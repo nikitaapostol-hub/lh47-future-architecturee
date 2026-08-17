@@ -313,4 +313,8 @@ export const ru = {
   nomDefault: "Номинация",
   studentNomPlaceholder: "[ПЛЕЙСХОЛДЕР · НОМИНАЦИЯ СТУДЕНЧЕСКОГО КОНКУРСА]",
   deadlineDefault: "20 ноября",
+  // полоса над шапкой
+  noticeTitle: "Премия отрасли 2026 — приём заявок открыт",
+  noticeCta: "Подать заявку",
+  noticeClose: "Закрыть",
 }

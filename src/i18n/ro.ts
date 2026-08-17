@@ -315,4 +315,8 @@ export const ro = {
   nomDefault: "Nominalizarea",
   studentNomPlaceholder: "[PLACEHOLDER · NOMINALIZAREA CONCURSULUI STUDENȚESC]",
   deadlineDefault: "20 noiembrie",
+  // полоса над шапкой
+  noticeTitle: "Premiul industriei 2026 — înscrierile sunt deschise",
+  noticeCta: "Depune proiectul",
+  noticeClose: "Închide",
 }

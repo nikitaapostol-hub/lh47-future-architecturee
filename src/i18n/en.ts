@@ -316,4 +316,8 @@ export const en: Dict = {
   nomDefault: "Category",
   studentNomPlaceholder: "[PLACEHOLDER · STUDENT COMPETITION CATEGORY]",
   deadlineDefault: "20 November",
+  // полоса над шапкой
+  noticeTitle: "Industry Award 2026 — entries are open",
+  noticeCta: "Submit a project",
+  noticeClose: "Close",
 }
