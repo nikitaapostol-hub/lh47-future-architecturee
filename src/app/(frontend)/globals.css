@@ -725,24 +725,27 @@ a:hover{color:#16181D}
   .fa-tick-on{left:-21px;top:8px;width:16px;height:2px}
 }
 
-/* ── заставка: конструктор ──────────────────────────────────────────────── */
-.fa-pre{position:fixed;inset:0;z-index:200;background:#16181D;display:flex;align-items:center;justify-content:center;
-  animation:fa-pre-lift 620ms cubic-bezier(.7,0,.3,1) 960ms forwards}
-.fa-pre-stage{position:relative;width:176px;height:196px}
-.fa-pre-b{position:absolute;display:block;width:88px;height:88px;border:1px solid rgba(247,246,243,.5);
-  background:rgba(247,246,243,.05);opacity:0;
-  animation:fa-pre-in 420ms cubic-bezier(.2,.8,.2,1) forwards}
-/* четыре четверти слетаются по диагоналям и смыкаются в кубик */
-.fa-pre-b1{left:0;top:0;transform:translate(-64px,-64px);animation-delay:0ms}
-.fa-pre-b2{left:88px;top:0;transform:translate(64px,-64px);animation-delay:90ms}
-.fa-pre-b3{left:0;top:88px;transform:translate(-64px,64px);animation-delay:180ms}
-.fa-pre-b4{left:88px;top:88px;background:#FF4002;border-color:#FF4002;
-  transform:translate(64px,64px);animation-delay:270ms}
-.fa-pre-line{position:absolute;left:0;top:192px;width:176px;height:2px;background:#FF4002;display:block;
-  transform:scaleX(0);transform-origin:left;animation:fa-pre-draw 700ms cubic-bezier(.2,.8,.2,1) 200ms forwards}
+/* ── заставка: кубик-конструктор ────────────────────────────────────────── */
+.fa-pre{position:fixed;inset:0;z-index:200;background:#16181D;display:flex;align-items:center;
+  justify-content:center;pointer-events:none;
+  animation:fa-pre-lift 620ms cubic-bezier(.7,0,.3,1) 1000ms forwards}
+.fa-pre-stage{position:relative;width:200px;height:230px;
+  animation:fa-pre-snap 460ms cubic-bezier(.34,1.5,.5,1) 640ms both}
+/* три грани изометрического куба, каждая — свой многоугольник */
+.fa-pre-f{position:absolute;inset:0;display:block;opacity:0;
+  animation:fa-pre-in 440ms cubic-bezier(.2,.8,.2,1) forwards}
+.fa-pre-left{background:#23262E;clip-path:polygon(0 25%,50% 50%,50% 100%,0 75%);
+  transform:translateX(-104px);animation-delay:0ms}
+.fa-pre-right{background:#FF4002;clip-path:polygon(100% 25%,100% 75%,50% 100%,50% 50%);
+  transform:translateX(104px);animation-delay:110ms}
+.fa-pre-top{background:#F7F6F3;clip-path:polygon(50% 0,100% 25%,50% 50%,0 25%);
+  transform:translateY(-118px);animation-delay:220ms}
+.fa-pre-line{position:absolute;left:0;top:252px;width:200px;height:2px;background:#FF4002;display:block;
+  transform:scaleX(0);transform-origin:left;animation:fa-pre-draw 760ms cubic-bezier(.2,.8,.2,1) 180ms forwards}
 @keyframes fa-pre-in{to{opacity:1;transform:none}}
 @keyframes fa-pre-draw{to{transform:scaleX(1)}}
-@keyframes fa-pre-lift{to{transform:translateY(-100%);visibility:hidden;pointer-events:none}}
+@keyframes fa-pre-snap{0%{transform:scale(1)}45%{transform:scale(1.05)}100%{transform:scale(1)}}
+@keyframes fa-pre-lift{to{transform:translateY(-100%);visibility:hidden}}
 /* второй заход в той же вкладке — без заставки */
 html[data-pre="off"] .fa-pre{display:none}
 @media (prefers-reduced-motion:reduce){.fa-pre{display:none}}
