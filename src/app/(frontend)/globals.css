@@ -728,74 +728,129 @@ a:hover{color:#16181D}
 /* ── заставка ───────────────────────────────────────────────────────────── */
 .fa-pre{position:fixed;inset:0;z-index:200;background:#16181D;display:flex;align-items:center;
   justify-content:center;pointer-events:none;
-  animation:fa-pre-lift 620ms cubic-bezier(.7,0,.3,1) 1160ms forwards}
+  animation:fa-pre-lift 640ms cubic-bezier(.7,0,.3,1) 1520ms forwards}
 .fa-pre-stage{position:relative;width:240px;height:240px}
-.fa-pre-line{position:absolute;left:20px;bottom:-38px;width:200px;height:2px;background:#FF4002;display:block;
-  transform:scaleX(0);transform-origin:left;animation:fa-pre-draw 820ms cubic-bezier(.2,.8,.2,1) 180ms forwards}
 .fa-pre i{position:absolute;display:block}
+.fa-pre-line{left:20px;bottom:-40px;width:200px;height:2px;background:#FF4002;
+  transform:scaleX(0);transform-origin:left;animation:fa-pre-draw 900ms cubic-bezier(.2,.8,.2,1) 200ms forwards}
 @keyframes fa-pre-draw{to{transform:scaleX(1)}}
 @keyframes fa-pre-lift{to{transform:translateY(-100%);visibility:hidden}}
-@keyframes fa-pre-up{to{opacity:1;transform:none}}
 @keyframes fa-pre-gx{to{transform:scaleX(1)}}
+@keyframes fa-pre-pulse{0%,100%{transform:scale(1)}40%{transform:scale(1.12)}}
 
-/* сообщество: люди встают в один ряд */
-.fa-co-head,.fa-co-body{background:#F7F6F3;opacity:0;transform:translateY(18px) scale(.7);
-  animation:fa-pre-up 420ms cubic-bezier(.34,1.35,.5,1) forwards}
-.fa-co-head{width:22px;height:22px;top:96px;border-radius:50%}
-.fa-co-body{width:32px;height:52px;top:124px;border-radius:16px 16px 2px 2px}
-.fa-co-h0{left:19px;animation-delay:0ms}    .fa-co-b0{left:14px;animation-delay:0ms}
-.fa-co-h1{left:63px;animation-delay:90ms}   .fa-co-b1{left:58px;animation-delay:90ms}
-.fa-co-h2{left:107px;animation-delay:180ms} .fa-co-b2{left:102px;animation-delay:180ms}
-.fa-co-h3{left:151px;animation-delay:270ms} .fa-co-b3{left:146px;animation-delay:270ms}
-.fa-co-h4{left:195px;animation-delay:360ms} .fa-co-b4{left:190px;animation-delay:360ms}
-.fa-co-h2,.fa-co-b2{background:#FF4002}
-.fa-co-floor{left:8px;top:182px;width:224px;height:2px;background:rgba(247,246,243,.4);
-  transform:scaleX(0);transform-origin:center;animation:fa-pre-gx 520ms cubic-bezier(.2,.8,.2,1) 420ms forwards}
+/* фигура: голова, корпус, руки, ноги */
+.fa-fig{width:40px;height:86px;color:#F7F6F3}
+.fa-fig-h{left:10px;top:0;width:20px;height:20px;border-radius:50%;background:currentColor}
+.fa-fig-t{left:11px;top:23px;width:18px;height:33px;border-radius:6px;background:currentColor}
+.fa-fig-al,.fa-fig-ar{top:25px;width:6px;height:27px;border-radius:3px;background:currentColor}
+.fa-fig-al{left:4px;transform:rotate(9deg);transform-origin:50% 3px}
+.fa-fig-ar{left:30px;transform:rotate(-9deg);transform-origin:50% 3px}
+.fa-fig-ll,.fa-fig-lr{top:55px;width:7px;height:31px;border-radius:3px;background:currentColor;
+  transform-origin:50% 3px}
+.fa-fig-ll{left:12px}
+.fa-fig-lr{left:21px}
 
-/* форум: сцена, спикер и зал */
-.fa-fo-screen{left:36px;top:22px;width:168px;height:72px;border:2px solid #F7F6F3;
-  background:rgba(247,246,243,.06);opacity:0;transform:translateY(-22px) scale(.9);
-  animation:fa-pre-up 420ms cubic-bezier(.2,.8,.2,1) forwards}
-.fa-fo-head{left:110px;top:104px;width:20px;height:20px;background:#F7F6F3;border-radius:50%;opacity:0;
-  transform:translateY(16px);animation:fa-pre-up 400ms cubic-bezier(.34,1.3,.5,1) 180ms forwards}
-.fa-fo-body{left:105px;top:128px;width:30px;height:40px;background:#F7F6F3;border-radius:15px 15px 2px 2px;
-  opacity:0;transform:translateY(16px);animation:fa-pre-up 400ms cubic-bezier(.34,1.3,.5,1) 220ms forwards}
-.fa-fo-stand{left:96px;top:168px;width:48px;height:6px;background:rgba(247,246,243,.5);opacity:0;
-  transform:scaleX(.4);animation:fa-pre-up 360ms cubic-bezier(.2,.8,.2,1) 300ms forwards}
+/* ── сообщество: люди сходятся с двух сторон ───────────────────────────── */
+.fa-co-p{top:98px;opacity:0}
+.fa-co-p0{left:10px;animation:fa-co-walk-l 760ms cubic-bezier(.25,.7,.35,1) 60ms forwards}
+.fa-co-p1{left:56px;animation:fa-co-walk-l 760ms cubic-bezier(.25,.7,.35,1) 220ms forwards}
+.fa-co-p3{left:148px;animation:fa-co-walk-r 760ms cubic-bezier(.25,.7,.35,1) 220ms forwards}
+.fa-co-p4{left:194px;animation:fa-co-walk-r 760ms cubic-bezier(.25,.7,.35,1) 60ms forwards}
+.fa-co-p2{left:102px;color:#FF4002;
+  animation:fa-co-drop 640ms cubic-bezier(.34,1.5,.5,1) 700ms forwards,fa-pre-pulse 620ms ease 1240ms}
+/* шаг: ноги качаются, пока фигура идёт */
+.fa-co-p0 .fa-fig-ll,.fa-co-p1 .fa-fig-ll,.fa-co-p3 .fa-fig-ll,.fa-co-p4 .fa-fig-ll{
+  animation:fa-co-step 260ms ease-in-out 3 alternate}
+.fa-co-p0 .fa-fig-lr,.fa-co-p1 .fa-fig-lr,.fa-co-p3 .fa-fig-lr,.fa-co-p4 .fa-fig-lr{
+  animation:fa-co-step 260ms ease-in-out 3 alternate-reverse}
+.fa-co-p0 .fa-fig-al,.fa-co-p1 .fa-fig-al,.fa-co-p3 .fa-fig-al,.fa-co-p4 .fa-fig-al{
+  animation:fa-co-swing-a 260ms ease-in-out 3 alternate-reverse}
+.fa-co-p0 .fa-fig-ar,.fa-co-p1 .fa-fig-ar,.fa-co-p3 .fa-fig-ar,.fa-co-p4 .fa-fig-ar{
+  animation:fa-co-swing-b 260ms ease-in-out 3 alternate}
+@keyframes fa-co-step{from{transform:rotate(-17deg)}to{transform:rotate(17deg)}}
+@keyframes fa-co-swing-a{from{transform:rotate(-14deg)}to{transform:rotate(16deg)}}
+@keyframes fa-co-swing-b{from{transform:rotate(14deg)}to{transform:rotate(-16deg)}}
+@keyframes fa-co-walk-l{
+  0%{opacity:0;transform:translate(-170px,0)}
+  12%{opacity:1}
+  35%{transform:translate(-104px,-6px)}
+  55%{transform:translate(-62px,0)}
+  78%{transform:translate(-22px,-5px)}
+  100%{opacity:1;transform:none}}
+@keyframes fa-co-walk-r{
+  0%{opacity:0;transform:translate(170px,0)}
+  12%{opacity:1}
+  35%{transform:translate(104px,-6px)}
+  55%{transform:translate(62px,0)}
+  78%{transform:translate(22px,-5px)}
+  100%{opacity:1;transform:none}}
+@keyframes fa-co-drop{0%{opacity:0;transform:translateY(-130px)}55%{opacity:1}100%{opacity:1;transform:none}}
+.fa-co-floor{left:8px;top:188px;width:224px;height:2px;background:rgba(247,246,243,.4);
+  transform:scaleX(0);transform-origin:center;animation:fa-pre-gx 560ms cubic-bezier(.2,.8,.2,1) 900ms forwards}
+
+/* ── форум: сцена, спикер и зал волной ─────────────────────────────────── */
+.fa-fo-screen{left:34px;top:12px;width:172px;height:72px;border:2px solid #F7F6F3;
+  background:rgba(247,246,243,.06);opacity:0;transform:translateY(-26px) scale(.9);
+  animation:fa-fo-drop 460ms cubic-bezier(.34,1.4,.5,1) forwards}
+.fa-fo-sweep{left:36px;top:14px;width:36px;height:68px;background:linear-gradient(90deg,
+  rgba(247,246,243,0),rgba(247,246,243,.45),rgba(247,246,243,0));opacity:0;
+  animation:fa-fo-sweep 900ms cubic-bezier(.4,0,.2,1) 520ms forwards}
+.fa-fo-speaker{left:100px;top:96px;opacity:0;transform:translateY(44px);
+  animation:fa-fo-rise 560ms cubic-bezier(.34,1.4,.5,1) 300ms forwards}
+.fa-fo-stand{left:84px;top:158px;width:72px;height:30px;background:#3D424C;border-radius:3px;opacity:0;
+  transform:translateY(26px);animation:fa-fo-rise 460ms cubic-bezier(.2,.8,.2,1) 420ms forwards}
 .fa-fo-seat{width:30px;height:14px;background:#3D424C;border-radius:4px 4px 0 0;opacity:0;
-  transform:translateY(20px);animation:fa-pre-up 340ms cubic-bezier(.2,.8,.2,1) forwards}
-.fa-fo-r1{top:190px}
-.fa-fo-r2{top:212px}
-.fa-fo-s0{left:18px;animation-delay:380ms}  .fa-fo-s1{left:62px;animation-delay:430ms}
-.fa-fo-s2{left:106px;animation-delay:480ms} .fa-fo-s3{left:150px;animation-delay:530ms}
-.fa-fo-s4{left:194px;animation-delay:580ms}
-.fa-fo-t0{left:40px;animation-delay:620ms}  .fa-fo-t1{left:84px;animation-delay:660ms}
-.fa-fo-t2{left:128px;animation-delay:700ms} .fa-fo-t3{left:172px;animation-delay:740ms}
+  animation:fa-fo-seat 480ms cubic-bezier(.34,1.5,.5,1) forwards}
+.fa-fo-r1{top:196px}
+.fa-fo-r2{top:218px}
+.fa-fo-s0{left:18px;animation-delay:640ms}  .fa-fo-s1{left:62px;animation-delay:700ms}
+.fa-fo-s2{left:106px;animation-delay:760ms} .fa-fo-s3{left:150px;animation-delay:820ms}
+.fa-fo-s4{left:194px;animation-delay:880ms}
+.fa-fo-t0{left:40px;animation-delay:930ms}  .fa-fo-t1{left:84px;animation-delay:980ms}
+.fa-fo-t2{left:128px;animation-delay:1030ms} .fa-fo-t3{left:172px;animation-delay:1080ms}
 .fa-fo-t1{background:#FF4002}
+@keyframes fa-fo-drop{to{opacity:1;transform:none}}
+@keyframes fa-fo-rise{to{opacity:1;transform:none}}
+@keyframes fa-fo-seat{0%{opacity:0;transform:translateY(26px)}60%{opacity:1;transform:translateY(-5px)}
+  100%{opacity:1;transform:none}}
+@keyframes fa-fo-sweep{0%{opacity:0;transform:translateX(0)}15%{opacity:1}85%{opacity:1}
+  100%{opacity:0;transform:translateX(134px)}}
 
-/* премия: пьедестал, победитель и кубок */
-.fa-aw-floor{left:16px;top:214px;width:208px;height:2px;background:rgba(247,246,243,.4);
+/* ── премия: пьедестал, победитель, кубок и салют ──────────────────────── */
+.fa-aw-floor{left:16px;top:216px;width:208px;height:2px;background:rgba(247,246,243,.4);
   transform:scaleX(0);transform-origin:center;animation:fa-pre-gx 460ms cubic-bezier(.2,.8,.2,1) forwards}
-.fa-aw-p1{left:92px;top:160px;width:56px;height:54px;background:#C9C6BE;opacity:0;transform:translateY(30px);
-  animation:fa-pre-up 400ms cubic-bezier(.34,1.3,.5,1) 120ms forwards}
-.fa-aw-p2{left:40px;top:176px;width:52px;height:38px;background:#3D424C;opacity:0;transform:translateY(30px);
-  animation:fa-pre-up 400ms cubic-bezier(.34,1.3,.5,1) 200ms forwards}
-.fa-aw-p3{left:148px;top:186px;width:52px;height:28px;background:#3D424C;opacity:0;transform:translateY(30px);
-  animation:fa-pre-up 400ms cubic-bezier(.34,1.3,.5,1) 280ms forwards}
-.fa-aw-head{left:110px;top:108px;width:20px;height:20px;background:#F7F6F3;border-radius:50%;opacity:0;
-  transform:translateY(14px);animation:fa-pre-up 380ms cubic-bezier(.34,1.3,.5,1) 380ms forwards}
-.fa-aw-body{left:105px;top:132px;width:30px;height:30px;background:#F7F6F3;border-radius:15px 15px 2px 2px;
-  opacity:0;transform:translateY(14px);animation:fa-pre-up 380ms cubic-bezier(.34,1.3,.5,1) 420ms forwards}
-/* кубок: чаша, ножка, подставка */
-.fa-aw-cup{left:98px;top:36px;width:44px;height:34px;background:#FF4002;border-radius:0 0 22px 22px;opacity:0;
-  transform:translateY(-40px);animation:fa-pre-up 460ms cubic-bezier(.34,1.4,.5,1) 560ms forwards}
-.fa-aw-stem{left:116px;top:70px;width:8px;height:14px;background:#FF4002;opacity:0;transform:translateY(-40px);
-  animation:fa-pre-up 460ms cubic-bezier(.34,1.4,.5,1) 600ms forwards}
-.fa-aw-foot{left:104px;top:84px;width:32px;height:7px;background:#FF4002;opacity:0;transform:translateY(-40px);
-  animation:fa-pre-up 460ms cubic-bezier(.34,1.4,.5,1) 640ms forwards}
-.fa-aw-ring{left:88px;top:26px;width:64px;height:64px;border:2px solid #FF4002;opacity:0;border-radius:50%;
-  animation:fa-aw-flash 620ms cubic-bezier(.2,.8,.2,1) 1000ms forwards}
-@keyframes fa-aw-flash{0%{opacity:.85;transform:scale(.85)}100%{opacity:0;transform:scale(1.5)}}
+.fa-aw-p1,.fa-aw-p2,.fa-aw-p3{opacity:0;animation:fa-aw-slam 520ms cubic-bezier(.34,1.55,.45,1) forwards}
+.fa-aw-p1{left:92px;top:162px;width:56px;height:54px;background:#C9C6BE;transform:translateY(60px);
+  animation-delay:140ms}
+.fa-aw-p2{left:40px;top:178px;width:52px;height:38px;background:#3D424C;transform:translateY(60px);
+  animation-delay:240ms}
+.fa-aw-p3{left:148px;top:188px;width:52px;height:28px;background:#3D424C;transform:translateY(60px);
+  animation-delay:340ms}
+/* победитель стоит на первом месте, руки подняты */
+.fa-aw-winner{left:100px;top:84px;opacity:0;transform:translateY(52px);
+  animation:fa-aw-step 580ms cubic-bezier(.34,1.4,.5,1) 460ms forwards,fa-aw-hop 560ms ease 1120ms}
+.fa-aw-winner .fa-fig-ll,.fa-aw-winner .fa-fig-lr{height:24px}
+.fa-aw-winner .fa-fig-al{transform:rotate(152deg)}
+.fa-aw-winner .fa-fig-ar{transform:rotate(-152deg)}
+.fa-aw-cup{left:98px;top:14px;width:44px;height:32px;background:#FF4002;border-radius:0 0 22px 22px;opacity:0;
+  transform:translateY(-80px);animation:fa-aw-fall 620ms cubic-bezier(.34,1.5,.45,1) 740ms forwards}
+.fa-aw-stem{left:116px;top:46px;width:8px;height:13px;background:#FF4002;opacity:0;transform:translateY(-80px);
+  animation:fa-aw-fall 620ms cubic-bezier(.34,1.5,.45,1) 780ms forwards}
+.fa-aw-foot{left:104px;top:59px;width:32px;height:7px;background:#FF4002;opacity:0;transform:translateY(-80px);
+  animation:fa-aw-fall 620ms cubic-bezier(.34,1.5,.45,1) 820ms forwards}
+/* салют: восемь коротких лучей вокруг кубка */
+.fa-aw-ray{left:118px;top:34px;width:4px;height:18px;background:#FF4002;transform-origin:50% 50%;opacity:0;
+  animation:fa-aw-burst 660ms cubic-bezier(.2,.8,.2,1) 1200ms forwards}
+.fa-aw-ray0{--a:0deg}    .fa-aw-ray1{--a:45deg}  .fa-aw-ray2{--a:90deg}  .fa-aw-ray3{--a:135deg}
+.fa-aw-ray4{--a:180deg}  .fa-aw-ray5{--a:225deg} .fa-aw-ray6{--a:270deg} .fa-aw-ray7{--a:315deg}
+@keyframes fa-aw-slam{to{opacity:1;transform:none}}
+@keyframes fa-aw-step{to{opacity:1;transform:none}}
+@keyframes fa-aw-fall{to{opacity:1;transform:none}}
+@keyframes fa-aw-hop{0%,100%{margin-top:0}45%{margin-top:-10px}}
+@keyframes fa-aw-burst{
+  0%{opacity:0;transform:rotate(var(--a)) translateY(-16px) scaleY(.4)}
+  25%{opacity:1}
+  100%{opacity:0;transform:rotate(var(--a)) translateY(-58px) scaleY(1)}}
 
 /* второй заход в той же вкладке — без заставки */
 html[data-pre="off"] .fa-pre{display:none}
