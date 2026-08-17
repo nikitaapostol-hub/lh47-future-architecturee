@@ -92,6 +92,23 @@
     if (headerInner) headerInner.style.paddingTop = headerInner.style.paddingBottom = s ? '16px' : '24px';
   }
 
+
+  /* ---- what is behind the left rail: light or dark section? ---- */
+  function backdropIsDark(x, y) {
+    var els = document.elementsFromPoint(x, y) || [];
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i];
+      if (el.closest && (el.closest('[data-rail]') || el.closest('[data-axis]') || el.closest('[data-header]'))) continue;
+      var bg = getComputedStyle(el).backgroundColor;
+      var m = bg && bg.match(/rgba?\(([^)]+)\)/);
+      if (!m) continue;
+      var p = m[1].split(',').map(parseFloat);
+      if (p.length > 3 && p[3] < 0.5) continue;
+      return (0.2126 * p[0] + 0.7152 * p[1] + 0.0722 * p[2]) < 128;
+    }
+    return false;
+  }
+
   /* ---- left rail: section index (community) ---- */
   function onRail() {
     var rail = document.querySelector('[data-rail]');
@@ -107,9 +124,11 @@
       var top = t.getBoundingClientRect().top - 140;
       if (top <= 0 && top > bestTop) { bestTop = top; best = a; }
     });
+    var r = rail.getBoundingClientRect();
+    var dark = backdropIsDark(Math.max(2, r.left + r.width / 2), r.top + r.height / 2);
     items.forEach(function (a) {
       var on = a === best;
-      a.style.color = on ? '#16181D' : '#5C5F66';
+      a.style.color = on ? (dark ? '#F7F6F3' : '#16181D') : (dark ? '#9A9DA4' : '#5C5F66');
       var dot = a.querySelector('[data-rail-dot]');
       if (dot) dot.style.background = on ? '#FF4002' : 'transparent';
     });
@@ -127,11 +146,14 @@
     if (fill) fill.style.transform = 'scaleY(' + p.toFixed(3) + ')';
     var ticks = axis.querySelectorAll('[data-axis-tick]');
     var idx = Math.min(ticks.length - 1, Math.floor(p * ticks.length));
+    var ar = axis.getBoundingClientRect();
+    var adark = backdropIsDark(Math.max(2, ar.left + ar.width / 2), ar.top + ar.height / 2);
     ticks.forEach(function (t, i) {
-      t.style.background = i <= idx ? '#FF4002' : '#5C5F66';
+      t.style.background = i <= idx ? '#FF4002' : (adark ? '#9A9DA4' : '#5C5F66');
       t.style.width = i === idx ? '18px' : '10px';
     });
     var label = axis.querySelector('[data-axis-label]');
+    if (label) label.style.color = adark ? '#F7F6F3' : '#16181D';
     if (label && ticks[idx]) label.textContent = ticks[idx].getAttribute('data-stage') || '';
   }
 
