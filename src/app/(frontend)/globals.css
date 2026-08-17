@@ -725,14 +725,20 @@ a:hover{color:#16181D}
   .fa-tick-on{left:-21px;top:8px;width:16px;height:2px}
 }
 
-/* ── заставка: кубик-конструктор ────────────────────────────────────────── */
+/* ── заставка ───────────────────────────────────────────────────────────── */
 .fa-pre{position:fixed;inset:0;z-index:200;background:#16181D;display:flex;align-items:center;
   justify-content:center;pointer-events:none;
-  animation:fa-pre-lift 620ms cubic-bezier(.7,0,.3,1) 1000ms forwards}
-.fa-pre-stage{position:relative;width:200px;height:230px;
-  animation:fa-pre-snap 460ms cubic-bezier(.34,1.5,.5,1) 640ms both}
-/* три грани изометрического куба, каждая — свой многоугольник */
-.fa-pre-f{position:absolute;inset:0;display:block;opacity:0;
+  animation:fa-pre-lift 620ms cubic-bezier(.7,0,.3,1) 1140ms forwards}
+.fa-pre-stage{position:relative;width:240px;height:240px}
+.fa-pre-line{position:absolute;left:20px;bottom:-34px;width:200px;height:2px;background:#FF4002;display:block;
+  transform:scaleX(0);transform-origin:left;animation:fa-pre-draw 800ms cubic-bezier(.2,.8,.2,1) 180ms forwards}
+@keyframes fa-pre-draw{to{transform:scaleX(1)}}
+@keyframes fa-pre-lift{to{transform:translateY(-100%);visibility:hidden}}
+@keyframes fa-pre-in{to{opacity:1;transform:none}}
+
+/* сообщество: кубик складывается из трёх граней */
+.fa-pre[data-scene="home"] .fa-pre-stage{animation:fa-pre-snap 460ms cubic-bezier(.34,1.5,.5,1) 640ms both}
+.fa-pre-f{position:absolute;left:20px;top:5px;width:200px;height:230px;display:block;opacity:0;
   animation:fa-pre-in 440ms cubic-bezier(.2,.8,.2,1) forwards}
 .fa-pre-left{background:#23262E;clip-path:polygon(0 25%,50% 50%,50% 100%,0 75%);
   transform:translateX(-104px);animation-delay:0ms}
@@ -740,12 +746,47 @@ a:hover{color:#16181D}
   transform:translateX(104px);animation-delay:110ms}
 .fa-pre-top{background:#F7F6F3;clip-path:polygon(50% 0,100% 25%,50% 50%,0 25%);
   transform:translateY(-118px);animation-delay:220ms}
-.fa-pre-line{position:absolute;left:0;top:252px;width:200px;height:2px;background:#FF4002;display:block;
-  transform:scaleX(0);transform-origin:left;animation:fa-pre-draw 760ms cubic-bezier(.2,.8,.2,1) 180ms forwards}
-@keyframes fa-pre-in{to{opacity:1;transform:none}}
-@keyframes fa-pre-draw{to{transform:scaleX(1)}}
 @keyframes fa-pre-snap{0%{transform:scale(1)}45%{transform:scale(1.05)}100%{transform:scale(1)}}
-@keyframes fa-pre-lift{to{transform:translateY(-100%);visibility:hidden}}
+
+/* форум: стол и четыре места вокруг него */
+.fa-fo-table{position:absolute;left:54px;top:92px;width:132px;height:76px;display:block;background:#F7F6F3;
+  clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);opacity:0;transform:scale(.7);
+  animation:fa-pre-in 420ms cubic-bezier(.2,.8,.2,1) forwards}
+.fa-fo-seat{position:absolute;width:48px;height:26px;display:block;background:#3A3E47;
+  clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);opacity:0;
+  animation:fa-pre-in 420ms cubic-bezier(.2,.8,.2,1) forwards}
+.fa-fo-n{left:96px;top:57px;transform:translateY(-70px);animation-delay:180ms}
+.fa-fo-e{left:182px;top:117px;background:#FF4002;transform:translateX(80px);animation-delay:270ms}
+.fa-fo-s{left:96px;top:177px;transform:translateY(70px);animation-delay:360ms}
+.fa-fo-w{left:10px;top:117px;transform:translateX(-80px);animation-delay:450ms}
+
+/* премия: фигура поднимает награду */
+.fa-aw-floor{position:absolute;left:60px;top:218px;width:120px;height:2px;display:block;
+  background:rgba(247,246,243,.35);transform:scaleX(0);transform-origin:center;
+  animation:fa-pre-gx 420ms cubic-bezier(.2,.8,.2,1) forwards}
+.fa-aw-body{position:absolute;left:100px;top:142px;width:40px;height:76px;display:block;background:#F7F6F3;
+  opacity:0;transform:translateY(26px);animation:fa-pre-in 420ms cubic-bezier(.2,.8,.2,1) 80ms forwards}
+.fa-aw-head{position:absolute;left:105px;top:106px;width:30px;height:30px;display:block;background:#F7F6F3;
+  border-radius:50%;opacity:0;transform:translateY(26px);
+  animation:fa-pre-in 420ms cubic-bezier(.2,.8,.2,1) 140ms forwards}
+/* руки растут вверх от плеча: точка вращения — низ полосы */
+.fa-aw-arm{position:absolute;top:82px;width:11px;height:70px;display:block;background:#F7F6F3;
+  transform-origin:50% 100%;opacity:0}
+.fa-aw-arm-l{left:92px;transform:rotate(156deg);
+  animation:fa-pre-in 240ms ease 200ms forwards,fa-aw-lift-l 560ms cubic-bezier(.34,1.35,.5,1) 300ms forwards}
+.fa-aw-arm-r{left:137px;transform:rotate(-156deg);
+  animation:fa-pre-in 240ms ease 200ms forwards,fa-aw-lift-r 560ms cubic-bezier(.34,1.35,.5,1) 300ms forwards}
+.fa-aw-cup{position:absolute;left:96px;top:30px;width:48px;height:48px;display:block;background:#FF4002;
+  opacity:0;transform:translateY(160px) scale(.6);
+  animation:fa-aw-rise 580ms cubic-bezier(.34,1.35,.5,1) 620ms forwards}
+.fa-aw-ring{position:absolute;left:86px;top:20px;width:68px;height:68px;display:block;border:2px solid #FF4002;
+  opacity:0;animation:fa-aw-flash 620ms cubic-bezier(.2,.8,.2,1) 1000ms forwards}
+@keyframes fa-pre-gx{to{transform:scaleX(1)}}
+@keyframes fa-aw-lift-l{from{transform:rotate(156deg)}to{transform:rotate(-6deg)}}
+@keyframes fa-aw-lift-r{from{transform:rotate(-156deg)}to{transform:rotate(6deg)}}
+@keyframes fa-aw-rise{to{opacity:1;transform:none}}
+@keyframes fa-aw-flash{0%{opacity:.9;transform:scale(.9)}100%{opacity:0;transform:scale(1.6)}}
+
 /* второй заход в той же вкладке — без заставки */
 html[data-pre="off"] .fa-pre{display:none}
 @media (prefers-reduced-motion:reduce){.fa-pre{display:none}}
