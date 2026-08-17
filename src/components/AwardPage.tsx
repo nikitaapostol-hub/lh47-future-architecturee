@@ -6,6 +6,9 @@
 
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
+import type { Dict } from '@/i18n/dict'
+import { path as langPath } from '@/i18n/links'
+import type { Lang } from '@/i18n/links'
 
 async function post(collection, body) {
   const res = await fetch('/api/' + collection, {
@@ -22,6 +25,8 @@ const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/
 type Nom = { no?: string; title: string }
 type Member = { no?: string; name: string; role?: string }
 type Props = {
+  t: Dict
+  lang: Lang
   deadlineLabel?: string
   deadlineDate?: string
   countdownVisible?: boolean
@@ -35,9 +40,15 @@ const AWARD_TRACK = 'Премия отрасли'
 const STUDENT_TRACK = 'Студенческий конкурс'
 
 export default function AwardPage({
+  t,
+  lang,
   deadlineLabel, deadlineDate, countdownVisible = true, juryVisible = false,
   jury: juryProp = [], nominations: nomProp = [], studentNominations: studentProp = [],
 }: Props) {
+  // "/forum" stays "/forum" in Russian and becomes "/ro/forum" elsewhere
+  const lp = (p: string) => langPath(lang, p)
+  const lhref = (c: Lang) => langPath(c, "/award")
+
 
   const [menu, setMenu] = useState(false)
   const toggleMenu = useCallback(() => setMenu((m) => !m), [])
@@ -146,14 +157,14 @@ export default function AwardPage({
     e.preventDefault()
     const d = data.current
     const n: Record<string, string> = {}
-    if (!d.name.trim()) n.name = 'Укажите имя и фамилию'
-    if (!d.org.trim()) n.org = 'Укажите компанию или учебное заведение'
-    if (!d.track) n.track = 'Выберите, куда подаёте'
-    if (!d.nomination) n.nomination = 'Выберите номинацию'
-    if (!EMAIL_RE.test(d.email.trim())) n.email = 'Проверьте адрес почты'
-    if (d.phone.replace(/\D/g, '').length < 8) n.phone = 'Проверьте номер телефона'
-    if (!/^https?:\/\/[^\s.]+\.[^\s]{2,}$/.test(d.url.trim())) n.url = 'Укажите ссылку вида https://'
-    if (!d.desc.trim()) n.desc = 'Добавьте короткое описание проекта'
+    if (!d.name.trim()) n.name = t.k253
+    if (!d.org.trim()) n.org = t.k254
+    if (!d.track) n.track = t.k255
+    if (!d.nomination) n.nomination = t.k256
+    if (!EMAIL_RE.test(d.email.trim())) n.email = t.k4
+    if (d.phone.replace(/\D/g, '').length < 8) n.phone = t.k5
+    if (!/^https?:\/\/[^\s.]+\.[^\s]{2,}$/.test(d.url.trim())) n.url = t.k257
+    if (!d.desc.trim()) n.desc = t.k258
     if (Object.keys(n).length) {
       setErr(n)
       ;(document.getElementById('aw-' + Object.keys(n)[0]) as any)?.focus?.()
@@ -165,9 +176,9 @@ export default function AwardPage({
   }
 
   const baseNoms: Nom[] = nomProp.length ? nomProp
-    : Array.from({ length: 8 }, (_, i) => ({ no: String(i + 1).padStart(2, '0'), title: 'Номинация ' + String(i + 1).padStart(2, '0') }))
+    : Array.from({ length: 8 }, (_, i) => ({ no: String(i + 1).padStart(2, '0'), title: t.nomDefault + ' ' + String(i + 1).padStart(2, '0') }))
   const studentNoms: Nom[] = studentProp.length ? studentProp
-    : [{ no: '01', title: '[ПЛЕЙСХОЛДЕР · НОМИНАЦИЯ СТУДЕНЧЕСКОГО КОНКУРСА]' }]
+    : [{ no: '01', title: t.studentNomPlaceholder }]
 
   const nominations = baseNoms.map((x, i) => ({ ...x, delay: (Math.floor(i / cols) + (i % cols)) * 60 }))
   const nomOptions = track === STUDENT_TRACK ? studentNoms : track === AWARD_TRACK ? baseNoms : []
@@ -188,7 +199,7 @@ export default function AwardPage({
   const studentFg = isStudent ? '#F7F6F3' : '#16181D'
   const countdownDisplay = countdownVisible === false ? 'none' : 'flex'
   const nominationValue = nomination
-  const resolvedDeadlineLabel = deadlineLabel || '20 ноября'
+  const resolvedDeadlineLabel = deadlineLabel || t.deadlineDefault
   const resolvedDeadlineDate = deadlineDate || '2026-11-20T23:59:00+02:00'
 
   return (
@@ -201,7 +212,7 @@ export default function AwardPage({
           {" "}
           <div data-header-inner="" style={{ maxWidth: "1720px", margin: "0 auto", padding: "20px clamp(20px,4.8vw,108px)", display: "flex", alignItems: "center", gap: "24px", transition: "padding 300ms ease" } as CSSProperties}>
             {" "}
-            <a href="/" data-page="" style={{ display: "flex", alignItems: "center", gap: "12px" } as CSSProperties}>
+            <a href={lp("/")} data-page="" style={{ display: "flex", alignItems: "center", gap: "12px" } as CSSProperties}>
               {" "}
               <img src="/img/5dd2fe9c60.png" alt="" style={{ height: "30px", width: "auto", display: "block" } as CSSProperties} />
               {" "}
@@ -211,55 +222,55 @@ export default function AwardPage({
               {" "}
             </a>
             {" "}
-            <nav aria-label="Основная навигация" style={{ marginLeft: "auto", minWidth: "0", display: ("var(--navDisplay)" as any), alignItems: "center", gap: "24px", fontSize: "15px", color: "#5C5F66" } as CSSProperties}>
+            <nav aria-label={t.k6} style={{ marginLeft: "auto", minWidth: "0", display: ("var(--navDisplay)" as any), alignItems: "center", gap: "24px", fontSize: "15px", color: "#5C5F66" } as CSSProperties}>
               {" "}
-              <a className="fa-hb09baf5" href="/" data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                Сообщество
+              <a className="fa-hb09baf5" href={lp("/")} data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                {t.k35}
               </a>
               {" "}
-              <a className="fa-hb09baf5" href="/forum" data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                Форум 2026
+              <a className="fa-hb09baf5" href={lp("/forum")} data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                {t.k9}
               </a>
               {" "}
               <a href="#top" aria-current="page" style={{ color: "#16181D", fontWeight: "600" } as CSSProperties}>
-                Премия
+                {t.k10}
               </a>
               {" "}
               <a className="fa-hb09baf5" href="#contacts" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                Контакты
+                {t.k12}
               </a>
               {" "}
             </nav>
             {" "}
             <div style={{ display: ("var(--navDisplay)" as any), alignItems: "center", gap: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em" } as CSSProperties}>
               {" "}
-              <span title="Перевод готовится" style={{ color: "#6E7278" } as CSSProperties}>
+              <a href={lhref('ro')} hrefLang="ro" aria-current={lang === 'ro' ? 'true' : undefined} style={{ color: lang === 'ro' ? "#16181D" : "#6E7278" } as CSSProperties}>
                 RO
-              </span>
+              </a>
               {" "}
               <span style={{ color: "#DCDAD4" } as CSSProperties}>
                 /
               </span>
               {" "}
-              <span aria-current="true" style={{ color: "#16181D" } as CSSProperties}>
+              <a href={lhref('ru')} hrefLang="ru" aria-current={lang === 'ru' ? 'true' : undefined} style={{ color: lang === 'ru' ? "#16181D" : "#6E7278" } as CSSProperties}>
                 RU
-              </span>
+              </a>
               {" "}
               <span style={{ color: "#DCDAD4" } as CSSProperties}>
                 /
               </span>
               {" "}
-              <span title="Перевод готовится" style={{ color: "#6E7278" } as CSSProperties}>
+              <a href={lhref('en')} hrefLang="en" aria-current={lang === 'en' ? 'true' : undefined} style={{ color: lang === 'en' ? "#16181D" : "#6E7278" } as CSSProperties}>
                 EN
-              </span>
+              </a>
               {" "}
             </div>
             {" "}
             <a className="fa-ha683e68" href="#apply" style={{ display: ("var(--navDisplay)" as any), flex: "0 0 auto", alignItems: "center", padding: "12px 22px", background: "#16181D", color: "#F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "14px", lineHeight: "1.2", whiteSpace: "nowrap", border: "1px solid #16181D", transition: "background 200ms ease,color 200ms ease,border-color 200ms ease" } as CSSProperties}>
-              Подать заявку
+              {t.k38}
             </a>
             {" "}
-            <button type="button" aria-label="Меню" onClick={toggleMenu} style={{ display: ("var(--burgerDisplay)" as any), marginLeft: "auto", flexDirection: "column", justifyContent: "center", gap: "6px", width: "44px", height: "44px", padding: "0", background: "transparent", border: "0", cursor: "pointer" } as CSSProperties}>
+            <button type="button" aria-label={t.k15} onClick={toggleMenu} style={{ display: ("var(--burgerDisplay)" as any), marginLeft: "auto", flexDirection: "column", justifyContent: "center", gap: "6px", width: "44px", height: "44px", padding: "0", background: "transparent", border: "0", cursor: "pointer" } as CSSProperties}>
               {" "}
               <span style={{ display: "block", width: "22px", height: "1px", background: "#16181D" } as CSSProperties} />
               {" "}
@@ -271,22 +282,22 @@ export default function AwardPage({
           {" "}
           <div style={{ display: (menu ? "var(--menuDisplay)" : "none"), background: "#F7F6F3", borderTop: "1px solid #DCDAD4", padding: "8px clamp(20px,4.8vw,108px) 32px" } as CSSProperties}>
             {" "}
-            <nav aria-label="Мобильная навигация" style={{ display: "flex", flexDirection: "column", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "22px" } as CSSProperties}>
+            <nav aria-label={t.k16} style={{ display: "flex", flexDirection: "column", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "22px" } as CSSProperties}>
               {" "}
-              <a href="/" data-page="" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                Сообщество
+              <a href={lp("/")} data-page="" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
+                {t.k35}
               </a>
               {" "}
-              <a href="/forum" data-page="" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                Форум 2026
+              <a href={lp("/forum")} data-page="" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
+                {t.k9}
               </a>
               {" "}
               <a href="#top" aria-current="page" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4", fontWeight: "700" } as CSSProperties}>
-                Премия
+                {t.k10}
               </a>
               {" "}
               <a href="#contacts" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                Контакты
+                {t.k12}
               </a>
               {" "}
             </nav>
@@ -295,26 +306,26 @@ export default function AwardPage({
               {" "}
               <div style={{ display: "flex", gap: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em" } as CSSProperties}>
                 {" "}
-                <span style={{ color: "#6E7278" } as CSSProperties}>
+                <a href={lhref('ro')} hrefLang="ro" aria-current={lang === 'ro' ? 'true' : undefined} style={{ color: lang === 'ro' ? "#16181D" : "#6E7278" } as CSSProperties}>
                   RO
-                </span>
+                </a>
                 <span style={{ color: "#DCDAD4" } as CSSProperties}>
                   /
                 </span>
-                <span style={{ color: "#16181D" } as CSSProperties}>
+                <a href={lhref('ru')} hrefLang="ru" aria-current={lang === 'ru' ? 'true' : undefined} style={{ color: lang === 'ru' ? "#16181D" : "#6E7278" } as CSSProperties}>
                   RU
-                </span>
+                </a>
                 <span style={{ color: "#DCDAD4" } as CSSProperties}>
                   /
                 </span>
-                <span style={{ color: "#6E7278" } as CSSProperties}>
+                <a href={lhref('en')} hrefLang="en" aria-current={lang === 'en' ? 'true' : undefined} style={{ color: lang === 'en' ? "#16181D" : "#6E7278" } as CSSProperties}>
                   EN
-                </span>
+                </a>
                 {" "}
               </div>
               {" "}
               <a href="#apply" onClick={closeMenu} style={{ display: "inline-flex", alignItems: "center", padding: "12px 24px", background: "#16181D", color: "#F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "14px", lineHeight: "1.2" } as CSSProperties}>
-                Подать заявку
+                {t.k38}
               </a>
               {" "}
             </div>
@@ -348,7 +359,7 @@ export default function AwardPage({
                   <span style={{ width: "40px", height: "1px", background: "#C9C6BE" } as CSSProperties} />
                   {" "}
                   <span style={{ color: "#16181D" } as CSSProperties}>
-                    Премия отрасли и студенческий конкурс · Кишинёв
+                    {t.k259}
                   </span>
                   {" "}
                 </div>
@@ -363,13 +374,13 @@ export default function AwardPage({
                 {" "}
                 <span style={{ display: "block", overflow: "hidden", paddingBottom: ".03em" } as CSSProperties}>
                   <span data-anim="" data-fit-line="" style={{ display: "block", animation: "faRise 1000ms cubic-bezier(.16,1,.3,1) 180ms both" } as CSSProperties}>
-                    Лучшее за год
+                    {t.k260}
                   </span>
                 </span>
                 {" "}
                 <span style={{ display: "block", overflow: "hidden", paddingBottom: ".03em" } as CSSProperties}>
                   <span data-anim="" data-fit-line="" style={{ display: "block", animation: "faRise 1000ms cubic-bezier(.16,1,.3,1) 300ms both" } as CSSProperties}>
-                    в архитектуре
+                    {t.k261}
                   </span>
                 </span>
                 {" "}
@@ -378,7 +389,7 @@ export default function AwardPage({
               <div data-anim="" style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "28px 48px", marginTop: "clamp(24px,3vw,44px)", animation: "faFade 800ms ease 700ms both" } as CSSProperties}>
                 {" "}
                 <p style={{ flex: "1 1 420px", maxWidth: "58ch", fontSize: "clamp(16px,1.4vw,22px)", lineHeight: "1.45", letterSpacing: "-.01em", color: "#5C5F66" } as CSSProperties}>
-                  Future Architecture Award — награды для проектов, компаний и профессионалов отрасли и конкурс для студентов. Победителей объявляют 3 декабря на форуме в Кишинёве, в зале на 250 человек.
+                  {t.k262}
                 </p>
                 {" "}
                 <div style={{ display: "flex", alignItems: "center", gap: "12px", paddingBottom: "6px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "clamp(11px,1vw,13px)", letterSpacing: ".12em", textTransform: "uppercase", color: "#16181D" } as CSSProperties}>
@@ -386,7 +397,7 @@ export default function AwardPage({
                   <span data-pulse="" style={{ width: "8px", height: "8px", background: "#16181D", animation: "faPulse 2s ease-in-out infinite" } as CSSProperties} />
                   {" "}
                   <span>
-                    Заявки принимаются до {resolvedDeadlineLabel}
+{t.k263}{" "}{resolvedDeadlineLabel}
                   </span>
                   {" "}
                 </div>
@@ -404,7 +415,7 @@ export default function AwardPage({
                   </div>
                   {" "}
                   <div style={{ marginTop: "clamp(8px,1vw,14px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                    дней
+                    {t.k143}
                   </div>
                   {" "}
                 </div>
@@ -418,7 +429,7 @@ export default function AwardPage({
                   </div>
                   {" "}
                   <div style={{ marginTop: "clamp(8px,1vw,14px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                    часов
+                    {t.k144}
                   </div>
                   {" "}
                 </div>
@@ -432,7 +443,7 @@ export default function AwardPage({
                   </div>
                   {" "}
                   <div style={{ marginTop: "clamp(8px,1vw,14px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                    минут
+                    {t.k145}
                   </div>
                   {" "}
                 </div>
@@ -446,7 +457,7 @@ export default function AwardPage({
                   </div>
                   {" "}
                   <div style={{ marginTop: "clamp(8px,1vw,14px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                    секунд
+                    {t.k146}
                   </div>
                   {" "}
                 </div>
@@ -454,7 +465,7 @@ export default function AwardPage({
                 <div style={{ flex: "1 1 200px", minWidth: "180px", display: "flex", flexDirection: "column", justifyContent: "flex-end", gap: "8px", padding: "clamp(16px,2vw,26px) clamp(12px,1.6vw,22px)", borderLeft: "1px solid #DCDAD4" } as CSSProperties}>
                   {" "}
                   <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                    осталось до конца приёма заявок
+                    {t.k264}
                   </span>
                   {" "}
                   <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(15px,1.4vw,20px)", letterSpacing: "-.01em" } as CSSProperties}>
@@ -468,11 +479,11 @@ export default function AwardPage({
               <div data-anim="" style={{ display: "flex", flexWrap: "wrap", gap: "14px", marginTop: "clamp(24px,3vw,40px)", animation: "faFade 800ms ease 820ms both" } as CSSProperties}>
                 {" "}
                 <button className="fa-h7a3127f" type="button" onClick={goAward} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "19px 38px", background: "#16181D", color: "#F7F6F3", border: "1px solid #16181D", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", cursor: "pointer", transition: "background 220ms ease,color 220ms ease,border-color 220ms ease,transform 220ms ease,box-shadow 220ms ease" } as CSSProperties}>
-                  Подать проект компании
+                  {t.k265}
                 </button>
                 {" "}
                 <button className="fa-h803f418" type="button" onClick={goStudent} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "19px 38px", background: "transparent", border: "1px solid #16181D", color: "#16181D", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", cursor: "pointer", transition: "background 220ms ease,color 220ms ease,transform 220ms ease" } as CSSProperties}>
-                  Подать студенческую работу
+                  {t.k266}
                 </button>
                 {" "}
               </div>
@@ -482,7 +493,7 @@ export default function AwardPage({
                 <span aria-hidden="true" style={{ display: "block", width: "1px", height: "34px", background: "#16181D" } as CSSProperties} />
                 {" "}
                 <span>
-                  листайте
+                  {t.k42}
                 </span>
                 {" "}
               </div>
@@ -508,13 +519,13 @@ export default function AwardPage({
                 </div>
                 {" "}
                 <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                  Участники
+                  {t.k267}
                 </span>
                 {" "}
               </div>
               {" "}
               <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(32px,4vw,48px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(38px,6.4vw,104px)", lineHeight: ".88", letterSpacing: "-.05em", textTransform: "uppercase" } as CSSProperties}>
-                Кто может подать заявку
+                {t.k268}
               </h2>
               {" "}
               <div style={{ display: "grid", gridTemplateColumns: ("var(--twoCols)" as any), gap: "1px", marginTop: "clamp(36px,4.4vw,60px)", background: "#DCDAD4", borderTop: "1px solid #DCDAD4" } as CSSProperties}>
@@ -526,15 +537,15 @@ export default function AwardPage({
                   </span>
                   {" "}
                   <h3 style={{ margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(26px,3vw,44px)", lineHeight: "1.02", letterSpacing: "-.035em" } as CSSProperties}>
-                    Премия отрасли
+                    {t.k269}
                   </h3>
                   {" "}
                   <p style={{ fontSize: "clamp(15px,1.15vw,18px)", lineHeight: "1.55", color: "#6E7278", maxWidth: "40ch" } as CSSProperties}>
-                    Для архитектурных бюро, дизайн-студий, девелоперов, производителей и отдельных профессионалов.
+                    {t.k270}
                   </p>
                   {" "}
                   <p style={{ fontSize: "clamp(16px,1.3vw,20px)", lineHeight: "1.5", color: "#5C5F66", maxWidth: "40ch" } as CSSProperties}>
-                    Подаются объекты и интерьеры, завершённые за последний год, а также продукты и практика компании.
+                    {t.k271}
                   </p>
                   {" "}
                 </div>
@@ -546,19 +557,19 @@ export default function AwardPage({
                   </span>
                   {" "}
                   <h3 style={{ margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(26px,3vw,44px)", lineHeight: "1.02", letterSpacing: "-.035em" } as CSSProperties}>
-                    Студенческий конкурс
+                    {t.k272}
                   </h3>
                   {" "}
                   <p style={{ fontSize: "clamp(15px,1.15vw,18px)", lineHeight: "1.55", color: "#6E7278", maxWidth: "40ch" } as CSSProperties}>
-                    Для студентов архитектуры и дизайна.
+                    {t.k273}
                   </p>
                   {" "}
                   <p style={{ fontSize: "clamp(16px,1.3vw,20px)", lineHeight: "1.5", color: "#5C5F66", maxWidth: "40ch" } as CSSProperties}>
-                    Тема года — идеи для общественных пространств и архитектурного облика городов Молдовы. Принимаются учебные, дипломные и собственные проекты.
+                    {t.k274}
                   </p>
                   {" "}
                   <span style={{ marginTop: "auto", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", lineHeight: "1.7", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                    Победителей конкурса награждают на той же сцене, что и компании
+                    {t.k275}
                   </span>
                   {" "}
                 </div>
@@ -586,13 +597,13 @@ export default function AwardPage({
                 </div>
                 {" "}
                 <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                  За что награждают
+                  {t.k276}
                 </span>
                 {" "}
               </div>
               {" "}
               <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(32px,4vw,48px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(40px,7vw,110px)", lineHeight: ".9", letterSpacing: "-.05em", textTransform: "uppercase" } as CSSProperties}>
-                Номинации
+                {t.k277}
               </h2>
               {" "}
               <div style={{ display: "grid", gridTemplateColumns: ("var(--nomCols)" as any), gap: "1px", marginTop: "clamp(36px,4.4vw,60px)", background: "#C9C6BE", borderTop: "1px solid #C9C6BE" } as CSSProperties}>
@@ -620,11 +631,11 @@ export default function AwardPage({
               <div data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", justifyContent: "space-between", gap: "12px 32px", marginTop: "24px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
                 {" "}
                 <span>
-                  Список номинаций дополняется
+                  {t.k278}
                 </span>
                 {" "}
-                <a className="fa-hd6ad87b" href="Forum.dc.html#participation" data-page="" style={{ display: "inline-flex", alignItems: "center", gap: "10px", color: "#16181D", borderBottom: "1px solid #C9C6BE", paddingBottom: "2px", transition: "border-color 200ms ease" } as CSSProperties}>
-                  Именная номинация – в пакете партнёра форума{" "}
+                <a className="fa-hd6ad87b" href={lp('/forum') + '#participation'} data-page="" style={{ display: "inline-flex", alignItems: "center", gap: "10px", color: "#16181D", borderBottom: "1px solid #C9C6BE", paddingBottom: "2px", transition: "border-color 200ms ease" } as CSSProperties}>
+{t.k279}{" "}
                   <span aria-hidden="true">
                     →
                   </span>
@@ -655,13 +666,13 @@ export default function AwardPage({
                 </div>
                 {" "}
                 <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#F7F6F3" } as CSSProperties}>
-                  Награда
+                  {t.k280}
                 </span>
                 {" "}
               </div>
               {" "}
               <h2 data-reveal="" data-delay="700" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(32px,4vw,48px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(34px,6vw,92px)", lineHeight: ".9", letterSpacing: "-.045em", textTransform: "uppercase", maxWidth: "20ch", color: "#F7F6F3" } as CSSProperties}>
-                Что получает победитель
+                {t.k281}
               </h2>
               {" "}
               <div style={{ marginTop: "clamp(40px,5vw,72px)", borderTop: "1px solid rgba(255,255,255,.4)" } as CSSProperties}>
@@ -673,11 +684,11 @@ export default function AwardPage({
                   </span>
                   {" "}
                   <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(19px,2vw,30px)", lineHeight: "1.16", letterSpacing: "-.022em", color: "#F7F6F3" } as CSSProperties}>
-                    Награду вручают на сцене форума, в зале{" "}
+{t.k282}{" "}
                     <span data-count="250" style={{ fontVariantNumeric: "tabular-nums" } as CSSProperties}>
                       250
                     </span>
-                    {" "}человек
+                    {" "}{t.k283}
                   </span>
                   {" "}
                 </div>
@@ -689,7 +700,7 @@ export default function AwardPage({
                   </span>
                   {" "}
                   <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(19px,2vw,30px)", lineHeight: "1.16", letterSpacing: "-.022em", color: "#F7F6F3" } as CSSProperties}>
-                    Проект выходит публикацией в InStyle Home
+                    {t.k284}
                   </span>
                   {" "}
                 </div>
@@ -701,7 +712,7 @@ export default function AwardPage({
                   </span>
                   {" "}
                   <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(19px,2vw,30px)", lineHeight: "1.16", letterSpacing: "-.022em", color: "#F7F6F3" } as CSSProperties}>
-                    Фото и видео церемонии — для сайта, соцсетей и презентаций
+                    {t.k285}
                   </span>
                   {" "}
                 </div>
@@ -713,7 +724,7 @@ export default function AwardPage({
                   </span>
                   {" "}
                   <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(19px,2vw,30px)", lineHeight: "1.16", letterSpacing: "-.022em", color: "#F7F6F3" } as CSSProperties}>
-                    Членство в сообществе Future Architecture
+                    {t.k286}
                   </span>
                   {" "}
                 </div>
@@ -725,7 +736,7 @@ export default function AwardPage({
                   </span>
                   {" "}
                   <span style={{ flex: "1 1 320px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "clamp(14px,1.2vw,16px)", lineHeight: "1.5", letterSpacing: ".06em", textTransform: "uppercase", color: "#F7F6F3" } as CSSProperties}>
-                    [ПЛЕЙСХОЛДЕР · ПРИЗ СТУДЕНЧЕСКОГО КОНКУРСА]
+                    {t.k287}
                   </span>
                   {" "}
                 </div>
@@ -753,13 +764,13 @@ export default function AwardPage({
                 </div>
                 {" "}
                 <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                  Отбор
+                  {t.k288}
                 </span>
                 {" "}
               </div>
               {" "}
               <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(32px,4vw,48px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(38px,6.4vw,104px)", lineHeight: ".9", letterSpacing: "-.05em", textTransform: "uppercase" } as CSSProperties}>
-                Как проходит отбор
+                {t.k289}
               </h2>
               {" "}
               <div style={{ position: "relative", display: "flex", flexDirection: ("var(--chainDir)" as any), marginTop: "clamp(44px,5.6vw,84px)", height: ("var(--chainHeight)" as any), padding: ("var(--chainPad)" as any) } as CSSProperties}>
@@ -777,7 +788,7 @@ export default function AwardPage({
                     </span>
                     {" "}
                     <span style={{ display: "block", marginTop: "12px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(18px,1.7vw,26px)", lineHeight: "1.14", letterSpacing: "-.025em", color: "#16181D" } as CSSProperties}>
-                      Заявка до {resolvedDeadlineLabel}
+{t.k290}{" "}{resolvedDeadlineLabel}
                     </span>
                     {" "}
                   </div>
@@ -795,7 +806,7 @@ export default function AwardPage({
                     </span>
                     {" "}
                     <span style={{ display: "block", marginTop: "12px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(18px,1.7vw,26px)", lineHeight: "1.14", letterSpacing: "-.025em", color: "#16181D" } as CSSProperties}>
-                      Проверка материалов
+                      {t.k291}
                     </span>
                     {" "}
                   </div>
@@ -813,7 +824,7 @@ export default function AwardPage({
                     </span>
                     {" "}
                     <span style={{ display: "block", marginTop: "12px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(18px,1.7vw,26px)", lineHeight: "1.14", letterSpacing: "-.025em", color: "#16181D" } as CSSProperties}>
-                      Оценка жюри
+                      {t.k292}
                     </span>
                     {" "}
                   </div>
@@ -831,7 +842,7 @@ export default function AwardPage({
                     </span>
                     {" "}
                     <span style={{ display: "block", marginTop: "12px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(18px,1.7vw,26px)", lineHeight: "1.14", letterSpacing: "-.025em", color: "#16181D" } as CSSProperties}>
-                      Победители на форуме 3 декабря
+                      {t.k293}
                     </span>
                     {" "}
                   </div>
@@ -841,7 +852,7 @@ export default function AwardPage({
               </div>
               {" "}
               <div data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(16px)", marginTop: "clamp(32px,4vw,48px)", paddingTop: "20px", borderTop: "1px solid #DCDAD4", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", lineHeight: "1.7", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                [ПЛЕЙСХОЛДЕР · ТРЕБОВАНИЯ К МАТЕРИАЛАМ – ФОРМАТ, ОБЪЁМ, ЯЗЫК]
+                {t.k294}
               </div>
               {" "}
               {juryVisible ? (
@@ -852,11 +863,11 @@ export default function AwardPage({
                   <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "24px", paddingBottom: "16px", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
                     {" "}
                     <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(22px,2.4vw,34px)", lineHeight: "1", letterSpacing: "-.03em", textTransform: "uppercase" } as CSSProperties}>
-                      Жюри
+                      {t.k295}
                     </span>
                     {" "}
                     <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                      Состав объявляется поэтапно
+                      {t.k219}
                     </span>
                     {" "}
                   </div>
@@ -902,7 +913,7 @@ export default function AwardPage({
               {" "}
               <div style={{ display: "flex", gap: "2.2em", paddingRight: "2.2em", whiteSpace: "nowrap" } as CSSProperties}>
                 <span>
-                  Заявки до {resolvedDeadlineLabel}
+{t.k296}{" "}{resolvedDeadlineLabel}
                 </span>
                 <span>
                   ◆
@@ -914,7 +925,7 @@ export default function AwardPage({
                   ◆
                 </span>
                 <span>
-                  Награждение 3 декабря · Кишинёв
+                  {t.k297}
                 </span>
                 <span>
                   ◆
@@ -923,7 +934,7 @@ export default function AwardPage({
               {" "}
               <div style={{ display: "flex", gap: "2.2em", paddingRight: "2.2em", whiteSpace: "nowrap" } as CSSProperties}>
                 <span>
-                  Заявки до {resolvedDeadlineLabel}
+{t.k296}{" "}{resolvedDeadlineLabel}
                 </span>
                 <span>
                   ◆
@@ -935,7 +946,7 @@ export default function AwardPage({
                   ◆
                 </span>
                 <span>
-                  Награждение 3 декабря · Кишинёв
+                  {t.k297}
                 </span>
                 <span>
                   ◆
@@ -971,15 +982,15 @@ export default function AwardPage({
                 </div>
                 {" "}
                 <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#8E9198" } as CSSProperties}>
-                  Заявка
+                  {t.k130}
                 </span>
                 {" "}
               </div>
               {" "}
               <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(32px,4vw,48px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(32px,5.4vw,80px)", lineHeight: ".94", letterSpacing: "-.045em", textTransform: "uppercase", maxWidth: "20ch" } as CSSProperties}>
-                Заявки принимаются
+                {t.k298}
                 <br />
-                до {resolvedDeadlineLabel}
+{t.k299}{" "}{resolvedDeadlineLabel}
               </h2>
               {" "}
               <div data-reveal="" data-delay="100" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "12px 20px", marginTop: "24px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".14em", textTransform: "uppercase", color: "#FFFFFF" } as CSSProperties}>
@@ -987,7 +998,7 @@ export default function AwardPage({
                 <span aria-hidden="true" style={{ width: "8px", height: "8px", background: "#FFFFFF" } as CSSProperties} />
                 {" "}
                 <span>
-                  Заполнение занимает две минуты
+                  {t.k247}
                 </span>
                 {" "}
               </div>
@@ -1002,7 +1013,7 @@ export default function AwardPage({
                     <div>
                       {" "}
                       <label htmlFor="aw-name" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        Имя и фамилия
+                        {t.k300}
                       </label>
                       {" "}
                       <input className="fa-f27ceb91" id="aw-name" name="name" type="text" autoComplete="name" onInput={onName} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
@@ -1016,7 +1027,7 @@ export default function AwardPage({
                     <div>
                       {" "}
                       <label htmlFor="aw-org" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        Компания или учебное заведение
+                        {t.k301}
                       </label>
                       {" "}
                       <input className="fa-f27ceb91" id="aw-org" name="org" type="text" autoComplete="organization" onInput={onOrg} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
@@ -1030,17 +1041,17 @@ export default function AwardPage({
                     <div>
                       {" "}
                       <span style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        Куда подаёте
+                        {t.k302}
                       </span>
                       {" "}
-                      <div role="radiogroup" aria-label="Куда подаёте" style={{ display: "flex", flexWrap: "wrap", gap: "1px", marginTop: "12px", background: "#C9C6BE", outline: "1px solid #C9C6BE" } as CSSProperties}>
+                      <div role="radiogroup" aria-label={t.k302} style={{ display: "flex", flexWrap: "wrap", gap: "1px", marginTop: "12px", background: "#C9C6BE", outline: "1px solid #C9C6BE" } as CSSProperties}>
                         {" "}
                         <button type="button" role="radio" aria-checked={isAward} onClick={pickAward} style={{ flex: "1 1 200px", padding: "15px 22px", background: awardBg, color: awardFg, border: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", textAlign: "left", cursor: "pointer", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
-                          Премия отрасли
+                          {t.k269}
                         </button>
                         {" "}
                         <button type="button" role="radio" aria-checked={isStudent} onClick={pickStudent} style={{ flex: "1 1 200px", padding: "15px 22px", background: studentBg, color: studentFg, border: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", textAlign: "left", cursor: "pointer", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
-                          Студенческий конкурс
+                          {t.k272}
                         </button>
                         {" "}
                       </div>
@@ -1054,13 +1065,13 @@ export default function AwardPage({
                     <div>
                       {" "}
                       <label htmlFor="aw-nomination" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        Номинация
+                        {t.k303}
                       </label>
                       {" "}
                       <select className="fa-f27ceb91" id="aw-nomination" name="nomination" value={nominationValue} onChange={onNomination} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "#FFFFFF", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", appearance: "none", borderRadius: "0", transition: "border-color 200ms ease" } as CSSProperties}>
                         {" "}
                         <option value="">
-                          Сначала выберите, куда подаёте
+                          {t.k304}
                         </option>
                         {" "}
                         {(nomOptions || []).map((opt, opt_i) => (
@@ -1098,7 +1109,7 @@ export default function AwardPage({
                     <div>
                       {" "}
                       <label htmlFor="aw-phone" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        Телефон
+                        {t.k120}
                       </label>
                       {" "}
                       <input className="fa-f27ceb91" id="aw-phone" name="phone" type="tel" autoComplete="tel" onInput={onPhone} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
@@ -1112,7 +1123,7 @@ export default function AwardPage({
                     <div>
                       {" "}
                       <label htmlFor="aw-url" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        Ссылка на материалы проекта
+                        {t.k305}
                       </label>
                       {" "}
                       <input className="fa-f27ceb91" id="aw-url" name="url" type="url" inputMode="url" placeholder="https://" onInput={onUrl} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
@@ -1126,7 +1137,7 @@ export default function AwardPage({
                     <div>
                       {" "}
                       <label htmlFor="aw-desc" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        Коротко о проекте
+                        {t.k306}
                       </label>
                       {" "}
                       <textarea className="fa-f27ceb91" id="aw-desc" name="desc" rows={4} maxLength={300} onInput={onDesc} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", lineHeight: "1.5", resize: "vertical", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
@@ -1148,11 +1159,11 @@ export default function AwardPage({
                   </div>
                   {" "}
                   <div style={{ marginTop: "clamp(28px,3vw,40px)", paddingTop: "20px", borderTop: "1px solid #DCDAD4", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", lineHeight: "1.7", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                    Материалы принимаются ссылкой на облако или портфолио — загружать файлы не нужно
+                    {t.k307}
                   </div>
                   {" "}
                   <button className="fa-ha683e68" type="submit" style={{ marginTop: "32px", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "16px", padding: "18px 36px", background: "#16181D", color: "#F7F6F3", border: "1px solid #16181D", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", cursor: "pointer", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
-                    Отправить заявку
+                    {t.k121}
                     <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
                       →
                     </span>
@@ -1169,11 +1180,11 @@ export default function AwardPage({
                 <div style={{ marginTop: "clamp(36px,4.4vw,56px)", padding: "clamp(26px,3.2vw,48px)", background: "#FFFFFF", color: "#16181D", maxWidth: "65ch", boxShadow: "14px 14px 0 rgba(255,255,255,.16)" } as CSSProperties}>
                   {" "}
                   <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(20px,1.9vw,24px)" } as CSSProperties}>
-                    Заявка отправлена
+                    {t.k122}
                   </div>
                   {" "}
                   <p style={{ margin: "16px 0 0", fontSize: "16px", lineHeight: "1.6", color: "#5C5F66" } as CSSProperties}>
-                    Ответ придёт на указанную почту после проверки материалов.
+                    {t.k308}
                   </p>
                   {" "}
                 </div>
@@ -1192,20 +1203,20 @@ export default function AwardPage({
               <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "24px 48px", padding: "clamp(28px,3.4vw,56px)", background: "#16181D", color: "#F7F6F3" } as CSSProperties}>
                 {" "}
                 <h3 style={{ margin: "0", flex: "1 1 420px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(22px,2.4vw,36px)", lineHeight: "1.1", letterSpacing: "-.025em", maxWidth: "26ch" } as CSSProperties}>
-                  Награды вручают на форуме. Сообщество работает между форумами.
+                  {t.k309}
                 </h3>
                 {" "}
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "14px" } as CSSProperties}>
                   {" "}
-                  <a className="fa-hb2c1ca2" href="/forum" data-page="" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "16px", padding: "19px 38px", border: "1px solid #F7F6F3", color: "#F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
-                    Форум 2026
+                  <a className="fa-hb2c1ca2" href={lp("/forum")} data-page="" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "16px", padding: "19px 38px", border: "1px solid #F7F6F3", color: "#F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
+                    {t.k9}
                     <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
                       →
                     </span>
                   </a>
                   {" "}
-                  <a className="fa-h7d2f5f0" href="/" data-page="" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "16px", padding: "19px 38px", border: "1px solid #3A3D44", color: "#B9BBC0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", transition: "background 200ms ease,color 200ms ease,border-color 200ms ease" } as CSSProperties}>
-                    О сообществе
+                  <a className="fa-h7d2f5f0" href={lp("/")} data-page="" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "16px", padding: "19px 38px", border: "1px solid #3A3D44", color: "#B9BBC0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", transition: "background 200ms ease,color 200ms ease,border-color 200ms ease" } as CSSProperties}>
+                    {t.k243}
                     <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
                       →
                     </span>
@@ -1270,27 +1281,27 @@ export default function AwardPage({
                 <img src="/img/0ce5b0d8a0.png" alt="Future Architecture" style={{ height: "104px", width: "auto", display: "block" } as CSSProperties} />
                 {" "}
                 <p style={{ margin: "24px 0 0", fontSize: "15px", lineHeight: "1.6", color: "#8E9198", maxWidth: "32ch" } as CSSProperties}>
-                  Форум и профессиональное сообщество архитектуры, дизайна и девелопмента в Молдове
+                  {t.k251}
                 </p>
                 {" "}
               </div>
               {" "}
-              <nav aria-label="Навигация в подвале" style={{ flex: "0 1 176px", display: "flex", flexDirection: "column", gap: "12px", fontSize: "15px", color: "#B9BBC0" } as CSSProperties}>
+              <nav aria-label={t.k125} style={{ flex: "0 1 176px", display: "flex", flexDirection: "column", gap: "12px", fontSize: "15px", color: "#B9BBC0" } as CSSProperties}>
                 {" "}
-                <a className="fa-h8d05fde" href="/" data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  Сообщество
+                <a className="fa-h8d05fde" href={lp("/")} data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                  {t.k35}
                 </a>
                 {" "}
-                <a className="fa-h8d05fde" href="/forum" data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  Форум 2026
+                <a className="fa-h8d05fde" href={lp("/forum")} data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                  {t.k9}
                 </a>
                 {" "}
                 <a className="fa-h8d05fde" href="#nominations" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  Номинации
+                  {t.k277}
                 </a>
                 {" "}
                 <a className="fa-h8d05fde" href="#apply" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  Заявка
+                  {t.k130}
                 </a>
                 {" "}
               </nav>
@@ -1350,7 +1361,7 @@ export default function AwardPage({
             <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "16px 32px", marginTop: "clamp(40px,5vw,64px)", paddingTop: "24px", borderTop: "1px solid #3A3D44" } as CSSProperties}>
               {" "}
               <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#8E9198" } as CSSProperties}>
-                Партнёры
+                {t.k126}
               </span>
               {" "}
               <img src="/img/d65b278e9b.png" alt="LH47 arch." style={{ height: "24px", width: "auto", display: "block", filter: "brightness(0) invert(.62)", opacity: ".9" } as CSSProperties} />
@@ -1363,21 +1374,21 @@ export default function AwardPage({
               {" "}
               <div style={{ display: "flex", gap: "8px" } as CSSProperties}>
                 {" "}
-                <span>
+                <a href={lhref('ro')} hrefLang="ro" aria-current={lang === 'ro' ? 'true' : undefined} style={{ color: lang === 'ro' ? "#16181D" : "inherit" } as CSSProperties}>
                   RO
-                </span>
+                </a>
                 <span style={{ color: "#3A3D44" } as CSSProperties}>
                   /
                 </span>
-                <span style={{ color: "#F7F6F3" } as CSSProperties}>
+                <a href={lhref('ru')} hrefLang="ru" aria-current={lang === 'ru' ? 'true' : undefined} style={{ color: lang === 'ru' ? "#16181D" : "inherit" } as CSSProperties}>
                   RU
-                </span>
+                </a>
                 <span style={{ color: "#3A3D44" } as CSSProperties}>
                   /
                 </span>
-                <span>
+                <a href={lhref('en')} hrefLang="en" aria-current={lang === 'en' ? 'true' : undefined} style={{ color: lang === 'en' ? "#16181D" : "inherit" } as CSSProperties}>
                   EN
-                </span>
+                </a>
                 {" "}
               </div>
               {" "}
@@ -1388,7 +1399,7 @@ export default function AwardPage({
                 </span>
                 {" "}
                 <a className="fa-h8d05fde" href="#" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  Политика данных
+                  {t.k127}
                 </a>
                 {" "}
               </div>

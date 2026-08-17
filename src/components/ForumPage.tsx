@@ -6,6 +6,9 @@
 
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
+import type { Dict } from '@/i18n/dict'
+import { path as langPath } from '@/i18n/links'
+import type { Lang } from '@/i18n/links'
 
 async function post(collection, body) {
   const res = await fetch('/api/' + collection, {
@@ -19,9 +22,15 @@ async function post(collection, body) {
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/
 
-type Props = { forumDate?: string; countdownVisible?: boolean }
+type Props = {
+  t: Dict; lang: Lang; forumDate?: string; countdownVisible?: boolean }
 
-export default function ForumPage({ forumDate, countdownVisible = true }: Props) {
+export default function ForumPage({
+  t, lang, forumDate, countdownVisible = true }: Props) {
+
+  // "/forum" stays "/forum" in Russian and becomes "/ro/forum" elsewhere
+  const lp = (p: string) => langPath(lang, p)
+  const lhref = (c: Lang) => langPath(c, "/forum")
 
   const [menu, setMenu] = useState(false)
   const toggleMenu = useCallback(() => setMenu((m) => !m), [])
@@ -100,12 +109,12 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
     e.preventDefault()
     const d = data.current
     const n: Record<string, string> = {}
-    if (!d.name.trim()) n.name = 'Укажите имя'
-    if (!d.company.trim()) n.company = 'Укажите компанию'
-    if (!d.role) n.role = 'Выберите роль'
-    if (!d.kind) n.kind = 'Выберите тип обращения'
-    if (!EMAIL_RE.test(d.email.trim())) n.email = 'Проверьте адрес почты'
-    if (d.phone.replace(/\D/g, '').length < 8) n.phone = 'Проверьте номер телефона'
+    if (!d.name.trim()) n.name = t.k1
+    if (!d.company.trim()) n.company = t.k2
+    if (!d.role) n.role = t.k3
+    if (!d.kind) n.kind = t.k128
+    if (!EMAIL_RE.test(d.email.trim())) n.email = t.k4
+    if (d.phone.replace(/\D/g, '').length < 8) n.phone = t.k5
     if (Object.keys(n).length) {
       setErr(n)
       document.getElementById('fa-' + Object.keys(n)[0])?.focus()
@@ -134,7 +143,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
           {" "}
           <div data-header-inner="" style={{ maxWidth: "1720px", margin: "0 auto", padding: "20px clamp(20px,4.8vw,108px)", display: "flex", alignItems: "center", gap: "24px", transition: "padding 300ms ease" } as CSSProperties}>
             {" "}
-            <a href="/" data-page="" style={{ display: "flex", alignItems: "center", gap: "12px" } as CSSProperties}>
+            <a href={lp("/")} data-page="" style={{ display: "flex", alignItems: "center", gap: "12px" } as CSSProperties}>
               {" "}
               <img src="/img/5dd2fe9c60.png" alt="" style={{ height: "30px", width: "auto", display: "block" } as CSSProperties} />
               {" "}
@@ -144,59 +153,59 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
               {" "}
             </a>
             {" "}
-            <nav aria-label="Основная навигация" style={{ marginLeft: "auto", minWidth: "0", display: ("var(--navDisplay)" as any), alignItems: "center", gap: "24px", fontSize: "15px", color: "#5C5F66" } as CSSProperties}>
+            <nav aria-label={t.k6} style={{ marginLeft: "auto", minWidth: "0", display: ("var(--navDisplay)" as any), alignItems: "center", gap: "24px", fontSize: "15px", color: "#5C5F66" } as CSSProperties}>
               {" "}
-              <a className="fa-hb09baf5" href="/" data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                Сообщество
+              <a className="fa-hb09baf5" href={lp("/")} data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                {t.k35}
               </a>
               {" "}
               <a className="fa-hb09baf5" href="#topics" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                Программа
+                {t.k129}
               </a>
               {" "}
               <a className="fa-hb09baf5" href="#participation" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                Участие
+                {t.k11}
               </a>
               {" "}
-              <a className="fa-hb09baf5" href="/award" data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                Премия
+              <a className="fa-hb09baf5" href={lp("/award")} data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                {t.k10}
               </a>
               {" "}
               <a className="fa-hb09baf5" href="#contacts" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                Контакты
+                {t.k12}
               </a>
               {" "}
             </nav>
             {" "}
             <div style={{ display: ("var(--navDisplay)" as any), alignItems: "center", gap: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em" } as CSSProperties}>
               {" "}
-              <span title="Перевод готовится" style={{ color: "#6E7278" } as CSSProperties}>
+              <a href={lhref('ro')} hrefLang="ro" aria-current={lang === 'ro' ? 'true' : undefined} style={{ color: lang === 'ro' ? "#16181D" : "#6E7278" } as CSSProperties}>
                 RO
-              </span>
+              </a>
               {" "}
               <span style={{ color: "#DCDAD4" } as CSSProperties}>
                 /
               </span>
               {" "}
-              <span aria-current="true" style={{ color: "#16181D" } as CSSProperties}>
+              <a href={lhref('ru')} hrefLang="ru" aria-current={lang === 'ru' ? 'true' : undefined} style={{ color: lang === 'ru' ? "#16181D" : "#6E7278" } as CSSProperties}>
                 RU
-              </span>
+              </a>
               {" "}
               <span style={{ color: "#DCDAD4" } as CSSProperties}>
                 /
               </span>
               {" "}
-              <span title="Перевод готовится" style={{ color: "#6E7278" } as CSSProperties}>
+              <a href={lhref('en')} hrefLang="en" aria-current={lang === 'en' ? 'true' : undefined} style={{ color: lang === 'en' ? "#16181D" : "#6E7278" } as CSSProperties}>
                 EN
-              </span>
+              </a>
               {" "}
             </div>
             {" "}
             <a className="fa-h2b89b98" href="#apply" style={{ display: ("var(--navDisplay)" as any), flex: "0 0 auto", alignItems: "center", padding: "12px 22px", background: "#FF4002", color: "#F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "14px", lineHeight: "1.2", whiteSpace: "nowrap", border: "1px solid #FF4002", transition: "background 200ms ease,color 200ms ease,border-color 200ms ease" } as CSSProperties}>
-              Заявка
+              {t.k130}
             </a>
             {" "}
-            <button type="button" aria-label="Меню" onClick={toggleMenu} style={{ display: ("var(--burgerDisplay)" as any), marginLeft: "auto", flexDirection: "column", justifyContent: "center", gap: "6px", width: "44px", height: "44px", padding: "0", background: "transparent", border: "0", cursor: "pointer" } as CSSProperties}>
+            <button type="button" aria-label={t.k15} onClick={toggleMenu} style={{ display: ("var(--burgerDisplay)" as any), marginLeft: "auto", flexDirection: "column", justifyContent: "center", gap: "6px", width: "44px", height: "44px", padding: "0", background: "transparent", border: "0", cursor: "pointer" } as CSSProperties}>
               {" "}
               <span style={{ display: "block", width: "22px", height: "1px", background: "#16181D" } as CSSProperties} />
               {" "}
@@ -208,26 +217,26 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
           {" "}
           <div style={{ display: (menu ? "var(--menuDisplay)" : "none"), background: "#F7F6F3", borderTop: "1px solid #DCDAD4", padding: "8px clamp(20px,4.8vw,108px) 32px" } as CSSProperties}>
             {" "}
-            <nav aria-label="Мобильная навигация" style={{ display: "flex", flexDirection: "column", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "22px" } as CSSProperties}>
+            <nav aria-label={t.k16} style={{ display: "flex", flexDirection: "column", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "22px" } as CSSProperties}>
               {" "}
-              <a href="/" data-page="" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                Сообщество
+              <a href={lp("/")} data-page="" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
+                {t.k35}
               </a>
               {" "}
               <a href="#topics" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                Программа
+                {t.k129}
               </a>
               {" "}
               <a href="#participation" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                Участие
+                {t.k11}
               </a>
               {" "}
-              <a href="/award" data-page="" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                Премия
+              <a href={lp("/award")} data-page="" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
+                {t.k10}
               </a>
               {" "}
               <a href="#contacts" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                Контакты
+                {t.k12}
               </a>
               {" "}
             </nav>
@@ -236,26 +245,26 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
               {" "}
               <div style={{ display: "flex", gap: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em" } as CSSProperties}>
                 {" "}
-                <span style={{ color: "#6E7278" } as CSSProperties}>
+                <a href={lhref('ro')} hrefLang="ro" aria-current={lang === 'ro' ? 'true' : undefined} style={{ color: lang === 'ro' ? "#16181D" : "#6E7278" } as CSSProperties}>
                   RO
-                </span>
+                </a>
                 <span style={{ color: "#DCDAD4" } as CSSProperties}>
                   /
                 </span>
-                <span style={{ color: "#16181D" } as CSSProperties}>
+                <a href={lhref('ru')} hrefLang="ru" aria-current={lang === 'ru' ? 'true' : undefined} style={{ color: lang === 'ru' ? "#16181D" : "#6E7278" } as CSSProperties}>
                   RU
-                </span>
+                </a>
                 <span style={{ color: "#DCDAD4" } as CSSProperties}>
                   /
                 </span>
-                <span style={{ color: "#6E7278" } as CSSProperties}>
+                <a href={lhref('en')} hrefLang="en" aria-current={lang === 'en' ? 'true' : undefined} style={{ color: lang === 'en' ? "#16181D" : "#6E7278" } as CSSProperties}>
                   EN
-                </span>
+                </a>
                 {" "}
               </div>
               {" "}
               <a href="#apply" onClick={closeMenu} style={{ display: "inline-flex", alignItems: "center", padding: "12px 24px", background: "#FF4002", color: "#F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "14px", lineHeight: "1.2" } as CSSProperties}>
-                Заявка
+                {t.k130}
               </a>
               {" "}
             </div>
@@ -276,19 +285,19 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
             {" "}
             <div data-axis-fill="" style={{ position: "absolute", left: "0", top: "0", width: "1px", height: "100%", background: "#FF4002", transform: "scaleY(0)", transformOrigin: "top", transition: "transform 200ms linear" } as CSSProperties} />
             {" "}
-            <div data-axis-tick="" data-stage="Регистрация" style={{ position: "absolute", left: "0", top: "0.00%", width: "10px", height: "1px", background: "#5C5F66", transition: "width 200ms ease,background 200ms ease" } as CSSProperties} />
+            <div data-axis-tick="" data-stage={t.k131} style={{ position: "absolute", left: "0", top: "0.00%", width: "10px", height: "1px", background: "#5C5F66", transition: "width 200ms ease,background 200ms ease" } as CSSProperties} />
             {" "}
-            <div data-axis-tick="" data-stage="Открытие" style={{ position: "absolute", left: "0", top: "16.67%", width: "10px", height: "1px", background: "#5C5F66", transition: "width 200ms ease,background 200ms ease" } as CSSProperties} />
+            <div data-axis-tick="" data-stage={t.k132} style={{ position: "absolute", left: "0", top: "16.67%", width: "10px", height: "1px", background: "#5C5F66", transition: "width 200ms ease,background 200ms ease" } as CSSProperties} />
             {" "}
-            <div data-axis-tick="" data-stage="Первая сессия" style={{ position: "absolute", left: "0", top: "33.33%", width: "10px", height: "1px", background: "#5C5F66", transition: "width 200ms ease,background 200ms ease" } as CSSProperties} />
+            <div data-axis-tick="" data-stage={t.k133} style={{ position: "absolute", left: "0", top: "33.33%", width: "10px", height: "1px", background: "#5C5F66", transition: "width 200ms ease,background 200ms ease" } as CSSProperties} />
             {" "}
-            <div data-axis-tick="" data-stage="Обед" style={{ position: "absolute", left: "0", top: "50.00%", width: "10px", height: "1px", background: "#5C5F66", transition: "width 200ms ease,background 200ms ease" } as CSSProperties} />
+            <div data-axis-tick="" data-stage={t.k134} style={{ position: "absolute", left: "0", top: "50.00%", width: "10px", height: "1px", background: "#5C5F66", transition: "width 200ms ease,background 200ms ease" } as CSSProperties} />
             {" "}
-            <div data-axis-tick="" data-stage="Вторая сессия" style={{ position: "absolute", left: "0", top: "66.67%", width: "10px", height: "1px", background: "#5C5F66", transition: "width 200ms ease,background 200ms ease" } as CSSProperties} />
+            <div data-axis-tick="" data-stage={t.k135} style={{ position: "absolute", left: "0", top: "66.67%", width: "10px", height: "1px", background: "#5C5F66", transition: "width 200ms ease,background 200ms ease" } as CSSProperties} />
             {" "}
-            <div data-axis-tick="" data-stage="Премия" style={{ position: "absolute", left: "0", top: "83.33%", width: "10px", height: "1px", background: "#5C5F66", transition: "width 200ms ease,background 200ms ease" } as CSSProperties} />
+            <div data-axis-tick="" data-stage={t.k10} style={{ position: "absolute", left: "0", top: "83.33%", width: "10px", height: "1px", background: "#5C5F66", transition: "width 200ms ease,background 200ms ease" } as CSSProperties} />
             {" "}
-            <div data-axis-tick="" data-stage="Фуршет" style={{ position: "absolute", left: "0", top: "100.00%", width: "10px", height: "1px", background: "#5C5F66", transition: "width 200ms ease,background 200ms ease" } as CSSProperties} />
+            <div data-axis-tick="" data-stage={t.k136} style={{ position: "absolute", left: "0", top: "100.00%", width: "10px", height: "1px", background: "#5C5F66", transition: "width 200ms ease,background 200ms ease" } as CSSProperties} />
             {" "}
           </div>
           {" "}
@@ -313,11 +322,11 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
               <div data-anim="" style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: "12px 32px", paddingBottom: "14px", borderBottom: "1px solid rgba(255,255,255,.4)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "clamp(10px,.9vw,12px)", letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(247,246,243,.92)", animation: "faFade 700ms ease 120ms both" } as CSSProperties}>
                 {" "}
                 <span>
-                  Кишинёв · Молдова
+                  {t.k137}
                 </span>
                 {" "}
                 <span>
-                  Закрытый формат · по приглашению
+                  {t.k138}
                 </span>
                 {" "}
               </div>
@@ -346,17 +355,17 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                 <div style={{ flex: "1 1 400px", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "clamp(18px,2vw,28px)" } as CSSProperties}>
                   {" "}
                   <p style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(20px,2.4vw,32px)", lineHeight: "1.12", letterSpacing: "-.025em", maxWidth: "22ch" } as CSSProperties}>
-                    Рынку нужен общий стол
+                    {t.k139}
                   </p>
                   {" "}
                   <div style={{ display: "flex", flexWrap: "wrap", gap: "14px" } as CSSProperties}>
                     {" "}
                     <a className="fa-ha12da69" href="#apply" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "19px 38px", background: "#F7F6F3", color: "#16181D", border: "1px solid #F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", transition: "background 220ms ease,color 220ms ease,border-color 220ms ease,transform 220ms ease" } as CSSProperties}>
-                      Заявка на участие
+                      {t.k140}
                     </a>
                     {" "}
                     <button className="fa-hf2ea20d" type="button" onClick={goPartner} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "19px 38px", background: "transparent", border: "1px solid rgba(255,255,255,.7)", color: "#F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", cursor: "pointer", transition: "background 220ms ease,color 220ms ease,border-color 220ms ease,transform 220ms ease" } as CSSProperties}>
-                      Стать партнёром
+                      {t.k141}
                     </button>
                     {" "}
                   </div>
@@ -368,7 +377,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   <span data-pulse="" style={{ width: "8px", height: "8px", background: "#16181D", animation: "faPulse 2s ease-in-out infinite" } as CSSProperties} />
                   {" "}
                   <span>
-                    Приём заявок открыт · 3 декабря 2026
+                    {t.k142}
                   </span>
                   {" "}
                 </div>
@@ -386,7 +395,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   </div>
                   {" "}
                   <div style={{ marginTop: "clamp(8px,1vw,14px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(247,246,243,.86)" } as CSSProperties}>
-                    дней
+                    {t.k143}
                   </div>
                   {" "}
                 </div>
@@ -400,7 +409,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   </div>
                   {" "}
                   <div style={{ marginTop: "clamp(8px,1vw,14px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(247,246,243,.86)" } as CSSProperties}>
-                    часов
+                    {t.k144}
                   </div>
                   {" "}
                 </div>
@@ -414,7 +423,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   </div>
                   {" "}
                   <div style={{ marginTop: "clamp(8px,1vw,14px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(247,246,243,.86)" } as CSSProperties}>
-                    минут
+                    {t.k145}
                   </div>
                   {" "}
                 </div>
@@ -428,7 +437,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   </div>
                   {" "}
                   <div style={{ marginTop: "clamp(8px,1vw,14px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(247,246,243,.86)" } as CSSProperties}>
-                    секунд
+                    {t.k146}
                   </div>
                   {" "}
                 </div>
@@ -436,11 +445,11 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                 <div style={{ flex: "1 1 200px", minWidth: "180px", display: "flex", flexDirection: "column", justifyContent: "flex-end", gap: "8px", padding: "clamp(16px,2vw,26px) clamp(12px,1.6vw,22px)", borderLeft: "1px solid rgba(255,255,255,.45)" } as CSSProperties}>
                   {" "}
                   <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(247,246,243,.86)" } as CSSProperties}>
-                    до начала форума
+                    {t.k147}
                   </span>
                   {" "}
                   <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(15px,1.4vw,20px)", letterSpacing: "-.01em" } as CSSProperties}>
-                    3 декабря 2026 · Кишинёв
+                    {t.k148}
                   </span>
                   {" "}
                 </div>
@@ -452,7 +461,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                 <span data-anim="" style={{ display: "block", width: "1px", height: "34px", background: "#16181D", animation: "faScroll 2.6s ease-in-out infinite" } as CSSProperties} />
                 {" "}
                 <span>
-                  листайте
+                  {t.k42}
                 </span>
                 {" "}
               </div>
@@ -468,56 +477,56 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
               <div style={{ display: "flex", gap: "24px", paddingRight: "24px" } as CSSProperties}>
                 {" "}
                 <span>
-                  250+ участников
+                  {t.k149}
                 </span>
                 <span style={{ color: "#FF4002" } as CSSProperties}>
                   ◆
                 </span>
                 {" "}
                 <span>
-                  только по приглашению
+                  {t.k150}
                 </span>
                 <span style={{ color: "#FF4002" } as CSSProperties}>
                   ◆
                 </span>
                 {" "}
                 <span>
-                  Кишинёв
+                  {t.k151}
                 </span>
                 <span style={{ color: "#FF4002" } as CSSProperties}>
                   ◆
                 </span>
                 {" "}
                 <span>
-                  3 декабря 2026
+                  {t.k152}
                 </span>
                 <span style={{ color: "#FF4002" } as CSSProperties}>
                   ◆
                 </span>
                 {" "}
                 <span>
-                  закрытый формат
+                  {t.k153}
                 </span>
                 <span style={{ color: "#FF4002" } as CSSProperties}>
                   ◆
                 </span>
                 {" "}
                 <span>
-                  4 направления
+                  {t.k154}
                 </span>
                 <span style={{ color: "#FF4002" } as CSSProperties}>
                   ◆
                 </span>
                 {" "}
                 <span>
-                  премия отрасли
+                  {t.k155}
                 </span>
                 <span style={{ color: "#FF4002" } as CSSProperties}>
                   ◆
                 </span>
                 {" "}
                 <span>
-                  закрытый ужин
+                  {t.k156}
                 </span>
                 <span style={{ color: "#FF4002" } as CSSProperties}>
                   ◆
@@ -528,56 +537,56 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
               <div aria-hidden="true" style={{ display: "flex", gap: "24px", paddingRight: "24px" } as CSSProperties}>
                 {" "}
                 <span>
-                  250+ участников
+                  {t.k149}
                 </span>
                 <span style={{ color: "#FF4002" } as CSSProperties}>
                   ◆
                 </span>
                 {" "}
                 <span>
-                  только по приглашению
+                  {t.k150}
                 </span>
                 <span style={{ color: "#FF4002" } as CSSProperties}>
                   ◆
                 </span>
                 {" "}
                 <span>
-                  Кишинёв
+                  {t.k151}
                 </span>
                 <span style={{ color: "#FF4002" } as CSSProperties}>
                   ◆
                 </span>
                 {" "}
                 <span>
-                  3 декабря 2026
+                  {t.k152}
                 </span>
                 <span style={{ color: "#FF4002" } as CSSProperties}>
                   ◆
                 </span>
                 {" "}
                 <span>
-                  закрытый формат
+                  {t.k153}
                 </span>
                 <span style={{ color: "#FF4002" } as CSSProperties}>
                   ◆
                 </span>
                 {" "}
                 <span>
-                  4 направления
+                  {t.k154}
                 </span>
                 <span style={{ color: "#FF4002" } as CSSProperties}>
                   ◆
                 </span>
                 {" "}
                 <span>
-                  премия отрасли
+                  {t.k155}
                 </span>
                 <span style={{ color: "#FF4002" } as CSSProperties}>
                   ◆
                 </span>
                 {" "}
                 <span>
-                  закрытый ужин
+                  {t.k156}
                 </span>
                 <span style={{ color: "#FF4002" } as CSSProperties}>
                   ◆
@@ -597,37 +606,37 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                 {" "}
                 <div style={{ display: "flex", gap: ".3em", paddingRight: ".3em" } as CSSProperties}>
                   <span style={{ color: "#16181D" } as CSSProperties}>
-                    Концепция
+                    {t.k157}
                   </span>
                   <span style={{ color: "#C9C6BE" } as CSSProperties}>
-                    Среда
+                    {t.k158}
                   </span>
                   <span style={{ color: "#FF4002" } as CSSProperties}>
-                    Ликвидность
+                    {t.k159}
                   </span>
                   <span style={{ color: "#16181D" } as CSSProperties}>
-                    Инфраструктура
+                    {t.k160}
                   </span>
                   <span style={{ color: "#C9C6BE" } as CSSProperties}>
-                    Ценность
+                    {t.k161}
                   </span>
                 </div>
                 {" "}
                 <div style={{ display: "flex", gap: ".3em", paddingRight: ".3em" } as CSSProperties}>
                   <span style={{ color: "#16181D" } as CSSProperties}>
-                    Концепция
+                    {t.k157}
                   </span>
                   <span style={{ color: "#C9C6BE" } as CSSProperties}>
-                    Среда
+                    {t.k158}
                   </span>
                   <span style={{ color: "#FF4002" } as CSSProperties}>
-                    Ликвидность
+                    {t.k159}
                   </span>
                   <span style={{ color: "#16181D" } as CSSProperties}>
-                    Инфраструктура
+                    {t.k160}
                   </span>
                   <span style={{ color: "#C9C6BE" } as CSSProperties}>
-                    Ценность
+                    {t.k161}
                   </span>
                 </div>
                 {" "}
@@ -641,37 +650,37 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                 {" "}
                 <div style={{ display: "flex", gap: ".3em", paddingRight: ".3em" } as CSSProperties}>
                   <span style={{ color: "#16181D" } as CSSProperties}>
-                    Ценность
+                    {t.k161}
                   </span>
                   <span style={{ color: "#C9C6BE" } as CSSProperties}>
-                    Инфраструктура
+                    {t.k160}
                   </span>
                   <span style={{ color: "#16181D" } as CSSProperties}>
-                    Ликвидность
+                    {t.k159}
                   </span>
                   <span style={{ color: "#FF4002" } as CSSProperties}>
-                    Среда
+                    {t.k158}
                   </span>
                   <span style={{ color: "#C9C6BE" } as CSSProperties}>
-                    Концепция
+                    {t.k157}
                   </span>
                 </div>
                 {" "}
                 <div style={{ display: "flex", gap: ".3em", paddingRight: ".3em" } as CSSProperties}>
                   <span style={{ color: "#16181D" } as CSSProperties}>
-                    Ценность
+                    {t.k161}
                   </span>
                   <span style={{ color: "#C9C6BE" } as CSSProperties}>
-                    Инфраструктура
+                    {t.k160}
                   </span>
                   <span style={{ color: "#16181D" } as CSSProperties}>
-                    Ликвидность
+                    {t.k159}
                   </span>
                   <span style={{ color: "#FF4002" } as CSSProperties}>
-                    Среда
+                    {t.k158}
                   </span>
                   <span style={{ color: "#C9C6BE" } as CSSProperties}>
-                    Концепция
+                    {t.k157}
                   </span>
                 </div>
                 {" "}
@@ -690,7 +699,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                 <div style={{ display: "flex", alignItems: "center", gap: "16px" } as CSSProperties}>
                   {" "}
                   <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".12em", textTransform: "uppercase", color: "#FF4002" } as CSSProperties}>
-                    Акт I
+                    {t.k162}
                   </span>
                   {" "}
                   <span data-draw="" style={{ width: "40px", height: "1px", background: "#FF4002", transform: "scaleX(0)", transformOrigin: "left" } as CSSProperties} />
@@ -698,27 +707,27 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                 </div>
                 {" "}
                 <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#8E9198" } as CSSProperties}>
-                  Задача
+                  {t.k163}
                 </span>
                 {" "}
               </div>
               {" "}
               <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(36px,4.4vw,64px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(40px,7.4vw,116px)", lineHeight: ".9", letterSpacing: "-.045em", textTransform: "uppercase", maxWidth: "13ch" } as CSSProperties}>
-                Цепочка стоимости
+                {t.k164}
               </h2>
               {" "}
               <p data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(28px,3vw,44px) 0 0", fontSize: "clamp(18px,1.6vw,27px)", lineHeight: "1.45", letterSpacing: "-.01em", color: "#B9BBC0", maxWidth: "50ch" } as CSSProperties}>
-                Успешный проект – результат работы всей цепочки: от инвестора и владельца земли до архитектора, производителя и управляющей компании. Форум собирает всех, кто влияет на создание, стоимость и коммерческий успех объекта.
+                {t.k165}
               </p>
               {" "}
               <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", justifyContent: "space-between", gap: "12px 32px", marginTop: "clamp(44px,5.4vw,80px)", paddingBottom: "14px", borderBottom: "2px solid #FF4002", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase" } as CSSProperties}>
                 {" "}
                 <span style={{ color: "#F7F6F3" } as CSSProperties}>
-                  Шесть этапов жизни объекта – и кто отвечает на каждом
+                  {t.k166}
                 </span>
                 {" "}
                 <span style={{ color: "#8E9198" } as CSSProperties}>
-                  Форум собирает всю цепочку в один день
+                  {t.k167}
                 </span>
                 {" "}
               </div>
@@ -732,9 +741,9 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   </span>
                   {" "}
                   <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,23px)", lineHeight: "1.18", letterSpacing: "-.02em" } as CSSProperties}>
-                    Земля
+                    {t.k168}
                     <span style={{ display: "block", marginTop: "10px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontWeight: "400", fontSize: "10px", letterSpacing: ".1em", textTransform: "uppercase", opacity: ".62" } as CSSProperties}>
-                      Владелец · город
+                      {t.k169}
                     </span>
                   </span>
                   {" "}
@@ -747,9 +756,9 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   </span>
                   {" "}
                   <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,23px)", lineHeight: "1.18", letterSpacing: "-.02em" } as CSSProperties}>
-                    Инвестиция
+                    {t.k170}
                     <span style={{ display: "block", marginTop: "10px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontWeight: "400", fontSize: "10px", letterSpacing: ".1em", textTransform: "uppercase", opacity: ".62" } as CSSProperties}>
-                      Инвестор · банк
+                      {t.k171}
                     </span>
                   </span>
                   {" "}
@@ -762,9 +771,9 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   </span>
                   {" "}
                   <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,23px)", lineHeight: "1.18", letterSpacing: "-.02em" } as CSSProperties}>
-                    Концепция
+                    {t.k157}
                     <span style={{ display: "block", marginTop: "10px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontWeight: "400", fontSize: "10px", letterSpacing: ".1em", textTransform: "uppercase", opacity: ".62" } as CSSProperties}>
-                      Архитектор · дизайнер
+                      {t.k172}
                     </span>
                   </span>
                   {" "}
@@ -777,9 +786,9 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   </span>
                   {" "}
                   <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,23px)", lineHeight: "1.18", letterSpacing: "-.02em" } as CSSProperties}>
-                    Строительство
+                    {t.k173}
                     <span style={{ display: "block", marginTop: "10px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontWeight: "400", fontSize: "10px", letterSpacing: ".1em", textTransform: "uppercase", opacity: ".62" } as CSSProperties}>
-                      Подрядчик · производитель
+                      {t.k174}
                     </span>
                   </span>
                   {" "}
@@ -792,9 +801,9 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   </span>
                   {" "}
                   <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,23px)", lineHeight: "1.18", letterSpacing: "-.02em" } as CSSProperties}>
-                    Продажи
+                    {t.k175}
                     <span style={{ display: "block", marginTop: "10px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontWeight: "400", fontSize: "10px", letterSpacing: ".1em", textTransform: "uppercase", opacity: ".62" } as CSSProperties}>
-                      Брокер · маркетинг
+                      {t.k176}
                     </span>
                   </span>
                   {" "}
@@ -807,9 +816,9 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   </span>
                   {" "}
                   <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,23px)", lineHeight: "1.18", letterSpacing: "-.02em" } as CSSProperties}>
-                    Эксплуатация
+                    {t.k177}
                     <span style={{ display: "block", marginTop: "10px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontWeight: "400", fontSize: "10px", letterSpacing: ".1em", textTransform: "uppercase", opacity: ".62" } as CSSProperties}>
-                      Управляющая компания
+                      {t.k178}
                     </span>
                   </span>
                   {" "}
@@ -830,7 +839,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                 <span style={{ width: "40px", height: "2px", background: "#FF4002" } as CSSProperties} />
                 {" "}
                 <span>
-                  Тезис форума
+                  {t.k179}
                 </span>
                 {" "}
               </div>
@@ -840,9 +849,9 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                 <div aria-hidden="true" data-reveal="" data-delay="40" style={{ opacity: "0", flex: "0 0 3px", background: "#FF4002" } as CSSProperties} />
                 {" "}
                 <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(30px,5.4vw,84px)", lineHeight: ".94", letterSpacing: "-.04em", textTransform: "uppercase", color: "#16181D", maxWidth: "26ch", textWrap: "balance" } as CSSProperties}>
-                  Сегодня выигрывают не те, кто строит,{" "}
+{t.k180}{" "}
                   <span style={{ color: "#FF4002" } as CSSProperties}>
-                    а те, кто создаёт ценность
+                    {t.k181}
                   </span>
                 </h2>
                 {" "}
@@ -853,7 +862,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                 <div className="fa-hea007e6" style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "16px", padding: "clamp(22px,2.4vw,32px)", background: "#F7F6F3", transition: "background 240ms ease,color 240ms ease" } as CSSProperties}>
                   {" "}
                   <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(22px,2.4vw,34px)", lineHeight: "1", letterSpacing: "-.035em", textTransform: "uppercase" } as CSSProperties}>
-                    Концепция
+                    {t.k157}
                   </span>
                   {" "}
                   <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#FF4002" } as CSSProperties}>
@@ -865,7 +874,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                 <div className="fa-hea007e6" style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "16px", padding: "clamp(22px,2.4vw,32px)", background: "#F7F6F3", transition: "background 240ms ease,color 240ms ease" } as CSSProperties}>
                   {" "}
                   <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(22px,2.4vw,34px)", lineHeight: "1", letterSpacing: "-.035em", textTransform: "uppercase" } as CSSProperties}>
-                    Среда
+                    {t.k158}
                   </span>
                   {" "}
                   <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#FF4002" } as CSSProperties}>
@@ -877,7 +886,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                 <div className="fa-hea007e6" style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "16px", padding: "clamp(22px,2.4vw,32px)", background: "#F7F6F3", transition: "background 240ms ease,color 240ms ease" } as CSSProperties}>
                   {" "}
                   <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(22px,2.4vw,34px)", lineHeight: "1", letterSpacing: "-.035em", textTransform: "uppercase" } as CSSProperties}>
-                    Ликвидность
+                    {t.k159}
                   </span>
                   {" "}
                   <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#FF4002" } as CSSProperties}>
@@ -909,7 +918,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                 </div>
                 {" "}
                 <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                  Состав зала
+                  {t.k182}
                 </span>
                 {" "}
               </div>
@@ -925,9 +934,9 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   </span>
                   {" "}
                   <span style={{ paddingBottom: "clamp(10px,1.4vw,22px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "clamp(11px,1vw,13px)", lineHeight: "1.7", letterSpacing: ".12em", textTransform: "uppercase", color: "#5C5F66" } as CSSProperties}>
-                    участников
+                    {t.k79}
                     <br />
-                    по приглашению
+                    {t.k183}
                   </span>
                   {" "}
                 </div>
@@ -945,7 +954,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                     </span>
                     {" "}
                     <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(20px,2vw,31px)", lineHeight: "1.14", letterSpacing: "-.022em" } as CSSProperties}>
-                      Девелоперы и строительные компании
+                      {t.k184}
                     </span>
                     {" "}
                     <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(28px,3.2vw,50px)", lineHeight: "1", letterSpacing: "-.035em", color: "#FF4002" } as CSSProperties}>
@@ -967,7 +976,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                     </span>
                     {" "}
                     <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(20px,2vw,31px)", lineHeight: "1.14", letterSpacing: "-.022em" } as CSSProperties}>
-                      Инвесторы и бизнес
+                      {t.k59}
                     </span>
                     {" "}
                     <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(28px,3.2vw,50px)", lineHeight: "1", letterSpacing: "-.035em", color: "#16181D" } as CSSProperties}>
@@ -989,7 +998,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                     </span>
                     {" "}
                     <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(20px,2vw,31px)", lineHeight: "1.14", letterSpacing: "-.022em" } as CSSProperties}>
-                      Производители и поставщики
+                      {t.k57}
                     </span>
                     {" "}
                     <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(28px,3.2vw,50px)", lineHeight: "1", letterSpacing: "-.035em", color: "#16181D" } as CSSProperties}>
@@ -1011,7 +1020,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                     </span>
                     {" "}
                     <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(20px,2vw,31px)", lineHeight: "1.14", letterSpacing: "-.022em" } as CSSProperties}>
-                      Архитекторы и дизайнеры
+                      {t.k53}
                     </span>
                     {" "}
                     <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(28px,3.2vw,50px)", lineHeight: "1", letterSpacing: "-.035em", color: "#16181D" } as CSSProperties}>
@@ -1033,7 +1042,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                     </span>
                     {" "}
                     <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(20px,2vw,31px)", lineHeight: "1.14", letterSpacing: "-.022em" } as CSSProperties}>
-                      Представители власти и профсообщество
+                      {t.k185}
                     </span>
                     {" "}
                     <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(28px,3.2vw,50px)", lineHeight: "1", letterSpacing: "-.035em", color: "#16181D" } as CSSProperties}>
@@ -1069,7 +1078,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                 </div>
                 {" "}
                 <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                  Хроника
+                  {t.k186}
                 </span>
                 {" "}
               </div>
@@ -1077,11 +1086,11 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
               <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "16px 48px", marginTop: "clamp(24px,3vw,40px)" } as CSSProperties}>
                 {" "}
                 <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(26px,3.4vw,48px)", lineHeight: "1", letterSpacing: "-.035em", textTransform: "uppercase", maxWidth: "22ch" } as CSSProperties}>
-                  Мы регулярно проводим мероприятия
+                  {t.k187}
                 </h2>
                 {" "}
                 <p data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", maxWidth: "52ch", fontSize: "clamp(15px,1.15vw,18px)", lineHeight: "1.55", color: "#5C5F66" } as CSSProperties}>
-                  Встречи, которые объединяют отрасль и формируют профессиональную среду.
+                  {t.k188}
                 </p>
                 {" "}
               </div>
@@ -1090,44 +1099,44 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                 {" "}
                 <div className="fa-h190d283" style={{ flex: `1 1 var(--stripBasis)`, minWidth: "0", height: ("var(--stripFrame)" as any), overflow: "hidden", background: "#E4E1DA", transition: "flex-grow 600ms cubic-bezier(.2,.8,.2,1)" } as CSSProperties}>
                   {" "}
-                  <img className="fa-hdb9575d" src="/img/049c83300f.jpg" alt="Мероприятие Future Architecture" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "grayscale(1)", transition: "filter 600ms ease,transform 900ms cubic-bezier(.2,.8,.2,1)" } as CSSProperties} />
+                  <img className="fa-hdb9575d" src="/img/049c83300f.jpg" alt={t.k189} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "grayscale(1)", transition: "filter 600ms ease,transform 900ms cubic-bezier(.2,.8,.2,1)" } as CSSProperties} />
                   {" "}
                 </div>
                 {" "}
                 <div className="fa-h190d283" style={{ flex: `1 1 var(--stripBasis)`, minWidth: "0", height: ("var(--stripFrame)" as any), overflow: "hidden", background: "#E4E1DA", transition: "flex-grow 600ms cubic-bezier(.2,.8,.2,1)" } as CSSProperties}>
                   {" "}
-                  <img className="fa-hdb9575d" src="/img/59226355eb.jpg" alt="Мероприятие Future Architecture" loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "grayscale(1)", transition: "filter 600ms ease,transform 900ms cubic-bezier(.2,.8,.2,1)" } as CSSProperties} />
+                  <img className="fa-hdb9575d" src="/img/59226355eb.jpg" alt={t.k189} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "grayscale(1)", transition: "filter 600ms ease,transform 900ms cubic-bezier(.2,.8,.2,1)" } as CSSProperties} />
                   {" "}
                 </div>
                 {" "}
                 <div className="fa-h190d283" style={{ flex: `1 1 var(--stripBasis)`, minWidth: "0", height: ("var(--stripFrame)" as any), overflow: "hidden", background: "#E4E1DA", transition: "flex-grow 600ms cubic-bezier(.2,.8,.2,1)" } as CSSProperties}>
                   {" "}
-                  <img className="fa-hdb9575d" src="/img/0b445d383f.jpg" alt="Мероприятие Future Architecture" loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "grayscale(1)", transition: "filter 600ms ease,transform 900ms cubic-bezier(.2,.8,.2,1)" } as CSSProperties} />
+                  <img className="fa-hdb9575d" src="/img/0b445d383f.jpg" alt={t.k189} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "grayscale(1)", transition: "filter 600ms ease,transform 900ms cubic-bezier(.2,.8,.2,1)" } as CSSProperties} />
                   {" "}
                 </div>
                 {" "}
                 <div className="fa-h190d283" style={{ flex: `1 1 var(--stripBasis)`, minWidth: "0", height: ("var(--stripFrame)" as any), overflow: "hidden", background: "#E4E1DA", transition: "flex-grow 600ms cubic-bezier(.2,.8,.2,1)" } as CSSProperties}>
                   {" "}
-                  <img className="fa-hdb9575d" src="/img/0c1ebc8a38.jpg" alt="Мероприятие Future Architecture" loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "grayscale(1)", transition: "filter 600ms ease,transform 900ms cubic-bezier(.2,.8,.2,1)" } as CSSProperties} />
+                  <img className="fa-hdb9575d" src="/img/0c1ebc8a38.jpg" alt={t.k189} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "grayscale(1)", transition: "filter 600ms ease,transform 900ms cubic-bezier(.2,.8,.2,1)" } as CSSProperties} />
                   {" "}
                 </div>
                 {" "}
                 <div className="fa-h190d283" style={{ flex: `1 1 var(--stripBasis)`, minWidth: "0", height: ("var(--stripFrame)" as any), overflow: "hidden", background: "#E4E1DA", transition: "flex-grow 600ms cubic-bezier(.2,.8,.2,1)" } as CSSProperties}>
                   {" "}
-                  <img className="fa-hdb9575d" src="/img/2f64f8de03.jpg" alt="Мероприятие Future Architecture" loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "grayscale(1)", transition: "filter 600ms ease,transform 900ms cubic-bezier(.2,.8,.2,1)" } as CSSProperties} />
+                  <img className="fa-hdb9575d" src="/img/2f64f8de03.jpg" alt={t.k189} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "grayscale(1)", transition: "filter 600ms ease,transform 900ms cubic-bezier(.2,.8,.2,1)" } as CSSProperties} />
                   {" "}
                 </div>
                 {" "}
                 <div className="fa-h190d283" style={{ flex: `1 1 var(--stripBasis)`, minWidth: "0", height: ("var(--stripFrame)" as any), overflow: "hidden", background: "#E4E1DA", transition: "flex-grow 600ms cubic-bezier(.2,.8,.2,1)" } as CSSProperties}>
                   {" "}
-                  <img className="fa-hdb9575d" src="/img/ec5233a8df.jpg" alt="Мероприятие Future Architecture" loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "grayscale(1)", transition: "filter 600ms ease,transform 900ms cubic-bezier(.2,.8,.2,1)" } as CSSProperties} />
+                  <img className="fa-hdb9575d" src="/img/ec5233a8df.jpg" alt={t.k189} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "grayscale(1)", transition: "filter 600ms ease,transform 900ms cubic-bezier(.2,.8,.2,1)" } as CSSProperties} />
                   {" "}
                 </div>
                 {" "}
               </div>
               {" "}
               <div data-reveal="" data-delay="200" style={{ opacity: "0", transform: "translateY(16px)", marginTop: "14px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".12em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                Наведите на кадр
+                {t.k190}
               </div>
               {" "}
             </div>
@@ -1141,15 +1150,15 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
             <div style={{ position: "relative", maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
               {" "}
               <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "inline-flex", alignItems: "center", gap: "12px", padding: "9px 18px", background: "#FF4002", color: "#F7F6F3", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".16em", textTransform: "uppercase" } as CSSProperties}>
-                Акт II
+                {t.k191}
               </div>
               {" "}
               <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "24px 40px", marginTop: "clamp(24px,3vw,40px)" } as CSSProperties}>
                 {" "}
                 <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(40px,8vw,124px)", lineHeight: ".88", letterSpacing: "-.05em", textTransform: "uppercase" } as CSSProperties}>
-                  Содержание{" "}
+{t.k192}{" "}
                   <span style={{ color: "#FF4002" } as CSSProperties}>
-                    дня
+                    {t.k193}
                   </span>
                 </h2>
                 {" "}
@@ -1176,16 +1185,16 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                 </div>
                 {" "}
                 <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                  Акт II · направления
+                  {t.k194}
                 </span>
                 {" "}
               </div>
               {" "}
               <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(32px,4vw,48px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(34px,6.4vw,96px)", lineHeight: ".9", letterSpacing: "-.045em", textTransform: "uppercase", maxWidth: "24ch" } as CSSProperties}>
                 <span style={{ color: "#FF4002" } as CSSProperties}>
-                  Четыре
+                  {t.k195}
                 </span>
-                {" "}программных направления
+                {" "}{t.k196}
               </h2>
               {" "}
               <div data-reveal="" data-delay="100" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "12px 28px", marginTop: "clamp(20px,2.4vw,32px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "#5C5F66" } as CSSProperties}>
@@ -1205,16 +1214,16 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                     <div style={{ position: "relative", display: "flex", alignItems: "center", gap: "12px" } as CSSProperties}>
                       <span style={{ width: "8px", height: "8px", background: t1.dot, transition: "background 300ms ease" } as CSSProperties} />
                       <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: t1.tag, transition: "color 300ms ease" } as CSSProperties}>
-                        Продажи
+                        {t.k175}
                       </span>
                     </div>
                     {" "}
                     <h3 style={{ position: "relative", margin: "32px 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(20px,1.8vw,26px)", lineHeight: "1.16", letterSpacing: "-.02em", maxWidth: "20ch" } as CSSProperties}>
-                      Архитектура как инструмент продаж
+                      {t.k197}
                     </h3>
                     {" "}
                     <p style={{ position: "relative", marginTop: "auto", paddingTop: "26px", fontSize: "15px", lineHeight: "1.55", opacity: ".62" } as CSSProperties}>
-                      Какие архитектурные решения создают ценность для покупателя и влияют на коммерческий результат
+                      {t.k198}
                     </p>
                     {" "}
                   </article>
@@ -1228,16 +1237,16 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                     <div style={{ position: "relative", display: "flex", alignItems: "center", gap: "12px" } as CSSProperties}>
                       <span style={{ width: "8px", height: "8px", background: t2.dot, transition: "background 300ms ease" } as CSSProperties} />
                       <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: t2.tag, transition: "color 300ms ease" } as CSSProperties}>
-                        Опыт
+                        {t.k199}
                       </span>
                     </div>
                     {" "}
                     <h3 style={{ position: "relative", margin: "32px 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(20px,1.8vw,26px)", lineHeight: "1.16", letterSpacing: "-.02em", maxWidth: "20ch" } as CSSProperties}>
-                      Новые стандарты жилого девелопмента
+                      {t.k200}
                     </h3>
                     {" "}
                     <p style={{ position: "relative", marginTop: "auto", paddingTop: "26px", fontSize: "15px", lineHeight: "1.55", opacity: ".62" } as CSSProperties}>
-                      Зарубежные девелоперы – о решениях и технологиях, применимых к рынку Молдовы
+                      {t.k201}
                     </p>
                     {" "}
                   </article>
@@ -1251,16 +1260,16 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                     <div style={{ position: "relative", display: "flex", alignItems: "center", gap: "12px" } as CSSProperties}>
                       <span style={{ width: "8px", height: "8px", background: t3.dot, transition: "background 300ms ease" } as CSSProperties} />
                       <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: t3.tag, transition: "color 300ms ease" } as CSSProperties}>
-                        Город
+                        {t.k30}
                       </span>
                     </div>
                     {" "}
                     <h3 style={{ position: "relative", margin: "32px 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(20px,1.8vw,26px)", lineHeight: "1.16", letterSpacing: "-.02em", maxWidth: "20ch" } as CSSProperties}>
-                      Кишинёв 2035: куда растёт город
+                      {t.k202}
                     </h3>
                     {" "}
                     <p style={{ position: "relative", marginTop: "auto", paddingTop: "26px", fontSize: "15px", lineHeight: "1.55", opacity: ".62" } as CSSProperties}>
-                      Направления развития, территории застройки, транспорт и новые центры притяжения
+                      {t.k203}
                     </p>
                     {" "}
                   </article>
@@ -1274,16 +1283,16 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                     <div style={{ position: "relative", display: "flex", alignItems: "center", gap: "12px" } as CSSProperties}>
                       <span style={{ width: "8px", height: "8px", background: t4.dot, transition: "background 300ms ease" } as CSSProperties} />
                       <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: t4.tag, transition: "color 300ms ease" } as CSSProperties}>
-                        Доходность
+                        {t.k204}
                       </span>
                     </div>
                     {" "}
                     <h3 style={{ position: "relative", margin: "32px 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(20px,1.8vw,26px)", lineHeight: "1.16", letterSpacing: "-.02em", maxWidth: "20ch" } as CSSProperties}>
-                      Новые источники доходности недвижимости
+                      {t.k205}
                     </h3>
                     {" "}
                     <p style={{ position: "relative", marginTop: "auto", paddingTop: "26px", fontSize: "15px", lineHeight: "1.55", opacity: ".62" } as CSSProperties}>
-                      Wellness, промышленная и новые форматы коммерческой недвижимости
+                      {t.k206}
                     </p>
                     {" "}
                   </article>
@@ -1327,7 +1336,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                 </div>
                 {" "}
                 <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                  Акт II · регламент
+                  {t.k207}
                 </span>
                 {" "}
               </div>
@@ -1335,14 +1344,14 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
               <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "24px 40px", marginTop: "clamp(32px,4vw,48px)" } as CSSProperties}>
                 {" "}
                 <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(34px,6.4vw,96px)", lineHeight: ".9", letterSpacing: "-.045em", textTransform: "uppercase", maxWidth: "18ch" } as CSSProperties}>
-                  Один день,{" "}
+{t.k208}{" "}
                   <span style={{ color: "#FF4002" } as CSSProperties}>
-                    восемь шагов
+                    {t.k209}
                   </span>
                 </h2>
                 {" "}
                 <p data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", maxWidth: "40ch", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", lineHeight: "1.7", letterSpacing: ".1em", textTransform: "uppercase", color: "#5C5F66" } as CSSProperties}>
-                  3 декабря 2026 · точное время программы публикуется позже
+                  {t.k210}
                 </p>
                 {" "}
               </div>
@@ -1356,7 +1365,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   </span>
                   {" "}
                   <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(15px,1.2vw,19px)", lineHeight: "1.2", letterSpacing: "-.02em" } as CSSProperties}>
-                    Регистрация и welcome-кофе
+                    {t.k211}
                   </span>
                   {" "}
                 </div>
@@ -1368,7 +1377,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   </span>
                   {" "}
                   <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(15px,1.2vw,19px)", lineHeight: "1.2", letterSpacing: "-.02em" } as CSSProperties}>
-                    Открытие
+                    {t.k132}
                   </span>
                   {" "}
                 </div>
@@ -1380,7 +1389,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   </span>
                   {" "}
                   <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(15px,1.2vw,19px)", lineHeight: "1.2", letterSpacing: "-.02em" } as CSSProperties}>
-                    Первая сессия выступлений
+                    {t.k212}
                   </span>
                   {" "}
                 </div>
@@ -1392,7 +1401,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   </span>
                   {" "}
                   <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(15px,1.2vw,19px)", lineHeight: "1.2", letterSpacing: "-.02em" } as CSSProperties}>
-                    Обед и нетворкинг
+                    {t.k213}
                   </span>
                   {" "}
                 </div>
@@ -1404,7 +1413,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   </span>
                   {" "}
                   <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(15px,1.2vw,19px)", lineHeight: "1.2", letterSpacing: "-.02em" } as CSSProperties}>
-                    Вторая сессия выступлений
+                    {t.k214}
                   </span>
                   {" "}
                 </div>
@@ -1416,7 +1425,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   </span>
                   {" "}
                   <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(15px,1.2vw,19px)", lineHeight: "1.2", letterSpacing: "-.02em" } as CSSProperties}>
-                    Премия и студенческий конкурс
+                    {t.k215}
                   </span>
                   {" "}
                 </div>
@@ -1428,7 +1437,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   </span>
                   {" "}
                   <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(15px,1.2vw,19px)", lineHeight: "1.2", letterSpacing: "-.02em" } as CSSProperties}>
-                    Фуршет
+                    {t.k136}
                   </span>
                   {" "}
                 </div>
@@ -1440,7 +1449,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   </span>
                   {" "}
                   <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(15px,1.2vw,19px)", lineHeight: "1.2", letterSpacing: "-.02em" } as CSSProperties}>
-                    Закрытый ужин
+                    {t.k216}
                   </span>
                   {" "}
                 </div>
@@ -1456,19 +1465,19 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                     <span style={{ width: "32px", height: "1px", background: "#FF4002" } as CSSProperties} />
                     {" "}
                     <span>
-                      Спикеры
+                      {t.k217}
                     </span>
                     {" "}
                   </div>
                   {" "}
                   <p style={{ margin: "20px 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(20px,2.2vw,32px)", lineHeight: "1.14", letterSpacing: "-.025em", maxWidth: "30ch" } as CSSProperties}>
-                    Международные и локальные эксперты: девелоперы, инвесторы, архитекторы и представители города.
+                    {t.k218}
                   </p>
                   {" "}
                 </div>
                 {" "}
                 <div style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", lineHeight: "1.7", letterSpacing: ".12em", textTransform: "uppercase", color: "#8E9198", maxWidth: "24ch" } as CSSProperties}>
-                  Состав объявляется поэтапно
+                  {t.k219}
                 </div>
                 {" "}
               </div>
@@ -1484,36 +1493,36 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
               <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", justifyContent: "space-between", gap: "12px 32px", paddingBottom: "16px", borderBottom: "1px solid rgba(255,255,255,.45)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase" } as CSSProperties}>
                 {" "}
                 <span>
-                  Отдельный конкурс в рамках форума
+                  {t.k220}
                 </span>
                 {" "}
               </div>
               {" "}
               <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(28px,3.4vw,48px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(40px,8.4vw,140px)", lineHeight: ".88", letterSpacing: "-.05em", textTransform: "uppercase", maxWidth: "12ch" } as CSSProperties}>
-                Премия{" "}
+{t.k10}{" "}
                 <span style={{ color: "#16181D" } as CSSProperties}>
-                  отрасли
+                  {t.k221}
                 </span>
               </h2>
               {" "}
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: "clamp(24px,3vw,56px)", marginTop: "clamp(32px,4vw,56px)" } as CSSProperties}>
                 {" "}
                 <p data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", fontSize: "clamp(16px,1.3vw,20px)", lineHeight: "1.55", maxWidth: "42ch" } as CSSProperties}>
-                  Награждение лучших проектов, компаний и профессионалов в архитектуре, дизайне и девелопменте. Вручение проходит на форуме.
+                  {t.k222}
                 </p>
                 {" "}
                 <p data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(16px)", fontSize: "clamp(16px,1.3vw,20px)", lineHeight: "1.55", maxWidth: "42ch" } as CSSProperties}>
-                  Студенческий конкурс идей по улучшению архитектурного облика городов Молдовы и общественных пространств.
+                  {t.k223}
                 </p>
                 {" "}
                 <div data-reveal="" data-delay="240" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "18px" } as CSSProperties}>
                   {" "}
                   <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", lineHeight: "1.7", letterSpacing: ".1em", textTransform: "uppercase", paddingBottom: "14px", borderBottom: "1px solid rgba(255,255,255,.45)" } as CSSProperties}>
-                    Номинации объявляются отдельно
+                    {t.k224}
                   </span>
                   {" "}
-                  <a className="fa-h7eab1cf" href="/award" data-page="" style={{ display: "inline-flex", alignItems: "center", justifyContent: "space-between", gap: "20px", padding: "18px 24px", background: "#16181D", color: "#F7F6F3", border: "1px solid #16181D", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
-                    Подать проект на премию
+                  <a className="fa-h7eab1cf" href={lp("/award")} data-page="" style={{ display: "inline-flex", alignItems: "center", justifyContent: "space-between", gap: "20px", padding: "18px 24px", background: "#16181D", color: "#F7F6F3", border: "1px solid #16181D", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
+                    {t.k225}
                     <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
                       →
                     </span>
@@ -1544,26 +1553,26 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                 </div>
                 {" "}
                 <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                  Участие
+                  {t.k11}
                 </span>
                 {" "}
               </div>
               {" "}
               <div data-reveal="" data-delay="40" style={{ opacity: "0", transform: "translateY(16px)", marginTop: "clamp(32px,4vw,48px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".16em", textTransform: "uppercase", color: "#FF4002" } as CSSProperties}>
-                Акт III · участие в форуме
+                {t.k226}
               </div>
               {" "}
               <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "24px 40px", marginTop: "clamp(20px,2.4vw,32px)" } as CSSProperties}>
                 {" "}
                 <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(40px,8vw,124px)", lineHeight: ".88", letterSpacing: "-.05em", textTransform: "uppercase", color: "#16181D" } as CSSProperties}>
-                  Как{" "}
+{t.k227}{" "}
                   <span style={{ color: "#FF4002" } as CSSProperties}>
-                    участвовать
+                    {t.k228}
                   </span>
                 </h2>
                 {" "}
                 <p data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", maxWidth: "52ch", fontSize: "clamp(16px,1.3vw,20px)", lineHeight: "1.5", color: "#5C5F66" } as CSSProperties}>
-                  Два входа в форум: участник – по заявке и отбору, партнёр – по договорённости. Приём проектов на премию идёт отдельно.
+                  {t.k229}
                 </p>
                 {" "}
               </div>
@@ -1575,7 +1584,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px" } as CSSProperties}>
                     {" "}
                     <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "#FF4002" } as CSSProperties}>
-                      01 · по заявке и отбору
+                      {t.k230}
                     </span>
                     {" "}
                     <span style={{ width: "8px", height: "8px", background: "#FF4002" } as CSSProperties} />
@@ -1583,7 +1592,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   </div>
                   {" "}
                   <h3 style={{ margin: "clamp(20px,2.4vw,32px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(30px,3.6vw,52px)", lineHeight: "1", letterSpacing: "-.04em", textTransform: "uppercase" } as CSSProperties}>
-                    Участник
+                    {t.k231}
                   </h3>
                   {" "}
                   <ul style={{ listStyle: "none", margin: "clamp(24px,3vw,36px) 0 0", padding: "0", display: "flex", flexDirection: "column", fontSize: "16px", lineHeight: "1.5", color: "#B9BBC0" } as CSSProperties}>
@@ -1593,7 +1602,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                         01
                       </span>
                       <span>
-                        Доступ к 250+ участникам рынка
+                        {t.k232}
                       </span>
                     </li>
                     {" "}
@@ -1602,7 +1611,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                         02
                       </span>
                       <span>
-                        Четыре программных направления
+                        {t.k233}
                       </span>
                     </li>
                     {" "}
@@ -1611,7 +1620,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                         03
                       </span>
                       <span>
-                        Две сессии выступлений и панельные дискуссии
+                        {t.k234}
                       </span>
                     </li>
                     {" "}
@@ -1620,14 +1629,14 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                         04
                       </span>
                       <span>
-                        Обед, фуршет и нетворкинг в течение дня
+                        {t.k235}
                       </span>
                     </li>
                     {" "}
                   </ul>
                   {" "}
                   <a className="fa-h7eab1cf" href="#apply" style={{ alignSelf: "flex-start", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "16px", marginTop: "clamp(28px,3vw,40px)", padding: "18px 36px", background: "#FF4002", color: "#F7F6F3", border: "1px solid #FF4002", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", transition: "background 200ms ease,color 200ms ease,border-color 200ms ease" } as CSSProperties}>
-                    Заявка на участие
+                    {t.k140}
                     <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
                       →
                     </span>
@@ -1640,7 +1649,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px" } as CSSProperties}>
                     {" "}
                     <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "#FF4002" } as CSSProperties}>
-                      02 · три позиции
+                      {t.k236}
                     </span>
                     {" "}
                     <span style={{ width: "8px", height: "8px", border: "1px solid #16181D" } as CSSProperties} />
@@ -1648,19 +1657,19 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   </div>
                   {" "}
                   <h3 style={{ margin: "clamp(20px,2.4vw,32px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(30px,3.6vw,52px)", lineHeight: "1", letterSpacing: "-.04em", textTransform: "uppercase" } as CSSProperties}>
-                    Партнёр
+                    {t.k237}
                   </h3>
                   {" "}
                   <p style={{ margin: "clamp(24px,3vw,36px) 0 0", fontSize: "clamp(16px,1.2vw,19px)", lineHeight: "1.6", color: "#5C5F66", maxWidth: "42ch" } as CSSProperties}>
-                    Форум – это не только один день. Партнёр присутствует в кампании до, во время и после: анонсы, digital-кампания, reels, публикации в InStyle Home и постпроектный контент.
+                    {t.k238}
                   </p>
                   {" "}
                   <div style={{ marginTop: "24px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", lineHeight: "1.7", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                    Места закрытого ужина закреплены за партнёрами
+                    {t.k239}
                   </div>
                   {" "}
                   <button className="fa-hea007e6" type="button" onClick={goPartner} style={{ alignSelf: "flex-start", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "16px", marginTop: "auto", padding: "18px 36px", border: "1px solid #16181D", background: "transparent", color: "#16181D", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", cursor: "pointer", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
-                    Запросить презентацию
+                    {t.k240}
                     <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
                       →
                     </span>
@@ -1671,17 +1680,17 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
               </div>
               {" "}
               <div data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(16px)", marginTop: "28px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                Позиции партнёрства и полные условия – в презентации
+                {t.k241}
               </div>
               {" "}
               <div data-reveal="" data-delay="240" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "28px 48px", marginTop: "clamp(48px,6vw,88px)", padding: "clamp(28px,3.4vw,56px)", background: "#16181D", color: "#F7F6F3" } as CSSProperties}>
                 {" "}
                 <h3 style={{ margin: "0", flex: "1 1 420px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(22px,2.4vw,36px)", lineHeight: "1.1", letterSpacing: "-.025em", maxWidth: "26ch" } as CSSProperties}>
-                  Форум создаёт первый контакт. Сообщество делает его рабочим.
+                  {t.k242}
                 </h3>
                 {" "}
-                <a className="fa-h12f478d" href="/" data-page="" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "16px", padding: "19px 38px", border: "1px solid #F7F6F3", color: "#F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
-                  О сообществе
+                <a className="fa-h12f478d" href={lp("/")} data-page="" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "16px", padding: "19px 38px", border: "1px solid #F7F6F3", color: "#F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
+                  {t.k243}
                   <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
                     →
                   </span>
@@ -1698,7 +1707,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
             <div aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", bottom: "-2%", pointerEvents: "none", overflow: "hidden" } as CSSProperties}>
               {" "}
               <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "min(24vw,320px)", lineHeight: ".78", letterSpacing: "-.06em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(255,64,2,.20)", paddingLeft: "clamp(20px,4.8vw,108px)" } as CSSProperties}>
-                Заявка 2026
+                {t.k244}
               </div>
               {" "}
             </div>
@@ -1718,15 +1727,15 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                 </div>
                 {" "}
                 <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#8E9198" } as CSSProperties}>
-                  Заявка
+                  {t.k130}
                 </span>
                 {" "}
               </div>
               {" "}
               <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(32px,4vw,48px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(34px,5.6vw,84px)", lineHeight: ".92", letterSpacing: "-.045em", textTransform: "uppercase", maxWidth: "20ch" } as CSSProperties}>
-                Участие по заявке и{" "}
+{t.k245}{" "}
                 <span style={{ color: "#FF4002" } as CSSProperties}>
-                  отбору
+                  {t.k246}
                 </span>
               </h2>
               {" "}
@@ -1735,13 +1744,13 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                 <span data-pulse="" style={{ width: "8px", height: "8px", background: "#FF4002", animation: "faPulse 2s ease-in-out infinite" } as CSSProperties} />
                 {" "}
                 <span>
-                  Заполнение занимает две минуты
+                  {t.k247}
                 </span>
                 {" "}
               </div>
               {" "}
               <p data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", margin: "16px 0 0", fontSize: "16px", lineHeight: "1.6", color: "#B9BBC0", maxWidth: "65ch" } as CSSProperties}>
-                Презентация для партнёров отправляется на почту после заявки.
+                {t.k248}
               </p>
               {" "}
               {notSent ? (
@@ -1754,7 +1763,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                     <div>
                       {" "}
                       <label htmlFor="fa-name" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        Имя
+                        {t.k112}
                       </label>
                       {" "}
                       <input className="fa-f0988020" id="fa-name" name="name" type="text" autoComplete="name" onInput={onName} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
@@ -1768,7 +1777,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                     <div>
                       {" "}
                       <label htmlFor="fa-company" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        Компания
+                        {t.k113}
                       </label>
                       {" "}
                       <input className="fa-f0988020" id="fa-company" name="company" type="text" autoComplete="organization" onInput={onCompany} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
@@ -1782,29 +1791,29 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                     <div>
                       {" "}
                       <label htmlFor="fa-role" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        Роль
+                        {t.k114}
                       </label>
                       {" "}
                       <select className="fa-f0988020" id="fa-role" name="role" onChange={onRole} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "#F7F6F3", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", appearance: "none", borderRadius: "0", transition: "border-color 200ms ease" } as CSSProperties}>
                         {" "}
                         <option value="">
-                          Выберите
+                          {t.k115}
                         </option>
                         {" "}
                         <option value="Архитектор или дизайнер">
-                          Архитектор или дизайнер
+                          {t.k116}
                         </option>
                         {" "}
                         <option value="Девелопер или застройщик">
-                          Девелопер или застройщик
+                          {t.k117}
                         </option>
                         {" "}
                         <option value="Производитель или поставщик">
-                          Производитель или поставщик
+                          {t.k118}
                         </option>
                         {" "}
                         <option value="Инвестор или бизнес">
-                          Инвестор или бизнес
+                          {t.k119}
                         </option>
                         {" "}
                       </select>
@@ -1818,21 +1827,21 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                     <div>
                       {" "}
                       <label htmlFor="fa-kind" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        Тип обращения
+                        {t.k249}
                       </label>
                       {" "}
                       <select className="fa-f0988020" id="fa-kind" name="kind" ref={kindRef} onChange={onKind} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "#F7F6F3", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", appearance: "none", borderRadius: "0", transition: "border-color 200ms ease" } as CSSProperties}>
                         {" "}
                         <option value="">
-                          Выберите
+                          {t.k115}
                         </option>
                         {" "}
                         <option value="Участник">
-                          Участник
+                          {t.k231}
                         </option>
                         {" "}
                         <option value="Партнёр">
-                          Партнёр
+                          {t.k237}
                         </option>
                         {" "}
                       </select>
@@ -1860,7 +1869,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                     <div>
                       {" "}
                       <label htmlFor="fa-phone" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        Телефон
+                        {t.k120}
                       </label>
                       {" "}
                       <input className="fa-f0988020" id="fa-phone" name="phone" type="tel" autoComplete="tel" onInput={onPhone} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
@@ -1874,7 +1883,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   </div>
                   {" "}
                   <button className="fa-h2b89b98" type="submit" style={{ marginTop: "40px", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "16px", padding: "18px 36px", background: "#FF4002", color: "#F7F6F3", border: "1px solid #FF4002", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", cursor: "pointer", transition: "background 200ms ease,color 200ms ease,border-color 200ms ease" } as CSSProperties}>
-                    Отправить заявку
+                    {t.k121}
                     <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
                       →
                     </span>
@@ -1891,11 +1900,11 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                 <div style={{ marginTop: "clamp(36px,4.4vw,56px)", padding: "clamp(26px,3.2vw,48px)", background: "#F7F6F3", color: "#16181D", maxWidth: "65ch", boxShadow: "14px 14px 0 #FF4002" } as CSSProperties}>
                   {" "}
                   <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(20px,1.9vw,24px)" } as CSSProperties}>
-                    Заявка отправлена
+                    {t.k122}
                   </div>
                   {" "}
                   <p style={{ margin: "16px 0 0", fontSize: "16px", lineHeight: "1.6", color: "#5C5F66" } as CSSProperties}>
-                    Ответ придёт на указанную почту. Презентация для партнёров отправляется в ответном письме.
+                    {t.k250}
                   </p>
                   {" "}
                 </div>
@@ -1925,7 +1934,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   ◆
                 </span>
                 <span>
-                  Форум 2026
+                  {t.k9}
                 </span>
                 <span style={{ color: "#FF4002" } as CSSProperties}>
                   ◆
@@ -1940,7 +1949,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                   ◆
                 </span>
                 <span>
-                  Форум 2026
+                  {t.k9}
                 </span>
                 <span style={{ color: "#FF4002" } as CSSProperties}>
                   ◆
@@ -1960,31 +1969,31 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                 <img src="/img/0ce5b0d8a0.png" alt="Future Architecture" style={{ height: "104px", width: "auto", display: "block" } as CSSProperties} />
                 {" "}
                 <p style={{ margin: "24px 0 0", fontSize: "15px", lineHeight: "1.6", color: "#8E9198", maxWidth: "32ch" } as CSSProperties}>
-                  Форум и профессиональное сообщество архитектуры, дизайна и девелопмента в Молдове
+                  {t.k251}
                 </p>
                 {" "}
               </div>
               {" "}
-              <nav aria-label="Навигация в подвале" style={{ flex: "0 1 176px", display: "flex", flexDirection: "column", gap: "12px", fontSize: "15px", color: "#B9BBC0" } as CSSProperties}>
+              <nav aria-label={t.k125} style={{ flex: "0 1 176px", display: "flex", flexDirection: "column", gap: "12px", fontSize: "15px", color: "#B9BBC0" } as CSSProperties}>
                 {" "}
-                <a className="fa-h80081ee" href="/" data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  Сообщество
+                <a className="fa-h80081ee" href={lp("/")} data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                  {t.k35}
                 </a>
                 {" "}
                 <a className="fa-h80081ee" href="#topics" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  Направления
+                  {t.k252}
                 </a>
                 {" "}
                 <a className="fa-h80081ee" href="#participation" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  Участие
+                  {t.k11}
                 </a>
                 {" "}
-                <a className="fa-h80081ee" href="/award" data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  Премия
+                <a className="fa-h80081ee" href={lp("/award")} data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                  {t.k10}
                 </a>
                 {" "}
                 <a className="fa-h80081ee" href="#apply" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  Заявка
+                  {t.k130}
                 </a>
                 {" "}
               </nav>
@@ -2044,7 +2053,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
             <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "16px 32px", marginTop: "clamp(40px,5vw,64px)", paddingTop: "24px", borderTop: "1px solid #3A3D44" } as CSSProperties}>
               {" "}
               <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#8E9198" } as CSSProperties}>
-                Партнёры
+                {t.k126}
               </span>
               {" "}
               <img src="/img/d65b278e9b.png" alt="LH47 arch." style={{ height: "24px", width: "auto", display: "block", filter: "brightness(0) invert(.62)", opacity: ".9" } as CSSProperties} />
@@ -2057,21 +2066,21 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
               {" "}
               <div style={{ display: "flex", gap: "8px" } as CSSProperties}>
                 {" "}
-                <span>
+                <a href={lhref('ro')} hrefLang="ro" aria-current={lang === 'ro' ? 'true' : undefined} style={{ color: lang === 'ro' ? "#16181D" : "inherit" } as CSSProperties}>
                   RO
-                </span>
+                </a>
                 <span style={{ color: "#3A3D44" } as CSSProperties}>
                   /
                 </span>
-                <span style={{ color: "#F7F6F3" } as CSSProperties}>
+                <a href={lhref('ru')} hrefLang="ru" aria-current={lang === 'ru' ? 'true' : undefined} style={{ color: lang === 'ru' ? "#16181D" : "inherit" } as CSSProperties}>
                   RU
-                </span>
+                </a>
                 <span style={{ color: "#3A3D44" } as CSSProperties}>
                   /
                 </span>
-                <span>
+                <a href={lhref('en')} hrefLang="en" aria-current={lang === 'en' ? 'true' : undefined} style={{ color: lang === 'en' ? "#16181D" : "inherit" } as CSSProperties}>
                   EN
-                </span>
+                </a>
                 {" "}
               </div>
               {" "}
@@ -2082,7 +2091,7 @@ export default function ForumPage({ forumDate, countdownVisible = true }: Props)
                 </span>
                 {" "}
                 <a className="fa-h0435e75" href="#" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  Политика данных
+                  {t.k127}
                 </a>
                 {" "}
               </div>

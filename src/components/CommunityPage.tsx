@@ -6,6 +6,9 @@
 
 import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
+import type { Dict } from '@/i18n/dict'
+import { path as langPath } from '@/i18n/links'
+import type { Lang } from '@/i18n/links'
 
 async function post(collection, body) {
   const res = await fetch('/api/' + collection, {
@@ -19,9 +22,15 @@ async function post(collection, body) {
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/
 
-type Props = { indexVisible?: boolean; bandMotion?: boolean }
+type Props = {
+  t: Dict; lang: Lang; indexVisible?: boolean; bandMotion?: boolean }
 
-export default function CommunityPage({ indexVisible = true, bandMotion = true }: Props) {
+export default function CommunityPage({
+  t, lang, indexVisible = true, bandMotion = true }: Props) {
+
+  // "/forum" stays "/forum" in Russian and becomes "/ro/forum" elsewhere
+  const lp = (p: string) => langPath(lang, p)
+  const lhref = (c: Lang) => langPath(c, "/")
 
   const [menu, setMenu] = useState(false)
   const toggleMenu = useCallback(() => setMenu((m) => !m), [])
@@ -51,11 +60,11 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
     e.preventDefault()
     const d = data.current
     const n: Record<string, string> = {}
-    if (!d.name.trim()) n.name = 'Укажите имя'
-    if (!d.company.trim()) n.company = 'Укажите компанию'
-    if (!d.role) n.role = 'Выберите роль'
-    if (!EMAIL_RE.test(d.email.trim())) n.email = 'Проверьте адрес почты'
-    if (d.phone.replace(/\D/g, '').length < 8) n.phone = 'Проверьте номер телефона'
+    if (!d.name.trim()) n.name = t.k1
+    if (!d.company.trim()) n.company = t.k2
+    if (!d.role) n.role = t.k3
+    if (!EMAIL_RE.test(d.email.trim())) n.email = t.k4
+    if (d.phone.replace(/\D/g, '').length < 8) n.phone = t.k5
     if (Object.keys(n).length) {
       setErr(n)
       document.getElementById('fa-' + Object.keys(n)[0])?.focus()
@@ -94,63 +103,63 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
               {" "}
             </a>
             {" "}
-            <nav aria-label="Основная навигация" style={{ marginLeft: "auto", minWidth: "0", display: ("var(--navDisplay)" as any), alignItems: "center", gap: "26px", fontSize: "15px", color: "#5C5F66" } as CSSProperties}>
+            <nav aria-label={t.k6} style={{ marginLeft: "auto", minWidth: "0", display: ("var(--navDisplay)" as any), alignItems: "center", gap: "26px", fontSize: "15px", color: "#5C5F66" } as CSSProperties}>
               {" "}
               <a className="fa-hb09baf5" href="#manifest" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                Позиция
+                {t.k7}
               </a>
               {" "}
               <a className="fa-hb09baf5" href="#formats" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                Форматы
+                {t.k8}
               </a>
               {" "}
-              <a className="fa-hb09baf5" href="/forum" data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                Форум 2026
+              <a className="fa-hb09baf5" href={lp("/forum")} data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                {t.k9}
               </a>
               {" "}
-              <a className="fa-hb09baf5" href="/award" data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                Премия
+              <a className="fa-hb09baf5" href={lp("/award")} data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                {t.k10}
               </a>
               {" "}
               <a className="fa-hb09baf5" href="#join" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                Участие
+                {t.k11}
               </a>
               {" "}
               <a className="fa-hb09baf5" href="#contacts" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                Контакты
+                {t.k12}
               </a>
               {" "}
             </nav>
             {" "}
             <div style={{ display: ("var(--navDisplay)" as any), alignItems: "center", gap: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em" } as CSSProperties}>
               {" "}
-              <span title="Перевод готовится" style={{ color: "#6E7278" } as CSSProperties}>
+              <a href={lhref('ro')} hrefLang="ro" aria-current={lang === 'ro' ? 'true' : undefined} style={{ color: lang === 'ro' ? "#16181D" : "#6E7278" } as CSSProperties}>
                 RO
-              </span>
+              </a>
               {" "}
               <span style={{ color: "#DCDAD4" } as CSSProperties}>
                 /
               </span>
               {" "}
-              <span aria-current="true" style={{ color: "#16181D" } as CSSProperties}>
+              <a href={lhref('ru')} hrefLang="ru" aria-current={lang === 'ru' ? 'true' : undefined} style={{ color: lang === 'ru' ? "#16181D" : "#6E7278" } as CSSProperties}>
                 RU
-              </span>
+              </a>
               {" "}
               <span style={{ color: "#DCDAD4" } as CSSProperties}>
                 /
               </span>
               {" "}
-              <span title="Перевод готовится" style={{ color: "#6E7278" } as CSSProperties}>
+              <a href={lhref('en')} hrefLang="en" aria-current={lang === 'en' ? 'true' : undefined} style={{ color: lang === 'en' ? "#16181D" : "#6E7278" } as CSSProperties}>
                 EN
-              </span>
+              </a>
               {" "}
             </div>
             {" "}
             <a className="fa-h3635ec6" href="#apply" style={{ display: ("var(--navDisplay)" as any), flex: "0 0 auto", alignItems: "center", padding: "12px 22px", background: "#16181D", color: "#F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "14px", lineHeight: "1.2", whiteSpace: "nowrap", border: "1px solid #16181D", transition: "background 200ms ease,color 200ms ease,border-color 200ms ease" } as CSSProperties}>
-              Вступить
+              {t.k14}
             </a>
             {" "}
-            <button type="button" aria-label="Меню" onClick={toggleMenu} style={{ display: ("var(--burgerDisplay)" as any), marginLeft: "auto", flexDirection: "column", justifyContent: "center", gap: "6px", width: "44px", height: "44px", padding: "0", background: "transparent", border: "0", cursor: "pointer" } as CSSProperties}>
+            <button type="button" aria-label={t.k15} onClick={toggleMenu} style={{ display: ("var(--burgerDisplay)" as any), marginLeft: "auto", flexDirection: "column", justifyContent: "center", gap: "6px", width: "44px", height: "44px", padding: "0", background: "transparent", border: "0", cursor: "pointer" } as CSSProperties}>
               {" "}
               <span style={{ display: "block", width: "22px", height: "1px", background: "#16181D" } as CSSProperties} />
               {" "}
@@ -162,30 +171,30 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
           {" "}
           <div style={{ display: (menu ? "var(--menuDisplay)" : "none"), background: "#F7F6F3", borderTop: "1px solid #DCDAD4", padding: "8px clamp(20px,4.8vw,108px) 32px" } as CSSProperties}>
             {" "}
-            <nav aria-label="Мобильная навигация" style={{ display: "flex", flexDirection: "column", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "22px" } as CSSProperties}>
+            <nav aria-label={t.k16} style={{ display: "flex", flexDirection: "column", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "22px" } as CSSProperties}>
               {" "}
               <a href="#manifest" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                Позиция
+                {t.k7}
               </a>
               {" "}
               <a href="#formats" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                Форматы
+                {t.k8}
               </a>
               {" "}
-              <a href="/forum" data-page="" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                Форум 2026
+              <a href={lp("/forum")} data-page="" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
+                {t.k9}
               </a>
               {" "}
-              <a href="/award" data-page="" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                Премия
+              <a href={lp("/award")} data-page="" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
+                {t.k10}
               </a>
               {" "}
               <a href="#join" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                Участие
+                {t.k11}
               </a>
               {" "}
               <a href="#contacts" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                Контакты
+                {t.k12}
               </a>
               {" "}
             </nav>
@@ -194,26 +203,26 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
               {" "}
               <div style={{ display: "flex", gap: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em" } as CSSProperties}>
                 {" "}
-                <span style={{ color: "#6E7278" } as CSSProperties}>
+                <a href={lhref('ro')} hrefLang="ro" aria-current={lang === 'ro' ? 'true' : undefined} style={{ color: lang === 'ro' ? "#16181D" : "#6E7278" } as CSSProperties}>
                   RO
-                </span>
+                </a>
                 <span style={{ color: "#DCDAD4" } as CSSProperties}>
                   /
                 </span>
-                <span style={{ color: "#16181D" } as CSSProperties}>
+                <a href={lhref('ru')} hrefLang="ru" aria-current={lang === 'ru' ? 'true' : undefined} style={{ color: lang === 'ru' ? "#16181D" : "#6E7278" } as CSSProperties}>
                   RU
-                </span>
+                </a>
                 <span style={{ color: "#DCDAD4" } as CSSProperties}>
                   /
                 </span>
-                <span style={{ color: "#6E7278" } as CSSProperties}>
+                <a href={lhref('en')} hrefLang="en" aria-current={lang === 'en' ? 'true' : undefined} style={{ color: lang === 'en' ? "#16181D" : "#6E7278" } as CSSProperties}>
                   EN
-                </span>
+                </a>
                 {" "}
               </div>
               {" "}
               <a href="#apply" onClick={closeMenu} style={{ display: "inline-flex", alignItems: "center", padding: "12px 24px", background: "#16181D", color: "#F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "14px", lineHeight: "1.2" } as CSSProperties}>
-                Вступить
+                {t.k14}
               </a>
               {" "}
             </div>
@@ -228,41 +237,41 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
           {" "}
         </header>
         {" "}
-        <nav data-rail="" aria-label="Разделы страницы" style={{ position: "fixed", left: "26px", top: "50%", transform: "translateY(-50%)", zIndex: "40", display: ("var(--railDisplay)" as any), flexDirection: "column", gap: "13px", opacity: "0", transition: "opacity 300ms ease", pointerEvents: "none", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase" } as CSSProperties}>
+        <nav data-rail="" aria-label={t.k17} style={{ position: "fixed", left: "26px", top: "50%", transform: "translateY(-50%)", zIndex: "40", display: ("var(--railDisplay)" as any), flexDirection: "column", gap: "13px", opacity: "0", transition: "opacity 300ms ease", pointerEvents: "none", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase" } as CSSProperties}>
           {" "}
           <a href="#manifest" data-rail-item="" data-target="manifest" style={{ display: "flex", alignItems: "center", gap: "10px", color: "#5C5F66", pointerEvents: "auto" } as CSSProperties}>
             <span data-rail-dot="" style={{ width: "6px", height: "6px", background: "transparent", flex: "0 0 6px" } as CSSProperties} />
-            Позиция
+            {t.k7}
           </a>
           {" "}
           <a href="#members" data-rail-item="" data-target="members" style={{ display: "flex", alignItems: "center", gap: "10px", color: "#5C5F66", pointerEvents: "auto" } as CSSProperties}>
             <span data-rail-dot="" style={{ width: "6px", height: "6px", background: "transparent", flex: "0 0 6px" } as CSSProperties} />
-            Состав
+            {t.k18}
           </a>
           {" "}
           <a href="#formats" data-rail-item="" data-target="formats" style={{ display: "flex", alignItems: "center", gap: "10px", color: "#5C5F66", pointerEvents: "auto" } as CSSProperties}>
             <span data-rail-dot="" style={{ width: "6px", height: "6px", background: "transparent", flex: "0 0 6px" } as CSSProperties} />
-            Форматы
+            {t.k8}
           </a>
           {" "}
           <a href="#forum" data-rail-item="" data-target="forum" style={{ display: "flex", alignItems: "center", gap: "10px", color: "#5C5F66", pointerEvents: "auto" } as CSSProperties}>
             <span data-rail-dot="" style={{ width: "6px", height: "6px", background: "transparent", flex: "0 0 6px" } as CSSProperties} />
-            Форум 2026
+            {t.k9}
           </a>
           {" "}
           <a href="#base" data-rail-item="" data-target="base" style={{ display: "flex", alignItems: "center", gap: "10px", color: "#5C5F66", pointerEvents: "auto" } as CSSProperties}>
             <span data-rail-dot="" style={{ width: "6px", height: "6px", background: "transparent", flex: "0 0 6px" } as CSSProperties} />
-            Основа
+            {t.k19}
           </a>
           {" "}
           <a href="#join" data-rail-item="" data-target="join" style={{ display: "flex", alignItems: "center", gap: "10px", color: "#5C5F66", pointerEvents: "auto" } as CSSProperties}>
             <span data-rail-dot="" style={{ width: "6px", height: "6px", background: "transparent", flex: "0 0 6px" } as CSSProperties} />
-            Участие
+            {t.k11}
           </a>
           {" "}
           <a href="#apply" data-rail-item="" data-target="apply" style={{ display: "flex", alignItems: "center", gap: "10px", color: "#5C5F66", pointerEvents: "auto" } as CSSProperties}>
             <span data-rail-dot="" style={{ width: "6px", height: "6px", background: "transparent", flex: "0 0 6px" } as CSSProperties} />
-            Вступление
+            {t.k20}
           </a>
           {" "}
         </nav>
@@ -284,51 +293,51 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
             <div aria-hidden="true" style={{ position: "absolute", inset: "0", pointerEvents: "none", overflow: "hidden" } as CSSProperties}>
               {" "}
               <span data-anim="" style={{ position: "absolute", left: "7%", top: "15%", display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(16px,2.14vw,30px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 700ms both,faFloatA 27s ease-in-out 1600ms infinite" } as CSSProperties}>
-                Архитекторы
+                {t.k21}
               </span>
               {" "}
               <span data-anim="" style={{ position: "absolute", left: "33%", top: "8%", display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.43vw,20px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 820ms both,faFloatB 31s ease-in-out 1720ms infinite" } as CSSProperties}>
-                Дизайнеры
+                {t.k22}
               </span>
               {" "}
               <span data-anim="" style={{ position: "absolute", left: "60%", top: "13%", display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(18px,2.43vw,34px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 940ms both,faFloatC 24s ease-in-out 1840ms infinite" } as CSSProperties}>
-                Девелоперы
+                {t.k23}
               </span>
               {" "}
               <span data-anim="" style={{ position: "absolute", left: "82%", top: "23%", display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.57vw,22px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 1060ms both,faFloatA 33s ease-in-out 1960ms infinite" } as CSSProperties}>
-                Инвесторы
+                {t.k24}
               </span>
               {" "}
               <span data-anim="" style={{ position: "absolute", left: "44%", top: "27%", display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.29vw,18px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 1180ms both,faFloatB 28s ease-in-out 2080ms infinite" } as CSSProperties}>
-                Производители
+                {t.k25}
               </span>
               {" "}
               <span data-anim="" style={{ position: "absolute", left: "70%", top: "37%", display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(14px,1.86vw,26px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 1300ms both,faFloatC 30s ease-in-out 2200ms infinite" } as CSSProperties}>
-                Поставщики
+                {t.k26}
               </span>
               {" "}
               <span data-anim="" style={{ position: "absolute", left: "20%", top: "33%", display: ("var(--wordsExtra)" as any), fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.14vw,16px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 1420ms both,faFloatA 25s ease-in-out 2320ms infinite" } as CSSProperties}>
-                Бюро и студии
+                {t.k27}
               </span>
               {" "}
               <span data-anim="" style={{ position: "absolute", left: "54%", top: "47%", display: ("var(--wordsExtra)" as any), fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.43vw,20px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 1540ms both,faFloatB 34s ease-in-out 2440ms infinite" } as CSSProperties}>
-                Подрядчики
+                {t.k28}
               </span>
               {" "}
               <span data-anim="" style={{ position: "absolute", left: "64%", top: "60%", display: ("var(--wordsExtra)" as any), fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.07vw,15px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 1660ms both,faFloatC 29s ease-in-out 2560ms infinite" } as CSSProperties}>
-                Управляющие компании
+                {t.k29}
               </span>
               {" "}
               <span data-anim="" style={{ position: "absolute", left: "11%", top: "45%", display: ("var(--wordsExtra)" as any), fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.57vw,22px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 1780ms both,faFloatA 26s ease-in-out 2680ms infinite" } as CSSProperties}>
-                Город
+                {t.k30}
               </span>
               {" "}
               <span data-anim="" style={{ position: "absolute", left: "38%", top: "57%", display: ("var(--wordsExtra)" as any), fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.21vw,17px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 1900ms both,faFloatB 32s ease-in-out 2800ms infinite" } as CSSProperties}>
-                Медиа
+                {t.k31}
               </span>
               {" "}
               <span data-anim="" style={{ position: "absolute", left: "88%", top: "50%", display: ("var(--wordsExtra)" as any), fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.14vw,16px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 2020ms both,faFloatC 27s ease-in-out 2920ms infinite" } as CSSProperties}>
-                Производство
+                {t.k32}
               </span>
               {" "}
             </div>
@@ -338,11 +347,11 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
               <div data-anim="" style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: "12px 32px", paddingBottom: "14px", borderBottom: "1px solid rgba(247,246,243,.34)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "clamp(12px,.9vw,12px)", letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(247,246,243,.86)", animation: "faFade 700ms ease 120ms both" } as CSSProperties}>
                 {" "}
                 <span>
-                  Профессиональное сообщество · Молдова
+                  {t.k33}
                 </span>
                 {" "}
                 <span>
-                  Est. 2026 · Кишинёв
+                  {t.k34}
                 </span>
                 {" "}
               </div>
@@ -366,13 +375,13 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
               <div data-anim="" style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 28px", animation: "faFade 700ms ease 500ms both" } as CSSProperties}>
                 {" "}
                 <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(24px,4.6vw,76px)", lineHeight: ".9", letterSpacing: "-.03em", textTransform: "uppercase", color: "#FF4002" } as CSSProperties}>
-                  Сообщество
+                  {t.k35}
                 </span>
                 {" "}
                 <span style={{ flex: "1 1 120px", height: "1px", background: "rgba(247,246,243,.34)" } as CSSProperties} />
                 {" "}
                 <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "clamp(12px,.9vw,12px)", letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(247,246,243,.78)" } as CSSProperties}>
-                  Вступление по заявке
+                  {t.k36}
                 </span>
                 {" "}
               </div>
@@ -380,17 +389,17 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
               <div data-anim="" style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "28px 56px", animation: "faFade 800ms ease 620ms both" } as CSSProperties}>
                 {" "}
                 <p style={{ flex: "1 1 420px", maxWidth: "46ch", fontSize: "clamp(17px,1.5vw,25px)", lineHeight: "1.42", letterSpacing: "-.012em", color: "rgba(247,246,243,.86)" } as CSSProperties}>
-                  Архитектура, дизайн и девелопмент Молдовы за одним столом. Закрытый круг практиков, которые формируют рынок.
+                  {t.k37}
                 </p>
                 {" "}
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "14px" } as CSSProperties}>
                   {" "}
                   <a className="fa-hf42e924" href="#apply" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "19px 38px", background: "#F7F6F3", color: "#16181D", border: "1px solid #F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", transition: "background 220ms ease,color 220ms ease,border-color 220ms ease,transform 220ms ease" } as CSSProperties}>
-                    Подать заявку
+                    {t.k38}
                   </a>
                   {" "}
-                  <a className="fa-hf2ea20d" href="/forum" data-page="" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "12px", padding: "19px 38px", border: "1px solid rgba(247,246,243,.6)", color: "#F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", transition: "background 220ms ease,color 220ms ease,border-color 220ms ease,transform 220ms ease" } as CSSProperties}>
-                    Форум 2026
+                  <a className="fa-hf2ea20d" href={lp("/forum")} data-page="" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "12px", padding: "19px 38px", border: "1px solid rgba(247,246,243,.6)", color: "#F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", transition: "background 220ms ease,color 220ms ease,border-color 220ms ease,transform 220ms ease" } as CSSProperties}>
+                    {t.k9}
                     <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
                       →
                     </span>
@@ -403,19 +412,19 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: "0", marginTop: "clamp(6px,1vw,16px)" } as CSSProperties}>
                 {" "}
                 <div style={{ padding: "16px 20px 12px 0", borderTop: "2px solid #FF4002", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "rgba(247,246,243,.86)" } as CSSProperties}>
-                  Архитектура
+                  {t.k39}
                 </div>
                 {" "}
                 <div style={{ padding: "16px 20px 12px 0", borderTop: "1px solid rgba(247,246,243,.34)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "rgba(247,246,243,.72)" } as CSSProperties}>
-                  Девелопмент
+                  {t.k40}
                 </div>
                 {" "}
                 <div style={{ padding: "16px 20px 12px 0", borderTop: "1px solid rgba(247,246,243,.34)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "rgba(247,246,243,.72)" } as CSSProperties}>
-                  Производство
+                  {t.k32}
                 </div>
                 {" "}
                 <div style={{ padding: "16px 20px 12px 0", borderTop: "1px solid rgba(247,246,243,.34)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "rgba(247,246,243,.72)" } as CSSProperties}>
-                  Инвестиции
+                  {t.k41}
                 </div>
                 {" "}
               </div>
@@ -425,7 +434,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                 <span data-anim="" style={{ display: "block", width: "1px", height: "32px", background: "#FF4002", animation: "faScroll 2.6s ease-in-out infinite" } as CSSProperties} />
                 {" "}
                 <span>
-                  листайте
+                  {t.k42}
                 </span>
                 {" "}
               </div>
@@ -440,31 +449,31 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
               {" "}
               <div style={{ display: "flex", alignItems: "center", gap: ".28em", paddingRight: ".28em" } as CSSProperties}>
                 <span>
-                  Архитектура
+                  {t.k39}
                 </span>
                 <span style={{ color: "#F7F6F3" } as CSSProperties}>
                   ◆
                 </span>
                 <span>
-                  Девелопмент
+                  {t.k40}
                 </span>
                 <span style={{ color: "#F7F6F3" } as CSSProperties}>
                   ◆
                 </span>
                 <span>
-                  Производство
+                  {t.k32}
                 </span>
                 <span style={{ color: "#F7F6F3" } as CSSProperties}>
                   ◆
                 </span>
                 <span>
-                  Инвестиции
+                  {t.k41}
                 </span>
                 <span style={{ color: "#F7F6F3" } as CSSProperties}>
                   ◆
                 </span>
                 <span>
-                  Закрытый круг
+                  {t.k43}
                 </span>
                 <span style={{ color: "#F7F6F3" } as CSSProperties}>
                   ◆
@@ -473,31 +482,31 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
               {" "}
               <div style={{ display: "flex", alignItems: "center", gap: ".28em", paddingRight: ".28em" } as CSSProperties}>
                 <span>
-                  Архитектура
+                  {t.k39}
                 </span>
                 <span style={{ color: "#F7F6F3" } as CSSProperties}>
                   ◆
                 </span>
                 <span>
-                  Девелопмент
+                  {t.k40}
                 </span>
                 <span style={{ color: "#F7F6F3" } as CSSProperties}>
                   ◆
                 </span>
                 <span>
-                  Производство
+                  {t.k32}
                 </span>
                 <span style={{ color: "#F7F6F3" } as CSSProperties}>
                   ◆
                 </span>
                 <span>
-                  Инвестиции
+                  {t.k41}
                 </span>
                 <span style={{ color: "#F7F6F3" } as CSSProperties}>
                   ◆
                 </span>
                 <span>
-                  Закрытый круг
+                  {t.k43}
                 </span>
                 <span style={{ color: "#F7F6F3" } as CSSProperties}>
                   ◆
@@ -508,7 +517,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
             {" "}
           </div>
           {" "}
-          <nav aria-label="Разделы" style={{ display: indexDisplay, background: "#F7F6F3", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
+          <nav aria-label={t.k44} style={{ display: indexDisplay, background: "#F7F6F3", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
             {" "}
             <div style={{ maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)", display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(148px,1fr))" } as CSSProperties}>
               {" "}
@@ -516,49 +525,49 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                 <span style={{ color: "#FF4002" } as CSSProperties}>
                   01
                 </span>
-                Позиция
+                {t.k7}
               </a>
               {" "}
               <a className="fa-h3bf4555" href="#members" style={{ display: "flex", flexDirection: "column", gap: "10px", padding: "20px 16px 18px 0", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "#6E7278", borderTop: "2px solid transparent", transition: "color 200ms ease,border-color 200ms ease" } as CSSProperties}>
                 <span style={{ color: "#C9C6BE" } as CSSProperties}>
                   02
                 </span>
-                Состав
+                {t.k18}
               </a>
               {" "}
               <a className="fa-h3bf4555" href="#formats" style={{ display: "flex", flexDirection: "column", gap: "10px", padding: "20px 16px 18px 0", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "#6E7278", borderTop: "2px solid transparent", transition: "color 200ms ease,border-color 200ms ease" } as CSSProperties}>
                 <span style={{ color: "#C9C6BE" } as CSSProperties}>
                   03
                 </span>
-                Форматы
+                {t.k8}
               </a>
               {" "}
               <a className="fa-h3bf4555" href="#forum" style={{ display: "flex", flexDirection: "column", gap: "10px", padding: "20px 16px 18px 0", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "#6E7278", borderTop: "2px solid transparent", transition: "color 200ms ease,border-color 200ms ease" } as CSSProperties}>
                 <span style={{ color: "#C9C6BE" } as CSSProperties}>
                   04
                 </span>
-                Форум 2026
+                {t.k9}
               </a>
               {" "}
               <a className="fa-h3bf4555" href="#base" style={{ display: "flex", flexDirection: "column", gap: "10px", padding: "20px 16px 18px 0", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "#6E7278", borderTop: "2px solid transparent", transition: "color 200ms ease,border-color 200ms ease" } as CSSProperties}>
                 <span style={{ color: "#C9C6BE" } as CSSProperties}>
                   05
                 </span>
-                Основа
+                {t.k19}
               </a>
               {" "}
               <a className="fa-h3bf4555" href="#join" style={{ display: "flex", flexDirection: "column", gap: "10px", padding: "20px 16px 18px 0", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "#6E7278", borderTop: "2px solid transparent", transition: "color 200ms ease,border-color 200ms ease" } as CSSProperties}>
                 <span style={{ color: "#C9C6BE" } as CSSProperties}>
                   06
                 </span>
-                Участие
+                {t.k11}
               </a>
               {" "}
               <a className="fa-h3bf4555" href="#apply" style={{ display: "flex", flexDirection: "column", gap: "10px", padding: "20px 16px 18px 0", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "#6E7278", borderTop: "2px solid transparent", transition: "color 200ms ease,border-color 200ms ease" } as CSSProperties}>
                 <span style={{ color: "#C9C6BE" } as CSSProperties}>
                   07
                 </span>
-                Вступление
+                {t.k20}
               </a>
               {" "}
             </div>
@@ -586,25 +595,25 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                 </div>
                 {" "}
                 <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                  Позиция
+                  {t.k7}
                 </span>
                 {" "}
               </div>
               {" "}
               <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(40px,5vw,84px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(34px,7.6vw,124px)", lineHeight: ".9", letterSpacing: "-.05em", textTransform: "uppercase", textWrap: "initial" } as CSSProperties}>
-                Архитектура
+                {t.k39}
                 <br />
-                больше не работает
+                {t.k45}
                 <br />
                 <span style={{ color: "#FF4002" } as CSSProperties}>
-                  в одиночку
+                  {t.k46}
                 </span>
               </h2>
               {" "}
               <div style={{ display: "flex", flexWrap: "wrap", gap: "36px 8%", marginTop: "clamp(44px,5.4vw,88px)", paddingTop: "28px", borderTop: "1px solid #DCDAD4" } as CSSProperties}>
                 {" "}
                 <p data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", flex: "1 1 420px", maxWidth: "54ch", fontSize: "clamp(17px,1.4vw,23px)", lineHeight: "1.5", color: "#4A4D53" } as CSSProperties}>
-                  Сильный проект рождается на пересечении девелопмента, инвестиций, производства и городской стратегии. Сообщество соединяет тех, кто раньше решал задачи порознь.
+                  {t.k47}
                 </p>
                 {" "}
                 <div data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(16px)", flex: "0 1 340px", display: "flex", alignItems: "flex-end", gap: "28px" } as CSSProperties}>
@@ -616,12 +625,12 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                   </div>
                   {" "}
                   <div style={{ flex: "1 1 auto", paddingBottom: "10px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", textTransform: "uppercase", lineHeight: "1.65", color: "#6E7278" } as CSSProperties}>
-                    Стороны
+                    {t.k48}
                     <br />
-                    одного проекта
+                    {t.k49}
                     <br />
                     <span style={{ color: "#16181D" } as CSSProperties}>
-                      за одним столом
+                      {t.k50}
                     </span>
                   </div>
                   {" "}
@@ -650,7 +659,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                 </div>
                 {" "}
                 <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                  Состав
+                  {t.k18}
                 </span>
                 {" "}
               </div>
@@ -658,13 +667,13 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
               <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "20px 48px", marginTop: "clamp(36px,4.4vw,68px)" } as CSSProperties}>
                 {" "}
                 <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(30px,5.4vw,86px)", lineHeight: ".94", letterSpacing: "-.045em", textTransform: "uppercase", textWrap: "initial" } as CSSProperties}>
-                  Четыре стороны
+                  {t.k51}
                   <br />
-                  одного проекта
+                  {t.k49}
                 </h2>
                 {" "}
                 <p data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", maxWidth: "38ch", fontSize: "clamp(15px,1.15vw,18px)", lineHeight: "1.55", color: "#5C5F66" } as CSSProperties}>
-                  Каждая категория отвечает за свой участок цепочки. Сообщество замыкает её целиком.
+                  {t.k52}
                 </p>
                 {" "}
               </div>
@@ -678,11 +687,11 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                   </span>
                   {" "}
                   <h3 style={{ flex: "1 1 340px", margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(22px,2.8vw,44px)", lineHeight: "1.06", letterSpacing: "-.03em" } as CSSProperties}>
-                    Архитекторы и дизайнеры
+                    {t.k53}
                   </h3>
                   {" "}
                   <p style={{ flex: "1 1 260px", maxWidth: "34ch", fontSize: "16px", lineHeight: "1.5", color: "#5C5F66" } as CSSProperties}>
-                    Бюро, студии и независимая практика
+                    {t.k54}
                   </p>
                   {" "}
                   <div data-draw="" data-delay="180" aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", bottom: "-1px", height: "2px", background: "#FF4002", transform: "scaleX(0)", transformOrigin: "left" } as CSSProperties} />
@@ -696,11 +705,11 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                   </span>
                   {" "}
                   <h3 style={{ flex: "1 1 340px", margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(22px,2.8vw,44px)", lineHeight: "1.06", letterSpacing: "-.03em" } as CSSProperties}>
-                    Девелоперы и застройщики
+                    {t.k55}
                   </h3>
                   {" "}
                   <p style={{ flex: "1 1 260px", maxWidth: "34ch", fontSize: "16px", lineHeight: "1.5", color: "#5C5F66" } as CSSProperties}>
-                    Те, кто запускает и ведёт проекты
+                    {t.k56}
                   </p>
                   {" "}
                 </div>
@@ -712,11 +721,11 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                   </span>
                   {" "}
                   <h3 style={{ flex: "1 1 340px", margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(22px,2.8vw,44px)", lineHeight: "1.06", letterSpacing: "-.03em" } as CSSProperties}>
-                    Производители и поставщики
+                    {t.k57}
                   </h3>
                   {" "}
                   <p style={{ flex: "1 1 260px", maxWidth: "34ch", fontSize: "16px", lineHeight: "1.5", color: "#5C5F66" } as CSSProperties}>
-                    Материалы, инженерия, оборудование
+                    {t.k58}
                   </p>
                   {" "}
                 </div>
@@ -728,11 +737,11 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                   </span>
                   {" "}
                   <h3 style={{ flex: "1 1 340px", margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(22px,2.8vw,44px)", lineHeight: "1.06", letterSpacing: "-.03em" } as CSSProperties}>
-                    Инвесторы и бизнес
+                    {t.k59}
                   </h3>
                   {" "}
                   <p style={{ flex: "1 1 260px", maxWidth: "34ch", fontSize: "16px", lineHeight: "1.5", color: "#5C5F66" } as CSSProperties}>
-                    Капитал и владельцы площадок
+                    {t.k60}
                   </p>
                   {" "}
                 </div>
@@ -760,7 +769,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                 </div>
                 {" "}
                 <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#8E9198" } as CSSProperties}>
-                  Инструменты
+                  {t.k61}
                 </span>
                 {" "}
               </div>
@@ -768,15 +777,15 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
               <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "20px 48px", marginTop: "clamp(36px,4.4vw,68px)" } as CSSProperties}>
                 {" "}
                 <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(32px,6.6vw,104px)", lineHeight: ".9", letterSpacing: "-.05em", textTransform: "uppercase", textWrap: "initial" } as CSSProperties}>
-                  Семь рабочих
+                  {t.k62}
                   <br />
                   <span style={{ color: "#FF4002" } as CSSProperties}>
-                    форматов
+                    {t.k63}
                   </span>
                 </h2>
                 {" "}
                 <p data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", maxWidth: "38ch", fontSize: "clamp(15px,1.15vw,18px)", lineHeight: "1.6", color: "#B9BBC0" } as CSSProperties}>
-                  Только то, что уже работает. Каждый формат ведёт к конкретному контакту или проекту.
+                  {t.k64}
                 </p>
                 {" "}
               </div>
@@ -790,11 +799,11 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                   </span>
                   {" "}
                   <h3 style={{ margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(26px,2.8vw,44px)", lineHeight: "1.04", letterSpacing: "-.03em" } as CSSProperties}>
-                    Форум
+                    {t.k65}
                   </h3>
                   {" "}
                   <p style={{ marginTop: "auto", maxWidth: "34ch", fontSize: "15px", lineHeight: "1.55", color: "#8E9198" } as CSSProperties}>
-                    Главное событие года. 250 участников, 3 декабря 2026.
+                    {t.k66}
                   </p>
                   {" "}
                 </div>
@@ -810,7 +819,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                   </h3>
                   {" "}
                   <p style={{ marginTop: "auto", fontSize: "15px", lineHeight: "1.55", color: "#8E9198" } as CSSProperties}>
-                    Двенадцать встреч в год. Разбор реального проекта в узком составе.
+                    {t.k67}
                   </p>
                   {" "}
                 </div>
@@ -822,11 +831,11 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                   </span>
                   {" "}
                   <h3 style={{ margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(19px,1.7vw,26px)", lineHeight: "1.1", letterSpacing: "-.025em" } as CSSProperties}>
-                    Партнёрская программа
+                    {t.k68}
                   </h3>
                   {" "}
                   <p style={{ marginTop: "auto", fontSize: "15px", lineHeight: "1.55", color: "#8E9198" } as CSSProperties}>
-                    Производитель показывает материал проектировщику до выхода на рынок.
+                    {t.k69}
                   </p>
                   {" "}
                 </div>
@@ -838,27 +847,27 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                   </span>
                   {" "}
                   <h3 style={{ margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(19px,1.7vw,26px)", lineHeight: "1.1", letterSpacing: "-.025em" } as CSSProperties}>
-                    Каталог участников
+                    {t.k70}
                   </h3>
                   {" "}
                   <p style={{ marginTop: "auto", fontSize: "15px", lineHeight: "1.55", color: "#8E9198" } as CSSProperties}>
-                    Подрядчик находится за один вопрос, а не за месяц поиска.
+                    {t.k71}
                   </p>
                   {" "}
                 </div>
                 {" "}
-                <a className="fa-h80081ee" href="/award" data-page="" data-reveal="" data-delay="240" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "16px", minHeight: "clamp(184px,13vw,236px)", padding: "clamp(20px,2vw,30px)", background: "#16181D", transition: "color 260ms ease" } as CSSProperties}>
+                <a className="fa-h80081ee" href={lp("/award")} data-page="" data-reveal="" data-delay="240" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "16px", minHeight: "clamp(184px,13vw,236px)", padding: "clamp(20px,2vw,30px)", background: "#16181D", transition: "color 260ms ease" } as CSSProperties}>
                   {" "}
                   <span style={{ alignSelf: "flex-end", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#6E7278" } as CSSProperties}>
                     05
                   </span>
                   {" "}
                   <h3 style={{ margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(19px,1.7vw,26px)", lineHeight: "1.1", letterSpacing: "-.025em" } as CSSProperties}>
-                    Премия
+                    {t.k10}
                   </h3>
                   {" "}
                   <p style={{ marginTop: "auto", fontSize: "15px", lineHeight: "1.55", color: "#8E9198" } as CSSProperties}>
-                    Раз в год рынок называет вслух лучшие проекты. Заявки и номинации — на странице премии.
+                    {t.k72}
                   </p>
                   {" "}
                   <span aria-hidden="true" style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", color: "#FF4002" } as CSSProperties}>
@@ -874,11 +883,11 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                   </span>
                   {" "}
                   <h3 style={{ margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(19px,1.7vw,26px)", lineHeight: "1.1", letterSpacing: "-.025em" } as CSSProperties}>
-                    Медиа
+                    {t.k31}
                   </h3>
                   {" "}
                   <p style={{ marginTop: "auto", fontSize: "15px", lineHeight: "1.55", color: "#8E9198" } as CSSProperties}>
-                    Реализованный проект выходит журналом, интервью и подкастом.
+                    {t.k73}
                   </p>
                   {" "}
                 </div>
@@ -890,11 +899,11 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                   </span>
                   {" "}
                   <h3 style={{ margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(19px,1.7vw,26px)", lineHeight: "1.1", letterSpacing: "-.025em" } as CSSProperties}>
-                    Поездки
+                    {t.k74}
                   </h3>
                   {" "}
                   <p style={{ marginTop: "auto", fontSize: "15px", lineHeight: "1.55", color: "#8E9198" } as CSSProperties}>
-                    Фабрика, биеннале, объект. Составом сообщества.
+                    {t.k75}
                   </p>
                   {" "}
                 </div>
@@ -924,7 +933,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                 </div>
                 {" "}
                 <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "rgba(247,246,243,.92)" } as CSSProperties}>
-                  Главное событие
+                  {t.k76}
                 </span>
                 {" "}
               </div>
@@ -934,7 +943,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                 <span data-pulse="" style={{ width: "8px", height: "8px", background: "#16181D", animation: "faPulse 2s ease-in-out infinite" } as CSSProperties} />
                 {" "}
                 <span>
-                  Кишинёв · 3 декабря 2026 · по приглашению
+                  {t.k77}
                 </span>
                 {" "}
               </div>
@@ -949,7 +958,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
               <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "36px 56px", marginTop: "clamp(36px,4.4vw,64px)" } as CSSProperties}>
                 {" "}
                 <p data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(16px)", flex: "1 1 440px", maxWidth: "48ch", fontSize: "clamp(16px,1.35vw,22px)", lineHeight: "1.5" } as CSSProperties}>
-                  Один день, в котором инвестор, девелопер, архитектор и производитель принимают решения за одним столом.
+                  {t.k78}
                 </p>
                 {" "}
                 <div data-reveal="" data-delay="240" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "flex-end", gap: "28px 44px" } as CSSProperties}>
@@ -963,7 +972,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                     </span>
                     {" "}
                     <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "rgba(247,246,243,.92)" } as CSSProperties}>
-                      участников
+                      {t.k79}
                     </span>
                     {" "}
                   </div>
@@ -977,13 +986,13 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                     </span>
                     {" "}
                     <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "rgba(247,246,243,.92)" } as CSSProperties}>
-                      направления
+                      {t.k80}
                     </span>
                     {" "}
                   </div>
                   {" "}
-                  <a className="fa-hf2ea20d" href="/forum" data-page="" style={{ display: "inline-flex", alignItems: "center", justifyContent: "space-between", gap: "20px", padding: "19px 32px", background: "#16181D", color: "#F7F6F3", border: "1px solid #16181D", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "15px", lineHeight: "1.2", transition: "background 220ms ease,color 220ms ease,border-color 220ms ease,transform 220ms ease" } as CSSProperties}>
-                    Страница форума
+                  <a className="fa-hf2ea20d" href={lp("/forum")} data-page="" style={{ display: "inline-flex", alignItems: "center", justifyContent: "space-between", gap: "20px", padding: "19px 32px", background: "#16181D", color: "#F7F6F3", border: "1px solid #16181D", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "15px", lineHeight: "1.2", transition: "background 220ms ease,color 220ms ease,border-color 220ms ease,transform 220ms ease" } as CSSProperties}>
+                    {t.k81}
                     <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
                       →
                     </span>
@@ -1014,13 +1023,13 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                 </div>
                 {" "}
                 <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                  Основание
+                  {t.k82}
                 </span>
                 {" "}
               </div>
               {" "}
               <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(36px,4.4vw,68px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(30px,5.4vw,86px)", lineHeight: ".94", letterSpacing: "-.045em", textTransform: "uppercase" } as CSSProperties}>
-                Кем создано сообщество
+                {t.k83}
               </h2>
               {" "}
               <div data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", marginTop: "clamp(36px,4.4vw,64px)", paddingTop: "24px", borderTop: "2px solid #16181D" } as CSSProperties}>
@@ -1030,7 +1039,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                   <img src="/img/d65b278e9b.png" alt="LH47 arch." style={{ height: "32px", width: "auto", display: "block", filter: "brightness(0) invert(.14)" } as CSSProperties} />
                   {" "}
                   <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                    Архитектурное бюро
+                    {t.k84}
                   </span>
                   {" "}
                 </div>
@@ -1046,7 +1055,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                     </div>
                     {" "}
                     <div style={{ marginTop: "12px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", opacity: ".62" } as CSSProperties}>
-                      лет
+                      {t.k85}
                     </div>
                     {" "}
                   </div>
@@ -1060,7 +1069,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                     </div>
                     {" "}
                     <div style={{ marginTop: "12px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", opacity: ".62" } as CSSProperties}>
-                      офисов
+                      {t.k86}
                     </div>
                     {" "}
                   </div>
@@ -1074,7 +1083,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                     </div>
                     {" "}
                     <div style={{ marginTop: "12px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", opacity: ".62" } as CSSProperties}>
-                      специалистов
+                      {t.k87}
                     </div>
                     {" "}
                   </div>
@@ -1088,7 +1097,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                     </div>
                     {" "}
                     <div style={{ marginTop: "12px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", opacity: ".62" } as CSSProperties}>
-                      страны
+                      {t.k88}
                     </div>
                     {" "}
                   </div>
@@ -1102,7 +1111,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                     </div>
                     {" "}
                     <div style={{ marginTop: "12px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", opacity: ".62" } as CSSProperties}>
-                      реализованных проектов
+                      {t.k89}
                     </div>
                     {" "}
                   </div>
@@ -1118,7 +1127,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                   <img src="/img/d7f7cfad4d.png" alt="InStyle Home" style={{ height: "26px", width: "auto", display: "block", filter: "brightness(0) invert(.14)" } as CSSProperties} />
                   {" "}
                   <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                    Медиа-партнёр
+                    {t.k90}
                   </span>
                   {" "}
                 </div>
@@ -1134,13 +1143,13 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                     </div>
                     {" "}
                     <div style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                      лет
+                      {t.k85}
                     </div>
                     {" "}
                   </div>
                   {" "}
                   <p style={{ flex: "1 1 380px", maxWidth: "44ch", fontSize: "16px", lineHeight: "1.6", color: "#5C5F66" } as CSSProperties}>
-                    Медиа об архитектуре и интерьере. Публикации проектов участников сообщества.
+                    {t.k91}
                   </p>
                   {" "}
                 </div>
@@ -1168,13 +1177,13 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                 </div>
                 {" "}
                 <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                  Форматы участия
+                  {t.k92}
                 </span>
                 {" "}
               </div>
               {" "}
               <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(36px,4.4vw,68px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(30px,5.4vw,86px)", lineHeight: ".94", letterSpacing: "-.045em", textTransform: "uppercase" } as CSSProperties}>
-                Два способа быть внутри
+                {t.k93}
               </h2>
               {" "}
               <div style={{ display: "grid", gridTemplateColumns: ("var(--twoCols)" as any), gap: "1px", marginTop: "clamp(36px,4.4vw,64px)", background: "#DCDAD4", outline: "1px solid #DCDAD4" } as CSSProperties}>
@@ -1190,11 +1199,11 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                   </div>
                   {" "}
                   <h3 style={{ margin: "clamp(16px,1.8vw,24px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,22px)", lineHeight: "1.16", letterSpacing: "-.02em" } as CSSProperties}>
-                    Архитекторы и дизайнеры
+                    {t.k53}
                   </h3>
                   {" "}
                   <div style={{ minHeight: "32px", marginTop: "14px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#8E9198" } as CSSProperties}>
-                    Условия участия – по запросу
+                    {t.k94}
                   </div>
                   {" "}
                   <ul style={{ listStyle: "none", margin: "clamp(20px,2.4vw,30px) 0 0", padding: "0", display: "flex", flexDirection: "column", fontSize: "16px", lineHeight: "1.5", color: "#B9BBC0" } as CSSProperties}>
@@ -1204,7 +1213,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                         01
                       </span>
                       <span>
-                        Профиль в каталоге участников
+                        {t.k95}
                       </span>
                     </li>
                     {" "}
@@ -1213,7 +1222,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                         02
                       </span>
                       <span>
-                        Закрытые встречи ArchiMinds
+                        {t.k96}
                       </span>
                     </li>
                     {" "}
@@ -1222,7 +1231,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                         03
                       </span>
                       <span>
-                        Участие в форуме без взноса
+                        {t.k97}
                       </span>
                     </li>
                     {" "}
@@ -1231,14 +1240,14 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                         04
                       </span>
                       <span>
-                        Прямой контакт с производителями
+                        {t.k98}
                       </span>
                     </li>
                     {" "}
                   </ul>
                   {" "}
                   <a className="fa-h7eab1cf" href="#apply" style={{ alignSelf: "flex-start", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "16px", marginTop: "auto", padding: "18px 34px", background: "#FF4002", color: "#F7F6F3", border: "1px solid #FF4002", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", transition: "background 200ms ease,color 200ms ease,border-color 200ms ease" } as CSSProperties}>
-                    Подать заявку
+                    {t.k38}
                     <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
                       →
                     </span>
@@ -1257,11 +1266,11 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                   </div>
                   {" "}
                   <h3 style={{ margin: "clamp(16px,1.8vw,24px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,22px)", lineHeight: "1.16", letterSpacing: "-.02em" } as CSSProperties}>
-                    Производители, девелоперы, бренды
+                    {t.k99}
                   </h3>
                   {" "}
                   <div style={{ minHeight: "32px", marginTop: "14px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                    Условия участия – по запросу
+                    {t.k94}
                   </div>
                   {" "}
                   <ul style={{ listStyle: "none", margin: "clamp(20px,2.4vw,30px) 0 0", padding: "0", display: "flex", flexDirection: "column", fontSize: "16px", lineHeight: "1.5", color: "#5C5F66" } as CSSProperties}>
@@ -1271,7 +1280,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                         01
                       </span>
                       <span>
-                        Доступ к бюро и студиям напрямую
+                        {t.k100}
                       </span>
                     </li>
                     {" "}
@@ -1280,7 +1289,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                         02
                       </span>
                       <span>
-                        Участие в форуме и премии
+                        {t.k101}
                       </span>
                     </li>
                     {" "}
@@ -1289,7 +1298,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                         03
                       </span>
                       <span>
-                        Совместные мероприятия и разборы
+                        {t.k102}
                       </span>
                     </li>
                     {" "}
@@ -1298,14 +1307,14 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                         04
                       </span>
                       <span>
-                        Публикация в InStyle Home
+                        {t.k103}
                       </span>
                     </li>
                     {" "}
                   </ul>
                   {" "}
                   <a className="fa-hea007e6" href="#apply" style={{ alignSelf: "flex-start", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "16px", marginTop: "auto", padding: "18px 34px", background: "transparent", color: "#16181D", border: "1px solid #16181D", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
-                    Запросить условия
+                    {t.k104}
                     <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
                       →
                     </span>
@@ -1324,7 +1333,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
             <div aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", bottom: "-2%", pointerEvents: "none", overflow: "hidden" } as CSSProperties}>
               {" "}
               <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "min(22vw,300px)", lineHeight: ".78", letterSpacing: "-.06em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(255,64,2,.18)", paddingLeft: "clamp(20px,4.8vw,108px)" } as CSSProperties}>
-                Сообщество
+                {t.k35}
               </div>
               {" "}
             </div>
@@ -1344,52 +1353,52 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                 </div>
                 {" "}
                 <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#8E9198" } as CSSProperties}>
-                  Вступление
+                  {t.k20}
                 </span>
                 {" "}
               </div>
               {" "}
               <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(36px,4.4vw,64px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(32px,5.8vw,92px)", lineHeight: ".92", letterSpacing: "-.05em", textTransform: "uppercase", maxWidth: "20ch", textWrap: "initial" } as CSSProperties}>
-                Вступление
+                {t.k20}
                 <br />
-                по заявке и{" "}
+{t.k105}{" "}
                 <span style={{ color: "#FF4002" } as CSSProperties}>
-                  модерации
+                  {t.k106}
                 </span>
               </h2>
               {" "}
               <div data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", gap: "10px 20px", marginTop: "clamp(24px,3vw,36px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "#8E9198" } as CSSProperties}>
                 {" "}
                 <span>
-                  01 Заявка
+                  {t.k107}
                 </span>
                 <span style={{ color: "#3A3D44" } as CSSProperties}>
                   →
                 </span>
                 {" "}
                 <span>
-                  02 Модерация
+                  {t.k108}
                 </span>
                 <span style={{ color: "#3A3D44" } as CSSProperties}>
                   →
                 </span>
                 {" "}
                 <span>
-                  03 Знакомство
+                  {t.k109}
                 </span>
                 <span style={{ color: "#3A3D44" } as CSSProperties}>
                   →
                 </span>
                 {" "}
                 <span>
-                  04 Контакты
+                  {t.k110}
                 </span>
                 <span style={{ color: "#3A3D44" } as CSSProperties}>
                   →
                 </span>
                 {" "}
                 <span style={{ color: "#FF4002" } as CSSProperties}>
-                  05 Проекты
+                  {t.k111}
                 </span>
                 {" "}
               </div>
@@ -1404,7 +1413,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                     <div>
                       {" "}
                       <label htmlFor="fa-name" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        Имя
+                        {t.k112}
                       </label>
                       {" "}
                       <input className="fa-f0988020" id="fa-name" name="name" type="text" autoComplete="name" onInput={onName} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
@@ -1418,7 +1427,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                     <div>
                       {" "}
                       <label htmlFor="fa-company" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        Компания
+                        {t.k113}
                       </label>
                       {" "}
                       <input className="fa-f0988020" id="fa-company" name="company" type="text" autoComplete="organization" onInput={onCompany} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
@@ -1432,29 +1441,29 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                     <div>
                       {" "}
                       <label htmlFor="fa-role" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        Роль
+                        {t.k114}
                       </label>
                       {" "}
                       <select className="fa-f0988020" id="fa-role" name="role" onChange={onRole} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "#F7F6F3", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", appearance: "none", borderRadius: "0", transition: "border-color 200ms ease" } as CSSProperties}>
                         {" "}
                         <option value="">
-                          Выберите
+                          {t.k115}
                         </option>
                         {" "}
                         <option value="Архитектор или дизайнер">
-                          Архитектор или дизайнер
+                          {t.k116}
                         </option>
                         {" "}
                         <option value="Девелопер или застройщик">
-                          Девелопер или застройщик
+                          {t.k117}
                         </option>
                         {" "}
                         <option value="Производитель или поставщик">
-                          Производитель или поставщик
+                          {t.k118}
                         </option>
                         {" "}
                         <option value="Инвестор или бизнес">
-                          Инвестор или бизнес
+                          {t.k119}
                         </option>
                         {" "}
                       </select>
@@ -1482,7 +1491,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                     <div>
                       {" "}
                       <label htmlFor="fa-phone" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        Телефон
+                        {t.k120}
                       </label>
                       {" "}
                       <input className="fa-f0988020" id="fa-phone" name="phone" type="tel" autoComplete="tel" onInput={onPhone} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
@@ -1496,7 +1505,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                   </div>
                   {" "}
                   <button className="fa-h3635ec6" type="submit" style={{ marginTop: "40px", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "16px", padding: "18px 36px", background: "#16181D", color: "#F7F6F3", border: "1px solid #16181D", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", cursor: "pointer", transition: "background 200ms ease,color 200ms ease,border-color 200ms ease" } as CSSProperties}>
-                    Отправить заявку
+                    {t.k121}
                     <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
                       →
                     </span>
@@ -1513,11 +1522,11 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                 <div style={{ marginTop: "clamp(36px,4.4vw,56px)", padding: "clamp(26px,3.2vw,48px)", background: "#F7F6F3", color: "#16181D", maxWidth: "65ch", boxShadow: "14px 14px 0 #FF4002" } as CSSProperties}>
                   {" "}
                   <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(20px,1.9vw,26px)" } as CSSProperties}>
-                    Заявка отправлена
+                    {t.k122}
                   </div>
                   {" "}
                   <p style={{ margin: "16px 0 0", fontSize: "16px", lineHeight: "1.6", color: "#5C5F66" } as CSSProperties}>
-                    Ответ придёт на указанную почту после модерации.
+                    {t.k123}
                   </p>
                   {" "}
                 </div>
@@ -1542,31 +1551,31 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                 <img src="/img/93a4df84e5.png" alt="Future Architecture" style={{ height: "92px", width: "auto", display: "block" } as CSSProperties} />
                 {" "}
                 <p style={{ margin: "24px 0 0", fontSize: "15px", lineHeight: "1.6", color: "#6E7278", maxWidth: "32ch" } as CSSProperties}>
-                  Профессиональное сообщество архитектуры, дизайна и девелопмента в Молдове
+                  {t.k124}
                 </p>
                 {" "}
               </div>
               {" "}
-              <nav aria-label="Навигация в подвале" style={{ flex: "0 1 168px", display: "flex", flexDirection: "column", gap: "12px", fontSize: "15px", color: "#5C5F66" } as CSSProperties}>
+              <nav aria-label={t.k125} style={{ flex: "0 1 168px", display: "flex", flexDirection: "column", gap: "12px", fontSize: "15px", color: "#5C5F66" } as CSSProperties}>
                 {" "}
                 <a className="fa-h80081ee" href="#manifest" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  Позиция
+                  {t.k7}
                 </a>
                 {" "}
                 <a className="fa-h80081ee" href="#formats" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  Форматы
+                  {t.k8}
                 </a>
                 {" "}
                 <a className="fa-h80081ee" href="#join" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  Участие
+                  {t.k11}
                 </a>
                 {" "}
-                <a className="fa-h80081ee" href="/forum" data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  Форум 2026
+                <a className="fa-h80081ee" href={lp("/forum")} data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                  {t.k9}
                 </a>
                 {" "}
-                <a className="fa-h80081ee" href="/award" data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  Премия
+                <a className="fa-h80081ee" href={lp("/award")} data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                  {t.k10}
                 </a>
                 {" "}
               </nav>
@@ -1608,7 +1617,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
             <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "16px 32px", marginTop: "clamp(36px,4.4vw,56px)", paddingTop: "20px", borderTop: "1px solid #DCDAD4" } as CSSProperties}>
               {" "}
               <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                Партнёры
+                {t.k126}
               </span>
               {" "}
               <img className="fa-hdb34e45" src="/img/d65b278e9b.png" alt="LH47 arch." style={{ height: "22px", width: "auto", display: "block", filter: "brightness(0) invert(.4)", transition: "filter 200ms ease" } as CSSProperties} />
@@ -1621,21 +1630,21 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
               {" "}
               <div style={{ display: "flex", gap: "8px" } as CSSProperties}>
                 {" "}
-                <span>
+                <a href={lhref('ro')} hrefLang="ro" aria-current={lang === 'ro' ? 'true' : undefined} style={{ color: lang === 'ro' ? "#16181D" : "inherit" } as CSSProperties}>
                   RO
-                </span>
+                </a>
                 <span style={{ color: "#DCDAD4" } as CSSProperties}>
                   /
                 </span>
-                <span style={{ color: "#16181D" } as CSSProperties}>
+                <a href={lhref('ru')} hrefLang="ru" aria-current={lang === 'ru' ? 'true' : undefined} style={{ color: lang === 'ru' ? "#16181D" : "inherit" } as CSSProperties}>
                   RU
-                </span>
+                </a>
                 <span style={{ color: "#DCDAD4" } as CSSProperties}>
                   /
                 </span>
-                <span>
+                <a href={lhref('en')} hrefLang="en" aria-current={lang === 'en' ? 'true' : undefined} style={{ color: lang === 'en' ? "#16181D" : "inherit" } as CSSProperties}>
                   EN
-                </span>
+                </a>
                 {" "}
               </div>
               {" "}
@@ -1646,7 +1655,7 @@ export default function CommunityPage({ indexVisible = true, bandMotion = true }
                 </span>
                 {" "}
                 <a className="fa-hb09baf5" href="#" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  Политика данных
+                  {t.k127}
                 </a>
                 {" "}
               </div>
