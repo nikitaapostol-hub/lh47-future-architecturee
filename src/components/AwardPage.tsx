@@ -228,7 +228,7 @@ export default function AwardPage({
                 {t.k35}
               </a>
               {" "}
-              <a className="fa-hb09baf5" href={lp("/forum")} data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
+              <a className="fa-hb09baf5 fa-nav-hot" href={lp("/forum")} data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
                 {t.k9}
               </a>
               {" "}
@@ -288,7 +288,7 @@ export default function AwardPage({
                 {t.k35}
               </a>
               {" "}
-              <a href={lp("/forum")} data-page="" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
+              <a className="fa-nav-hot" href={lp("/forum")} data-page="" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
                 {t.k9}
               </a>
               {" "}
@@ -1340,19 +1340,13 @@ export default function AwardPage({
                 {" "}
               </div>
               {" "}
-              <div style={{ flex: "0 1 160px", display: "flex", flexDirection: "column", gap: "12px", fontSize: "15px", color: "#B9BBC0" } as CSSProperties}>
+              <div className="fa-social" style={{ flex: "0 1 160px", color: "#B9BBC0" } as CSSProperties}>
                 {" "}
-                <a className="fa-h8d05fde" href="#" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  Instagram
-                </a>
+                <a className="fa-h8d05fde" href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4.2" /><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" /></svg><span className="fa-sr">Instagram</span></a>
                 {" "}
-                <a className="fa-h8d05fde" href="#" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  Facebook
-                </a>
+                <a className="fa-h8d05fde" href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H16.7V3.6c-.3-.04-1.3-.13-2.47-.13-2.44 0-4.11 1.49-4.11 4.23V9.9H7.4V13h2.72v8h3.38z" /></svg><span className="fa-sr">Facebook</span></a>
                 {" "}
-                <a className="fa-h8d05fde" href="#" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  LinkedIn
-                </a>
+                <a className="fa-h8d05fde" href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.94 8.6H3.9V21h3.04V8.6zM5.42 3A1.8 1.8 0 105.4 6.6 1.8 1.8 0 005.42 3zM21 14.2c0-3.4-1.82-4.98-4.24-4.98-1.96 0-2.83 1.08-3.32 1.84V8.6H10.4c.04.86 0 12.4 0 12.4h3.04v-6.92c0-.33.02-.66.12-.9.27-.66.87-1.34 1.9-1.34 1.33 0 1.87 1.02 1.87 2.5V21H21v-6.8z" /></svg><span className="fa-sr">LinkedIn</span></a>
                 {" "}
               </div>
               {" "}
