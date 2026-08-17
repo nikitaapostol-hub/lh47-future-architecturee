@@ -1,21 +1,30 @@
 'use client'
 
 /* Заставка. На каждой странице своя сцена, собранная из простых фигур:
-   сообщество — кубик складывается из трёх граней;
-   форум — стол и четыре места вокруг него;
-   премия — фигура поднимает награду над головой.
+   сообщество — люди встают в один ряд;
+   форум — сцена, спикер и зал;
+   премия — пьедестал, победитель и кубок.
    Всё на CSS: если JavaScript не отработает, заставка всё равно уйдёт. */
 import { usePathname } from 'next/navigation'
+
+const PEOPLE = [0, 1, 2, 3, 4]
+const ROW1 = [0, 1, 2, 3, 4]
+const ROW2 = [0, 1, 2, 3]
 
 function scene(kind: 'home' | 'forum' | 'award') {
   if (kind === 'forum') {
     return (
       <>
-        <i className="fa-fo-table" />
-        <i className="fa-fo-seat fa-fo-n" />
-        <i className="fa-fo-seat fa-fo-e" />
-        <i className="fa-fo-seat fa-fo-s" />
-        <i className="fa-fo-seat fa-fo-w" />
+        <i className="fa-fo-screen" />
+        <i className="fa-fo-head" />
+        <i className="fa-fo-body" />
+        <i className="fa-fo-stand" />
+        {ROW1.map((i) => (
+          <i key={'a' + i} className={`fa-fo-seat fa-fo-r1 fa-fo-s${i}`} />
+        ))}
+        {ROW2.map((i) => (
+          <i key={'b' + i} className={`fa-fo-seat fa-fo-r2 fa-fo-t${i}`} />
+        ))}
       </>
     )
   }
@@ -23,20 +32,27 @@ function scene(kind: 'home' | 'forum' | 'award') {
     return (
       <>
         <i className="fa-aw-cup" />
+        <i className="fa-aw-stem" />
+        <i className="fa-aw-foot" />
         <i className="fa-aw-ring" />
-        <i className="fa-aw-arm fa-aw-arm-l" />
-        <i className="fa-aw-arm fa-aw-arm-r" />
         <i className="fa-aw-head" />
         <i className="fa-aw-body" />
+        <i className="fa-aw-p1" />
+        <i className="fa-aw-p2" />
+        <i className="fa-aw-p3" />
         <i className="fa-aw-floor" />
       </>
     )
   }
   return (
     <>
-      <i className="fa-pre-f fa-pre-left" />
-      <i className="fa-pre-f fa-pre-right" />
-      <i className="fa-pre-f fa-pre-top" />
+      {PEOPLE.map((i) => (
+        <i key={'h' + i} className={`fa-co-head fa-co-h${i}`} />
+      ))}
+      {PEOPLE.map((i) => (
+        <i key={'b' + i} className={`fa-co-body fa-co-b${i}`} />
+      ))}
+      <i className="fa-co-floor" />
     </>
   )
 }
