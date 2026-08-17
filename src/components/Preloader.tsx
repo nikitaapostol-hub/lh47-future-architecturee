@@ -1,14 +1,13 @@
-/* Заставка: кубик собирается из четырёх частей. Четверти слетаются по
-   диагоналям и смыкаются в один квадрат, последняя — оранжевая.
-   Всё на CSS: если JavaScript не отработает, экран всё равно уедет сам. */
+/* Заставка: кубик-конструктор. Три грани прилетают с разных сторон и
+   складываются в объём — светлый верх, тёмный бок, оранжевая грань.
+   Всё на CSS: если JavaScript не отработает, заставка всё равно уйдёт. */
 export default function Preloader() {
   return (
     <div className="fa-pre" aria-hidden="true">
       <div className="fa-pre-stage">
-        <i className="fa-pre-b fa-pre-b1" />
-        <i className="fa-pre-b fa-pre-b2" />
-        <i className="fa-pre-b fa-pre-b3" />
-        <i className="fa-pre-b fa-pre-b4" />
+        <i className="fa-pre-f fa-pre-left" />
+        <i className="fa-pre-f fa-pre-right" />
+        <i className="fa-pre-f fa-pre-top" />
         <i className="fa-pre-line" />
       </div>
     </div>
