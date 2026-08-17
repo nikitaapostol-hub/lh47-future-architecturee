@@ -282,7 +282,7 @@ export default function CommunityPage({
             {" "}
             <div aria-hidden="true" data-anim="" style={{ position: "absolute", top: "-10%", left: "-10%", right: "-10%", bottom: "-10%", pointerEvents: "none", backgroundImage: "repeating-linear-gradient(90deg,rgba(247,246,243,.10) 0 1px,transparent 1px 96px)", animation: "faPan 26s linear infinite" } as CSSProperties} />
             {" "}
-            <div aria-hidden="true" data-anim="" style={{ position: "absolute", inset: "-64px", pointerEvents: "none", backgroundImage: "radial-gradient(rgba(247,246,243,.09) 1px,transparent 1px)", backgroundSize: "80px 80px", animation: "faDrift 30s linear infinite" } as CSSProperties} />
+            <div aria-hidden="true" data-anim="" style={{ position: "absolute", inset: "-64px", pointerEvents: "none", backgroundImage: "radial-gradient(rgba(247,246,243,.06) 1px,transparent 1px)", backgroundSize: "80px 80px", animation: "faDrift 13s linear infinite" } as CSSProperties} />
             {" "}
             <div aria-hidden="true" data-parallax="0.05" style={{ position: "absolute", right: "clamp(-40px,-2vw,0px)", top: "clamp(96px,16vh,200px)", pointerEvents: "none", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(140px,20vw,300px)", lineHeight: ".76", letterSpacing: "-.06em", color: "#1D2027" } as CSSProperties}>
               FA
@@ -292,51 +292,51 @@ export default function CommunityPage({
             {" "}
             <div aria-hidden="true" style={{ position: "absolute", inset: "0", pointerEvents: "none", overflow: "hidden" } as CSSProperties}>
               {" "}
-              <span data-anim="" style={{ position: "absolute", left: "7%", top: "15%", display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(16px,2.14vw,30px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 700ms both,faFloatA 27s ease-in-out 1600ms infinite" } as CSSProperties}>
+              <span data-anim="" style={{ position: "absolute", left: "7%", top: "15%", display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(16px,2.14vw,30px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.09)", animation: "faFade 900ms ease 700ms both,faFloatA 11s ease-in-out 1600ms infinite" } as CSSProperties}>
                 {t.k21}
               </span>
               {" "}
-              <span data-anim="" style={{ position: "absolute", left: "33%", top: "8%", display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.43vw,20px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 820ms both,faFloatB 31s ease-in-out 1720ms infinite" } as CSSProperties}>
+              <span data-anim="" style={{ position: "absolute", left: "33%", top: "8%", display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.43vw,20px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.09)", animation: "faFade 900ms ease 820ms both,faFloatB 12s ease-in-out 1720ms infinite" } as CSSProperties}>
                 {t.k22}
               </span>
               {" "}
-              <span data-anim="" style={{ position: "absolute", left: "60%", top: "13%", display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(18px,2.43vw,34px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 940ms both,faFloatC 24s ease-in-out 1840ms infinite" } as CSSProperties}>
+              <span data-anim="" style={{ position: "absolute", left: "60%", top: "13%", display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(18px,2.43vw,34px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.09)", animation: "faFade 900ms ease 940ms both,faFloatC 10s ease-in-out 1840ms infinite" } as CSSProperties}>
                 {t.k23}
               </span>
               {" "}
-              <span data-anim="" style={{ position: "absolute", left: "82%", top: "23%", display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.57vw,22px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 1060ms both,faFloatA 33s ease-in-out 1960ms infinite" } as CSSProperties}>
+              <span data-anim="" style={{ position: "absolute", left: "82%", top: "23%", display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.57vw,22px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.09)", animation: "faFade 900ms ease 1060ms both,faFloatA 13s ease-in-out 1960ms infinite" } as CSSProperties}>
                 {t.k24}
               </span>
               {" "}
-              <span data-anim="" style={{ position: "absolute", left: "44%", top: "27%", display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.29vw,18px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 1180ms both,faFloatB 28s ease-in-out 2080ms infinite" } as CSSProperties}>
+              <span data-anim="" style={{ position: "absolute", left: "44%", top: "27%", display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.29vw,18px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.09)", animation: "faFade 900ms ease 1180ms both,faFloatB 11s ease-in-out 2080ms infinite" } as CSSProperties}>
                 {t.k25}
               </span>
               {" "}
-              <span data-anim="" style={{ position: "absolute", left: "70%", top: "37%", display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(14px,1.86vw,26px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 1300ms both,faFloatC 30s ease-in-out 2200ms infinite" } as CSSProperties}>
+              <span data-anim="" style={{ position: "absolute", left: "70%", top: "37%", display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(14px,1.86vw,26px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.09)", animation: "faFade 900ms ease 1300ms both,faFloatC 12s ease-in-out 2200ms infinite" } as CSSProperties}>
                 {t.k26}
               </span>
               {" "}
-              <span data-anim="" style={{ position: "absolute", left: "20%", top: "33%", display: ("var(--wordsExtra)" as any), fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.14vw,16px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 1420ms both,faFloatA 25s ease-in-out 2320ms infinite" } as CSSProperties}>
+              <span data-anim="" style={{ position: "absolute", left: "20%", top: "33%", display: ("var(--wordsExtra)" as any), fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.14vw,16px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.09)", animation: "faFade 900ms ease 1420ms both,faFloatA 10s ease-in-out 2320ms infinite" } as CSSProperties}>
                 {t.k27}
               </span>
               {" "}
-              <span data-anim="" style={{ position: "absolute", left: "54%", top: "47%", display: ("var(--wordsExtra)" as any), fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.43vw,20px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 1540ms both,faFloatB 34s ease-in-out 2440ms infinite" } as CSSProperties}>
+              <span data-anim="" style={{ position: "absolute", left: "54%", top: "47%", display: ("var(--wordsExtra)" as any), fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.43vw,20px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.09)", animation: "faFade 900ms ease 1540ms both,faFloatB 14s ease-in-out 2440ms infinite" } as CSSProperties}>
                 {t.k28}
               </span>
               {" "}
-              <span data-anim="" style={{ position: "absolute", left: "64%", top: "60%", display: ("var(--wordsExtra)" as any), fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.07vw,15px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 1660ms both,faFloatC 29s ease-in-out 2560ms infinite" } as CSSProperties}>
+              <span data-anim="" style={{ position: "absolute", left: "64%", top: "60%", display: ("var(--wordsExtra)" as any), fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.07vw,15px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.09)", animation: "faFade 900ms ease 1660ms both,faFloatC 12s ease-in-out 2560ms infinite" } as CSSProperties}>
                 {t.k29}
               </span>
               {" "}
-              <span data-anim="" style={{ position: "absolute", left: "11%", top: "45%", display: ("var(--wordsExtra)" as any), fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.57vw,22px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 1780ms both,faFloatA 26s ease-in-out 2680ms infinite" } as CSSProperties}>
+              <span data-anim="" style={{ position: "absolute", left: "11%", top: "45%", display: ("var(--wordsExtra)" as any), fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.57vw,22px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.09)", animation: "faFade 900ms ease 1780ms both,faFloatA 10s ease-in-out 2680ms infinite" } as CSSProperties}>
                 {t.k30}
               </span>
               {" "}
-              <span data-anim="" style={{ position: "absolute", left: "38%", top: "57%", display: ("var(--wordsExtra)" as any), fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.21vw,17px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 1900ms both,faFloatB 32s ease-in-out 2800ms infinite" } as CSSProperties}>
+              <span data-anim="" style={{ position: "absolute", left: "38%", top: "57%", display: ("var(--wordsExtra)" as any), fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.21vw,17px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.09)", animation: "faFade 900ms ease 1900ms both,faFloatB 13s ease-in-out 2800ms infinite" } as CSSProperties}>
                 {t.k31}
               </span>
               {" "}
-              <span data-anim="" style={{ position: "absolute", left: "88%", top: "50%", display: ("var(--wordsExtra)" as any), fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.14vw,16px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.17)", animation: "faFade 900ms ease 2020ms both,faFloatC 27s ease-in-out 2920ms infinite" } as CSSProperties}>
+              <span data-anim="" style={{ position: "absolute", left: "88%", top: "50%", display: ("var(--wordsExtra)" as any), fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.14vw,16px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.09)", animation: "faFade 900ms ease 2020ms both,faFloatC 11s ease-in-out 2920ms infinite" } as CSSProperties}>
                 {t.k32}
               </span>
               {" "}
