@@ -1,12 +1,8 @@
-import type { Metadata } from 'next'
-import CommunityPage from '@/components/CommunityPage'
+import { Community } from '@/lib/pages'
+import { meta } from '@/i18n/meta'
 
-export const metadata: Metadata = {
-  title: 'Future Architecture – профессиональное сообщество',
-  description:
-    'Future Architecture — профессиональное сообщество архитекторов, девелоперов и производителей Молдовы.',
-}
+export const metadata = meta('ru', '/')
 
-export default function Home() {
-  return <CommunityPage />
+export default function Page() {
+  return <Community lang="ru" />
 }
