@@ -31,7 +31,15 @@ export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: { outputFile: path.resolve(dirname, 'payload-types.ts') },
   db: postgresAdapter({
-    pool: { connectionString: process.env.DATABASE_URI || '' },
+    // Vercel's Neon integration injects the connection string under its own
+    // name, so accept the usual aliases rather than forcing a manual copy.
+    pool: {
+      connectionString:
+        process.env.DATABASE_URI ||
+        process.env.POSTGRES_URL ||
+        process.env.DATABASE_URL ||
+        '',
+    },
   }),
   sharp,
 })
