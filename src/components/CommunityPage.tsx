@@ -62,7 +62,7 @@ export default function CommunityPage({
     const n: Record<string, string> = {}
     if (!d.name.trim()) n.name = t.k1
     if (!d.company.trim()) n.company = t.k2
-    if (!d.role) n.role = t.k3
+    if (!d.role.trim()) n.role = t.k3
     if (!EMAIL_RE.test(d.email.trim())) n.email = t.k4
     if (d.phone.replace(/\D/g, '').length < 8) n.phone = t.k5
     if (Object.keys(n).length) {
@@ -324,20 +324,12 @@ export default function CommunityPage({
                 {t.k28}
               </span>
               {" "}
-              <span data-anim="" style={{ position: "absolute", left: "64%", top: "60%", display: ("var(--wordsExtra)" as any), fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.07vw,15px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.09)", animation: "faFade 900ms ease 1660ms both,faFloatC 12s ease-in-out 2560ms infinite" } as CSSProperties}>
-                {t.k29}
-              </span>
-              {" "}
-              <span data-anim="" style={{ position: "absolute", left: "11%", top: "45%", display: ("var(--wordsExtra)" as any), fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.57vw,22px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.09)", animation: "faFade 900ms ease 1780ms both,faFloatA 10s ease-in-out 2680ms infinite" } as CSSProperties}>
+<span data-anim="" style={{ position: "absolute", left: "11%", top: "45%", display: ("var(--wordsExtra)" as any), fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.57vw,22px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.09)", animation: "faFade 900ms ease 1780ms both,faFloatA 10s ease-in-out 2680ms infinite" } as CSSProperties}>
                 {t.k30}
               </span>
               {" "}
               <span data-anim="" style={{ position: "absolute", left: "38%", top: "57%", display: ("var(--wordsExtra)" as any), fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.21vw,17px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.09)", animation: "faFade 900ms ease 1900ms both,faFloatB 13s ease-in-out 2800ms infinite" } as CSSProperties}>
                 {t.k31}
-              </span>
-              {" "}
-              <span data-anim="" style={{ position: "absolute", left: "88%", top: "50%", display: ("var(--wordsExtra)" as any), fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.14vw,16px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.09)", animation: "faFade 900ms ease 2020ms both,faFloatC 11s ease-in-out 2920ms infinite" } as CSSProperties}>
-                {t.k32}
               </span>
               {" "}
             </div>
@@ -667,9 +659,9 @@ export default function CommunityPage({
               <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "20px 48px", marginTop: "clamp(36px,4.4vw,68px)" } as CSSProperties}>
                 {" "}
                 <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(30px,5.4vw,86px)", lineHeight: ".94", letterSpacing: "-.045em", textTransform: "uppercase", textWrap: "initial" } as CSSProperties}>
-                  {t.k51}
+                  {t.k315}
                   <br />
-                  {t.k49}
+                  {t.k316}
                 </h2>
                 {" "}
                 <p data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", maxWidth: "38ch", fontSize: "clamp(15px,1.15vw,18px)", lineHeight: "1.55", color: "#5C5F66" } as CSSProperties}>
@@ -679,6 +671,10 @@ export default function CommunityPage({
               </div>
               {" "}
               <div style={{ marginTop: "clamp(36px,4.4vw,64px)", borderTop: "2px solid #16181D" } as CSSProperties}>
+                {" "}
+                <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", paddingTop: "clamp(20px,2.4vw,32px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "#FF4002" } as CSSProperties}>
+                  {t.k317}
+                </div>
                 {" "}
                 <div className="fa-h52a5cac" data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "8px 40px", padding: "clamp(22px,2.6vw,40px) 0", borderBottom: "1px solid #DCDAD4", transition: "padding 260ms ease" } as CSSProperties}>
                   {" "}
@@ -696,6 +692,10 @@ export default function CommunityPage({
                   {" "}
                   <div data-draw="" data-delay="180" aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", bottom: "-1px", height: "2px", background: "#FF4002", transform: "scaleX(0)", transformOrigin: "left" } as CSSProperties} />
                   {" "}
+                </div>
+                {" "}
+                <div data-reveal="" data-delay="40" style={{ opacity: "0", transform: "translateY(16px)", paddingTop: "clamp(20px,2.4vw,32px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "#8E8B83" } as CSSProperties}>
+                  {t.k318}
                 </div>
                 {" "}
                 <div className="fa-h52a5cac" data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "8px 40px", padding: "clamp(22px,2.6vw,40px) 0", borderBottom: "1px solid #DCDAD4", transition: "padding 260ms ease" } as CSSProperties}>
@@ -883,7 +883,7 @@ export default function CommunityPage({
                   </span>
                   {" "}
                   <h3 style={{ margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(19px,1.7vw,26px)", lineHeight: "1.1", letterSpacing: "-.025em" } as CSSProperties}>
-                    {t.k31}
+                    {t.k310}
                   </h3>
                   {" "}
                   <p style={{ marginTop: "auto", fontSize: "15px", lineHeight: "1.55", color: "#8E9198" } as CSSProperties}>
@@ -896,6 +896,22 @@ export default function CommunityPage({
                   {" "}
                   <span style={{ alignSelf: "flex-end", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#6E7278" } as CSSProperties}>
                     07
+                  </span>
+                  {" "}
+                  <h3 style={{ margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(19px,1.7vw,26px)", lineHeight: "1.1", letterSpacing: "-.025em" } as CSSProperties}>
+                    YouTube
+                  </h3>
+                  {" "}
+                  <p style={{ marginTop: "auto", fontSize: "15px", lineHeight: "1.55", color: "#8E9198" } as CSSProperties}>
+                    {t.k311}
+                  </p>
+                  {" "}
+                </div>
+                {" "}
+                <div className="fa-h80081ee" data-reveal="" data-delay="420" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "16px", minHeight: "clamp(184px,13vw,236px)", padding: "clamp(20px,2vw,30px)", background: "#16181D", transition: "color 260ms ease" } as CSSProperties}>
+                  {" "}
+                  <span style={{ alignSelf: "flex-end", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#6E7278" } as CSSProperties}>
+                    08
                   </span>
                   {" "}
                   <h3 style={{ margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(19px,1.7vw,26px)", lineHeight: "1.1", letterSpacing: "-.025em" } as CSSProperties}>
@@ -973,20 +989,6 @@ export default function CommunityPage({
                     {" "}
                     <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "rgba(247,246,243,.92)" } as CSSProperties}>
                       {t.k79}
-                    </span>
-                    {" "}
-                  </div>
-                  {" "}
-                  <div style={{ display: "flex", alignItems: "baseline", gap: "14px" } as CSSProperties}>
-                    {" "}
-                    <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(48px,5.4vw,84px)", lineHeight: ".9", letterSpacing: "-.05em" } as CSSProperties}>
-                      <span data-count="4">
-                        4
-                      </span>
-                    </span>
-                    {" "}
-                    <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "rgba(247,246,243,.92)" } as CSSProperties}>
-                      {t.k80}
                     </span>
                     {" "}
                   </div>
@@ -1105,8 +1107,8 @@ export default function CommunityPage({
                   <div className="fa-hea007e6" style={{ padding: "clamp(20px,2vw,28px)", background: "#F7F6F3", transition: "background 260ms ease,color 260ms ease" } as CSSProperties}>
                     {" "}
                     <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(38px,4.2vw,64px)", lineHeight: "1", letterSpacing: "-.045em" } as CSSProperties}>
-                      <span data-count="200" data-suffix="+">
-                        200+
+                      <span data-count="800" data-suffix="+">
+                        800+
                       </span>
                     </div>
                     {" "}
@@ -1330,9 +1332,9 @@ export default function CommunityPage({
           {" "}
           <section id="apply" data-screen-label="07 Вступление" style={{ position: "relative", overflow: "hidden", padding: "clamp(72px,9vw,140px) 0 clamp(64px,8vw,120px)", backgroundColor: "#16181D", color: "#F7F6F3", backgroundImage: "repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,rgba(255,255,255,.06) 0 1px,transparent 1px 80px)" } as CSSProperties}>
             {" "}
-            <div aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", bottom: "-2%", pointerEvents: "none", overflow: "hidden" } as CSSProperties}>
+            <div aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", bottom: "0", pointerEvents: "none", overflow: "hidden" } as CSSProperties}>
               {" "}
-              <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "min(22vw,300px)", lineHeight: ".78", letterSpacing: "-.06em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(255,64,2,.18)", paddingLeft: "clamp(20px,4.8vw,108px)" } as CSSProperties}>
+              <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "min(22vw,300px)", lineHeight: "1", letterSpacing: "-.06em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(255,64,2,.18)", paddingLeft: "clamp(20px,4.8vw,108px)" } as CSSProperties}>
                 {t.k35}
               </div>
               {" "}
@@ -1444,29 +1446,7 @@ export default function CommunityPage({
                         {t.k114}
                       </label>
                       {" "}
-                      <select className="fa-f0988020" id="fa-role" name="role" onChange={onRole} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "#F7F6F3", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", appearance: "none", borderRadius: "0", transition: "border-color 200ms ease" } as CSSProperties}>
-                        {" "}
-                        <option value="">
-                          {t.k115}
-                        </option>
-                        {" "}
-                        <option value="Архитектор или дизайнер">
-                          {t.k116}
-                        </option>
-                        {" "}
-                        <option value="Девелопер или застройщик">
-                          {t.k117}
-                        </option>
-                        {" "}
-                        <option value="Производитель или поставщик">
-                          {t.k118}
-                        </option>
-                        {" "}
-                        <option value="Инвестор или бизнес">
-                          {t.k119}
-                        </option>
-                        {" "}
-                      </select>
+                      <input className="fa-f0988020" id="fa-role" name="role" type="text" autoComplete="organization-title" placeholder={t.k312} onInput={onRole} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
                       {" "}
                       <div style={{ minHeight: "16px", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".06em", color: "#FF4002" } as CSSProperties}>
                         {errRole}
@@ -1580,19 +1560,37 @@ export default function CommunityPage({
                 {" "}
               </nav>
               {" "}
-              <div style={{ flex: "0 1 240px", display: "flex", flexDirection: "column", gap: "12px", fontSize: "15px", color: "#5C5F66" } as CSSProperties}>
+              <div style={{ flex: "0 1 280px", display: "flex", flexDirection: "column", gap: "12px", fontSize: "15px", color: "#5C5F66" } as CSSProperties}>
                 {" "}
-                <a className="fa-h80081ee" href="mailto:join@futurearchitecture.md" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  join@futurearchitecture.md
+                <a className="fa-h80081ee" href="mailto:marketing@lh47arch.com" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                  marketing@lh47arch.com
                 </a>
                 {" "}
-                <a className="fa-h80081ee" href="tel:+37368199951" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  (+373) 68 199 951
+                <a className="fa-h80081ee" href="mailto:marketing@instylehome.md" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                  marketing@instylehome.md
                 </a>
                 {" "}
-                <a className="fa-h80081ee" href="tel:+37368059311" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  (+373) 68 059 311
-                </a>
+                <span style={{ color: "#8E8B83" } as CSSProperties}>
+                  future-arch.md/forum2026
+                </span>
+                {" "}
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" } as CSSProperties}>
+                  <a className="fa-h80081ee" href="tel:+37368199951" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                    (+373) 68 199 951
+                  </a>
+                  <span style={{ color: "#8E8B83" } as CSSProperties}>
+                    – InStyle Home
+                  </span>
+                </div>
+                {" "}
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" } as CSSProperties}>
+                  <a className="fa-h80081ee" href="tel:+37368059311" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                    (+373) 68 059 311
+                  </a>
+                  <span style={{ color: "#8E8B83" } as CSSProperties}>
+                    – LH47
+                  </span>
+                </div>
                 {" "}
               </div>
               {" "}
