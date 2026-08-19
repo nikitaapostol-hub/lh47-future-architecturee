@@ -677,6 +677,10 @@ export default function AwardPage({
               {" "}
               <div style={{ marginTop: "clamp(40px,5vw,72px)", borderTop: "1px solid rgba(255,255,255,.4)" } as CSSProperties}>
                 {" "}
+                <div data-reveal="" data-delay="740" style={{ opacity: "0", transform: "translateY(16px)", paddingTop: "clamp(18px,2vw,26px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".14em", textTransform: "uppercase", color: "#F7F6F3" } as CSSProperties}>
+                  {t.k269}
+                </div>
+                {" "}
                 <div className="fa-h56641de" data-reveal="" data-delay="780" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px", padding: "clamp(20px,2.2vw,30px) 0", borderBottom: "1px solid rgba(255,255,255,.4)", transition: "padding 240ms ease" } as CSSProperties}>
                   {" "}
                   <span style={{ flex: "0 0 40px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", color: "#F7F6F3" } as CSSProperties}>
@@ -729,13 +733,17 @@ export default function AwardPage({
                   {" "}
                 </div>
                 {" "}
+                <div data-reveal="" data-delay="1000" style={{ opacity: "0", transform: "translateY(16px)", paddingTop: "clamp(18px,2vw,26px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".14em", textTransform: "uppercase", color: "#F7F6F3" } as CSSProperties}>
+                  {t.k272}
+                </div>
+                {" "}
                 <div className="fa-h56641de" data-reveal="" data-delay="1020" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px", padding: "clamp(20px,2.2vw,30px) 0", borderBottom: "1px solid rgba(255,255,255,.4)", transition: "padding 240ms ease" } as CSSProperties}>
                   {" "}
                   <span style={{ flex: "0 0 40px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", color: "#F7F6F3" } as CSSProperties}>
-                    05
+                    01
                   </span>
                   {" "}
-                  <span style={{ flex: "1 1 320px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "clamp(14px,1.2vw,16px)", lineHeight: "1.5", letterSpacing: ".06em", textTransform: "uppercase", color: "#F7F6F3" } as CSSProperties}>
+                  <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(19px,2vw,30px)", lineHeight: "1.16", letterSpacing: "-.022em", color: "#F7F6F3" } as CSSProperties}>
                     {t.k287}
                   </span>
                   {" "}
