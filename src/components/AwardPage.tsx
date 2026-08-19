@@ -1323,11 +1323,6 @@ export default function AwardPage({
                 <a className="fa-h8d05fde" href="mailto:marketing@instylehome.md" style={{ transition: "color 200ms ease" } as CSSProperties}>
                   marketing@instylehome.md
                 </a>
-                {" "}
-                <span style={{ color: "#8E9198" } as CSSProperties}>
-                  future-arch.md/forum2026
-                </span>
-                {" "}
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" } as CSSProperties}>
                   <a className="fa-h8d05fde" href="tel:+37368199951" style={{ transition: "color 200ms ease" } as CSSProperties}>
                     (+373) 68 199 951

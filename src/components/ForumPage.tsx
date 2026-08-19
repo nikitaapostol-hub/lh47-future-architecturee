@@ -1319,8 +1319,7 @@ export default function ForumPage({
               <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "24px 40px", marginTop: "clamp(32px,4vw,48px)" } as CSSProperties}>
                 {" "}
                 <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(34px,6.4vw,96px)", lineHeight: ".9", letterSpacing: "-.045em", textTransform: "uppercase", maxWidth: "18ch" } as CSSProperties}>
-{t.k208}{" "}
-                  <span style={{ color: "#FF4002" } as CSSProperties}>
+<span style={{ color: "#FF4002" } as CSSProperties}>
                     {t.k209}
                   </span>
                 </h2>
@@ -1331,68 +1330,92 @@ export default function ForumPage({
                 {" "}
               </div>
               {" "}
-              <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "12px 16px", marginTop: "clamp(36px,4.4vw,60px)", paddingTop: "clamp(24px,3vw,36px)", borderTop: "2px solid #16181D" } as CSSProperties}>
-                {" "}
-                <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.05vw,17px)", lineHeight: "1.25", letterSpacing: "-.015em" } as CSSProperties}>
-                  {t.k211}
-                </span>
-                {" "}
-                <span aria-hidden="true" style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "14px", color: "#FF4002" } as CSSProperties}>
-                  →
-                </span>
-                {" "}
-                <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.05vw,17px)", lineHeight: "1.25", letterSpacing: "-.015em" } as CSSProperties}>
-                  {t.k132}
-                </span>
-                {" "}
-                <span aria-hidden="true" style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "14px", color: "#FF4002" } as CSSProperties}>
-                  →
-                </span>
-                {" "}
-                <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.05vw,17px)", lineHeight: "1.25", letterSpacing: "-.015em" } as CSSProperties}>
-                  {t.k212}
-                </span>
-                {" "}
-                <span aria-hidden="true" style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "14px", color: "#FF4002" } as CSSProperties}>
-                  →
-                </span>
-                {" "}
-                <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.05vw,17px)", lineHeight: "1.25", letterSpacing: "-.015em" } as CSSProperties}>
-                  {t.k213}
-                </span>
-                {" "}
-                <span aria-hidden="true" style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "14px", color: "#FF4002" } as CSSProperties}>
-                  →
-                </span>
-                {" "}
-                <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.05vw,17px)", lineHeight: "1.25", letterSpacing: "-.015em" } as CSSProperties}>
-                  {t.k214}
-                </span>
-                {" "}
-                <span aria-hidden="true" style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "14px", color: "#FF4002" } as CSSProperties}>
-                  →
-                </span>
-                {" "}
-                <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.05vw,17px)", lineHeight: "1.25", letterSpacing: "-.015em" } as CSSProperties}>
-                  {t.k215}
-                </span>
-                {" "}
-                <span aria-hidden="true" style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "14px", color: "#FF4002" } as CSSProperties}>
-                  →
-                </span>
-                {" "}
-                <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.05vw,17px)", lineHeight: "1.25", letterSpacing: "-.015em" } as CSSProperties}>
-                  {t.k313}
-                </span>
-                {" "}
-                <span aria-hidden="true" style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "14px", color: "#FF4002" } as CSSProperties}>
-                  →
-                </span>
-                {" "}
-                <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.05vw,17px)", lineHeight: "1.25", letterSpacing: "-.015em" } as CSSProperties}>
-                  {t.k216}
-                </span>
-                {" "}
+              <div style={{ display: "grid", gridTemplateColumns: ("var(--programCols)" as any), gap: "1px", marginTop: "clamp(36px,4.4vw,60px)", background: "#DCDAD4", outline: "1px solid #DCDAD4" } as CSSProperties}>
+                <div className="fa-hea007e6" data-reveal="" data-delay="0" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", display: "flex", flexDirection: "column", gap: "12px", minHeight: "clamp(120px,9vw,150px)", padding: "clamp(16px,1.6vw,24px)", background: "#EFEDE8", transition: "background 260ms ease,color 260ms ease" } as CSSProperties}>
+                  <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#FF4002" } as CSSProperties}>
+                    01
+                  </span>
+                  <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.1vw,18px)", lineHeight: "1.22", letterSpacing: "-.02em" } as CSSProperties}>
+                    {t.k211}
+                  </span>
+                  <span aria-hidden="true" style={{ position: "absolute", right: "clamp(10px,1vw,16px)", bottom: "clamp(14px,1.4vw,20px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "13px", color: "#FF4002" } as CSSProperties}>
+                    →
+                  </span>
+                </div>
+                <div className="fa-hea007e6" data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", display: "flex", flexDirection: "column", gap: "12px", minHeight: "clamp(120px,9vw,150px)", padding: "clamp(16px,1.6vw,24px)", background: "#EFEDE8", transition: "background 260ms ease,color 260ms ease" } as CSSProperties}>
+                  <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#B4B0A6" } as CSSProperties}>
+                    02
+                  </span>
+                  <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.1vw,18px)", lineHeight: "1.22", letterSpacing: "-.02em" } as CSSProperties}>
+                    {t.k132}
+                  </span>
+                  <span aria-hidden="true" style={{ position: "absolute", right: "clamp(10px,1vw,16px)", bottom: "clamp(14px,1.4vw,20px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "13px", color: "#FF4002" } as CSSProperties}>
+                    →
+                  </span>
+                </div>
+                <div className="fa-hea007e6" data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", display: "flex", flexDirection: "column", gap: "12px", minHeight: "clamp(120px,9vw,150px)", padding: "clamp(16px,1.6vw,24px)", background: "#EFEDE8", transition: "background 260ms ease,color 260ms ease" } as CSSProperties}>
+                  <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#B4B0A6" } as CSSProperties}>
+                    03
+                  </span>
+                  <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.1vw,18px)", lineHeight: "1.22", letterSpacing: "-.02em" } as CSSProperties}>
+                    {t.k212}
+                  </span>
+                  <span aria-hidden="true" style={{ position: "absolute", right: "clamp(10px,1vw,16px)", bottom: "clamp(14px,1.4vw,20px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "13px", color: "#FF4002" } as CSSProperties}>
+                    →
+                  </span>
+                </div>
+                <div className="fa-hea007e6" data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", display: "flex", flexDirection: "column", gap: "12px", minHeight: "clamp(120px,9vw,150px)", padding: "clamp(16px,1.6vw,24px)", background: "#EFEDE8", transition: "background 260ms ease,color 260ms ease" } as CSSProperties}>
+                  <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#B4B0A6" } as CSSProperties}>
+                    04
+                  </span>
+                  <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.1vw,18px)", lineHeight: "1.22", letterSpacing: "-.02em" } as CSSProperties}>
+                    {t.k213}
+                  </span>
+                  <span aria-hidden="true" style={{ position: "absolute", right: "clamp(10px,1vw,16px)", bottom: "clamp(14px,1.4vw,20px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "13px", color: "#FF4002" } as CSSProperties}>
+                    →
+                  </span>
+                </div>
+                <div className="fa-hea007e6" data-reveal="" data-delay="240" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", display: "flex", flexDirection: "column", gap: "12px", minHeight: "clamp(120px,9vw,150px)", padding: "clamp(16px,1.6vw,24px)", background: "#EFEDE8", transition: "background 260ms ease,color 260ms ease" } as CSSProperties}>
+                  <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#B4B0A6" } as CSSProperties}>
+                    05
+                  </span>
+                  <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.1vw,18px)", lineHeight: "1.22", letterSpacing: "-.02em" } as CSSProperties}>
+                    {t.k214}
+                  </span>
+                  <span aria-hidden="true" style={{ position: "absolute", right: "clamp(10px,1vw,16px)", bottom: "clamp(14px,1.4vw,20px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "13px", color: "#FF4002" } as CSSProperties}>
+                    →
+                  </span>
+                </div>
+                <div className="fa-hea007e6" data-reveal="" data-delay="300" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", display: "flex", flexDirection: "column", gap: "12px", minHeight: "clamp(120px,9vw,150px)", padding: "clamp(16px,1.6vw,24px)", background: "#EFEDE8", transition: "background 260ms ease,color 260ms ease" } as CSSProperties}>
+                  <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#B4B0A6" } as CSSProperties}>
+                    06
+                  </span>
+                  <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.1vw,18px)", lineHeight: "1.22", letterSpacing: "-.02em" } as CSSProperties}>
+                    {t.k215}
+                  </span>
+                  <span aria-hidden="true" style={{ position: "absolute", right: "clamp(10px,1vw,16px)", bottom: "clamp(14px,1.4vw,20px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "13px", color: "#FF4002" } as CSSProperties}>
+                    →
+                  </span>
+                </div>
+                <div className="fa-hea007e6" data-reveal="" data-delay="360" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", display: "flex", flexDirection: "column", gap: "12px", minHeight: "clamp(120px,9vw,150px)", padding: "clamp(16px,1.6vw,24px)", background: "#EFEDE8", transition: "background 260ms ease,color 260ms ease" } as CSSProperties}>
+                  <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#B4B0A6" } as CSSProperties}>
+                    07
+                  </span>
+                  <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.1vw,18px)", lineHeight: "1.22", letterSpacing: "-.02em" } as CSSProperties}>
+                    {t.k313}
+                  </span>
+                  <span aria-hidden="true" style={{ position: "absolute", right: "clamp(10px,1vw,16px)", bottom: "clamp(14px,1.4vw,20px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "13px", color: "#FF4002" } as CSSProperties}>
+                    →
+                  </span>
+                </div>
+                <div className="fa-hea007e6" data-reveal="" data-delay="420" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", display: "flex", flexDirection: "column", gap: "12px", minHeight: "clamp(120px,9vw,150px)", padding: "clamp(16px,1.6vw,24px)", background: "#EFEDE8", transition: "background 260ms ease,color 260ms ease" } as CSSProperties}>
+                  <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#FF4002" } as CSSProperties}>
+                    08
+                  </span>
+                  <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.1vw,18px)", lineHeight: "1.22", letterSpacing: "-.02em" } as CSSProperties}>
+                    {t.k216}
+                  </span>
+                </div>
               </div>
               {" "}
               <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "28px 56px", marginTop: "clamp(48px,6vw,80px)", padding: "clamp(28px,3.4vw,56px)", background: "#16181D", color: "#F7F6F3" } as CSSProperties}>
@@ -1649,7 +1672,7 @@ export default function ForumPage({
             {" "}
             <div aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", bottom: "0", pointerEvents: "none", overflow: "hidden" } as CSSProperties}>
               {" "}
-              <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "min(24vw,320px)", lineHeight: "1", letterSpacing: "-.06em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(255,64,2,.20)", paddingLeft: "clamp(20px,4.8vw,108px)" } as CSSProperties}>
+              <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "min(13vw,180px)", lineHeight: "1", letterSpacing: "-.06em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(255,64,2,.20)", paddingLeft: "clamp(20px,4.8vw,108px)" } as CSSProperties}>
                 {t.k244}
               </div>
               {" "}
@@ -1950,11 +1973,6 @@ export default function ForumPage({
                 <a className="fa-h80081ee" href="mailto:marketing@instylehome.md" style={{ transition: "color 200ms ease" } as CSSProperties}>
                   marketing@instylehome.md
                 </a>
-                {" "}
-                <span style={{ color: "#8E9198" } as CSSProperties}>
-                  future-arch.md/forum2026
-                </span>
-                {" "}
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" } as CSSProperties}>
                   <a className="fa-h80081ee" href="tel:+37368199951" style={{ transition: "color 200ms ease" } as CSSProperties}>
                     (+373) 68 199 951

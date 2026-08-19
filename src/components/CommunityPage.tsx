@@ -300,16 +300,8 @@ export default function CommunityPage({
                 {t.k22}
               </span>
               {" "}
-              <span data-anim="" style={{ position: "absolute", left: "60%", top: "13%", display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(18px,2.43vw,34px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.09)", animation: "faFade 900ms ease 940ms both,faFloatC 10s ease-in-out 1840ms infinite" } as CSSProperties}>
-                {t.k23}
-              </span>
-              {" "}
               <span data-anim="" style={{ position: "absolute", left: "82%", top: "23%", display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.57vw,22px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.09)", animation: "faFade 900ms ease 1060ms both,faFloatA 13s ease-in-out 1960ms infinite" } as CSSProperties}>
                 {t.k24}
-              </span>
-              {" "}
-              <span data-anim="" style={{ position: "absolute", left: "44%", top: "27%", display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(12px,1.29vw,18px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.09)", animation: "faFade 900ms ease 1180ms both,faFloatB 11s ease-in-out 2080ms infinite" } as CSSProperties}>
-                {t.k25}
               </span>
               {" "}
               <span data-anim="" style={{ position: "absolute", left: "70%", top: "37%", display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(14px,1.86vw,26px)", letterSpacing: "-.02em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(247,246,243,.09)", animation: "faFade 900ms ease 1300ms both,faFloatC 12s ease-in-out 2200ms infinite" } as CSSProperties}>
@@ -401,26 +393,6 @@ export default function CommunityPage({
                 {" "}
               </div>
               {" "}
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: "0", marginTop: "clamp(6px,1vw,16px)" } as CSSProperties}>
-                {" "}
-                <div style={{ padding: "16px 20px 12px 0", borderTop: "2px solid #FF4002", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "rgba(247,246,243,.86)" } as CSSProperties}>
-                  {t.k39}
-                </div>
-                {" "}
-                <div style={{ padding: "16px 20px 12px 0", borderTop: "1px solid rgba(247,246,243,.34)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "rgba(247,246,243,.72)" } as CSSProperties}>
-                  {t.k40}
-                </div>
-                {" "}
-                <div style={{ padding: "16px 20px 12px 0", borderTop: "1px solid rgba(247,246,243,.34)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "rgba(247,246,243,.72)" } as CSSProperties}>
-                  {t.k32}
-                </div>
-                {" "}
-                <div style={{ padding: "16px 20px 12px 0", borderTop: "1px solid rgba(247,246,243,.34)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "rgba(247,246,243,.72)" } as CSSProperties}>
-                  {t.k41}
-                </div>
-                {" "}
-              </div>
-              {" "}
               <div aria-hidden="true" style={{ display: "flex", alignItems: "center", gap: "12px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(247,246,243,.7)" } as CSSProperties}>
                 {" "}
                 <span data-anim="" style={{ display: "block", width: "1px", height: "32px", background: "#FF4002", animation: "faScroll 2.6s ease-in-out infinite" } as CSSProperties} />
@@ -447,24 +419,6 @@ export default function CommunityPage({
                   ◆
                 </span>
                 <span>
-                  {t.k40}
-                </span>
-                <span style={{ color: "#F7F6F3" } as CSSProperties}>
-                  ◆
-                </span>
-                <span>
-                  {t.k32}
-                </span>
-                <span style={{ color: "#F7F6F3" } as CSSProperties}>
-                  ◆
-                </span>
-                <span>
-                  {t.k41}
-                </span>
-                <span style={{ color: "#F7F6F3" } as CSSProperties}>
-                  ◆
-                </span>
-                <span>
                   {t.k43}
                 </span>
                 <span style={{ color: "#F7F6F3" } as CSSProperties}>
@@ -475,24 +429,6 @@ export default function CommunityPage({
               <div style={{ display: "flex", alignItems: "center", gap: ".28em", paddingRight: ".28em" } as CSSProperties}>
                 <span>
                   {t.k39}
-                </span>
-                <span style={{ color: "#F7F6F3" } as CSSProperties}>
-                  ◆
-                </span>
-                <span>
-                  {t.k40}
-                </span>
-                <span style={{ color: "#F7F6F3" } as CSSProperties}>
-                  ◆
-                </span>
-                <span>
-                  {t.k32}
-                </span>
-                <span style={{ color: "#F7F6F3" } as CSSProperties}>
-                  ◆
-                </span>
-                <span>
-                  {t.k41}
                 </span>
                 <span style={{ color: "#F7F6F3" } as CSSProperties}>
                   ◆
@@ -694,54 +630,14 @@ export default function CommunityPage({
                   {" "}
                 </div>
                 {" "}
-                <div data-reveal="" data-delay="40" style={{ opacity: "0", transform: "translateY(16px)", paddingTop: "clamp(20px,2.4vw,32px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "#8E8B83" } as CSSProperties}>
-                  {t.k318}
-                </div>
-                {" "}
-                <div className="fa-h52a5cac" data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "8px 40px", padding: "clamp(22px,2.6vw,40px) 0", borderBottom: "1px solid #DCDAD4", transition: "padding 260ms ease" } as CSSProperties}>
+                <div data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 24px", paddingTop: "clamp(22px,2.6vw,36px)" } as CSSProperties}>
                   {" "}
-                  <span style={{ flex: "0 0 44px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
-                    02
+                  <span style={{ flex: "0 0 auto", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "#8E8B83" } as CSSProperties}>
+                    {t.k318}
                   </span>
                   {" "}
-                  <h3 style={{ flex: "1 1 340px", margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(22px,2.8vw,44px)", lineHeight: "1.06", letterSpacing: "-.03em" } as CSSProperties}>
-                    {t.k55}
-                  </h3>
-                  {" "}
-                  <p style={{ flex: "1 1 260px", maxWidth: "34ch", fontSize: "16px", lineHeight: "1.5", color: "#5C5F66" } as CSSProperties}>
-                    {t.k56}
-                  </p>
-                  {" "}
-                </div>
-                {" "}
-                <div className="fa-h52a5cac" data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "8px 40px", padding: "clamp(22px,2.6vw,40px) 0", borderBottom: "1px solid #DCDAD4", transition: "padding 260ms ease" } as CSSProperties}>
-                  {" "}
-                  <span style={{ flex: "0 0 44px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
-                    03
-                  </span>
-                  {" "}
-                  <h3 style={{ flex: "1 1 340px", margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(22px,2.8vw,44px)", lineHeight: "1.06", letterSpacing: "-.03em" } as CSSProperties}>
-                    {t.k57}
-                  </h3>
-                  {" "}
-                  <p style={{ flex: "1 1 260px", maxWidth: "34ch", fontSize: "16px", lineHeight: "1.5", color: "#5C5F66" } as CSSProperties}>
-                    {t.k58}
-                  </p>
-                  {" "}
-                </div>
-                {" "}
-                <div className="fa-h52a5cac" data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "8px 40px", padding: "clamp(22px,2.6vw,40px) 0", borderBottom: "1px solid #DCDAD4", transition: "padding 260ms ease" } as CSSProperties}>
-                  {" "}
-                  <span style={{ flex: "0 0 44px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
-                    04
-                  </span>
-                  {" "}
-                  <h3 style={{ flex: "1 1 340px", margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(22px,2.8vw,44px)", lineHeight: "1.06", letterSpacing: "-.03em" } as CSSProperties}>
-                    {t.k59}
-                  </h3>
-                  {" "}
-                  <p style={{ flex: "1 1 260px", maxWidth: "34ch", fontSize: "16px", lineHeight: "1.5", color: "#5C5F66" } as CSSProperties}>
-                    {t.k60}
+                  <p style={{ flex: "1 1 320px", margin: "0", maxWidth: "56ch", fontSize: "16px", lineHeight: "1.55", color: "#5C5F66" } as CSSProperties}>
+                    {t.k319}
                   </p>
                   {" "}
                 </div>
@@ -792,13 +688,13 @@ export default function CommunityPage({
               {" "}
               <div style={{ display: "grid", gridTemplateColumns: ("var(--formatCols)" as any), gap: "1px", marginTop: "clamp(36px,4.4vw,64px)", background: "#3A3D44", outline: "1px solid #3A3D44" } as CSSProperties}>
                 {" "}
-                <div className="fa-h80081ee" data-reveal="" data-delay="0" style={{ opacity: "0", transform: "translateY(16px)", gridColumn: ("var(--forumSpan)" as any), display: "flex", flexDirection: "column", gap: "16px", minHeight: "clamp(184px,13vw,236px)", padding: "clamp(20px,2vw,30px)", background: "#16181D", transition: "color 260ms ease" } as CSSProperties}>
+                <div className="fa-h80081ee" data-reveal="" data-delay="0" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "16px", minHeight: "clamp(184px,13vw,236px)", padding: "clamp(20px,2vw,30px)", background: "#16181D", transition: "color 260ms ease" } as CSSProperties}>
                   {" "}
                   <span style={{ alignSelf: "flex-end", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#6E7278" } as CSSProperties}>
                     01
                   </span>
                   {" "}
-                  <h3 style={{ margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(26px,2.8vw,44px)", lineHeight: "1.04", letterSpacing: "-.03em" } as CSSProperties}>
+                  <h3 style={{ margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(19px,1.7vw,26px)", lineHeight: "1.1", letterSpacing: "-.025em" } as CSSProperties}>
                     {t.k65}
                   </h3>
                   {" "}
@@ -1334,7 +1230,7 @@ export default function CommunityPage({
             {" "}
             <div aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", bottom: "0", pointerEvents: "none", overflow: "hidden" } as CSSProperties}>
               {" "}
-              <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "min(22vw,300px)", lineHeight: "1", letterSpacing: "-.06em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(255,64,2,.18)", paddingLeft: "clamp(20px,4.8vw,108px)" } as CSSProperties}>
+              <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "min(14vw,190px)", lineHeight: "1", letterSpacing: "-.06em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(255,64,2,.18)", paddingLeft: "clamp(20px,4.8vw,108px)" } as CSSProperties}>
                 {t.k35}
               </div>
               {" "}
@@ -1569,11 +1465,6 @@ export default function CommunityPage({
                 <a className="fa-h80081ee" href="mailto:marketing@instylehome.md" style={{ transition: "color 200ms ease" } as CSSProperties}>
                   marketing@instylehome.md
                 </a>
-                {" "}
-                <span style={{ color: "#8E8B83" } as CSSProperties}>
-                  future-arch.md/forum2026
-                </span>
-                {" "}
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" } as CSSProperties}>
                   <a className="fa-h80081ee" href="tel:+37368199951" style={{ transition: "color 200ms ease" } as CSSProperties}>
                     (+373) 68 199 951
