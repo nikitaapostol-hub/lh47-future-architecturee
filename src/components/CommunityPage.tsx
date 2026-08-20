@@ -1230,7 +1230,7 @@ export default function CommunityPage({
             {" "}
             <div aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", bottom: "0", pointerEvents: "none", overflow: "hidden" } as CSSProperties}>
               {" "}
-              <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "min(14vw,190px)", lineHeight: "1", letterSpacing: "-.06em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(255,64,2,.18)", paddingLeft: "clamp(20px,4.8vw,108px)" } as CSSProperties}>
+              <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "min(10vw,160px)", lineHeight: "1", letterSpacing: "-.06em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(255,64,2,.18)", paddingLeft: "clamp(20px,4.8vw,108px)" } as CSSProperties}>
                 {t.k35}
               </div>
               {" "}

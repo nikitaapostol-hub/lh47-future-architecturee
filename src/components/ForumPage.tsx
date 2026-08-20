@@ -1672,7 +1672,7 @@ export default function ForumPage({
             {" "}
             <div aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", bottom: "0", pointerEvents: "none", overflow: "hidden" } as CSSProperties}>
               {" "}
-              <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "min(13vw,180px)", lineHeight: "1", letterSpacing: "-.06em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(255,64,2,.20)", paddingLeft: "clamp(20px,4.8vw,108px)" } as CSSProperties}>
+              <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "min(9.5vw,150px)", lineHeight: "1", letterSpacing: "-.06em", textTransform: "uppercase", whiteSpace: "nowrap", color: "rgba(255,64,2,.20)", paddingLeft: "clamp(20px,4.8vw,108px)" } as CSSProperties}>
                 {t.k244}
               </div>
               {" "}
