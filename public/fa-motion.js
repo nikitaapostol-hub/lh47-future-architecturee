@@ -267,7 +267,35 @@
     }, 2500);
   }
 
-  window.FA = { scan: scan, init: init, refresh: function () { onScroll(); tickCountdown(); } };
+
+  /* ── [data-fit]: подогнать кегль строки под ширину контейнера ───────── */
+  function fitLines() {
+    document.querySelectorAll('[data-fit]').forEach(function (el) {
+      var box = el.parentElement;
+      if (!box) return;
+      var avail = box.clientWidth;
+      if (!avail) return;
+      var max = parseFloat(el.getAttribute('data-fit-max')) || 200;
+      el.style.fontSize = '100px';
+      var w = el.scrollWidth;
+      if (!w) return;
+      el.style.fontSize = Math.max(20, Math.min(max, (100 * avail) / w)) + 'px';
+    });
+  }
+  var fitRO = null;
+  function initFit() {
+    fitLines();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitLines);
+    if (window.ResizeObserver && !fitRO) {
+      fitRO = new ResizeObserver(fitLines);
+      fitRO.observe(document.documentElement);
+    } else if (!fitRO) {
+      window.addEventListener('resize', fitLines, { passive: true });
+    }
+  }
+
+  initFit();
+  window.FA = { scan: scan, init: init, refresh: function () { onScroll(); tickCountdown(); fitLines(); }, fit: fitLines };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();
