@@ -14,4 +14,4 @@ export function path(lang: Lang, page: string): string {
 export const SITE = (process.env.NEXT_PUBLIC_SITE_URL || 'https://future-arch.md').replace(/\/$/, '')
 
 /** Страницы, которые попадают в карту сайта. */
-export const PAGES = ['/', '/forum', '/award'] as const
+export const PAGES = ['/', '/forum', '/award', '/privacy'] as const

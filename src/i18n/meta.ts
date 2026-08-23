@@ -97,3 +97,46 @@ export function meta(lang: Lang, page: Page): Metadata {
     },
   }
 }
+
+const PRIVACY: Record<Lang, { title: string; description: string }> = {
+  ru: {
+    title: 'Политика обработки персональных данных · Future Architecture',
+    description:
+      'Какие данные собирают формы сайта future-arch.md, зачем они нужны, сколько хранятся и как их удалить.',
+  },
+  ro: {
+    title: 'Politica de prelucrare a datelor cu caracter personal · Future Architecture',
+    description:
+      'Ce date colectează formularele site-ului future-arch.md, de ce sunt necesare, cât se păstrează și cum pot fi șterse.',
+  },
+  en: {
+    title: 'Personal data processing policy · Future Architecture',
+    description:
+      'What data the forms on future-arch.md collect, why it is needed, how long it is kept and how to have it deleted.',
+  },
+}
+
+export function privacyMeta(lang: Lang): Metadata {
+  const c = PRIVACY[lang]
+  return {
+    title: c.title,
+    description: c.description,
+    alternates: {
+      canonical: path(lang, '/privacy'),
+      languages: {
+        ...Object.fromEntries(LANGS.map((l) => [l, path(l, '/privacy')])),
+        'x-default': path('ru', '/privacy'),
+      },
+    },
+    robots: { index: true, follow: true },
+    openGraph: {
+      type: 'article',
+      siteName: 'Future Architecture',
+      title: c.title,
+      description: c.description,
+      url: SITE + path(lang, '/privacy'),
+      locale: OG_LOCALE[lang],
+      images: [{ url: '/og.png', width: 1200, height: 630, alt: c.title }],
+    },
+  }
+}
