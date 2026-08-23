@@ -6,26 +6,39 @@ import AwardPage from '@/components/AwardPage'
 import { getGlobal } from '@/lib/settings'
 import { dict } from '@/i18n'
 import type { Lang } from '@/i18n/links'
+import { OrgLd, ForumLd, AwardLd } from '@/lib/JsonLd'
 
 export function Community({ lang }: { lang: Lang }) {
-  return <CommunityPage t={dict[lang]} lang={lang} />
+  return (
+    <>
+      <OrgLd lang={lang} />
+      <CommunityPage t={dict[lang]} lang={lang} />
+    </>
+  )
 }
 
 export async function Forum({ lang }: { lang: Lang }) {
   const s = await getGlobal('forum-settings')
   return (
+    <>
+      <OrgLd lang={lang} />
+      <ForumLd lang={lang} startDate={s.forumDate as string} />
     <ForumPage
       t={dict[lang]}
       lang={lang}
       forumDate={s.forumDate as string}
       countdownVisible={s.countdownVisible !== false}
     />
+    </>
   )
 }
 
 export async function Award({ lang }: { lang: Lang }) {
   const s = await getGlobal('award-settings')
   return (
+    <>
+      <OrgLd lang={lang} />
+      <AwardLd lang={lang} deadline={s.deadlineDate as string} />
     <AwardPage
       t={dict[lang]}
       lang={lang}
@@ -37,5 +50,6 @@ export async function Award({ lang }: { lang: Lang }) {
       nominations={(s.nominations as any) || []}
       studentNominations={(s.studentNominations as any) || []}
     />
+    </>
   )
 }
