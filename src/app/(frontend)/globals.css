@@ -753,3 +753,8 @@ body:has(.fa-notice[data-on="1"]) header[data-header]{top:38px!important}
 .fa-hcb630f1:hover{background: #FFFFFF;color: #16181D}
 .fa-hd277039:focus{border-bottom-color: #FF4002}
 .fa-hdf939ad:hover{background: #FFFFFF;color: #16181D;border-color: #FFFFFF}
+
+/* ── 404 ─────────────────────────────────────────────────────────────── */
+.fa-404-card:hover{ background:#FF4002; color:#16181D }
+.fa-404-card:hover span{ color:#16181D }
+.fa-404-link:hover{ color:#FF4002 }
