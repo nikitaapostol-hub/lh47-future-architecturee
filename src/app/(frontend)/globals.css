@@ -616,101 +616,26 @@ input,select,button,textarea{font-family:inherit;font-size:inherit;color:inherit
 :focus-visible{outline:2px solid #FF4002;outline-offset:4px}
 ::selection{background:#FF4002;color:#F7F6F3}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}body{animation:none}[data-marquee],[data-pulse],[data-anim]{animation:none!important}[data-reveal]{opacity:1!important;transform:none!important;transition:none!important}[data-draw],[data-bar]{transition:none!important}}
-.fa-hb09baf5:hover{color:#16181D !important}
-.fa-h2b89b98:hover{background:#16181D !important;color:#F7F6F3 !important;border-color:#16181D !important}
-.fa-ha12da69:hover{background:#16181D !important;color:#F7F6F3 !important;border-color:#16181D !important;transform:translateY(-2px) !important}
-.fa-hf2ea20d:hover{background:#F7F6F3 !important;color:#16181D !important;border-color:#F7F6F3 !important;transform:translateY(-2px) !important}
-.fa-hbc91abb:hover{background:rgba(22,24,29,.14) !important}
-.fa-h7b88ea7:hover{background:#FF4002 !important;color:#F7F6F3 !important}
-.fa-hea007e6:hover{background:#16181D !important;color:#F7F6F3 !important}
-.fa-h56641de:hover{padding-left:14px !important}
-.fa-h190d283:hover{flex-grow:2.6 !important}
-.fa-hdb9575d:hover{filter:grayscale(0) !important;transform:scale(1.03) !important}
-.fa-h3d09d55:hover{transform:translateY(-10px) !important}
-.fa-h7eab1cf:hover{background:#F7F6F3 !important;color:#16181D !important;border-color:#F7F6F3 !important}
-.fa-hf6acb64:hover{color:#F7F6F3 !important;transform:translateX(4px) !important}
-.fa-h12f478d:hover{background:#F7F6F3 !important;color:#16181D !important}
 .fa-f0988020:focus{border-bottom-color:#FF4002 !important}
-.fa-h80081ee:hover{color:#FF4002 !important}
-.fa-h0435e75:hover{color:#F7F6F3 !important}
 @keyframes faDrift{to{background-position:80px 80px}}
 @keyframes faTick{0%,100%{opacity:.25}50%{opacity:1}}
 @keyframes faFloatA{0%,100%{transform:translate(0,0)}50%{transform:translate(16px,-20px)}}
 @keyframes faFloatB{0%,100%{transform:translate(0,0)}50%{transform:translate(-20px,14px)}}
 @keyframes faFloatC{0%,100%{transform:translate(0,0)}50%{transform:translate(12px,18px)}}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}body{animation:none}[data-anim],[data-pulse],[data-marquee]{animation:none!important}[data-reveal]{opacity:1!important;transform:none!important;transition:none!important}[data-draw],[data-grow]{transition:none!important}}
-.fa-h3635ec6:hover{background:#FF4002 !important;color:#F7F6F3 !important;border-color:#FF4002 !important}
-.fa-hf42e924:hover{background:#FF4002 !important;color:#F7F6F3 !important;border-color:#FF4002 !important;transform:translateY(-2px) !important}
-.fa-h932431b:hover{animation-play-state:paused !important}
-.fa-h3bf4555:hover{color:#16181D !important;border-top-color:#FF4002 !important}
-.fa-h52a5cac:hover{padding-left:18px !important}
-.fa-h112782f:hover{color:#16181D !important;transform:translateX(4px) !important}
-.fa-hdb34e45:hover{filter:brightness(0) invert(.14) !important}
 @keyframes faPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.25;transform:scale(.7)}}
 a:hover{color:#16181D}
 :focus-visible{outline:2px solid #16181D;outline-offset:4px}
 ::selection{background:#16181D;color:#FFFFFF}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}body{animation:none}[data-marquee],[data-pulse],[data-anim]{animation:none!important}[data-reveal]{opacity:1!important;transform:none!important;transition:none!important}[data-draw],[data-fill]{transition:none!important}}
-.fa-ha683e68:hover{background:transparent !important;color:#16181D !important}
-.fa-h7a3127f:hover{transform:translateY(-2px) !important;box-shadow:0 12px 30px rgba(22,24,29,.22) !important}
-.fa-h803f418:hover{background:#16181D !important;color:#F7F6F3 !important;transform:translateY(-2px) !important}
-.fa-h13caac1:hover{background:#16181D !important;color:#FFFFFF !important}
-.fa-hd6ad87b:hover{border-bottom-color:#16181D !important}
 .fa-f27ceb91:focus{border-bottom-color:#16181D !important}
-.fa-hb2c1ca2:hover{background:#FFFFFF !important;color:#16181D !important}
-.fa-h7d2f5f0:hover{background:#FFFFFF !important;color:#16181D !important;border-color:#FFFFFF !important}
-.fa-h8d05fde:hover{color:#FFFFFF !important}
 
 /* ── responsive tokens (were JS-computed in the original build) ────────── */
-:root{
-  --navDisplay:flex;
-  --burgerDisplay:none;
-  --menuDisplay:none;
-  --railDisplay:none;
-  --twoCols:repeat(2,1fr);
-  --threeCols:repeat(3,1fr);
-  --programCols:repeat(4,1fr);
-  --stripBasis:0;
-  --stripFrame:100%;
-  --stripHeight:clamp(180px,20vw,268px);
-  --formatCols:repeat(4,1fr);
-  --forumSpan:span 2;
-  --wordsExtra:block;
-  --nomCols:repeat(4,1fr);
-  --juryCols:repeat(4,1fr);
-  --chainDir:row;
-  --chainHeight:212px;
-  --chainPad:0;
-}
-@media (min-width:1440px){
-  :root{ --railDisplay:flex; }
-}
-@media (max-width:1080px){
-  :root{
-    --navDisplay:none;
-    --burgerDisplay:inline-flex;
-    --menuDisplay:block;
-    --twoCols:1fr;
-    --threeCols:1fr;
-    --programCols:repeat(2,1fr);
-    --stripBasis:31%;
-    --stripFrame:clamp(120px,30vw,180px);
-    --stripHeight:auto;
-    --formatCols:repeat(2,1fr);
-    --nomCols:repeat(2,1fr);
-    --juryCols:repeat(2,1fr);
-    --chainDir:column;
-    --chainHeight:auto;
-    --chainPad:0 0 0 20px;
-  }
-}
-@media (max-width:700px){
-  :root{ --formatCols:1fr; --forumSpan:span 1; --wordsExtra:none; }
-}
-@media (max-width:640px){
-  :root{ --nomCols:1fr; --juryCols:1fr; }
-}
-
+:root{--burgerDisplay:none;--chainDir:row;--chainHeight:212px;--chainPad:0;--formatCols:repeat(4,1fr);--memberCols:minmax(180px,1fr) minmax(0,2fr) minmax(0,1.6fr);--memberGap:24px 48px;--menuDisplay:none;--navDisplay:flex;--nomCols:repeat(4,1fr);--programCols:repeat(4,1fr);--railDisplay:none;--stripBasis:0;--stripFrame:100%;--stripHeight:clamp(180px,20vw,268px);--twoCols:repeat(2,1fr);--wordsExtra:block;}
+@media (min-width:1440px){ :root{--railDisplay:flex;} }
+@media (max-width:1080px){ :root{--burgerDisplay:inline-flex;--chainDir:column;--chainHeight:auto;--chainPad:0 0 0 20px;--formatCols:repeat(2,1fr);--memberCols:1fr;--memberGap:10px;--menuDisplay:block;--navDisplay:none;--programCols:repeat(2,1fr);--stripBasis:31%;--stripFrame:clamp(120px,30vw,180px);--stripHeight:auto;--twoCols:1fr;} }
+@media (max-width:700px){ :root{--formatCols:1fr;--wordsExtra:none;} }
+@media (max-width:640px){ :root{--nomCols:1fr;} }
 /* ── award timeline: whole-string styles that switched at 1080px ───────── */
 .fa-axis{position:absolute;left:0;right:0;top:50%;bottom:auto;height:1px;width:auto;background:#DCDAD4;transform:scaleX(0);transform-origin:left}
 .fa-node{position:relative;flex:1 1 0;min-width:0;padding:0}
@@ -797,3 +722,34 @@ body:has(.fa-notice[data-on="1"]) header[data-header]{top:38px!important}
 .fa-social svg{width:17px;height:17px;display:block}
 .fa-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);
   white-space:nowrap;border:0}
+
+/* ── hover / focus из новой вёрстки ─────────────────────────────────── */
+.fa-h011a976:hover{background: #F7F6F3;color: #16181D;border-color: #F7F6F3}
+.fa-h10f47c2:hover{color: #F7F6F3;transform: translateX(4px)}
+.fa-h21d64df:hover{padding-left: 14px}
+.fa-h230b4f3:hover{background: #FF4002;color: #F7F6F3;border-color: #FF4002}
+.fa-h4c6dd28:hover{border-bottom-color: #16181D}
+.fa-h4ed6486:hover{padding-left: 18px}
+.fa-h55d5336:hover{background: #F7F6F3;color: #16181D}
+.fa-h58ee740:hover{background: #FF4002;color: #F7F6F3}
+.fa-h5fa00f1:hover{background: #16181D;color: #F7F6F3;border-color: #16181D}
+.fa-h69183df:hover{background: #16181D;color: #F7F6F3;transform: translateY(-10px)}
+.fa-h6ae611c:hover{color: #16181D}
+.fa-h6bd4330:hover{animation-play-state: paused}
+.fa-h6d4f325:hover{background: #16181D;color: #F7F6F3}
+.fa-h7189809:hover{background: #F7F6F3;color: #16181D;border-color: #F7F6F3;transform: translateY(-2px)}
+.fa-h77c075a:hover{background: #F1EFEA}
+.fa-h879d62b:hover{background: #FF4002;color: #F7F6F3;border-color: #FF4002;transform: translateY(-2px)}
+.fa-h88f6f23:hover{background: transparent;color: #16181D}
+.fa-h9b28a07:hover{color: #F7F6F3}
+.fa-h9cd382b:hover{transform: translateY(-2px);box-shadow: 0 12px 30px rgba(22,24,29,.22)}
+.fa-ha311dfc:hover{background: #16181D;color: #FFFFFF}
+.fa-hbb70728:hover{filter: brightness(0) invert(.14)}
+.fa-hbb9d53c:hover{background: #16181D;color: #F7F6F3;transform: translateY(-2px)}
+.fa-hbd8acac:focus{border-bottom-color: #16181D}
+.fa-hbe9e358:hover{background: rgba(22,24,29,.14)}
+.fa-hc263921:hover{background: #16181D;color: #F7F6F3;border-color: #16181D;transform: translateY(-2px)}
+.fa-hc3889f8:hover{color: #FF4002}
+.fa-hcb630f1:hover{background: #FFFFFF;color: #16181D}
+.fa-hd277039:focus{border-bottom-color: #FF4002}
+.fa-hdf939ad:hover{background: #FFFFFF;color: #16181D;border-color: #FFFFFF}
