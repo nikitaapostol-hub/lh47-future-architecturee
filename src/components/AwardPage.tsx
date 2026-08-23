@@ -1068,7 +1068,7 @@ export default function AwardPage({
                     <span>
                       {t.k466}
                     </span>
-                    <a className="fa-hc3889f8" href="#" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                    <a className="fa-hc3889f8" href={lp("/privacy")} style={{ transition: "color 200ms ease" } as CSSProperties}>
                       {t.k127}
                     </a>
                   </div>

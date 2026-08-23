@@ -1427,7 +1427,7 @@ export default function ForumPage({
                     <span>
                       {t.k466}
                     </span>
-                    <a className="fa-h9b28a07" href="#" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                    <a className="fa-h9b28a07" href={lp("/privacy")} style={{ transition: "color 200ms ease" } as CSSProperties}>
                       {t.k127}
                     </a>
                   </div>

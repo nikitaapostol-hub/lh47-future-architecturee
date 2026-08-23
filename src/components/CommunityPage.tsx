@@ -1007,7 +1007,7 @@ export default function CommunityPage({
                     <span>
                       {t.k466}
                     </span>
-                    <a className="fa-h6ae611c" href="#" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                    <a className="fa-h6ae611c" href={lp("/privacy")} style={{ transition: "color 200ms ease" } as CSSProperties}>
                       {t.k127}
                     </a>
                   </div>
