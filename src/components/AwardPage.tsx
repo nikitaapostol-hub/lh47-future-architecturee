@@ -189,6 +189,8 @@ export default function AwardPage({
   const errName = err.name || '', errOrg = err.org || '', errTrack = err.track || ''
   const errNomination = err.nomination || '', errEmail = err.email || ''
   const errPhone = err.phone || '', errUrl = err.url || '', errDesc = err.desc || ''
+  const nominationPlaceholder = track ? t.k256 : t.k255
+  const menuDisplay = menu ? ('var(--menuDisplay)' as any) : 'none'
   const notSent = !sent
   const descCount = descLen + ' / 300'
   const isAward = track === AWARD_TRACK
@@ -204,1211 +206,876 @@ export default function AwardPage({
 
   return (
     <>
-      {" "}
-      {" "}
-      <div style={{ background: "#F7F6F3", color: "#16181D", overflowX: "hidden" } as CSSProperties}>
-        {" "}
-        <header data-header="" data-header-solid="" style={{ position: "fixed", top: "0", left: "0", right: "0", zIndex: "60", background: "rgba(247,246,243,.94)", borderBottom: "1px solid #DCDAD4", transition: "background 300ms ease,border-color 300ms ease" } as CSSProperties}>
-          {" "}
-          <div data-header-inner="" style={{ maxWidth: "1720px", margin: "0 auto", padding: "20px clamp(20px,4.8vw,108px)", display: "flex", alignItems: "center", gap: "24px", transition: "padding 300ms ease" } as CSSProperties}>
-            {" "}
-            <a href={lp("/")} data-page="" style={{ display: "flex", alignItems: "center", gap: "12px" } as CSSProperties}>
-              {" "}
-              <img src="/img/5dd2fe9c60.png" alt="" style={{ height: "30px", width: "auto", display: "block" } as CSSProperties} />
-              {" "}
-              <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "13px", letterSpacing: ".14em", textTransform: "uppercase", whiteSpace: "nowrap" } as CSSProperties}>
-                Future Architecture
-              </span>
-              {" "}
-            </a>
-            {" "}
-            <nav aria-label={t.k6} style={{ marginLeft: "auto", minWidth: "0", display: ("var(--navDisplay)" as any), alignItems: "center", gap: "24px", fontSize: "15px", color: "#5C5F66" } as CSSProperties}>
-              {" "}
-              <a className="fa-hb09baf5" href={lp("/")} data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                {t.k35}
-              </a>
-              {" "}
-              <a className="fa-hb09baf5 fa-nav-hot" href={lp("/forum")} data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                {t.k9}
-              </a>
-              {" "}
-              <a href="#top" aria-current="page" style={{ color: "#16181D", fontWeight: "600" } as CSSProperties}>
-                {t.k10}
-              </a>
-              {" "}
-              <a className="fa-hb09baf5" href="#contacts" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                {t.k12}
-              </a>
-              {" "}
-            </nav>
-            {" "}
-            <div style={{ display: ("var(--navDisplay)" as any), alignItems: "center", gap: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em" } as CSSProperties}>
-              {" "}
-              <a href={lhref('ro')} hrefLang="ro" aria-current={lang === 'ro' ? 'true' : undefined} style={{ color: lang === 'ro' ? "#16181D" : "#6E7278" } as CSSProperties}>
-                RO
-              </a>
-              {" "}
-              <span style={{ color: "#DCDAD4" } as CSSProperties}>
-                /
-              </span>
-              {" "}
-              <a href={lhref('ru')} hrefLang="ru" aria-current={lang === 'ru' ? 'true' : undefined} style={{ color: lang === 'ru' ? "#16181D" : "#6E7278" } as CSSProperties}>
-                RU
-              </a>
-              {" "}
-              <span style={{ color: "#DCDAD4" } as CSSProperties}>
-                /
-              </span>
-              {" "}
-              <a href={lhref('en')} hrefLang="en" aria-current={lang === 'en' ? 'true' : undefined} style={{ color: lang === 'en' ? "#16181D" : "#6E7278" } as CSSProperties}>
-                EN
-              </a>
-              {" "}
-            </div>
-            {" "}
-            <a className="fa-ha683e68" href="#apply" style={{ display: ("var(--navDisplay)" as any), flex: "0 0 auto", alignItems: "center", padding: "12px 22px", background: "#16181D", color: "#F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "14px", lineHeight: "1.2", whiteSpace: "nowrap", border: "1px solid #16181D", transition: "background 200ms ease,color 200ms ease,border-color 200ms ease" } as CSSProperties}>
-              {t.k38}
-            </a>
-            {" "}
-            <button type="button" aria-label={t.k15} onClick={toggleMenu} style={{ display: ("var(--burgerDisplay)" as any), marginLeft: "auto", flexDirection: "column", justifyContent: "center", gap: "6px", width: "44px", height: "44px", padding: "0", background: "transparent", border: "0", cursor: "pointer" } as CSSProperties}>
-              {" "}
-              <span style={{ display: "block", width: "22px", height: "1px", background: "#16181D" } as CSSProperties} />
-              {" "}
-              <span style={{ display: "block", width: "22px", height: "1px", background: "#16181D" } as CSSProperties} />
-              {" "}
-            </button>
-            {" "}
-          </div>
-          {" "}
-          <div style={{ display: (menu ? "var(--menuDisplay)" : "none"), background: "#F7F6F3", borderTop: "1px solid #DCDAD4", padding: "8px clamp(20px,4.8vw,108px) 32px" } as CSSProperties}>
-            {" "}
-            <nav aria-label={t.k16} style={{ display: "flex", flexDirection: "column", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "22px" } as CSSProperties}>
-              {" "}
-              <a href={lp("/")} data-page="" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                {t.k35}
-              </a>
-              {" "}
-              <a className="fa-nav-hot" href={lp("/forum")} data-page="" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                {t.k9}
-              </a>
-              {" "}
-              <a href="#top" aria-current="page" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4", fontWeight: "700" } as CSSProperties}>
-                {t.k10}
-              </a>
-              {" "}
-              <a href="#contacts" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                {t.k12}
-              </a>
-              {" "}
-            </nav>
-            {" "}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", marginTop: "24px" } as CSSProperties}>
-              {" "}
-              <div style={{ display: "flex", gap: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em" } as CSSProperties}>
-                {" "}
-                <a href={lhref('ro')} hrefLang="ro" aria-current={lang === 'ro' ? 'true' : undefined} style={{ color: lang === 'ro' ? "#16181D" : "#6E7278" } as CSSProperties}>
-                  RO
-                </a>
-                <span style={{ color: "#DCDAD4" } as CSSProperties}>
-                  /
-                </span>
-                <a href={lhref('ru')} hrefLang="ru" aria-current={lang === 'ru' ? 'true' : undefined} style={{ color: lang === 'ru' ? "#16181D" : "#6E7278" } as CSSProperties}>
-                  RU
-                </a>
-                <span style={{ color: "#DCDAD4" } as CSSProperties}>
-                  /
-                </span>
-                <a href={lhref('en')} hrefLang="en" aria-current={lang === 'en' ? 'true' : undefined} style={{ color: lang === 'en' ? "#16181D" : "#6E7278" } as CSSProperties}>
-                  EN
-                </a>
-                {" "}
-              </div>
-              {" "}
-              <a href="#apply" onClick={closeMenu} style={{ display: "inline-flex", alignItems: "center", padding: "12px 24px", background: "#16181D", color: "#F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "14px", lineHeight: "1.2" } as CSSProperties}>
-                {t.k38}
-              </a>
-              {" "}
-            </div>
-            {" "}
-          </div>
-          {" "}
-          <div aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", bottom: "-1px", height: "2px", overflow: "hidden" } as CSSProperties}>
-            {" "}
-            <div data-progress="" style={{ width: "100%", height: "2px", background: "#16181D", transform: "scaleX(0)", transformOrigin: "left" } as CSSProperties} />
-            {" "}
-          </div>
-          {" "}
-        </header>
-        {" "}
-        <main>
-          {" "}
-          <section id="top" style={{ position: "relative", overflow: "hidden", minHeight: "100svh", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "clamp(128px,17vh,188px) 0 clamp(24px,3vw,40px)", backgroundColor: "#FFFFFF", color: "#16181D" } as CSSProperties}>
-            {" "}
-            <div aria-hidden="true" style={{ position: "absolute", inset: "0", backgroundImage: "repeating-linear-gradient(90deg,rgba(22,24,29,.06) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,rgba(22,24,29,.06) 0 1px,transparent 1px 80px)" } as CSSProperties} />
-            {" "}
-            <div style={{ position: "relative", maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)", width: "100%" } as CSSProperties}>
-              {" "}
-              <div data-anim="" style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", justifyContent: "space-between", gap: "12px 32px", paddingBottom: "14px", borderBottom: "1px solid #DCDAD4", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "clamp(10px,.9vw,12px)", letterSpacing: ".14em", textTransform: "uppercase", color: "#6E7278", animation: "faFade 700ms ease 120ms both" } as CSSProperties}>
-                {" "}
-                <div style={{ display: "flex", alignItems: "center", gap: "16px" } as CSSProperties}>
-                  {" "}
-                  <span style={{ color: "#16181D" } as CSSProperties}>
-                    01
-                  </span>
-                  {" "}
-                  <span style={{ width: "40px", height: "1px", background: "#C9C6BE" } as CSSProperties} />
-                  {" "}
-                  <span style={{ color: "#16181D" } as CSSProperties}>
-                    {t.k259}
-                  </span>
-                  {" "}
-                </div>
-                {" "}
-                <span>
-                  Future Architecture Forum 2026
-                </span>
-                {" "}
-              </div>
-              {" "}
-              <h1 data-fit-head="" style={{ margin: "clamp(22px,2.8vw,44px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", textTransform: "uppercase", lineHeight: ".86", letterSpacing: "-.05em", fontSize: "clamp(30px,9vw,150px)", whiteSpace: "nowrap" } as CSSProperties}>
-                {" "}
-                <span style={{ display: "block", overflow: "hidden", paddingBottom: ".03em" } as CSSProperties}>
-                  <span data-anim="" data-fit-line="" style={{ display: "block", animation: "faRise 1000ms cubic-bezier(.16,1,.3,1) 180ms both" } as CSSProperties}>
-                    {t.k260}
-                  </span>
-                </span>
-                {" "}
-                <span style={{ display: "block", overflow: "hidden", paddingBottom: ".03em" } as CSSProperties}>
-                  <span data-anim="" data-fit-line="" style={{ display: "block", animation: "faRise 1000ms cubic-bezier(.16,1,.3,1) 300ms both" } as CSSProperties}>
-                    {t.k261}
-                  </span>
-                </span>
-                {" "}
-              </h1>
-              {" "}
-              <div data-anim="" style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "28px 48px", marginTop: "clamp(24px,3vw,44px)", animation: "faFade 800ms ease 700ms both" } as CSSProperties}>
-                {" "}
-                <p style={{ flex: "1 1 420px", maxWidth: "58ch", fontSize: "clamp(16px,1.4vw,22px)", lineHeight: "1.45", letterSpacing: "-.01em", color: "#5C5F66" } as CSSProperties}>
-                  {t.k262}
-                </p>
-                {" "}
-                <div style={{ display: "flex", alignItems: "center", gap: "12px", paddingBottom: "6px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "clamp(11px,1vw,13px)", letterSpacing: ".12em", textTransform: "uppercase", color: "#16181D" } as CSSProperties}>
-                  {" "}
-                  <span data-pulse="" style={{ width: "8px", height: "8px", background: "#16181D", animation: "faPulse 2s ease-in-out infinite" } as CSSProperties} />
-                  {" "}
-                  <span>
-{t.k263}{" "}{resolvedDeadlineLabel}
-                  </span>
-                  {" "}
-                </div>
-                {" "}
-              </div>
-              {" "}
-              <div data-countdown="" data-target={resolvedDeadlineDate} style={{ display: countdownDisplay, flexWrap: "wrap", marginTop: "clamp(28px,3.6vw,52px)", borderTop: "1px solid #DCDAD4", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                {" "}
-                <div style={{ flex: "1 1 0", minWidth: "96px", padding: "clamp(16px,2vw,26px) clamp(12px,1.6vw,22px)" } as CSSProperties}>
-                  {" "}
-                  <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(38px,5.6vw,86px)", lineHeight: ".9", letterSpacing: "-.045em", fontVariantNumeric: "tabular-nums" } as CSSProperties}>
-                    <span data-cd="d">
-                      –
-                    </span>
-                  </div>
-                  {" "}
-                  <div style={{ marginTop: "clamp(8px,1vw,14px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                    {t.k143}
-                  </div>
-                  {" "}
-                </div>
-                {" "}
-                <div style={{ flex: "1 1 0", minWidth: "96px", padding: "clamp(16px,2vw,26px) clamp(12px,1.6vw,22px)", borderLeft: "1px solid #DCDAD4" } as CSSProperties}>
-                  {" "}
-                  <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(38px,5.6vw,86px)", lineHeight: ".9", letterSpacing: "-.045em", fontVariantNumeric: "tabular-nums" } as CSSProperties}>
-                    <span data-cd="h">
-                      –
-                    </span>
-                  </div>
-                  {" "}
-                  <div style={{ marginTop: "clamp(8px,1vw,14px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                    {t.k144}
-                  </div>
-                  {" "}
-                </div>
-                {" "}
-                <div style={{ flex: "1 1 0", minWidth: "96px", padding: "clamp(16px,2vw,26px) clamp(12px,1.6vw,22px)", borderLeft: "1px solid #DCDAD4" } as CSSProperties}>
-                  {" "}
-                  <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(38px,5.6vw,86px)", lineHeight: ".9", letterSpacing: "-.045em", fontVariantNumeric: "tabular-nums" } as CSSProperties}>
-                    <span data-cd="m">
-                      –
-                    </span>
-                  </div>
-                  {" "}
-                  <div style={{ marginTop: "clamp(8px,1vw,14px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                    {t.k145}
-                  </div>
-                  {" "}
-                </div>
-                {" "}
-                <div style={{ flex: "1 1 0", minWidth: "96px", padding: "clamp(16px,2vw,26px) clamp(12px,1.6vw,22px)", borderLeft: "1px solid #DCDAD4" } as CSSProperties}>
-                  {" "}
-                  <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(38px,5.6vw,86px)", lineHeight: ".9", letterSpacing: "-.045em", fontVariantNumeric: "tabular-nums" } as CSSProperties}>
-                    <span data-cd="s">
-                      –
-                    </span>
-                  </div>
-                  {" "}
-                  <div style={{ marginTop: "clamp(8px,1vw,14px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                    {t.k146}
-                  </div>
-                  {" "}
-                </div>
-                {" "}
-                <div style={{ flex: "1 1 200px", minWidth: "180px", display: "flex", flexDirection: "column", justifyContent: "flex-end", gap: "8px", padding: "clamp(16px,2vw,26px) clamp(12px,1.6vw,22px)", borderLeft: "1px solid #DCDAD4" } as CSSProperties}>
-                  {" "}
-                  <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                    {t.k264}
-                  </span>
-                  {" "}
-                  <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(15px,1.4vw,20px)", letterSpacing: "-.01em" } as CSSProperties}>
-                    {resolvedDeadlineLabel}
-                  </span>
-                  {" "}
-                </div>
-                {" "}
-              </div>
-              {" "}
-              <div data-anim="" style={{ display: "flex", flexWrap: "wrap", gap: "14px", marginTop: "clamp(24px,3vw,40px)", animation: "faFade 800ms ease 820ms both" } as CSSProperties}>
-                {" "}
-                <button className="fa-h7a3127f" type="button" onClick={goAward} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "19px 38px", background: "#16181D", color: "#F7F6F3", border: "1px solid #16181D", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", cursor: "pointer", transition: "background 220ms ease,color 220ms ease,border-color 220ms ease,transform 220ms ease,box-shadow 220ms ease" } as CSSProperties}>
-                  {t.k265}
-                </button>
-                {" "}
-                <button className="fa-h803f418" type="button" onClick={goStudent} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "19px 38px", background: "transparent", border: "1px solid #16181D", color: "#16181D", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", cursor: "pointer", transition: "background 220ms ease,color 220ms ease,transform 220ms ease" } as CSSProperties}>
-                  {t.k266}
-                </button>
-                {" "}
-              </div>
-              {" "}
-              <div aria-hidden="true" style={{ display: "flex", alignItems: "center", gap: "12px", marginTop: "clamp(20px,2.4vw,32px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                {" "}
-                <span aria-hidden="true" style={{ display: "block", width: "1px", height: "34px", background: "#16181D" } as CSSProperties} />
-                {" "}
-                <span>
-                  {t.k42}
-                </span>
-                {" "}
-              </div>
-              {" "}
-            </div>
-            {" "}
-          </section>
-          {" "}
-          <section id="tracks" style={{ padding: "clamp(64px,8vw,120px) 0", backgroundColor: "#F7F6F3" } as CSSProperties}>
-            {" "}
-            <div style={{ maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
-              {" "}
-              <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "24px", paddingBottom: "16px", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                {" "}
-                <div style={{ display: "flex", alignItems: "center", gap: "16px" } as CSSProperties}>
-                  {" "}
-                  <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em", color: "#16181D" } as CSSProperties}>
-                    02
-                  </span>
-                  {" "}
-                  <span data-draw="" style={{ width: "40px", height: "1px", background: "#16181D", transform: "scaleX(0)", transformOrigin: "left" } as CSSProperties} />
-                  {" "}
-                </div>
-                {" "}
-                <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                  {t.k267}
-                </span>
-                {" "}
-              </div>
-              {" "}
-              <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(32px,4vw,48px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(38px,6.4vw,104px)", lineHeight: ".88", letterSpacing: "-.05em", textTransform: "uppercase" } as CSSProperties}>
-                {t.k268}
-              </h2>
-              {" "}
-              <div style={{ display: "grid", gridTemplateColumns: ("var(--twoCols)" as any), gap: "1px", marginTop: "clamp(36px,4.4vw,60px)", background: "#DCDAD4", borderTop: "1px solid #DCDAD4" } as CSSProperties}>
-                {" "}
-                <div data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "clamp(16px,1.8vw,24px)", padding: "clamp(28px,3vw,44px) clamp(24px,2.6vw,40px) clamp(32px,3.4vw,52px) 0", background: "#F7F6F3" } as CSSProperties}>
-                  {" "}
-                  <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".12em", color: "#6E7278" } as CSSProperties}>
-                    01
-                  </span>
-                  {" "}
-                  <h3 style={{ margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(26px,3vw,44px)", lineHeight: "1.02", letterSpacing: "-.035em" } as CSSProperties}>
-                    {t.k269}
-                  </h3>
-                  {" "}
-                  <p style={{ fontSize: "clamp(15px,1.15vw,18px)", lineHeight: "1.55", color: "#6E7278", maxWidth: "40ch" } as CSSProperties}>
-                    {t.k270}
-                  </p>
-                  {" "}
-                  <p style={{ fontSize: "clamp(16px,1.3vw,20px)", lineHeight: "1.5", color: "#5C5F66", maxWidth: "40ch" } as CSSProperties}>
-                    {t.k271}
-                  </p>
-                  {" "}
-                </div>
-                {" "}
-                <div data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "clamp(16px,1.8vw,24px)", padding: "clamp(28px,3vw,44px) 0 clamp(32px,3.4vw,52px) clamp(24px,2.6vw,40px)", background: "#F7F6F3" } as CSSProperties}>
-                  {" "}
-                  <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".12em", color: "#6E7278" } as CSSProperties}>
-                    02
-                  </span>
-                  {" "}
-                  <h3 style={{ margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(26px,3vw,44px)", lineHeight: "1.02", letterSpacing: "-.035em" } as CSSProperties}>
-                    {t.k272}
-                  </h3>
-                  {" "}
-                  <p style={{ fontSize: "clamp(15px,1.15vw,18px)", lineHeight: "1.55", color: "#6E7278", maxWidth: "40ch" } as CSSProperties}>
-                    {t.k273}
-                  </p>
-                  {" "}
-                  <p style={{ fontSize: "clamp(16px,1.3vw,20px)", lineHeight: "1.5", color: "#5C5F66", maxWidth: "40ch" } as CSSProperties}>
-                    {t.k274}
-                  </p>
-                  {" "}
-                  <span style={{ marginTop: "auto", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", lineHeight: "1.7", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                    {t.k275}
-                  </span>
-                  {" "}
-                </div>
-                {" "}
-              </div>
-              {" "}
-            </div>
-            {" "}
-          </section>
-          {" "}
-          <section id="nominations" style={{ padding: "clamp(64px,8vw,120px) 0", backgroundColor: "#EFEDE8" } as CSSProperties}>
-            {" "}
-            <div style={{ maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
-              {" "}
-              <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "24px", paddingBottom: "16px", borderBottom: "1px solid #C9C6BE" } as CSSProperties}>
-                {" "}
-                <div style={{ display: "flex", alignItems: "center", gap: "16px" } as CSSProperties}>
-                  {" "}
-                  <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em", color: "#16181D" } as CSSProperties}>
-                    03
-                  </span>
-                  {" "}
-                  <span data-draw="" style={{ width: "40px", height: "1px", background: "#16181D", transform: "scaleX(0)", transformOrigin: "left" } as CSSProperties} />
-                  {" "}
-                </div>
-                {" "}
-                <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                  {t.k276}
-                </span>
-                {" "}
-              </div>
-              {" "}
-              <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(32px,4vw,48px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(40px,7vw,110px)", lineHeight: ".9", letterSpacing: "-.05em", textTransform: "uppercase" } as CSSProperties}>
-                {t.k277}
-              </h2>
-              {" "}
-              <div style={{ display: "grid", gridTemplateColumns: ("var(--nomCols)" as any), gap: "1px", marginTop: "clamp(36px,4.4vw,60px)", background: "#C9C6BE", borderTop: "1px solid #C9C6BE" } as CSSProperties}>
-                {" "}
-                {(nominations || []).map((nom, nom_i) => (
-                  <Fragment key={nom_i}>
-                  {" "}
-                  <div className="fa-h13caac1" data-reveal="" data-delay={nom.delay} style={{ opacity: "0", transform: "translateY(14px)", display: "flex", alignItems: "baseline", gap: "16px", padding: "clamp(22px,2.4vw,32px) clamp(18px,2vw,28px)", background: "#EFEDE8", transition: "background 240ms ease,color 240ms ease" } as CSSProperties}>
-                    {" "}
-                    <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
-                      {nom.no}
-                    </span>
-                    {" "}
-                    <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,22px)", lineHeight: "1.18", letterSpacing: "-.022em" } as CSSProperties}>
-                      {nom.title}
-                    </span>
-                    {" "}
-                  </div>
-                  {" "}
-                  </Fragment>
-                ))}
-                {" "}
-              </div>
-              {" "}
-              <div data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", justifyContent: "space-between", gap: "12px 32px", marginTop: "24px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                {" "}
-                <span>
-                  {t.k278}
-                </span>
-                {" "}
-                <a className="fa-hd6ad87b" href={lp('/forum') + '#participation'} data-page="" style={{ display: "inline-flex", alignItems: "center", gap: "10px", color: "#16181D", borderBottom: "1px solid #C9C6BE", paddingBottom: "2px", transition: "border-color 200ms ease" } as CSSProperties}>
-{t.k279}{" "}
-                  <span aria-hidden="true">
-                    →
+          <div style={{ background: "#F7F6F3", color: "#16181D", overflowX: "hidden" } as CSSProperties}>
+            <header data-header="" data-header-solid="" style={{ position: "fixed", top: "0", left: "0", right: "0", zIndex: "60", background: "rgba(247,246,243,.94)", borderBottom: "1px solid #DCDAD4", transition: "background 300ms ease,border-color 300ms ease" } as CSSProperties}>
+              <div data-header-inner="" style={{ maxWidth: "1720px", margin: "0 auto", padding: "20px clamp(20px,4.8vw,108px)", display: "flex", alignItems: "center", gap: "24px", transition: "padding 300ms ease" } as CSSProperties}>
+                <a href={lp("/")} style={{ display: "flex", alignItems: "center", gap: "12px" } as CSSProperties}>
+                  <img src="/img/5dd2fe9c60.png" alt="" style={{ height: "30px", width: "auto", display: "block" } as CSSProperties} />
+                  <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "13px", letterSpacing: ".14em", textTransform: "uppercase", whiteSpace: "nowrap" } as CSSProperties}>
+                    {t.k401}
                   </span>
                 </a>
-                {" "}
-              </div>
-              {" "}
-            </div>
-            {" "}
-          </section>
-          {" "}
-          <section id="result" style={{ position: "relative", overflow: "hidden", padding: "clamp(72px,9vw,132px) 0", backgroundColor: "#FF4002", color: "#F7F6F3" } as CSSProperties}>
-            {" "}
-            <div data-unfill="" aria-hidden="true" style={{ position: "absolute", inset: "0", background: "#EFEDE8", transform: "scaleY(1)", transformOrigin: "top" } as CSSProperties} />
-            {" "}
-            <div style={{ position: "relative", maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
-              {" "}
-              <div data-reveal="" data-delay="620" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "24px", paddingBottom: "16px", borderBottom: "1px solid rgba(255,255,255,.45)" } as CSSProperties}>
-                {" "}
-                <div style={{ display: "flex", alignItems: "center", gap: "16px" } as CSSProperties}>
-                  {" "}
-                  <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em", color: "#F7F6F3" } as CSSProperties}>
-                    04
-                  </span>
-                  {" "}
-                  <span data-draw="" data-delay="700" style={{ width: "40px", height: "1px", background: "#F7F6F3", transform: "scaleX(0)", transformOrigin: "left" } as CSSProperties} />
-                  {" "}
-                </div>
-                {" "}
-                <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#F7F6F3" } as CSSProperties}>
-                  {t.k280}
-                </span>
-                {" "}
-              </div>
-              {" "}
-              <h2 data-reveal="" data-delay="700" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(32px,4vw,48px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(34px,6vw,92px)", lineHeight: ".9", letterSpacing: "-.045em", textTransform: "uppercase", maxWidth: "20ch", color: "#F7F6F3" } as CSSProperties}>
-                {t.k281}
-              </h2>
-              {" "}
-              <div style={{ marginTop: "clamp(40px,5vw,72px)", borderTop: "1px solid rgba(255,255,255,.4)" } as CSSProperties}>
-                {" "}
-                <div data-reveal="" data-delay="740" style={{ opacity: "0", transform: "translateY(16px)", paddingTop: "clamp(18px,2vw,26px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".14em", textTransform: "uppercase", color: "#F7F6F3" } as CSSProperties}>
-                  {t.k269}
-                </div>
-                {" "}
-                <div className="fa-h56641de" data-reveal="" data-delay="780" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px", padding: "clamp(20px,2.2vw,30px) 0", borderBottom: "1px solid rgba(255,255,255,.4)", transition: "padding 240ms ease" } as CSSProperties}>
-                  {" "}
-                  <span style={{ flex: "0 0 40px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", color: "#F7F6F3" } as CSSProperties}>
-                    01
-                  </span>
-                  {" "}
-                  <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(19px,2vw,30px)", lineHeight: "1.16", letterSpacing: "-.022em", color: "#F7F6F3" } as CSSProperties}>
-{t.k282}{" "}
-                    <span data-count="250" style={{ fontVariantNumeric: "tabular-nums" } as CSSProperties}>
-                      250
-                    </span>
-                    {" "}{t.k283}
-                  </span>
-                  {" "}
-                </div>
-                {" "}
-                <div className="fa-h56641de" data-reveal="" data-delay="840" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px", padding: "clamp(20px,2.2vw,30px) 0", borderBottom: "1px solid rgba(255,255,255,.4)", transition: "padding 240ms ease" } as CSSProperties}>
-                  {" "}
-                  <span style={{ flex: "0 0 40px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", color: "#F7F6F3" } as CSSProperties}>
-                    02
-                  </span>
-                  {" "}
-                  <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(19px,2vw,30px)", lineHeight: "1.16", letterSpacing: "-.022em", color: "#F7F6F3" } as CSSProperties}>
-                    {t.k284}
-                  </span>
-                  {" "}
-                </div>
-                {" "}
-                <div className="fa-h56641de" data-reveal="" data-delay="900" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px", padding: "clamp(20px,2.2vw,30px) 0", borderBottom: "1px solid rgba(255,255,255,.4)", transition: "padding 240ms ease" } as CSSProperties}>
-                  {" "}
-                  <span style={{ flex: "0 0 40px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", color: "#F7F6F3" } as CSSProperties}>
-                    03
-                  </span>
-                  {" "}
-                  <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(19px,2vw,30px)", lineHeight: "1.16", letterSpacing: "-.022em", color: "#F7F6F3" } as CSSProperties}>
-                    {t.k285}
-                  </span>
-                  {" "}
-                </div>
-                {" "}
-                <div className="fa-h56641de" data-reveal="" data-delay="960" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px", padding: "clamp(20px,2.2vw,30px) 0", borderBottom: "1px solid rgba(255,255,255,.4)", transition: "padding 240ms ease" } as CSSProperties}>
-                  {" "}
-                  <span style={{ flex: "0 0 40px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", color: "#F7F6F3" } as CSSProperties}>
-                    04
-                  </span>
-                  {" "}
-                  <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(19px,2vw,30px)", lineHeight: "1.16", letterSpacing: "-.022em", color: "#F7F6F3" } as CSSProperties}>
-                    {t.k286}
-                  </span>
-                  {" "}
-                </div>
-                {" "}
-                <div data-reveal="" data-delay="1000" style={{ opacity: "0", transform: "translateY(16px)", paddingTop: "clamp(18px,2vw,26px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".14em", textTransform: "uppercase", color: "#F7F6F3" } as CSSProperties}>
-                  {t.k272}
-                </div>
-                {" "}
-                <div className="fa-h56641de" data-reveal="" data-delay="1020" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px", padding: "clamp(20px,2.2vw,30px) 0", borderBottom: "1px solid rgba(255,255,255,.4)", transition: "padding 240ms ease" } as CSSProperties}>
-                  {" "}
-                  <span style={{ flex: "0 0 40px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", color: "#F7F6F3" } as CSSProperties}>
-                    01
-                  </span>
-                  {" "}
-                  <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(19px,2vw,30px)", lineHeight: "1.16", letterSpacing: "-.022em", color: "#F7F6F3" } as CSSProperties}>
-                    {t.k287}
-                  </span>
-                  {" "}
-                </div>
-                {" "}
-              </div>
-              {" "}
-            </div>
-            {" "}
-          </section>
-          {" "}
-          <section id="how" style={{ padding: "clamp(64px,8vw,120px) 0", backgroundColor: "#F7F6F3" } as CSSProperties}>
-            {" "}
-            <div style={{ maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
-              {" "}
-              <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "24px", paddingBottom: "16px", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                {" "}
-                <div style={{ display: "flex", alignItems: "center", gap: "16px" } as CSSProperties}>
-                  {" "}
-                  <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em", color: "#16181D" } as CSSProperties}>
-                    05
-                  </span>
-                  {" "}
-                  <span data-draw="" style={{ width: "40px", height: "1px", background: "#16181D", transform: "scaleX(0)", transformOrigin: "left" } as CSSProperties} />
-                  {" "}
-                </div>
-                {" "}
-                <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                  {t.k288}
-                </span>
-                {" "}
-              </div>
-              {" "}
-              <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(32px,4vw,48px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(38px,6.4vw,104px)", lineHeight: ".9", letterSpacing: "-.05em", textTransform: "uppercase" } as CSSProperties}>
-                {t.k289}
-              </h2>
-              {" "}
-              <div style={{ position: "relative", display: "flex", flexDirection: ("var(--chainDir)" as any), marginTop: "clamp(44px,5.6vw,84px)", height: ("var(--chainHeight)" as any), padding: ("var(--chainPad)" as any) } as CSSProperties}>
-                {" "}
-                <span aria-hidden="true" data-draw="" data-ms="900" data-ease="cubic-bezier(.16,1,.3,1)" data-dir={axisDir} className="fa-axis" />
-                {" "}
-                <div className="fa-node">
-                  {" "}
-                  <span aria-hidden="true" className="fa-tick" />
-                  {" "}
-                  <div className="fa-label" data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(10px)" } as CSSProperties}>
-                    {" "}
-                    <span style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
-                      01
-                    </span>
-                    {" "}
-                    <span style={{ display: "block", marginTop: "12px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(18px,1.7vw,26px)", lineHeight: "1.14", letterSpacing: "-.025em", color: "#16181D" } as CSSProperties}>
-{t.k290}{" "}{resolvedDeadlineLabel}
-                    </span>
-                    {" "}
-                  </div>
-                  {" "}
-                </div>
-                {" "}
-                <div className="fa-node">
-                  {" "}
-                  <span aria-hidden="true" className="fa-tick" />
-                  {" "}
-                  <div className="fa-label" data-reveal="" data-delay="240" style={{ opacity: "0", transform: "translateY(10px)" } as CSSProperties}>
-                    {" "}
-                    <span style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
-                      02
-                    </span>
-                    {" "}
-                    <span style={{ display: "block", marginTop: "12px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(18px,1.7vw,26px)", lineHeight: "1.14", letterSpacing: "-.025em", color: "#16181D" } as CSSProperties}>
-                      {t.k291}
-                    </span>
-                    {" "}
-                  </div>
-                  {" "}
-                </div>
-                {" "}
-                <div className="fa-node">
-                  {" "}
-                  <span aria-hidden="true" className="fa-tick" />
-                  {" "}
-                  <div className="fa-label" data-reveal="" data-delay="360" style={{ opacity: "0", transform: "translateY(10px)" } as CSSProperties}>
-                    {" "}
-                    <span style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
-                      03
-                    </span>
-                    {" "}
-                    <span style={{ display: "block", marginTop: "12px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(18px,1.7vw,26px)", lineHeight: "1.14", letterSpacing: "-.025em", color: "#16181D" } as CSSProperties}>
-                      {t.k292}
-                    </span>
-                    {" "}
-                  </div>
-                  {" "}
-                </div>
-                {" "}
-                <div className="fa-node">
-                  {" "}
-                  <span aria-hidden="true" className="fa-tick-on" />
-                  {" "}
-                  <div className="fa-label" data-reveal="" data-delay="480" style={{ opacity: "0", transform: "translateY(10px)" } as CSSProperties}>
-                    {" "}
-                    <span style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#16181D" } as CSSProperties}>
-                      04
-                    </span>
-                    {" "}
-                    <span style={{ display: "block", marginTop: "12px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(18px,1.7vw,26px)", lineHeight: "1.14", letterSpacing: "-.025em", color: "#16181D" } as CSSProperties}>
-                      {t.k293}
-                    </span>
-                    {" "}
-                  </div>
-                  {" "}
-                </div>
-                {" "}
-              </div>
-              {" "}
-              <div data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(16px)", marginTop: "clamp(32px,4vw,48px)", paddingTop: "20px", borderTop: "1px solid #DCDAD4", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", lineHeight: "1.7", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                {t.k294}
-              </div>
-              {" "}
-              {juryVisible ? (
-                <>
-                {" "}
-                <div data-reveal="" data-delay="240" style={{ opacity: "0", transform: "translateY(16px)", marginTop: "clamp(48px,6vw,88px)" } as CSSProperties}>
-                  {" "}
-                  <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "24px", paddingBottom: "16px", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                    {" "}
-                    <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(22px,2.4vw,34px)", lineHeight: "1", letterSpacing: "-.03em", textTransform: "uppercase" } as CSSProperties}>
-                      {t.k295}
-                    </span>
-                    {" "}
-                    <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                      {t.k219}
-                    </span>
-                    {" "}
-                  </div>
-                  {" "}
-                  <div style={{ display: "grid", gridTemplateColumns: ("var(--juryCols)" as any), gap: "1px", marginTop: "1px", background: "#DCDAD4" } as CSSProperties}>
-                    {" "}
-                    {(jury || []).map((member, member_i) => (
-                      <Fragment key={member_i}>
-                      {" "}
-                      <div style={{ display: "flex", flexDirection: "column", gap: "12px", padding: "clamp(22px,2.4vw,32px)", background: "#F7F6F3" } as CSSProperties}>
-                        {" "}
-                        <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
-                          {member.no}
-                        </span>
-                        {" "}
-                        <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,22px)", lineHeight: "1.16", letterSpacing: "-.022em" } as CSSProperties}>
-                          {member.name}
-                        </span>
-                        {" "}
-                        <span style={{ fontSize: "15px", lineHeight: "1.5", color: "#5C5F66" } as CSSProperties}>
-                          {member.role}
-                        </span>
-                        {" "}
-                      </div>
-                      {" "}
-                      </Fragment>
-                    ))}
-                    {" "}
-                  </div>
-                  {" "}
-                </div>
-                {" "}
-                </>
-              ) : null}
-              {" "}
-            </div>
-            {" "}
-          </section>
-          {" "}
-          <div aria-hidden="true" style={{ overflow: "hidden", background: "#16181D", color: "#F7F6F3", padding: "16px 0" } as CSSProperties}>
-            {" "}
-            <div data-marquee="" style={{ display: "flex", width: "max-content", animation: "faMarquee 38s linear infinite", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "clamp(11px,1.1vw,14px)", letterSpacing: ".18em", textTransform: "uppercase" } as CSSProperties}>
-              {" "}
-              <div style={{ display: "flex", gap: "2.2em", paddingRight: "2.2em", whiteSpace: "nowrap" } as CSSProperties}>
-                <span>
-{t.k296}{" "}{resolvedDeadlineLabel}
-                </span>
-                <span>
-                  ◆
-                </span>
-                <span>
-                  Future Architecture Award 2026
-                </span>
-                <span>
-                  ◆
-                </span>
-                <span>
-                  {t.k297}
-                </span>
-                <span>
-                  ◆
-                </span>
-              </div>
-              {" "}
-              <div style={{ display: "flex", gap: "2.2em", paddingRight: "2.2em", whiteSpace: "nowrap" } as CSSProperties}>
-                <span>
-{t.k296}{" "}{resolvedDeadlineLabel}
-                </span>
-                <span>
-                  ◆
-                </span>
-                <span>
-                  Future Architecture Award 2026
-                </span>
-                <span>
-                  ◆
-                </span>
-                <span>
-                  {t.k297}
-                </span>
-                <span>
-                  ◆
-                </span>
-              </div>
-              {" "}
-            </div>
-            {" "}
-          </div>
-          {" "}
-          <section id="apply" style={{ position: "relative", overflow: "hidden", padding: "clamp(72px,9vw,140px) 0 clamp(64px,8vw,120px)", backgroundColor: "#16181D", color: "#F7F6F3" } as CSSProperties}>
-            {" "}
-            <div aria-hidden="true" style={{ position: "absolute", inset: "0", backgroundImage: "repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,rgba(255,255,255,.06) 0 1px,transparent 1px 80px)" } as CSSProperties} />
-            {" "}
-            <div aria-hidden="true" style={{ position: "absolute", top: "0", left: "0", right: "0", height: "2px", background: "rgba(255,255,255,.14)", overflow: "hidden" } as CSSProperties}>
-              {" "}
-              <div data-formfill="" style={{ width: "100%", height: "2px", background: "#FF4002", transform: "scaleX(0)", transformOrigin: "left", transition: "transform 240ms ease" } as CSSProperties} />
-              {" "}
-            </div>
-            {" "}
-            <div style={{ position: "relative", maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
-              {" "}
-              <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "24px", paddingBottom: "16px", borderBottom: "1px solid #3A3D44" } as CSSProperties}>
-                {" "}
-                <div style={{ display: "flex", alignItems: "center", gap: "16px" } as CSSProperties}>
-                  {" "}
-                  <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em", color: "#FFFFFF" } as CSSProperties}>
-                    06
-                  </span>
-                  {" "}
-                  <span data-draw="" style={{ width: "40px", height: "1px", background: "#FFFFFF", transform: "scaleX(0)", transformOrigin: "left" } as CSSProperties} />
-                  {" "}
-                </div>
-                {" "}
-                <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#8E9198" } as CSSProperties}>
-                  {t.k130}
-                </span>
-                {" "}
-              </div>
-              {" "}
-              <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(32px,4vw,48px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(32px,5.4vw,80px)", lineHeight: ".94", letterSpacing: "-.045em", textTransform: "uppercase", maxWidth: "20ch" } as CSSProperties}>
-                {t.k298}
-                <br />
-{t.k299}{" "}{resolvedDeadlineLabel}
-              </h2>
-              {" "}
-              <div data-reveal="" data-delay="100" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "12px 20px", marginTop: "24px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".14em", textTransform: "uppercase", color: "#FFFFFF" } as CSSProperties}>
-                {" "}
-                <span aria-hidden="true" style={{ width: "8px", height: "8px", background: "#FFFFFF" } as CSSProperties} />
-                {" "}
-                <span>
-                  {t.k247}
-                </span>
-                {" "}
-              </div>
-              {" "}
-              {notSent ? (
-                <>
-                {" "}
-                <form onSubmit={submit} noValidate data-reveal="" data-delay="160" style={{ opacity: "0", transform: "translateY(16px)", marginTop: "clamp(36px,4.4vw,56px)", maxWidth: "820px", background: "#FFFFFF", color: "#16181D", padding: "clamp(26px,3.2vw,52px)", boxShadow: "14px 14px 0 rgba(255,255,255,.16)" } as CSSProperties}>
-                  {" "}
-                  <div style={{ display: "flex", flexDirection: "column", gap: "clamp(20px,2.2vw,28px)" } as CSSProperties}>
-                    {" "}
-                    <div>
-                      {" "}
-                      <label htmlFor="aw-name" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        {t.k300}
-                      </label>
-                      {" "}
-                      <input className="fa-f27ceb91" id="aw-name" name="name" type="text" autoComplete="name" onInput={onName} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
-                      {" "}
-                      <div style={{ minHeight: "16px", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", fontWeight: "500", letterSpacing: ".06em", color: "#16181D" } as CSSProperties}>
-                        {errName}
-                      </div>
-                      {" "}
-                    </div>
-                    {" "}
-                    <div>
-                      {" "}
-                      <label htmlFor="aw-org" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        {t.k301}
-                      </label>
-                      {" "}
-                      <input className="fa-f27ceb91" id="aw-org" name="org" type="text" autoComplete="organization" onInput={onOrg} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
-                      {" "}
-                      <div style={{ minHeight: "16px", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", fontWeight: "500", letterSpacing: ".06em", color: "#16181D" } as CSSProperties}>
-                        {errOrg}
-                      </div>
-                      {" "}
-                    </div>
-                    {" "}
-                    <div>
-                      {" "}
-                      <span style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        {t.k302}
-                      </span>
-                      {" "}
-                      <div role="radiogroup" aria-label={t.k302} style={{ display: "flex", flexWrap: "wrap", gap: "1px", marginTop: "12px", background: "#C9C6BE", outline: "1px solid #C9C6BE" } as CSSProperties}>
-                        {" "}
-                        <button type="button" role="radio" aria-checked={isAward} onClick={pickAward} style={{ flex: "1 1 200px", padding: "15px 22px", background: awardBg, color: awardFg, border: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", textAlign: "left", cursor: "pointer", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
-                          {t.k269}
-                        </button>
-                        {" "}
-                        <button type="button" role="radio" aria-checked={isStudent} onClick={pickStudent} style={{ flex: "1 1 200px", padding: "15px 22px", background: studentBg, color: studentFg, border: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", textAlign: "left", cursor: "pointer", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
-                          {t.k272}
-                        </button>
-                        {" "}
-                      </div>
-                      {" "}
-                      <div style={{ minHeight: "16px", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", fontWeight: "500", letterSpacing: ".06em", color: "#16181D" } as CSSProperties}>
-                        {errTrack}
-                      </div>
-                      {" "}
-                    </div>
-                    {" "}
-                    <div>
-                      {" "}
-                      <label htmlFor="aw-nomination" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        {t.k303}
-                      </label>
-                      {" "}
-                      <select className="fa-f27ceb91" id="aw-nomination" name="nomination" value={nominationValue} onChange={onNomination} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "#FFFFFF", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", appearance: "none", borderRadius: "0", transition: "border-color 200ms ease" } as CSSProperties}>
-                        {" "}
-                        <option value="">
-                          {t.k304}
-                        </option>
-                        {" "}
-                        {(nomOptions || []).map((opt, opt_i) => (
-                          <Fragment key={opt_i}>
-                          {" "}
-                          <option value={opt.title}>
-                            {opt.title}
-                          </option>
-                          {" "}
-                          </Fragment>
-                        ))}
-                        {" "}
-                      </select>
-                      {" "}
-                      <div style={{ minHeight: "16px", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", fontWeight: "500", letterSpacing: ".06em", color: "#16181D" } as CSSProperties}>
-                        {errNomination}
-                      </div>
-                      {" "}
-                    </div>
-                    {" "}
-                    <div>
-                      {" "}
-                      <label htmlFor="aw-email" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        E-mail
-                      </label>
-                      {" "}
-                      <input className="fa-f27ceb91" id="aw-email" name="email" type="email" autoComplete="email" onInput={onEmail} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
-                      {" "}
-                      <div style={{ minHeight: "16px", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", fontWeight: "500", letterSpacing: ".06em", color: "#16181D" } as CSSProperties}>
-                        {errEmail}
-                      </div>
-                      {" "}
-                    </div>
-                    {" "}
-                    <div>
-                      {" "}
-                      <label htmlFor="aw-phone" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        {t.k120}
-                      </label>
-                      {" "}
-                      <input className="fa-f27ceb91" id="aw-phone" name="phone" type="tel" autoComplete="tel" onInput={onPhone} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
-                      {" "}
-                      <div style={{ minHeight: "16px", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", fontWeight: "500", letterSpacing: ".06em", color: "#16181D" } as CSSProperties}>
-                        {errPhone}
-                      </div>
-                      {" "}
-                    </div>
-                    {" "}
-                    <div>
-                      {" "}
-                      <label htmlFor="aw-url" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        {t.k305}
-                      </label>
-                      {" "}
-                      <input className="fa-f27ceb91" id="aw-url" name="url" type="url" inputMode="url" placeholder="https://" onInput={onUrl} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
-                      {" "}
-                      <div style={{ minHeight: "16px", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", fontWeight: "500", letterSpacing: ".06em", color: "#16181D" } as CSSProperties}>
-                        {errUrl}
-                      </div>
-                      {" "}
-                    </div>
-                    {" "}
-                    <div>
-                      {" "}
-                      <label htmlFor="aw-desc" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        {t.k306}
-                      </label>
-                      {" "}
-                      <textarea className="fa-f27ceb91" id="aw-desc" name="desc" rows={4} maxLength={300} onInput={onDesc} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", lineHeight: "1.5", resize: "vertical", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
-                      {" "}
-                      <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "16px", minHeight: "16px", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".06em" } as CSSProperties}>
-                        {" "}
-                        <span style={{ fontWeight: "500", color: "#16181D" } as CSSProperties}>
-                          {errDesc}
-                        </span>
-                        {" "}
-                        <span style={{ color: "#6E7278" } as CSSProperties}>
-                          {descCount}
-                        </span>
-                        {" "}
-                      </div>
-                      {" "}
-                    </div>
-                    {" "}
-                  </div>
-                  {" "}
-                  <div style={{ marginTop: "clamp(28px,3vw,40px)", paddingTop: "20px", borderTop: "1px solid #DCDAD4", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", lineHeight: "1.7", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                    {t.k307}
-                  </div>
-                  {" "}
-                  <button className="fa-ha683e68" type="submit" style={{ marginTop: "32px", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "16px", padding: "18px 36px", background: "#16181D", color: "#F7F6F3", border: "1px solid #16181D", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", cursor: "pointer", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
-                    {t.k121}
-                    <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
-                      →
-                    </span>
-                  </button>
-                  {" "}
-                </form>
-                {" "}
-                </>
-              ) : null}
-              {" "}
-              {sent ? (
-                <>
-                {" "}
-                <div style={{ marginTop: "clamp(36px,4.4vw,56px)", padding: "clamp(26px,3.2vw,48px)", background: "#FFFFFF", color: "#16181D", maxWidth: "65ch", boxShadow: "14px 14px 0 rgba(255,255,255,.16)" } as CSSProperties}>
-                  {" "}
-                  <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(20px,1.9vw,24px)" } as CSSProperties}>
-                    {t.k122}
-                  </div>
-                  {" "}
-                  <p style={{ margin: "16px 0 0", fontSize: "16px", lineHeight: "1.6", color: "#5C5F66" } as CSSProperties}>
-                    {t.k308}
-                  </p>
-                  {" "}
-                </div>
-                {" "}
-                </>
-              ) : null}
-              {" "}
-            </div>
-            {" "}
-          </section>
-          {" "}
-          <section style={{ padding: "clamp(56px,7vw,96px) 0", backgroundColor: "#F7F6F3" } as CSSProperties}>
-            {" "}
-            <div style={{ maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
-              {" "}
-              <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "24px 48px", padding: "clamp(28px,3.4vw,56px)", background: "#16181D", color: "#F7F6F3" } as CSSProperties}>
-                {" "}
-                <h3 style={{ margin: "0", flex: "1 1 420px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(22px,2.4vw,36px)", lineHeight: "1.1", letterSpacing: "-.025em", maxWidth: "26ch" } as CSSProperties}>
-                  {t.k309}
-                </h3>
-                {" "}
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "14px" } as CSSProperties}>
-                  {" "}
-                  <a className="fa-hb2c1ca2" href={lp("/forum")} data-page="" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "16px", padding: "19px 38px", border: "1px solid #F7F6F3", color: "#F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
+                <nav aria-label={t.k6} style={{ marginLeft: "auto", minWidth: "0", display: ("var(--navDisplay)" as any), alignItems: "center", gap: "24px", fontSize: "15px", color: "#5C5F66" } as CSSProperties}>
+                  <a className="fa-h6ae611c" href={lp("/")} style={{ transition: "color 200ms ease" } as CSSProperties}>
+                    {t.k35}
+                  </a>
+                  <a className="fa-h6ae611c" href={lp("/forum")} style={{ transition: "color 200ms ease", color: "#FF4002", fontWeight: "600" } as CSSProperties}>
                     {t.k9}
-                    <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
-                      →
-                    </span>
                   </a>
-                  {" "}
-                  <a className="fa-h7d2f5f0" href={lp("/")} data-page="" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "16px", padding: "19px 38px", border: "1px solid #3A3D44", color: "#B9BBC0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", transition: "background 200ms ease,color 200ms ease,border-color 200ms ease" } as CSSProperties}>
-                    {t.k243}
-                    <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
-                      →
-                    </span>
+                  <a href="#top" aria-current="page" style={{ color: "#16181D", fontWeight: "600" } as CSSProperties}>
+                    {t.k10}
                   </a>
-                  {" "}
-                </div>
-                {" "}
-              </div>
-              {" "}
-            </div>
-            {" "}
-          </section>
-          {" "}
-        </main>
-        {" "}
-        <footer id="contacts" style={{ position: "relative", overflow: "hidden", backgroundColor: "#16181D", color: "#F7F6F3", padding: "clamp(40px,5vw,64px) 0 40px", backgroundImage: "repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,rgba(255,255,255,.06) 0 1px,transparent 1px 80px)" } as CSSProperties}>
-          {" "}
-          <div aria-hidden="true" style={{ position: "relative", overflow: "hidden", paddingBottom: "clamp(28px,3.4vw,48px)", WebkitMaskImage: "linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent)", maskImage: "linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent)" } as CSSProperties}>
-            {" "}
-            <div data-marquee="" style={{ display: "flex", width: "max-content", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(52px,10vw,150px)", lineHeight: ".9", letterSpacing: "-.05em", textTransform: "uppercase", color: "rgba(247,246,243,.17)" } as CSSProperties}>
-              {" "}
-              <div style={{ display: "flex", gap: ".3em", paddingRight: ".3em" } as CSSProperties}>
-                <span>
-                  Future Architecture
-                </span>
-                <span style={{ color: "#FFFFFF" } as CSSProperties}>
-                  ◆
-                </span>
-                <span>
-                  Award 2026
-                </span>
-                <span style={{ color: "#FFFFFF" } as CSSProperties}>
-                  ◆
-                </span>
-              </div>
-              {" "}
-              <div style={{ display: "flex", gap: ".3em", paddingRight: ".3em" } as CSSProperties}>
-                <span>
-                  Future Architecture
-                </span>
-                <span style={{ color: "#FFFFFF" } as CSSProperties}>
-                  ◆
-                </span>
-                <span>
-                  Award 2026
-                </span>
-                <span style={{ color: "#FFFFFF" } as CSSProperties}>
-                  ◆
-                </span>
-              </div>
-              {" "}
-            </div>
-            {" "}
-          </div>
-          {" "}
-          <div style={{ position: "relative", maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
-            {" "}
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "48px", borderTop: "1px solid #3A3D44", paddingTop: "clamp(40px,5vw,56px)" } as CSSProperties}>
-              {" "}
-              <div style={{ flex: "1 1 260px" } as CSSProperties}>
-                {" "}
-                <img src="/img/0ce5b0d8a0.png" alt="Future Architecture" style={{ height: "104px", width: "auto", display: "block" } as CSSProperties} />
-                {" "}
-                <p style={{ margin: "24px 0 0", fontSize: "15px", lineHeight: "1.6", color: "#8E9198", maxWidth: "32ch" } as CSSProperties}>
-                  {t.k251}
-                </p>
-                {" "}
-              </div>
-              {" "}
-              <nav aria-label={t.k125} style={{ flex: "0 1 176px", display: "flex", flexDirection: "column", gap: "12px", fontSize: "15px", color: "#B9BBC0" } as CSSProperties}>
-                {" "}
-                <a className="fa-h8d05fde" href={lp("/")} data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  {t.k35}
-                </a>
-                {" "}
-                <a className="fa-h8d05fde" href={lp("/forum")} data-page="" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  {t.k9}
-                </a>
-                {" "}
-                <a className="fa-h8d05fde" href="#nominations" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  {t.k277}
-                </a>
-                {" "}
-                <a className="fa-h8d05fde" href="#apply" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  {t.k130}
-                </a>
-                {" "}
-              </nav>
-              {" "}
-              <div style={{ flex: "0 1 280px", display: "flex", flexDirection: "column", gap: "12px", fontSize: "15px", color: "#B9BBC0" } as CSSProperties}>
-                {" "}
-                <a className="fa-h8d05fde" href="mailto:marketing@lh47arch.com" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  marketing@lh47arch.com
-                </a>
-                {" "}
-                <a className="fa-h8d05fde" href="mailto:marketing@instylehome.md" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  marketing@instylehome.md
-                </a>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" } as CSSProperties}>
-                  <a className="fa-h8d05fde" href="tel:+37368199951" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                    (+373) 68 199 951
+                  <a className="fa-h6ae611c" href="#contacts" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                    {t.k12}
                   </a>
-                  <span style={{ color: "#8E9198" } as CSSProperties}>
-                    – InStyle Home
+                </nav>
+                <div style={{ display: ("var(--navDisplay)" as any), alignItems: "center", gap: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em" } as CSSProperties}>
+                  <a href={lhref("ro")} style={{ color: "#6E7278" } as CSSProperties}>
+                    {t.k402}
+                  </a>
+                  <span style={{ color: "#DCDAD4" } as CSSProperties}>
+                    {t.k403}
                   </span>
-                </div>
-                {" "}
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" } as CSSProperties}>
-                  <a className="fa-h8d05fde" href="tel:+37368059311" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                    (+373) 68 059 311
+                  <a href={lhref("ru")} style={{ color: "#16181D" } as CSSProperties}>
+                    {t.k404}
                   </a>
-                  <span style={{ color: "#8E9198" } as CSSProperties}>
-                    – LH47
+                  <span style={{ color: "#DCDAD4" } as CSSProperties}>
+                    {t.k403}
                   </span>
+                  <a href={lhref("en")} style={{ color: "#6E7278" } as CSSProperties}>
+                    {t.k405}
+                  </a>
                 </div>
-                {" "}
-              </div>
-              {" "}
-              <div className="fa-social" style={{ flex: "0 1 160px", color: "#B9BBC0" } as CSSProperties}>
-                {" "}
-                <a className="fa-h8d05fde" href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4.2" /><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" /></svg><span className="fa-sr">Instagram</span></a>
-                {" "}
-                <a className="fa-h8d05fde" href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H16.7V3.6c-.3-.04-1.3-.13-2.47-.13-2.44 0-4.11 1.49-4.11 4.23V9.9H7.4V13h2.72v8h3.38z" /></svg><span className="fa-sr">Facebook</span></a>
-                {" "}
-                <a className="fa-h8d05fde" href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.94 8.6H3.9V21h3.04V8.6zM5.42 3A1.8 1.8 0 105.4 6.6 1.8 1.8 0 005.42 3zM21 14.2c0-3.4-1.82-4.98-4.24-4.98-1.96 0-2.83 1.08-3.32 1.84V8.6H10.4c.04.86 0 12.4 0 12.4h3.04v-6.92c0-.33.02-.66.12-.9.27-.66.87-1.34 1.9-1.34 1.33 0 1.87 1.02 1.87 2.5V21H21v-6.8z" /></svg><span className="fa-sr">LinkedIn</span></a>
-                {" "}
-              </div>
-              {" "}
-            </div>
-            {" "}
-            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "16px 32px", marginTop: "clamp(40px,5vw,64px)", paddingTop: "24px", borderTop: "1px solid #3A3D44" } as CSSProperties}>
-              {" "}
-              <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#8E9198" } as CSSProperties}>
-                {t.k126}
-              </span>
-              {" "}
-              <img src="/img/d65b278e9b.png" alt="LH47 arch." style={{ height: "24px", width: "auto", display: "block", filter: "brightness(0) invert(.62)", opacity: ".9" } as CSSProperties} />
-              {" "}
-              <img src="/img/d7f7cfad4d.png" alt="InStyle Home" style={{ height: "18px", width: "auto", display: "block", filter: "brightness(0) invert(.62)", opacity: ".9" } as CSSProperties} />
-              {" "}
-            </div>
-            {" "}
-            <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "16px 32px", marginTop: "32px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#8E9198" } as CSSProperties}>
-              {" "}
-              <div style={{ display: "flex", gap: "8px" } as CSSProperties}>
-                {" "}
-                <a href={lhref('ro')} hrefLang="ro" aria-current={lang === 'ro' ? 'true' : undefined} style={{ color: lang === 'ro' ? "#16181D" : "inherit" } as CSSProperties}>
-                  RO
+                <a className="fa-h88f6f23" href="#apply" style={{ display: ("var(--navDisplay)" as any), flex: "0 0 auto", alignItems: "center", padding: "12px 22px", background: "#16181D", color: "#F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "14px", lineHeight: "1.2", whiteSpace: "nowrap", border: "1px solid #16181D", transition: "background 200ms ease,color 200ms ease,border-color 200ms ease" } as CSSProperties}>
+                  {t.k38}
                 </a>
-                <span style={{ color: "#3A3D44" } as CSSProperties}>
-                  /
-                </span>
-                <a href={lhref('ru')} hrefLang="ru" aria-current={lang === 'ru' ? 'true' : undefined} style={{ color: lang === 'ru' ? "#16181D" : "inherit" } as CSSProperties}>
-                  RU
-                </a>
-                <span style={{ color: "#3A3D44" } as CSSProperties}>
-                  /
-                </span>
-                <a href={lhref('en')} hrefLang="en" aria-current={lang === 'en' ? 'true' : undefined} style={{ color: lang === 'en' ? "#16181D" : "inherit" } as CSSProperties}>
-                  EN
-                </a>
-                {" "}
+                <button type="button" aria-label={t.k15} onClick={toggleMenu} style={{ display: ("var(--burgerDisplay)" as any), marginLeft: "auto", flexDirection: "column", justifyContent: "center", gap: "6px", width: "44px", height: "44px", padding: "0", background: "transparent", border: "0", cursor: "pointer" } as CSSProperties}>
+                  <span style={{ display: "block", width: "22px", height: "1px", background: "#16181D" } as CSSProperties}>
+                  </span>
+                  <span style={{ display: "block", width: "22px", height: "1px", background: "#16181D" } as CSSProperties}>
+                  </span>
+                </button>
               </div>
-              {" "}
-              <div style={{ display: "flex", flexWrap: "wrap", gap: "8px 24px" } as CSSProperties}>
-                {" "}
-                <span>
-                  © 2026 Future Architecture
-                </span>
-                {" "}
-                <a className="fa-h8d05fde" href="#" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                  {t.k127}
-                </a>
-                {" "}
+              <div style={{ display: menuDisplay, background: "#F7F6F3", borderTop: "1px solid #DCDAD4", padding: "8px clamp(20px,4.8vw,108px) 32px" } as CSSProperties}>
+                <nav aria-label={t.k16} style={{ display: "flex", flexDirection: "column", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "22px" } as CSSProperties}>
+                  <a href={lp("/")} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
+                    {t.k35}
+                  </a>
+                  <a href={lp("/forum")} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4", color: "#FF4002" } as CSSProperties}>
+                    {t.k9}
+                  </a>
+                  <a href="#top" aria-current="page" style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4", fontWeight: "700" } as CSSProperties}>
+                    {t.k10}
+                  </a>
+                  <a href="#contacts" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
+                    {t.k12}
+                  </a>
+                </nav>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", marginTop: "24px" } as CSSProperties}>
+                  <div style={{ display: "flex", gap: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em" } as CSSProperties}>
+                    <a href={lhref("ro")} style={{ color: "#6E7278" } as CSSProperties}>
+                      {t.k402}
+                    </a>
+                    <span style={{ color: "#DCDAD4" } as CSSProperties}>
+                      {t.k403}
+                    </span>
+                    <a href={lhref("ru")} style={{ color: "#16181D" } as CSSProperties}>
+                      {t.k404}
+                    </a>
+                    <span style={{ color: "#DCDAD4" } as CSSProperties}>
+                      {t.k403}
+                    </span>
+                    <a href={lhref("en")} style={{ color: "#6E7278" } as CSSProperties}>
+                      {t.k405}
+                    </a>
+                  </div>
+                  <a href="#apply" onClick={closeMenu} style={{ display: "inline-flex", alignItems: "center", padding: "12px 24px", background: "#16181D", color: "#F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "14px", lineHeight: "1.2" } as CSSProperties}>
+                    {t.k38}
+                  </a>
+                </div>
               </div>
-              {" "}
-            </div>
-            {" "}
+              <div aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", bottom: "-1px", height: "2px", overflow: "hidden" } as CSSProperties}>
+                <div data-progress="" style={{ width: "100%", height: "2px", background: "#16181D", transform: "scaleX(0)", transformOrigin: "left" } as CSSProperties}>
+                </div>
+              </div>
+            </header>
+            <main>
+              <section id="top" style={{ position: "relative", overflow: "hidden", minHeight: "100svh", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "clamp(128px,17vh,188px) 0 clamp(24px,3vw,40px)", backgroundColor: "#FFFFFF", color: "#16181D" } as CSSProperties}>
+                <div aria-hidden="true" style={{ position: "absolute", inset: "0", backgroundImage: "repeating-linear-gradient(90deg,rgba(22,24,29,.06) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,rgba(22,24,29,.06) 0 1px,transparent 1px 80px)" } as CSSProperties}>
+                </div>
+                <div style={{ position: "relative", maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)", width: "100%" } as CSSProperties}>
+                  <div style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", justifyContent: "space-between", gap: "12px 32px", paddingBottom: "14px", borderBottom: "1px solid #DCDAD4", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "clamp(10px,.9vw,12px)", letterSpacing: ".14em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "16px" } as CSSProperties}>
+                      <span style={{ color: "#16181D" } as CSSProperties}>
+                        {t.k420}
+                      </span>
+                      <span style={{ width: "40px", height: "1px", background: "#C9C6BE" } as CSSProperties}>
+                      </span>
+                      <span style={{ color: "#16181D" } as CSSProperties}>
+                        {t.k259}
+                      </span>
+                    </div>
+                    <span>
+                      {t.k477}
+                    </span>
+                  </div>
+                  <h1 style={{ margin: "clamp(22px,2.8vw,44px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", textTransform: "uppercase", color: "#16181D" } as CSSProperties}>
+                    <span style={{ display: "block", overflow: "hidden", paddingBottom: ".04em" } as CSSProperties}>
+                      <span style={{ display: "block", fontSize: "clamp(48px,11.5vw,190px)", lineHeight: ".84", letterSpacing: "-.055em" } as CSSProperties}>
+                        {t.k478}
+                      </span>
+                    </span>
+                    <span style={{ display: "block", overflow: "hidden", paddingBottom: ".05em" } as CSSProperties}>
+                      <span style={{ display: "block", fontSize: "clamp(26px,5.4vw,94px)", lineHeight: ".98", letterSpacing: "-.04em", color: "#FF4002", whiteSpace: "nowrap" } as CSSProperties}>
+                        {t.k479}
+                      </span>
+                    </span>
+                  </h1>
+                  <div style={{ display: "grid", gridTemplateColumns: ("var(--twoCols)" as any), gap: "clamp(24px,3vw,56px)", alignItems: "start", marginTop: "clamp(28px,3.4vw,52px)" } as CSSProperties}>
+                    <p style={{ margin: "0", maxWidth: "52ch", fontSize: "clamp(16px,1.4vw,22px)", lineHeight: "1.5", letterSpacing: "-.01em", color: "#5C5F66" } as CSSProperties}>
+                      <span style={{ color: "#16181D", fontWeight: "600" } as CSSProperties}>
+                        {t.k480}
+                      </span>
+                      {t.k481}
+                    </p>
+                    <div style={{ display: "flex", alignItems: "center", gap: "12px", paddingTop: "clamp(10px,1.2vw,18px)", borderTop: "1px solid #DCDAD4", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "clamp(11px,1vw,13px)", letterSpacing: ".12em", textTransform: "uppercase", color: "#16181D" } as CSSProperties}>
+                      <span style={{ flex: "0 0 8px", width: "8px", height: "8px", background: "#FF4002", animation: "faPulse 2s ease-in-out infinite" } as CSSProperties}>
+                      </span>
+                      <span>
+                        {t.k482}
+                      </span>
+                    </div>
+                  </div>
+                  <div data-countdown="" data-target="2026-11-20T23:59:00+02:00" style={{ display: "flex", flexWrap: "wrap", marginTop: "clamp(28px,3.6vw,52px)", borderTop: "1px solid #DCDAD4", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
+                    <div style={{ flex: "1 1 0", minWidth: "96px", padding: "clamp(16px,2vw,26px) clamp(12px,1.6vw,22px)" } as CSSProperties}>
+                      <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(38px,5.6vw,86px)", lineHeight: ".9", letterSpacing: "-.045em", fontVariantNumeric: "tabular-nums" } as CSSProperties}>
+                        <span data-cd="d">
+                          {t.k469}
+                        </span>
+                      </div>
+                      <div style={{ marginTop: "clamp(8px,1vw,14px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
+                        {t.k143}
+                      </div>
+                    </div>
+                    <div style={{ flex: "1 1 0", minWidth: "96px", padding: "clamp(16px,2vw,26px) clamp(12px,1.6vw,22px)", borderLeft: "1px solid #DCDAD4" } as CSSProperties}>
+                      <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(38px,5.6vw,86px)", lineHeight: ".9", letterSpacing: "-.045em", fontVariantNumeric: "tabular-nums" } as CSSProperties}>
+                        <span data-cd="h">
+                          {t.k469}
+                        </span>
+                      </div>
+                      <div style={{ marginTop: "clamp(8px,1vw,14px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
+                        {t.k144}
+                      </div>
+                    </div>
+                    <div style={{ flex: "1 1 0", minWidth: "96px", padding: "clamp(16px,2vw,26px) clamp(12px,1.6vw,22px)", borderLeft: "1px solid #DCDAD4" } as CSSProperties}>
+                      <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(38px,5.6vw,86px)", lineHeight: ".9", letterSpacing: "-.045em", fontVariantNumeric: "tabular-nums" } as CSSProperties}>
+                        <span data-cd="m">
+                          {t.k469}
+                        </span>
+                      </div>
+                      <div style={{ marginTop: "clamp(8px,1vw,14px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
+                        {t.k145}
+                      </div>
+                    </div>
+                    <div style={{ flex: "1 1 0", minWidth: "96px", padding: "clamp(16px,2vw,26px) clamp(12px,1.6vw,22px)", borderLeft: "1px solid #DCDAD4" } as CSSProperties}>
+                      <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(38px,5.6vw,86px)", lineHeight: ".9", letterSpacing: "-.045em", fontVariantNumeric: "tabular-nums" } as CSSProperties}>
+                        <span data-cd="s">
+                          {t.k469}
+                        </span>
+                      </div>
+                      <div style={{ marginTop: "clamp(8px,1vw,14px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
+                        {t.k146}
+                      </div>
+                    </div>
+                    <div style={{ flex: "1 1 200px", minWidth: "180px", display: "flex", flexDirection: "column", justifyContent: "flex-end", gap: "8px", padding: "clamp(16px,2vw,26px) clamp(12px,1.6vw,22px)", borderLeft: "1px solid #DCDAD4" } as CSSProperties}>
+                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
+                        {t.k264}
+                      </span>
+                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(15px,1.4vw,20px)", letterSpacing: "-.01em" } as CSSProperties}>
+                        {t.k483}
+                      </span>
+                    </div>
+                  </div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "14px", marginTop: "clamp(24px,3vw,40px)" } as CSSProperties}>
+                    <button className="fa-h9cd382b" type="button" onClick={goAward} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "19px 38px", background: "#16181D", color: "#F7F6F3", border: "1px solid #16181D", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", cursor: "pointer", transition: "background 220ms ease,color 220ms ease,border-color 220ms ease,transform 220ms ease,box-shadow 220ms ease" } as CSSProperties}>
+                      {t.k265}
+                    </button>
+                    <button className="fa-hbb9d53c" type="button" onClick={goStudent} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "19px 38px", background: "transparent", border: "1px solid #16181D", color: "#16181D", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", cursor: "pointer", transition: "background 220ms ease,color 220ms ease,transform 220ms ease" } as CSSProperties}>
+                      {t.k266}
+                    </button>
+                  </div>
+                  <div aria-hidden="true" style={{ display: "flex", alignItems: "center", gap: "12px", marginTop: "clamp(20px,2.4vw,32px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
+                    <span style={{ display: "block", width: "1px", height: "34px", background: "#16181D" } as CSSProperties}>
+                    </span>
+                    <span>
+                      {t.k42}
+                    </span>
+                  </div>
+                </div>
+              </section>
+              <section id="tracks" style={{ padding: "clamp(64px,8vw,120px) 0", backgroundColor: "#F7F6F3" } as CSSProperties}>
+                <div style={{ maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
+                  <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "24px", paddingBottom: "16px", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "16px" } as CSSProperties}>
+                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em", color: "#16181D" } as CSSProperties}>
+                        {t.k422}
+                      </span>
+                      <span data-draw="" style={{ width: "40px", height: "1px", background: "#16181D", transform: "scaleX(0)", transformOrigin: "left" } as CSSProperties}>
+                      </span>
+                    </div>
+                    <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
+                      {t.k267}
+                    </span>
+                  </div>
+                  <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(32px,4vw,48px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(38px,6.4vw,104px)", lineHeight: ".88", letterSpacing: "-.05em", textTransform: "uppercase" } as CSSProperties}>
+                    {t.k268}
+                  </h2>
+                  <div style={{ display: "grid", gridTemplateColumns: ("var(--twoCols)" as any), gap: "1px", marginTop: "clamp(36px,4.4vw,60px)", background: "#DCDAD4", borderTop: "1px solid #DCDAD4", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
+                    <div className="fa-h77c075a" data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", padding: "clamp(28px,3.2vw,52px) clamp(24px,3vw,48px) clamp(32px,3.6vw,56px)", background: "#F7F6F3", transition: "background 260ms ease" } as CSSProperties}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "16px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".12em", color: "#FF4002" } as CSSProperties}>
+                        <span>
+                          {t.k420}
+                        </span>
+                        <span style={{ flex: "1 1 auto", height: "1px", background: "#DCDAD4" } as CSSProperties}>
+                        </span>
+                      </div>
+                      <h3 style={{ margin: "clamp(20px,2.2vw,32px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(26px,3vw,44px)", lineHeight: "1.02", letterSpacing: "-.035em" } as CSSProperties}>
+                        {t.k269}
+                      </h3>
+                      <p style={{ margin: "clamp(18px,2vw,28px) 0 0", fontSize: "clamp(17px,1.4vw,22px)", lineHeight: "1.45", letterSpacing: "-.01em", color: "#16181D", maxWidth: "34ch" } as CSSProperties}>
+                        {t.k270}
+                      </p>
+                      <p style={{ margin: "clamp(16px,1.6vw,22px) 0 0", fontSize: "clamp(15px,1.15vw,18px)", lineHeight: "1.6", color: "#6E7278", maxWidth: "38ch" } as CSSProperties}>
+                        {t.k271}
+                      </p>
+                    </div>
+                    <div className="fa-h77c075a" data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", padding: "clamp(28px,3.2vw,52px) clamp(24px,3vw,48px) clamp(32px,3.6vw,56px)", background: "#F7F6F3", transition: "background 260ms ease" } as CSSProperties}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "16px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".12em", color: "#FF4002" } as CSSProperties}>
+                        <span>
+                          {t.k422}
+                        </span>
+                        <span style={{ flex: "1 1 auto", height: "1px", background: "#DCDAD4" } as CSSProperties}>
+                        </span>
+                      </div>
+                      <h3 style={{ margin: "clamp(20px,2.2vw,32px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(26px,3vw,44px)", lineHeight: "1.02", letterSpacing: "-.035em" } as CSSProperties}>
+                        {t.k272}
+                      </h3>
+                      <p style={{ margin: "clamp(18px,2vw,28px) 0 0", fontSize: "clamp(17px,1.4vw,22px)", lineHeight: "1.45", letterSpacing: "-.01em", color: "#16181D", maxWidth: "34ch" } as CSSProperties}>
+                        {t.k273}
+                      </p>
+                      <p style={{ margin: "clamp(16px,1.6vw,22px) 0 0", fontSize: "clamp(15px,1.15vw,18px)", lineHeight: "1.6", color: "#6E7278", maxWidth: "38ch" } as CSSProperties}>
+                        {t.k274}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <section id="nominations" style={{ padding: "clamp(64px,8vw,120px) 0", backgroundColor: "#EFEDE8" } as CSSProperties}>
+                <div style={{ maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
+                  <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "24px", paddingBottom: "16px", borderBottom: "1px solid #C9C6BE" } as CSSProperties}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "16px" } as CSSProperties}>
+                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em", color: "#16181D" } as CSSProperties}>
+                        {t.k428}
+                      </span>
+                      <span data-draw="" style={{ width: "40px", height: "1px", background: "#16181D", transform: "scaleX(0)", transformOrigin: "left" } as CSSProperties}>
+                      </span>
+                    </div>
+                    <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
+                      {t.k276}
+                    </span>
+                  </div>
+                  <div data-reveal="" data-delay="40" style={{ opacity: "0", transform: "translateY(16px)", marginTop: "clamp(32px,4vw,48px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".14em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
+                    {t.k269}
+                  </div>
+                  <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(16px,1.6vw,22px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(40px,7vw,110px)", lineHeight: ".9", letterSpacing: "-.05em", textTransform: "uppercase" } as CSSProperties}>
+                    {t.k277}
+                  </h2>
+                  <div style={{ display: "grid", gridTemplateColumns: ("var(--nomCols)" as any), gap: "1px", marginTop: "clamp(36px,4.4vw,60px)", background: "#C9C6BE", borderTop: "1px solid #C9C6BE" } as CSSProperties}>
+                    <div className="fa-ha311dfc" data-reveal="" data-delay="0" style={{ opacity: "0", transform: "translateY(14px)", display: "flex", alignItems: "baseline", gap: "16px", padding: "clamp(22px,2.4vw,32px) clamp(18px,2vw,28px)", background: "#EFEDE8", transition: "background 240ms ease,color 240ms ease" } as CSSProperties}>
+                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
+                        {t.k420}
+                      </span>
+                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,22px)", lineHeight: "1.18", letterSpacing: "-.022em" } as CSSProperties}>
+                        {t.k484}
+                      </span>
+                    </div>
+                    <div className="fa-ha311dfc" data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(14px)", display: "flex", alignItems: "baseline", gap: "16px", padding: "clamp(22px,2.4vw,32px) clamp(18px,2vw,28px)", background: "#EFEDE8", transition: "background 240ms ease,color 240ms ease" } as CSSProperties}>
+                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
+                        {t.k422}
+                      </span>
+                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,22px)", lineHeight: "1.18", letterSpacing: "-.022em" } as CSSProperties}>
+                        {t.k485}
+                      </span>
+                    </div>
+                    <div className="fa-ha311dfc" data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(14px)", display: "flex", alignItems: "baseline", gap: "16px", padding: "clamp(22px,2.4vw,32px) clamp(18px,2vw,28px)", background: "#EFEDE8", transition: "background 240ms ease,color 240ms ease" } as CSSProperties}>
+                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
+                        {t.k428}
+                      </span>
+                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,22px)", lineHeight: "1.18", letterSpacing: "-.022em" } as CSSProperties}>
+                        {t.k486}
+                      </span>
+                    </div>
+                    <div className="fa-ha311dfc" data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(14px)", display: "flex", alignItems: "baseline", gap: "16px", padding: "clamp(22px,2.4vw,32px) clamp(18px,2vw,28px)", background: "#EFEDE8", transition: "background 240ms ease,color 240ms ease" } as CSSProperties}>
+                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
+                        {t.k429}
+                      </span>
+                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,22px)", lineHeight: "1.18", letterSpacing: "-.022em" } as CSSProperties}>
+                        {t.k487}
+                      </span>
+                    </div>
+                    <div className="fa-ha311dfc" data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(14px)", display: "flex", alignItems: "baseline", gap: "16px", padding: "clamp(22px,2.4vw,32px) clamp(18px,2vw,28px)", background: "#EFEDE8", transition: "background 240ms ease,color 240ms ease" } as CSSProperties}>
+                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
+                        {t.k431}
+                      </span>
+                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,22px)", lineHeight: "1.18", letterSpacing: "-.022em" } as CSSProperties}>
+                        {t.k488}
+                      </span>
+                    </div>
+                    <div className="fa-ha311dfc" data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(14px)", display: "flex", alignItems: "baseline", gap: "16px", padding: "clamp(22px,2.4vw,32px) clamp(18px,2vw,28px)", background: "#EFEDE8", transition: "background 240ms ease,color 240ms ease" } as CSSProperties}>
+                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
+                        {t.k434}
+                      </span>
+                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,22px)", lineHeight: "1.18", letterSpacing: "-.022em" } as CSSProperties}>
+                        {t.k489}
+                      </span>
+                    </div>
+                    <div className="fa-ha311dfc" data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(14px)", display: "flex", alignItems: "baseline", gap: "16px", padding: "clamp(22px,2.4vw,32px) clamp(18px,2vw,28px)", background: "#EFEDE8", transition: "background 240ms ease,color 240ms ease" } as CSSProperties}>
+                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
+                        {t.k436}
+                      </span>
+                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,22px)", lineHeight: "1.18", letterSpacing: "-.022em" } as CSSProperties}>
+                        {t.k490}
+                      </span>
+                    </div>
+                    <div className="fa-ha311dfc" data-reveal="" data-delay="240" style={{ opacity: "0", transform: "translateY(14px)", display: "flex", alignItems: "baseline", gap: "16px", padding: "clamp(22px,2.4vw,32px) clamp(18px,2vw,28px)", background: "#EFEDE8", transition: "background 240ms ease,color 240ms ease" } as CSSProperties}>
+                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
+                        {t.k438}
+                      </span>
+                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,22px)", lineHeight: "1.18", letterSpacing: "-.022em" } as CSSProperties}>
+                        {t.k491}
+                      </span>
+                    </div>
+                  </div>
+                  <div data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", justifyContent: "space-between", gap: "12px 32px", marginTop: "24px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
+                    <span>
+                      {t.k278}
+                    </span>
+                    <a className="fa-h4c6dd28" href={lp("/forum") + "#participation"} style={{ display: "inline-flex", alignItems: "center", gap: "10px", color: "#16181D", borderBottom: "1px solid #C9C6BE", paddingBottom: "2px", transition: "border-color 200ms ease" } as CSSProperties}>
+                      {t.k279}
+                      <span aria-hidden="true">
+                        {t.k416}
+                      </span>
+                    </a>
+                  </div>
+                </div>
+              </section>
+              <section id="result" style={{ position: "relative", overflow: "hidden", padding: "clamp(72px,9vw,132px) 0", backgroundColor: "#FF4002", color: "#F7F6F3" } as CSSProperties}>
+                <div style={{ position: "relative", maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
+                  <div data-reveal="" data-delay="620" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "24px", paddingBottom: "16px", borderBottom: "1px solid rgba(255,255,255,.45)" } as CSSProperties}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "16px" } as CSSProperties}>
+                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em", color: "#F7F6F3" } as CSSProperties}>
+                        {t.k429}
+                      </span>
+                      <span data-draw="" data-delay="700" style={{ width: "40px", height: "1px", background: "#F7F6F3", transform: "scaleX(0)", transformOrigin: "left" } as CSSProperties}>
+                      </span>
+                    </div>
+                    <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#F7F6F3" } as CSSProperties}>
+                      {t.k280}
+                    </span>
+                  </div>
+                  <h2 data-reveal="" data-delay="700" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(32px,4vw,48px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(34px,6vw,92px)", lineHeight: ".9", letterSpacing: "-.045em", textTransform: "uppercase", maxWidth: "20ch", color: "#F7F6F3" } as CSSProperties}>
+                    {t.k281}
+                  </h2>
+                  <div style={{ marginTop: "clamp(40px,5vw,72px)", borderTop: "1px solid rgba(255,255,255,.4)" } as CSSProperties}>
+                    <div data-reveal="" data-delay="740" style={{ opacity: "0", transform: "translateY(16px)", paddingTop: "clamp(18px,2vw,26px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".14em", textTransform: "uppercase", color: "#F7F6F3" } as CSSProperties}>
+                      {t.k269}
+                    </div>
+                    <div data-reveal="" data-delay="780" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px", padding: "clamp(20px,2.2vw,30px) 0", borderBottom: "1px solid rgba(255,255,255,.4)" } as CSSProperties}>
+                      <span style={{ flex: "0 0 40px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", color: "#F7F6F3" } as CSSProperties}>
+                        {t.k420}
+                      </span>
+                      <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(19px,2vw,30px)", lineHeight: "1.16", letterSpacing: "-.022em", color: "#F7F6F3" } as CSSProperties}>
+                        {t.k282}
+                        <span data-count="250" style={{ fontVariantNumeric: "tabular-nums" } as CSSProperties}>
+                          {t.k442}
+                        </span>
+                        {t.k283}
+                      </span>
+                    </div>
+                    <div data-reveal="" data-delay="840" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px", padding: "clamp(20px,2.2vw,30px) 0", borderBottom: "1px solid rgba(255,255,255,.4)" } as CSSProperties}>
+                      <span style={{ flex: "0 0 40px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", color: "#F7F6F3" } as CSSProperties}>
+                        {t.k422}
+                      </span>
+                      <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(19px,2vw,30px)", lineHeight: "1.16", letterSpacing: "-.022em", color: "#F7F6F3" } as CSSProperties}>
+                        {t.k284}
+                      </span>
+                    </div>
+                    <div data-reveal="" data-delay="900" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px", padding: "clamp(20px,2.2vw,30px) 0", borderBottom: "1px solid rgba(255,255,255,.4)" } as CSSProperties}>
+                      <span style={{ flex: "0 0 40px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", color: "#F7F6F3" } as CSSProperties}>
+                        {t.k428}
+                      </span>
+                      <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(19px,2vw,30px)", lineHeight: "1.16", letterSpacing: "-.022em", color: "#F7F6F3" } as CSSProperties}>
+                        {t.k285}
+                      </span>
+                    </div>
+                    <div data-reveal="" data-delay="960" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px", padding: "clamp(20px,2.2vw,30px) 0", borderBottom: "1px solid rgba(255,255,255,.4)" } as CSSProperties}>
+                      <span style={{ flex: "0 0 40px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", color: "#F7F6F3" } as CSSProperties}>
+                        {t.k429}
+                      </span>
+                      <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(19px,2vw,30px)", lineHeight: "1.16", letterSpacing: "-.022em", color: "#F7F6F3" } as CSSProperties}>
+                        {t.k492}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </section>
+              <section id="how" style={{ padding: "clamp(64px,8vw,120px) 0", backgroundColor: "#F7F6F3" } as CSSProperties}>
+                <div style={{ maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
+                  <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "24px", paddingBottom: "16px", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "16px" } as CSSProperties}>
+                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em", color: "#16181D" } as CSSProperties}>
+                        {t.k431}
+                      </span>
+                      <span data-draw="" style={{ width: "40px", height: "1px", background: "#16181D", transform: "scaleX(0)", transformOrigin: "left" } as CSSProperties}>
+                      </span>
+                    </div>
+                    <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
+                      {t.k288}
+                    </span>
+                  </div>
+                  <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(32px,4vw,48px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(38px,6.4vw,104px)", lineHeight: ".9", letterSpacing: "-.05em", textTransform: "uppercase" } as CSSProperties}>
+                    {t.k289}
+                  </h2>
+                  <div style={{ position: "relative", display: "flex", flexDirection: ("var(--chainDir)" as any), marginTop: "clamp(44px,5.6vw,84px)", height: ("var(--chainHeight)" as any), padding: ("var(--chainPad)" as any) } as CSSProperties}>
+                    <span className="fa-axis" aria-hidden="true" data-draw="" data-ms="900" data-ease="cubic-bezier(.16,1,.3,1)" data-dir="x">
+                    </span>
+                    <div className="fa-node">
+                      <span className="fa-tick" aria-hidden="true">
+                      </span>
+                      <div className="fa-label" data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(10px)" } as CSSProperties}>
+                        <span style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
+                          {t.k420}
+                        </span>
+                        <span style={{ display: "block", marginTop: "12px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(18px,1.7vw,26px)", lineHeight: "1.14", letterSpacing: "-.025em", color: "#16181D" } as CSSProperties}>
+                          {t.k493}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="fa-node">
+                      <span className="fa-tick" aria-hidden="true">
+                      </span>
+                      <div className="fa-label" data-reveal="" data-delay="240" style={{ opacity: "0", transform: "translateY(10px)" } as CSSProperties}>
+                        <span style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
+                          {t.k422}
+                        </span>
+                        <span style={{ display: "block", marginTop: "12px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(18px,1.7vw,26px)", lineHeight: "1.14", letterSpacing: "-.025em", color: "#16181D" } as CSSProperties}>
+                          {t.k291}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="fa-node">
+                      <span className="fa-tick" aria-hidden="true">
+                      </span>
+                      <div className="fa-label" data-reveal="" data-delay="360" style={{ opacity: "0", transform: "translateY(10px)" } as CSSProperties}>
+                        <span style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
+                          {t.k428}
+                        </span>
+                        <span style={{ display: "block", marginTop: "12px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(18px,1.7vw,26px)", lineHeight: "1.14", letterSpacing: "-.025em", color: "#16181D" } as CSSProperties}>
+                          {t.k292}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="fa-node">
+                      <span className="fa-tick-on" aria-hidden="true">
+                      </span>
+                      <div className="fa-label" data-reveal="" data-delay="480" style={{ opacity: "0", transform: "translateY(10px)" } as CSSProperties}>
+                        <span style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#16181D" } as CSSProperties}>
+                          {t.k429}
+                        </span>
+                        <span style={{ display: "block", marginTop: "12px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(18px,1.7vw,26px)", lineHeight: "1.14", letterSpacing: "-.025em", color: "#16181D" } as CSSProperties}>
+                          {t.k293}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(16px)", marginTop: "clamp(32px,4vw,48px)", paddingTop: "20px", borderTop: "1px solid #DCDAD4", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", lineHeight: "1.7", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
+                    {t.k294}
+                  </div>
+                </div>
+              </section>
+              <div aria-hidden="true" style={{ overflow: "hidden", background: "#16181D", color: "#F7F6F3", padding: "16px 0" } as CSSProperties}>
+                <div data-marquee="" style={{ display: "flex", width: "max-content", animation: "faMarquee 38s linear infinite", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "clamp(11px,1.1vw,14px)", letterSpacing: ".18em", textTransform: "uppercase" } as CSSProperties}>
+                  <div style={{ display: "flex", gap: "2.2em", paddingRight: "2.2em", whiteSpace: "nowrap" } as CSSProperties}>
+                    <span>
+                      {t.k494}
+                    </span>
+                    <span>
+                      {t.k417}
+                    </span>
+                    <span>
+                      {t.k495}
+                    </span>
+                    <span>
+                      {t.k417}
+                    </span>
+                    <span>
+                      {t.k297}
+                    </span>
+                    <span>
+                      {t.k417}
+                    </span>
+                  </div>
+                  <div style={{ display: "flex", gap: "2.2em", paddingRight: "2.2em", whiteSpace: "nowrap" } as CSSProperties}>
+                    <span>
+                      {t.k494}
+                    </span>
+                    <span>
+                      {t.k417}
+                    </span>
+                    <span>
+                      {t.k495}
+                    </span>
+                    <span>
+                      {t.k417}
+                    </span>
+                    <span>
+                      {t.k297}
+                    </span>
+                    <span>
+                      {t.k417}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <section id="apply" style={{ position: "relative", overflow: "hidden", padding: "clamp(72px,9vw,140px) 0 clamp(64px,8vw,120px)", backgroundColor: "#16181D", color: "#F7F6F3" } as CSSProperties}>
+                <div aria-hidden="true" style={{ position: "absolute", inset: "0", backgroundImage: "repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,rgba(255,255,255,.06) 0 1px,transparent 1px 80px)" } as CSSProperties}>
+                </div>
+                <div style={{ position: "relative", maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
+                  <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "24px", paddingBottom: "16px", borderBottom: "1px solid #3A3D44" } as CSSProperties}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "16px" } as CSSProperties}>
+                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em", color: "#FFFFFF" } as CSSProperties}>
+                        {t.k434}
+                      </span>
+                      <span data-draw="" style={{ width: "40px", height: "1px", background: "#FFFFFF", transform: "scaleX(0)", transformOrigin: "left" } as CSSProperties}>
+                      </span>
+                    </div>
+                    <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#8E9198" } as CSSProperties}>
+                      {t.k130}
+                    </span>
+                  </div>
+                  <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(32px,4vw,48px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(32px,5.4vw,80px)", lineHeight: ".94", letterSpacing: "-.045em", textTransform: "uppercase", maxWidth: "20ch" } as CSSProperties}>
+                    {t.k298}
+                    <br />
+                    {t.k496}
+                  </h2>
+                  <div data-reveal="" data-delay="100" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "12px 20px", marginTop: "24px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".14em", textTransform: "uppercase", color: "#FFFFFF" } as CSSProperties}>
+                    <span aria-hidden="true" style={{ width: "8px", height: "8px", background: "#FFFFFF" } as CSSProperties}>
+                    </span>
+                    <span>
+                      {t.k247}
+                    </span>
+                  </div>
+                  {notSent ? (
+                  <>
+                    <form onSubmit={submit} noValidate data-reveal="" data-delay="160" style={{ opacity: "0", transform: "translateY(16px)", marginTop: "clamp(36px,4.4vw,56px)", maxWidth: "820px", background: "#FFFFFF", color: "#16181D", padding: "clamp(26px,3.2vw,52px)", boxShadow: "14px 14px 0 rgba(255,255,255,.16)" } as CSSProperties}>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "clamp(20px,2.2vw,28px)" } as CSSProperties}>
+                        <div>
+                          <label htmlFor="aw-name" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
+                            {t.k300}
+                          </label>
+                          <input className="fa-hbd8acac" id="aw-name" name="name" type="text" autoComplete="name" onInput={onName} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
+                          <div style={{ minHeight: "16px", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", fontWeight: "500", letterSpacing: ".06em", color: "#16181D" } as CSSProperties}>
+                            {errName}
+                          </div>
+                        </div>
+                        <div>
+                          <label htmlFor="aw-org" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
+                            {t.k301}
+                          </label>
+                          <input className="fa-hbd8acac" id="aw-org" name="org" type="text" autoComplete="organization" onInput={onOrg} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
+                          <div style={{ minHeight: "16px", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", fontWeight: "500", letterSpacing: ".06em", color: "#16181D" } as CSSProperties}>
+                            {errOrg}
+                          </div>
+                        </div>
+                        <div>
+                          <span style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
+                            {t.k302}
+                          </span>
+                          <div role="radiogroup" aria-label={t.k302} style={{ display: "flex", flexWrap: "wrap", gap: "1px", marginTop: "12px", background: "#C9C6BE", outline: "1px solid #C9C6BE" } as CSSProperties}>
+                            <button type="button" role="radio" aria-checked={isAward} onClick={pickAward} style={{ flex: "1 1 200px", padding: "15px 22px", background: awardBg, color: awardFg, border: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", textAlign: "left", cursor: "pointer", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
+                              {t.k269}
+                            </button>
+                            <button type="button" role="radio" aria-checked={isStudent} onClick={pickStudent} style={{ flex: "1 1 200px", padding: "15px 22px", background: studentBg, color: studentFg, border: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", textAlign: "left", cursor: "pointer", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
+                              {t.k272}
+                            </button>
+                          </div>
+                          <div style={{ minHeight: "16px", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", fontWeight: "500", letterSpacing: ".06em", color: "#16181D" } as CSSProperties}>
+                            {errTrack}
+                          </div>
+                        </div>
+                        <div>
+                          <label htmlFor="aw-nomination" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
+                            {t.k303}
+                          </label>
+                          <select className="fa-hbd8acac" id="aw-nomination" name="nomination" onChange={onNomination} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "#FFFFFF", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", appearance: "none", borderRadius: "0", transition: "border-color 200ms ease" } as CSSProperties}>
+                            <option value="">
+                              {nominationPlaceholder}
+                            </option>
+                            {nomOptions.map((opt, i) => (
+                            <Fragment key={i}>
+                              <option value={opt.title}>
+                                {opt.title}
+                              </option>
+                            </Fragment>
+                            ))}
+                          </select>
+                          <div style={{ minHeight: "16px", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", fontWeight: "500", letterSpacing: ".06em", color: "#16181D" } as CSSProperties}>
+                            {errNomination}
+                          </div>
+                        </div>
+                        <div>
+                          <label htmlFor="aw-email" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
+                            {t.k455}
+                          </label>
+                          <input className="fa-hbd8acac" id="aw-email" name="email" type="email" autoComplete="email" onInput={onEmail} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
+                          <div style={{ minHeight: "16px", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", fontWeight: "500", letterSpacing: ".06em", color: "#16181D" } as CSSProperties}>
+                            {errEmail}
+                          </div>
+                        </div>
+                        <div>
+                          <label htmlFor="aw-phone" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
+                            {t.k120}
+                          </label>
+                          <input className="fa-hbd8acac" id="aw-phone" name="phone" type="tel" autoComplete="tel" onInput={onPhone} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
+                          <div style={{ minHeight: "16px", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", fontWeight: "500", letterSpacing: ".06em", color: "#16181D" } as CSSProperties}>
+                            {errPhone}
+                          </div>
+                        </div>
+                        <div>
+                          <label htmlFor="aw-url" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
+                            {t.k305}
+                          </label>
+                          <input className="fa-hbd8acac" id="aw-url" name="url" type="url" inputMode="url" placeholder={t.k497} onInput={onUrl} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
+                          <div style={{ minHeight: "16px", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", fontWeight: "500", letterSpacing: ".06em", color: "#16181D" } as CSSProperties}>
+                            {errUrl}
+                          </div>
+                        </div>
+                        <div>
+                          <label htmlFor="aw-desc" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
+                            {t.k306}
+                          </label>
+                          <textarea className="fa-hbd8acac" id="aw-desc" name="desc" rows={4} maxLength={300} onInput={onDesc} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", lineHeight: "1.5", resize: "vertical", outline: "none", transition: "border-color 200ms ease" } as CSSProperties}>
+                          </textarea>
+                          <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "16px", minHeight: "16px", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".06em" } as CSSProperties}>
+                            <span style={{ fontWeight: "500", color: "#16181D" } as CSSProperties}>
+                              {errDesc}
+                            </span>
+                            <span style={{ color: "#6E7278" } as CSSProperties}>
+                              {descCount}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div style={{ marginTop: "clamp(28px,3vw,40px)", paddingTop: "20px", borderTop: "1px solid #DCDAD4", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", lineHeight: "1.7", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
+                        {t.k307}
+                      </div>
+                      <button className="fa-h88f6f23" type="submit" style={{ marginTop: "32px", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "16px", padding: "18px 36px", background: "#16181D", color: "#F7F6F3", border: "1px solid #16181D", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", cursor: "pointer", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
+                        {t.k121}
+                        <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
+                          {t.k416}
+                        </span>
+                      </button>
+                    </form>
+                  </>
+                  ) : null}
+                  {sent ? (
+                  <>
+                    <div style={{ marginTop: "clamp(36px,4.4vw,56px)", padding: "clamp(26px,3.2vw,48px)", background: "#FFFFFF", color: "#16181D", maxWidth: "65ch", boxShadow: "14px 14px 0 rgba(255,255,255,.16)" } as CSSProperties}>
+                      <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(20px,1.9vw,24px)" } as CSSProperties}>
+                        {t.k122}
+                      </div>
+                      <p style={{ margin: "16px 0 0", fontSize: "16px", lineHeight: "1.6", color: "#5C5F66" } as CSSProperties}>
+                        {t.k308}
+                      </p>
+                    </div>
+                  </>
+                  ) : null}
+                </div>
+              </section>
+              <section style={{ padding: "clamp(56px,7vw,96px) 0", backgroundColor: "#F7F6F3" } as CSSProperties}>
+                <div style={{ maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
+                  <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "24px 48px", padding: "clamp(28px,3.4vw,56px)", background: "#16181D", color: "#F7F6F3" } as CSSProperties}>
+                    <h3 style={{ margin: "0", flex: "1 1 420px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(22px,2.4vw,36px)", lineHeight: "1.1", letterSpacing: "-.025em", maxWidth: "26ch" } as CSSProperties}>
+                      {t.k309}
+                    </h3>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "14px" } as CSSProperties}>
+                      <a className="fa-hcb630f1" href={lp("/forum")} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "16px", padding: "19px 38px", border: "1px solid #F7F6F3", color: "#F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
+                        {t.k9}
+                        <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
+                          {t.k416}
+                        </span>
+                      </a>
+                      <a className="fa-hdf939ad" href={lp("/")} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "16px", padding: "19px 38px", border: "1px solid #3A3D44", color: "#B9BBC0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", transition: "background 200ms ease,color 200ms ease,border-color 200ms ease" } as CSSProperties}>
+                        {t.k243}
+                        <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
+                          {t.k416}
+                        </span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </main>
+            <footer id="contacts" style={{ position: "relative", overflow: "hidden", backgroundColor: "#16181D", color: "#F7F6F3", padding: "clamp(40px,5vw,64px) 0 40px", backgroundImage: "repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,rgba(255,255,255,.06) 0 1px,transparent 1px 80px)" } as CSSProperties}>
+              <div aria-hidden="true" style={{ position: "relative", overflow: "hidden", paddingBottom: "clamp(28px,3.4vw,48px)", WebkitMaskImage: "linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent)", maskImage: "linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent)" } as CSSProperties}>
+                <div data-marquee="" style={{ display: "flex", width: "max-content", animation: "faMarquee 44s linear infinite", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(34px,6.4vw,104px)", lineHeight: ".9", letterSpacing: "-.05em", textTransform: "uppercase", color: "rgba(247,246,243,.17)" } as CSSProperties}>
+                  <div style={{ display: "flex", gap: ".3em", paddingRight: ".3em" } as CSSProperties}>
+                    <span>
+                      {t.k401}
+                    </span>
+                    <span style={{ color: "#FFFFFF" } as CSSProperties}>
+                      {t.k417}
+                    </span>
+                    <span>
+                      {t.k498}
+                    </span>
+                    <span style={{ color: "#FFFFFF" } as CSSProperties}>
+                      {t.k417}
+                    </span>
+                  </div>
+                  <div style={{ display: "flex", gap: ".3em", paddingRight: ".3em" } as CSSProperties}>
+                    <span>
+                      {t.k401}
+                    </span>
+                    <span style={{ color: "#FFFFFF" } as CSSProperties}>
+                      {t.k417}
+                    </span>
+                    <span>
+                      {t.k498}
+                    </span>
+                    <span style={{ color: "#FFFFFF" } as CSSProperties}>
+                      {t.k417}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div style={{ position: "relative", maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "48px", borderTop: "1px solid #3A3D44", paddingTop: "clamp(40px,5vw,56px)" } as CSSProperties}>
+                  <div style={{ flex: "1 1 300px", minWidth: "0" } as CSSProperties}>
+                    <img src="/img/0ce5b0d8a0.png" alt={t.k401} style={{ height: "104px", width: "auto", maxWidth: "100%", display: "block" } as CSSProperties} />
+                    <p style={{ margin: "24px 0 0", fontSize: "15px", lineHeight: "1.6", color: "#8E9198", maxWidth: "none" } as CSSProperties}>
+                      {t.k251}
+                    </p>
+                  </div>
+                  <nav aria-label={t.k125} style={{ flex: "0 1 176px", display: "flex", flexDirection: "column", gap: "12px", fontSize: "15px", color: "#B9BBC0" } as CSSProperties}>
+                    <a className="fa-hc3889f8" href={lp("/")} style={{ transition: "color 200ms ease" } as CSSProperties}>
+                      {t.k35}
+                    </a>
+                    <a className="fa-hc3889f8" href={lp("/forum")} style={{ transition: "color 200ms ease" } as CSSProperties}>
+                      {t.k9}
+                    </a>
+                    <a className="fa-hc3889f8" href="#nominations" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                      {t.k277}
+                    </a>
+                    <a className="fa-hc3889f8" href="#apply" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                      {t.k130}
+                    </a>
+                  </nav>
+                  <div style={{ flex: "0 1 280px", display: "flex", flexDirection: "column", gap: "12px", fontSize: "15px", color: "#B9BBC0" } as CSSProperties}>
+                    <a className="fa-hc3889f8" href="mailto:marketing@lh47arch.com" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                      {t.k457}
+                    </a>
+                    <a className="fa-hc3889f8" href="mailto:marketing@instylehome.md" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                      {t.k458}
+                    </a>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" } as CSSProperties}>
+                      <a className="fa-hc3889f8" href="tel:+37368199951" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                        {t.k459}
+                      </a>
+                      <span style={{ color: "#8E9198" } as CSSProperties}>
+                        {t.k460}
+                      </span>
+                    </div>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" } as CSSProperties}>
+                      <a className="fa-hc3889f8" href="tel:+37368059311" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                        {t.k461}
+                      </a>
+                      <span style={{ color: "#8E9198" } as CSSProperties}>
+                        {t.k462}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="fa-social" style={{ flex: "0 1 160px", color: "#B9BBC0" } as CSSProperties}>
+                    <a href="#" aria-label={t.k463}>
+                      <svg sc-camel-view-box="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                        <rect x="3" y="3" width="18" height="18" rx="5">
+                        </rect>
+                        <circle cx="12" cy="12" r="4.2">
+                        </circle>
+                        <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none">
+                        </circle>
+                      </svg>
+                      <span className="fa-sr">
+                        {t.k463}
+                      </span>
+                    </a>
+                    <a href="#" aria-label={t.k464}>
+                      <svg sc-camel-view-box="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H16.7V3.6c-.3-.04-1.3-.13-2.47-.13-2.44 0-4.11 1.49-4.11 4.23V9.9H7.4V13h2.72v8h3.38z">
+                        </path>
+                      </svg>
+                      <span className="fa-sr">
+                        {t.k464}
+                      </span>
+                    </a>
+                    <a href="#" aria-label={t.k465}>
+                      <svg sc-camel-view-box="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M6.94 8.6H3.9V21h3.04V8.6zM5.42 3A1.8 1.8 0 105.4 6.6 1.8 1.8 0 005.42 3zM21 14.2c0-3.4-1.82-4.98-4.24-4.98-1.96 0-2.83 1.08-3.32 1.84V8.6H10.4c.04.86 0 12.4 0 12.4h3.04v-6.92c0-.33.02-.66.12-.9.27-.66.87-1.34 1.9-1.34 1.33 0 1.87 1.02 1.87 2.5V21H21v-6.8z">
+                        </path>
+                      </svg>
+                      <span className="fa-sr">
+                        {t.k465}
+                      </span>
+                    </a>
+                  </div>
+                </div>
+                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "16px 32px", marginTop: "clamp(40px,5vw,64px)", paddingTop: "24px", borderTop: "1px solid #3A3D44" } as CSSProperties}>
+                  <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#8E9198" } as CSSProperties}>
+                    {t.k126}
+                  </span>
+                  <img src="/img/d65b278e9b.png" alt={t.k444} style={{ height: "24px", width: "auto", display: "block", filter: "brightness(0) invert(.62)", opacity: ".9" } as CSSProperties} />
+                  <img src="/img/d7f7cfad4d.png" alt={t.k450} style={{ height: "18px", width: "auto", display: "block", filter: "brightness(0) invert(.62)", opacity: ".9" } as CSSProperties} />
+                </div>
+                <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "16px 32px", marginTop: "32px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#8E9198" } as CSSProperties}>
+                  <div style={{ display: "flex", gap: "8px" } as CSSProperties}>
+                    <a href={lhref("ro")} style={{ color: "inherit" } as CSSProperties}>
+                      {t.k402}
+                    </a>
+                    <span style={{ color: "#3A3D44" } as CSSProperties}>
+                      {t.k403}
+                    </span>
+                    <a href={lhref("ru")} style={{ color: "#16181D" } as CSSProperties}>
+                      {t.k404}
+                    </a>
+                    <span style={{ color: "#3A3D44" } as CSSProperties}>
+                      {t.k403}
+                    </span>
+                    <a href={lhref("en")} style={{ color: "inherit" } as CSSProperties}>
+                      {t.k405}
+                    </a>
+                  </div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "8px 24px" } as CSSProperties}>
+                    <span>
+                      {t.k466}
+                    </span>
+                    <a className="fa-hc3889f8" href="#" style={{ transition: "color 200ms ease" } as CSSProperties}>
+                      {t.k127}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </footer>
           </div>
-          {" "}
-        </footer>
-        {" "}
-      </div>
-      {" "}
     </>
   )
 }
