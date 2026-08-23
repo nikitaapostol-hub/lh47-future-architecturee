@@ -758,3 +758,7 @@ body:has(.fa-notice[data-on="1"]) header[data-header]{top:38px!important}
 .fa-404-card:hover{ background:#FF4002; color:#16181D }
 .fa-404-card:hover span{ color:#16181D }
 .fa-404-link:hover{ color:#FF4002 }
+
+/* политика: шапка не фиксированная, поэтому полосу компенсируем отступом */
+body:has(.fa-notice[data-on="1"]) .fa-privacy{padding-top:38px}
+@media (max-width:700px){ body:has(.fa-notice[data-on="1"]) .fa-privacy{padding-top:34px} }
