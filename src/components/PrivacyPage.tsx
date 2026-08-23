@@ -281,7 +281,7 @@ export default function PrivacyPage({ lang }: { lang: Lang }) {
   const lp = (p: string) => langPath(lang, p)
 
   return (
-    <div style={{ background: '#F7F6F3', color: '#16181D', overflowX: 'hidden' } as CSSProperties}>
+    <div className="fa-privacy" style={{ background: '#F7F6F3', color: '#16181D', overflowX: 'hidden' } as CSSProperties}>
       <header
         style={{
           borderBottom: '1px solid #DCDAD4',
