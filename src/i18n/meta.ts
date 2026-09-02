@@ -26,34 +26,34 @@ const COPY: Record<Page, Record<Lang, { title: string; description: string }>> =
     ru: {
       title: 'Future Architecture Forum Moldova 2026',
       description:
-        'Закрытый отраслевой форум 3 декабря 2026 в Кишинёве, площадка Range Rover Moldova. 250 участников: инвесторы, девелоперы, архитекторы и производители за одним столом. Участие по заявке и отбору, без взноса.',
+        'Закрытый отраслевой форум 9 декабря 2026 в Кишинёве, площадка Range Rover Moldova. 250 участников: инвесторы, девелоперы, архитекторы и производители за одним столом. Участие по заявке и отбору, без взноса.',
     },
     ro: {
       title: 'Future Architecture Forum Moldova 2026',
       description:
-        'Forum închis al industriei, 3 decembrie 2026, Chișinău, locație Range Rover Moldova. 250 de participanți: investitori, dezvoltatori, arhitecți și producători la aceeași masă. Participare pe bază de cerere și selecție, fără taxă.',
+        'Forum închis al industriei, 9 decembrie 2026, Chișinău, locație Range Rover Moldova. 250 de participanți: investitori, dezvoltatori, arhitecți și producători la aceeași masă. Participare pe bază de cerere și selecție, fără taxă.',
     },
     en: {
       title: 'Future Architecture Forum Moldova 2026',
       description:
-        'A closed industry forum on 3 December 2026 in Chișinău, at Range Rover Moldova. 250 participants: investors, developers, architects and manufacturers at one table. Entry by application and selection, no fee.',
+        'A closed industry forum on 9 December 2026 in Chișinău, at Range Rover Moldova. 250 participants: investors, developers, architects and manufacturers at one table. Entry by application and selection, no fee.',
     },
   },
   '/award': {
     ru: {
       title: 'Future Architecture Award 2026 · Премия отрасли и студенческий конкурс',
       description:
-        'Future Architecture Award 2026: премия отрасли для проектов, компаний и профессионалов и отдельный студенческий конкурс. Заявки до 20 ноября, победителей объявляют 3 декабря на форуме в Кишинёве.',
+        'Future Architecture Award 2026: премия отрасли для проектов, компаний и профессионалов и отдельный студенческий конкурс. Заявки до 20 ноября, победителей объявляют 9 декабря на форуме в Кишинёве.',
     },
     ro: {
       title: 'Future Architecture Award 2026 · Premiul industriei și concursul studențesc',
       description:
-        'Future Architecture Award 2026: premiul industriei pentru proiecte, companii și profesioniști și un concurs separat pentru studenți. Cereri până pe 20 noiembrie, câștigătorii se anunță pe 3 decembrie la forumul din Chișinău.',
+        'Future Architecture Award 2026: premiul industriei pentru proiecte, companii și profesioniști și un concurs separat pentru studenți. Cereri până pe 20 noiembrie, câștigătorii se anunță pe 9 decembrie la forumul din Chișinău.',
     },
     en: {
       title: 'Future Architecture Award 2026 · Industry award and student competition',
       description:
-        'Future Architecture Award 2026: an industry award for projects, companies and professionals, plus a separate student competition. Applications until 20 November, winners announced on 3 December at the forum in Chișinău.',
+        'Future Architecture Award 2026: an industry award for projects, companies and professionals, plus a separate student competition. Applications until 20 November, winners announced on 9 December at the forum in Chișinău.',
     },
   },
 }
