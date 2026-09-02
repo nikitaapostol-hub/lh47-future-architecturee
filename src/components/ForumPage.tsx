@@ -134,7 +134,7 @@ export default function ForumPage({
   const menuDisplay = menu ? ('var(--menuDisplay)' as any) : 'none'
   const notSent = !sent
   const countdownDisplay = countdownVisible === false ? 'none' : 'flex'
-  const forumDateValue = forumDate || '2026-12-03T10:00:00'
+  const forumDateValue = forumDate || '2026-12-09T10:00:00'
 
   return (
     <>
@@ -356,7 +356,7 @@ export default function ForumPage({
                     {" "}
                   </div>
                   {" "}
-                  <div data-countdown="" data-target="2026-12-03T10:00:00" style={{ display: "flex", flexWrap: "wrap", marginTop: "clamp(28px,3.6vw,52px)", borderTop: "1px solid rgba(255,255,255,.45)", borderBottom: "1px solid rgba(255,255,255,.45)" } as CSSProperties}>
+                  <div data-countdown="" data-target={forumDateValue} style={{ display: "flex", flexWrap: "wrap", marginTop: "clamp(28px,3.6vw,52px)", borderTop: "1px solid rgba(255,255,255,.45)", borderBottom: "1px solid rgba(255,255,255,.45)" } as CSSProperties}>
                     {" "}
                     <div className="fa-hbe9e358" style={{ flex: "1 1 0", minWidth: "96px", padding: "clamp(16px,2vw,26px) clamp(12px,1.6vw,22px)", transition: "background 260ms ease" } as CSSProperties}>
                       <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(38px,5.6vw,86px)", lineHeight: ".9", letterSpacing: "-.045em", fontVariantNumeric: "tabular-nums" } as CSSProperties}>

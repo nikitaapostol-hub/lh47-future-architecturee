@@ -12,7 +12,7 @@ export const ForumSettings: GlobalConfig = {
       name: 'forumDate',
       type: 'date',
       label: 'Дата и время форума',
-      defaultValue: '2026-12-03T10:00:00',
+      defaultValue: '2026-12-09T10:00:00',
       admin: {
         date: { pickerAppearance: 'dayAndTime' },
         description: 'От неё считается таймер обратного отсчёта.',
