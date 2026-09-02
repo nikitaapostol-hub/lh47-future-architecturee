@@ -15,7 +15,7 @@ const SANS = 'Montserrat,Manrope,sans-serif'
 
 const LINKS: { href: string; no: string; label: string; note: string }[] = [
   { href: '/', no: '01', label: 'Сообщество', note: 'Архитекторы и дизайнеры Молдовы' },
-  { href: '/forum', no: '02', label: 'Форум 2026', note: '3 декабря · Кишинёв' },
+  { href: '/forum', no: '02', label: 'Форум 2026', note: '9 декабря · Кишинёв' },
   { href: '/award', no: '03', label: 'Премия', note: 'Заявки до 20 ноября' },
 ]
 
