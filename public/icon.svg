@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Future Architecture">
+  <rect width="512" height="512" fill="#16181D"/>
+  <circle cx="176" cy="256" r="76" fill="#FF4002"/>
+  <path d="M170 148 L246 106 L246 404 L170 404 Z" fill="#F7F6F3"/>
+  <path d="M274 128 L274 246 L370 288 L370 170 Z" fill="none" stroke="#F7F6F3" stroke-width="14" stroke-linejoin="miter"/>
+  <path d="M274 268 L370 310 L370 428 L274 386 Z" fill="#F7F6F3"/>
+</svg>

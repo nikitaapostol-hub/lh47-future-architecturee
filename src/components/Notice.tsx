@@ -9,8 +9,15 @@ import { dict } from '@/i18n'
 import { path } from '@/i18n/links'
 import type { Lang } from '@/i18n/links'
 
-export default function Notice({ lang }: { lang: Lang }) {
-  const t = dict[lang]
+type Props = { lang: Lang; title?: string; cta?: string; close?: string }
+
+export default function Notice({ lang, title, cta, close: closeLabel }: Props) {
+  const d = dict[lang]
+  const t = {
+    noticeTitle: title || d.noticeTitle,
+    noticeCta: cta || d.noticeCta,
+    noticeClose: closeLabel || d.noticeClose,
+  }
   const [on, setOn] = useState(true)
   // форум — оранжевая страница, на ней полоса тёмная, иначе сливается
   const tone = /\/forum\/?$/.test(usePathname() || '') ? 'dark' : 'orange'

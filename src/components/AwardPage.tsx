@@ -8,21 +8,13 @@ import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import type { Dict } from '@/i18n/dict'
 import { path as langPath } from '@/i18n/links'
+import { post } from '@/lib/submit'
 import type { Lang } from '@/i18n/links'
 
-async function post(collection, body) {
-  const res = await fetch('/api/' + collection, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  })
-  if (!res.ok) throw new Error('submit failed: ' + res.status)
-  return res.json()
-}
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/
 
-type Nom = { no?: string; title: string }
+type Nom = { no?: string; title: string; hint?: string }
 type Member = { no?: string; name: string; role?: string }
 type Props = {
   t: Dict
@@ -34,7 +26,17 @@ type Props = {
   jury?: Member[]
   nominations?: Nom[]
   studentNominations?: Nom[]
+  formOpen?: boolean
+  formClosedText?: string
 }
+
+/* Если база ещё не отвечает, страница всё равно показывает реальные номинации. */
+const FALLBACK_NOMINATIONS: Nom[] = [
+  { no: '01', title: 'Архитектура частного дома', hint: 'ИЖС · экстерьер и объём' },
+  { no: '02', title: 'Интерьер частного дома', hint: 'ИЖС · интерьер' },
+  { no: '03', title: 'Интерьер коммерческого пространства', hint: 'Офисы, ретейл, HoReCa' },
+  { no: '04', title: 'Экстерьер жилого комплекса', hint: 'ЖК · архитектура и благоустройство' },
+]
 
 const AWARD_TRACK = 'Премия отрасли'
 const STUDENT_TRACK = 'Студенческий конкурс'
@@ -44,6 +46,7 @@ export default function AwardPage({
   lang,
   deadlineLabel, deadlineDate, countdownVisible = true, juryVisible = false,
   jury: juryProp = [], nominations: nomProp = [], studentNominations: studentProp = [],
+  formOpen = true, formClosedText,
 }: Props) {
   // "/forum" stays "/forum" in Russian and becomes "/ro/forum" elsewhere
   const lp = (p: string) => langPath(lang, p)
@@ -172,13 +175,12 @@ export default function AwardPage({
       ;(document.getElementById('aw-' + Object.keys(n)[0]) as any)?.focus?.()
       return
     }
-    try { await post('award-applications', d) } catch { /* noop */ }
+    try { await post('award-applications', d, lang) } catch { /* noop */ }
     setErr({})
     setSent(true)
   }
 
-  const baseNoms: Nom[] = nomProp.length ? nomProp
-    : Array.from({ length: 8 }, (_, i) => ({ no: String(i + 1).padStart(2, '0'), title: t.nomDefault + ' ' + String(i + 1).padStart(2, '0') }))
+  const baseNoms: Nom[] = nomProp.length ? nomProp : FALLBACK_NOMINATIONS
   const studentNoms: Nom[] = studentProp.length ? studentProp
     : [{ no: '01', title: t.studentNomPlaceholder }]
 
@@ -193,7 +195,7 @@ export default function AwardPage({
   const errPhone = err.phone || '', errUrl = err.url || '', errDesc = err.desc || ''
   const nominationPlaceholder = track ? t.k256 : t.k255
   const menuDisplay = menu ? ('var(--menuDisplay)' as any) : 'none'
-  const notSent = !sent
+  const notSent = !sent && formOpen
   const descCount = descLen + ' / 300'
   const isAward = track === AWARD_TRACK
   const isStudent = track === STUDENT_TRACK
@@ -509,7 +511,7 @@ export default function AwardPage({
                   {" "}
                   <div style={{ display: "grid", gridTemplateColumns: ("var(--twoCols)" as any), gap: "1px", marginTop: "clamp(36px,4.4vw,60px)", background: "#DCDAD4", borderTop: "1px solid #DCDAD4", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
                     {" "}
-                    <div className="fa-h77c075a" data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", padding: "clamp(28px,3.2vw,52px) clamp(24px,3vw,48px) clamp(32px,3.6vw,56px)", background: "#F7F6F3", transition: "background 260ms ease" } as CSSProperties}>
+                    <div className="fa-h77c075a fa-card-light" data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", padding: "clamp(28px,3.2vw,52px) clamp(24px,3vw,48px) clamp(32px,3.6vw,56px)", background: "#F7F6F3", transition: "background 260ms ease" } as CSSProperties}>
                       {" "}
                       <div style={{ display: "flex", alignItems: "center", gap: "16px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".12em", color: "#FF4002" } as CSSProperties}>
                         <span>
@@ -533,7 +535,7 @@ export default function AwardPage({
                       {" "}
                     </div>
                     {" "}
-                    <div className="fa-h77c075a" data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", padding: "clamp(28px,3.2vw,52px) clamp(24px,3vw,48px) clamp(32px,3.6vw,56px)", background: "#F7F6F3", transition: "background 260ms ease" } as CSSProperties}>
+                    <div className="fa-h77c075a fa-card-light" data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", padding: "clamp(28px,3.2vw,52px) clamp(24px,3vw,48px) clamp(32px,3.6vw,56px)", background: "#F7F6F3", transition: "background 260ms ease" } as CSSProperties}>
                       {" "}
                       <div style={{ display: "flex", alignItems: "center", gap: "16px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".12em", color: "#FF4002" } as CSSProperties}>
                         <span>
@@ -593,78 +595,21 @@ export default function AwardPage({
                   {" "}
                   <div style={{ display: "grid", gridTemplateColumns: ("var(--nomCols)" as any), gap: "1px", marginTop: "clamp(36px,4.4vw,60px)", background: "#C9C6BE", borderTop: "1px solid #C9C6BE" } as CSSProperties}>
                     {" "}
-                    <div className="fa-ha311dfc" data-reveal="" data-delay="0" style={{ opacity: "0", transform: "translateY(14px)", display: "flex", alignItems: "baseline", gap: "16px", padding: "clamp(22px,2.4vw,32px) clamp(18px,2vw,28px)", background: "#EFEDE8", transition: "background 240ms ease,color 240ms ease" } as CSSProperties}>
+                    {nominations.map((n, i) => (
+                    <div key={i} className="fa-ha311dfc" data-reveal="" data-delay={n.delay} style={{ opacity: "0", transform: "translateY(14px)", display: "flex", alignItems: "baseline", gap: "16px", padding: "clamp(22px,2.4vw,32px) clamp(18px,2vw,28px)", background: "#EFEDE8", transition: "background 240ms ease,color 240ms ease" } as CSSProperties}>
                       <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
-                        {t.k420}
+                        {n.no || String(i + 1).padStart(2, "0")}
                       </span>
                       <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,22px)", lineHeight: "1.18", letterSpacing: "-.022em" } as CSSProperties}>
-                        {t.k484}
+                        {n.title}
+                        {n.hint ? (
+                          <span style={{ display: "block", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontWeight: "400", fontSize: "11px", lineHeight: "1.4", letterSpacing: ".08em", textTransform: "uppercase", color: "#8E8B83" } as CSSProperties}>
+                            {n.hint}
+                          </span>
+                        ) : null}
                       </span>
                     </div>
-                    {" "}
-                    <div className="fa-ha311dfc" data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(14px)", display: "flex", alignItems: "baseline", gap: "16px", padding: "clamp(22px,2.4vw,32px) clamp(18px,2vw,28px)", background: "#EFEDE8", transition: "background 240ms ease,color 240ms ease" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
-                        {t.k422}
-                      </span>
-                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,22px)", lineHeight: "1.18", letterSpacing: "-.022em" } as CSSProperties}>
-                        {t.k485}
-                      </span>
-                    </div>
-                    {" "}
-                    <div className="fa-ha311dfc" data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(14px)", display: "flex", alignItems: "baseline", gap: "16px", padding: "clamp(22px,2.4vw,32px) clamp(18px,2vw,28px)", background: "#EFEDE8", transition: "background 240ms ease,color 240ms ease" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
-                        {t.k428}
-                      </span>
-                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,22px)", lineHeight: "1.18", letterSpacing: "-.022em" } as CSSProperties}>
-                        {t.k486}
-                      </span>
-                    </div>
-                    {" "}
-                    <div className="fa-ha311dfc" data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(14px)", display: "flex", alignItems: "baseline", gap: "16px", padding: "clamp(22px,2.4vw,32px) clamp(18px,2vw,28px)", background: "#EFEDE8", transition: "background 240ms ease,color 240ms ease" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
-                        {t.k429}
-                      </span>
-                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,22px)", lineHeight: "1.18", letterSpacing: "-.022em" } as CSSProperties}>
-                        {t.k487}
-                      </span>
-                    </div>
-                    {" "}
-                    <div className="fa-ha311dfc" data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(14px)", display: "flex", alignItems: "baseline", gap: "16px", padding: "clamp(22px,2.4vw,32px) clamp(18px,2vw,28px)", background: "#EFEDE8", transition: "background 240ms ease,color 240ms ease" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
-                        {t.k431}
-                      </span>
-                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,22px)", lineHeight: "1.18", letterSpacing: "-.022em" } as CSSProperties}>
-                        {t.k488}
-                      </span>
-                    </div>
-                    {" "}
-                    <div className="fa-ha311dfc" data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(14px)", display: "flex", alignItems: "baseline", gap: "16px", padding: "clamp(22px,2.4vw,32px) clamp(18px,2vw,28px)", background: "#EFEDE8", transition: "background 240ms ease,color 240ms ease" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
-                        {t.k434}
-                      </span>
-                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,22px)", lineHeight: "1.18", letterSpacing: "-.022em" } as CSSProperties}>
-                        {t.k489}
-                      </span>
-                    </div>
-                    {" "}
-                    <div className="fa-ha311dfc" data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(14px)", display: "flex", alignItems: "baseline", gap: "16px", padding: "clamp(22px,2.4vw,32px) clamp(18px,2vw,28px)", background: "#EFEDE8", transition: "background 240ms ease,color 240ms ease" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
-                        {t.k436}
-                      </span>
-                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,22px)", lineHeight: "1.18", letterSpacing: "-.022em" } as CSSProperties}>
-                        {t.k490}
-                      </span>
-                    </div>
-                    {" "}
-                    <div className="fa-ha311dfc" data-reveal="" data-delay="240" style={{ opacity: "0", transform: "translateY(14px)", display: "flex", alignItems: "baseline", gap: "16px", padding: "clamp(22px,2.4vw,32px) clamp(18px,2vw,28px)", background: "#EFEDE8", transition: "background 240ms ease,color 240ms ease" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
-                        {t.k438}
-                      </span>
-                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,22px)", lineHeight: "1.18", letterSpacing: "-.022em" } as CSSProperties}>
-                        {t.k491}
-                      </span>
-                    </div>
-                    {" "}
+                    ))}
                   </div>
                   {" "}
                   <div data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", justifyContent: "space-between", gap: "12px 32px", marginTop: "24px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
@@ -716,7 +661,7 @@ export default function AwardPage({
                       {t.k269}
                     </div>
                     {" "}
-                    <div data-reveal="" data-delay="780" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px", padding: "clamp(20px,2.2vw,30px) 0", borderBottom: "1px solid rgba(255,255,255,.4)" } as CSSProperties}>
+                    <div className="fa-row fa-row-orange" data-reveal="" data-delay="780" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px", padding: "clamp(20px,2.2vw,30px) 0", borderBottom: "1px solid rgba(255,255,255,.4)" } as CSSProperties}>
                       <span style={{ flex: "0 0 40px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", color: "#F7F6F3" } as CSSProperties}>
                         {t.k420}
                       </span>
@@ -731,7 +676,7 @@ export default function AwardPage({
                       </span>
                     </div>
                     {" "}
-                    <div data-reveal="" data-delay="840" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px", padding: "clamp(20px,2.2vw,30px) 0", borderBottom: "1px solid rgba(255,255,255,.4)" } as CSSProperties}>
+                    <div className="fa-row fa-row-orange" data-reveal="" data-delay="840" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px", padding: "clamp(20px,2.2vw,30px) 0", borderBottom: "1px solid rgba(255,255,255,.4)" } as CSSProperties}>
                       <span style={{ flex: "0 0 40px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", color: "#F7F6F3" } as CSSProperties}>
                         {t.k422}
                       </span>
@@ -740,7 +685,7 @@ export default function AwardPage({
                       </span>
                     </div>
                     {" "}
-                    <div data-reveal="" data-delay="900" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px", padding: "clamp(20px,2.2vw,30px) 0", borderBottom: "1px solid rgba(255,255,255,.4)" } as CSSProperties}>
+                    <div className="fa-row fa-row-orange" data-reveal="" data-delay="900" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px", padding: "clamp(20px,2.2vw,30px) 0", borderBottom: "1px solid rgba(255,255,255,.4)" } as CSSProperties}>
                       <span style={{ flex: "0 0 40px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", color: "#F7F6F3" } as CSSProperties}>
                         {t.k428}
                       </span>
@@ -749,7 +694,7 @@ export default function AwardPage({
                       </span>
                     </div>
                     {" "}
-                    <div data-reveal="" data-delay="960" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px", padding: "clamp(20px,2.2vw,30px) 0", borderBottom: "1px solid rgba(255,255,255,.4)" } as CSSProperties}>
+                    <div className="fa-row fa-row-orange" data-reveal="" data-delay="960" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px", padding: "clamp(20px,2.2vw,30px) 0", borderBottom: "1px solid rgba(255,255,255,.4)" } as CSSProperties}>
                       <span style={{ flex: "0 0 40px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", color: "#F7F6F3" } as CSSProperties}>
                         {t.k429}
                       </span>
@@ -942,6 +887,11 @@ export default function AwardPage({
                     </span>
                   </div>
                   {" "}
+                  {!formOpen ? (
+                    <div data-reveal="" data-delay="160" style={{ opacity: "0", transform: "translateY(16px)", marginTop: "clamp(36px,4.4vw,56px)", maxWidth: "820px", background: "#FFFFFF", color: "#16181D", padding: "clamp(26px,3.2vw,52px)", boxShadow: "14px 14px 0 rgba(255,255,255,.16)", font: "500 clamp(17px,1.6vw,22px)/1.5 Montserrat,Manrope,sans-serif", letterSpacing: "-.02em" } as CSSProperties}>
+                      {formClosedText || t.k309}
+                    </div>
+                  ) : null}
                   {notSent ? (
                   <>
                     {" "}

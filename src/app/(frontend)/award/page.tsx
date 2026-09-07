@@ -1,8 +1,11 @@
 import { Award } from '@/lib/pages'
 import { meta } from '@/i18n/meta'
 
-export const dynamic = 'force-dynamic'
-export const metadata = meta('ru', '/award')
+export const revalidate = 60
+
+export async function generateMetadata() {
+  return meta('ru', '/award')
+}
 
 export default function Page() {
   return <Award lang="ru" />

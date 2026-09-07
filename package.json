@@ -21,13 +21,16 @@
     "payload": "3.88.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "sharp": "^0.34.1"
+    "sharp": "^0.34.1",
+    "@payloadcms/email-nodemailer": "3.88.0",
+    "nodemailer": "^7.0.5"
   },
   "devDependencies": {
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "@types/nodemailer": "^6.4.17"
   },
   "engines": {
     "node": ">=20.9.0"

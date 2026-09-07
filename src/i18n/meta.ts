@@ -1,6 +1,33 @@
 import type { Metadata } from 'next'
 import { LANGS, SITE, path } from './links'
 import type { Lang } from './links'
+import { getGlobal } from '@/lib/settings'
+
+/** Ключи в глобале «SEO — заголовки и описания». */
+const SEO_KEY: Record<Page, string> = { '/': 'home', '/forum': 'forum', '/award': 'award' }
+
+/** Своя картинка для соцсетей на каждой странице. */
+const OG_IMAGE: Record<Page, string> = {
+  '/': '/og.png',
+  '/forum': '/og-forum.png',
+  '/award': '/og-award.png',
+}
+
+type SeoOverride = { title?: string; description?: string; image?: string }
+
+async function seoFor(lang: Lang, page: Page): Promise<SeoOverride> {
+  const g: any = await getGlobal('seo', lang)
+  const k = SEO_KEY[page]
+  const img = g?.[k + 'Image']
+  return {
+    title: typeof g?.[k + 'Title'] === 'string' && g[k + 'Title'].trim() ? g[k + 'Title'] : undefined,
+    description:
+      typeof g?.[k + 'Description'] === 'string' && g[k + 'Description'].trim()
+        ? g[k + 'Description']
+        : undefined,
+    image: img && typeof img === 'object' && typeof img.url === 'string' ? img.url : undefined,
+  }
+}
 
 type Page = '/' | '/forum' | '/award'
 
@@ -60,8 +87,11 @@ const COPY: Record<Page, Record<Lang, { title: string; description: string }>> =
 
 const OG_LOCALE: Record<Lang, string> = { ru: 'ru_RU', ro: 'ro_MD', en: 'en_US' }
 
-export function meta(lang: Lang, page: Page): Metadata {
-  const c = COPY[page][lang]
+export async function meta(lang: Lang, page: Page): Promise<Metadata> {
+  const base = COPY[page][lang]
+  const over = await seoFor(lang, page)
+  const c = { title: over.title || base.title, description: over.description || base.description }
+  const image = over.image || OG_IMAGE[page]
   const url = SITE + path(lang, page)
   return {
     title: c.title,
@@ -87,13 +117,13 @@ export function meta(lang: Lang, page: Page): Metadata {
       url,
       locale: OG_LOCALE[lang],
       alternateLocale: LANGS.filter((l) => l !== lang).map((l) => OG_LOCALE[l]),
-      images: [{ url: '/og.png', width: 1200, height: 630, alt: c.title }],
+      images: [{ url: image, width: 1200, height: 630, alt: c.title }],
     },
     twitter: {
       card: 'summary_large_image',
       title: c.title,
       description: c.description,
-      images: ['/og.png'],
+      images: [image],
     },
   }
 }

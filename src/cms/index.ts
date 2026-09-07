@@ -1,0 +1,6 @@
+export { COMMON } from './common'
+export { HOME } from './home'
+export { FORUM } from './forum'
+export { AWARD } from './award'
+export { buildGlobal, applyContent } from './build'
+export type { PageContent, Section, Field } from './types'

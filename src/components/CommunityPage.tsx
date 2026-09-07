@@ -8,17 +8,9 @@ import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import type { Dict } from '@/i18n/dict'
 import { path as langPath } from '@/i18n/links'
+import { post } from '@/lib/submit'
 import type { Lang } from '@/i18n/links'
 
-async function post(collection, body) {
-  const res = await fetch('/api/' + collection, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  })
-  if (!res.ok) throw new Error('submit failed: ' + res.status)
-  return res.json()
-}
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/
 
@@ -72,7 +64,7 @@ export default function CommunityPage({
       document.getElementById('fa-' + Object.keys(n)[0])?.focus()
       return
     }
-    try { await post('community-applications', d) } catch { /* noop */ }
+    try { await post('community-applications', d, lang) } catch { /* noop */ }
     setErr({})
     setSent(true)
   }
@@ -633,7 +625,7 @@ export default function CommunityPage({
                   {" "}
                   <div style={{ display: "grid", gridTemplateColumns: ("var(--formatCols)" as any), gap: "1px", marginTop: "clamp(36px,4.4vw,64px)", background: "#3A3D44", outline: "1px solid #3A3D44" } as CSSProperties}>
                     {" "}
-                    <div className="fa-hc3889f8" data-reveal="" data-delay="0" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "16px", minHeight: "clamp(184px,13vw,236px)", padding: "clamp(20px,2vw,30px)", background: "#16181D", transition: "color 260ms ease" } as CSSProperties}>
+                    <div className="fa-hc3889f8 fa-card-dark" data-reveal="" data-delay="0" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "16px", minHeight: "clamp(184px,13vw,236px)", padding: "clamp(20px,2vw,30px)", background: "#16181D", transition: "color 260ms ease" } as CSSProperties}>
                       <span style={{ alignSelf: "flex-end", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#6E7278" } as CSSProperties}>
                         {t.k420}
                       </span>
@@ -645,7 +637,7 @@ export default function CommunityPage({
                       </p>
                     </div>
                     {" "}
-                    <div className="fa-hc3889f8" data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "16px", minHeight: "clamp(184px,13vw,236px)", padding: "clamp(20px,2vw,30px)", background: "#16181D", transition: "color 260ms ease" } as CSSProperties}>
+                    <div className="fa-hc3889f8 fa-card-dark" data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "16px", minHeight: "clamp(184px,13vw,236px)", padding: "clamp(20px,2vw,30px)", background: "#16181D", transition: "color 260ms ease" } as CSSProperties}>
                       <span style={{ alignSelf: "flex-end", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#6E7278" } as CSSProperties}>
                         {t.k422}
                       </span>
@@ -657,7 +649,7 @@ export default function CommunityPage({
                       </p>
                     </div>
                     {" "}
-                    <div className="fa-hc3889f8" data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "16px", minHeight: "clamp(184px,13vw,236px)", padding: "clamp(20px,2vw,30px)", background: "#16181D", transition: "color 260ms ease" } as CSSProperties}>
+                    <div className="fa-hc3889f8 fa-card-dark" data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "16px", minHeight: "clamp(184px,13vw,236px)", padding: "clamp(20px,2vw,30px)", background: "#16181D", transition: "color 260ms ease" } as CSSProperties}>
                       <span style={{ alignSelf: "flex-end", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#6E7278" } as CSSProperties}>
                         {t.k428}
                       </span>
@@ -669,7 +661,7 @@ export default function CommunityPage({
                       </p>
                     </div>
                     {" "}
-                    <div className="fa-hc3889f8" data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "16px", minHeight: "clamp(184px,13vw,236px)", padding: "clamp(20px,2vw,30px)", background: "#16181D", transition: "color 260ms ease" } as CSSProperties}>
+                    <div className="fa-hc3889f8 fa-card-dark" data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "16px", minHeight: "clamp(184px,13vw,236px)", padding: "clamp(20px,2vw,30px)", background: "#16181D", transition: "color 260ms ease" } as CSSProperties}>
                       <span style={{ alignSelf: "flex-end", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#6E7278" } as CSSProperties}>
                         {t.k429}
                       </span>
@@ -681,7 +673,7 @@ export default function CommunityPage({
                       </p>
                     </div>
                     {" "}
-                    <a className="fa-hc3889f8" href={lp("/award")} data-reveal="" data-delay="240" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "16px", minHeight: "clamp(184px,13vw,236px)", padding: "clamp(20px,2vw,30px)", background: "#16181D", transition: "color 260ms ease" } as CSSProperties}>
+                    <a className="fa-hc3889f8 fa-card-dark" href={lp("/award")} data-reveal="" data-delay="240" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "16px", minHeight: "clamp(184px,13vw,236px)", padding: "clamp(20px,2vw,30px)", background: "#16181D", transition: "color 260ms ease" } as CSSProperties}>
                       <span style={{ alignSelf: "flex-end", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#6E7278" } as CSSProperties}>
                         {t.k431}
                       </span>
@@ -696,7 +688,7 @@ export default function CommunityPage({
                       </span>
                     </a>
                     {" "}
-                    <div className="fa-hc3889f8" data-reveal="" data-delay="300" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "16px", minHeight: "clamp(184px,13vw,236px)", padding: "clamp(20px,2vw,30px)", background: "#16181D", transition: "color 260ms ease" } as CSSProperties}>
+                    <div className="fa-hc3889f8 fa-card-dark" data-reveal="" data-delay="300" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "16px", minHeight: "clamp(184px,13vw,236px)", padding: "clamp(20px,2vw,30px)", background: "#16181D", transition: "color 260ms ease" } as CSSProperties}>
                       <span style={{ alignSelf: "flex-end", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#6E7278" } as CSSProperties}>
                         {t.k434}
                       </span>
@@ -708,7 +700,7 @@ export default function CommunityPage({
                       </p>
                     </div>
                     {" "}
-                    <div className="fa-hc3889f8" data-reveal="" data-delay="360" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "16px", minHeight: "clamp(184px,13vw,236px)", padding: "clamp(20px,2vw,30px)", background: "#16181D", transition: "color 260ms ease" } as CSSProperties}>
+                    <div className="fa-hc3889f8 fa-card-dark" data-reveal="" data-delay="360" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "16px", minHeight: "clamp(184px,13vw,236px)", padding: "clamp(20px,2vw,30px)", background: "#16181D", transition: "color 260ms ease" } as CSSProperties}>
                       <span style={{ alignSelf: "flex-end", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#6E7278" } as CSSProperties}>
                         {t.k436}
                       </span>
@@ -720,7 +712,7 @@ export default function CommunityPage({
                       </p>
                     </div>
                     {" "}
-                    <div className="fa-hc3889f8" data-reveal="" data-delay="420" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "16px", minHeight: "clamp(184px,13vw,236px)", padding: "clamp(20px,2vw,30px)", background: "#16181D", transition: "color 260ms ease" } as CSSProperties}>
+                    <div className="fa-hc3889f8 fa-card-dark" data-reveal="" data-delay="420" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "16px", minHeight: "clamp(184px,13vw,236px)", padding: "clamp(20px,2vw,30px)", background: "#16181D", transition: "color 260ms ease" } as CSSProperties}>
                       <span style={{ alignSelf: "flex-end", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#6E7278" } as CSSProperties}>
                         {t.k438}
                       </span>

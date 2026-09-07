@@ -631,11 +631,11 @@ a:hover{color:#16181D}
 .fa-f27ceb91:focus{border-bottom-color:#16181D !important}
 
 /* ── responsive tokens (were JS-computed in the original build) ────────── */
-:root{--burgerDisplay:none;--chainDir:row;--chainHeight:212px;--chainPad:0;--formatCols:repeat(4,1fr);--memberCols:minmax(180px,1fr) minmax(0,2fr) minmax(0,1.6fr);--memberGap:24px 48px;--menuDisplay:none;--navDisplay:flex;--nomCols:repeat(4,1fr);--programCols:repeat(4,1fr);--railDisplay:none;--stripBasis:0;--stripFrame:100%;--stripHeight:clamp(180px,20vw,268px);--twoCols:repeat(2,1fr);--wordsExtra:block;}
+:root{--burgerDisplay:none;--chainDir:row;--chainHeight:212px;--chainPad:0;--formatCols:repeat(4,1fr);--memberCols:minmax(180px,1fr) minmax(0,2fr) minmax(0,1.6fr);--memberGap:24px 48px;--menuDisplay:none;--navDisplay:flex;--nomCols:repeat(4,1fr);--programCols:repeat(4,1fr);--speakerCols:repeat(4,1fr);--railDisplay:none;--stripBasis:0;--stripFrame:100%;--stripHeight:clamp(180px,20vw,268px);--twoCols:repeat(2,1fr);--wordsExtra:block;}
 @media (min-width:1440px){ :root{--railDisplay:flex;} }
-@media (max-width:1080px){ :root{--burgerDisplay:inline-flex;--chainDir:column;--chainHeight:auto;--chainPad:0 0 0 20px;--formatCols:repeat(2,1fr);--memberCols:1fr;--memberGap:10px;--menuDisplay:block;--navDisplay:none;--programCols:repeat(2,1fr);--stripBasis:31%;--stripFrame:clamp(120px,30vw,180px);--stripHeight:auto;--twoCols:1fr;} }
+@media (max-width:1080px){ :root{--speakerCols:repeat(2,1fr);--burgerDisplay:inline-flex;--chainDir:column;--chainHeight:auto;--chainPad:0 0 0 20px;--formatCols:repeat(2,1fr);--memberCols:1fr;--memberGap:10px;--menuDisplay:block;--navDisplay:none;--programCols:repeat(2,1fr);--stripBasis:31%;--stripFrame:clamp(120px,30vw,180px);--stripHeight:auto;--twoCols:1fr;} }
 @media (max-width:700px){ :root{--formatCols:1fr;--wordsExtra:none;} }
-@media (max-width:640px){ :root{--nomCols:1fr;} }
+@media (max-width:640px){ :root{--nomCols:1fr;--speakerCols:1fr;} }
 /* ── award timeline: whole-string styles that switched at 1080px ───────── */
 .fa-axis{position:absolute;left:0;right:0;top:50%;bottom:auto;height:1px;width:auto;background:#DCDAD4;transform:scaleX(0);transform-origin:left}
 .fa-node{position:relative;flex:1 1 0;min-width:0;padding:0}
@@ -762,3 +762,53 @@ body:has(.fa-notice[data-on="1"]) header[data-header]{top:38px!important}
 /* политика: шапка не фиксированная, поэтому полосу компенсируем отступом */
 body:has(.fa-notice[data-on="1"]) .fa-privacy{padding-top:38px}
 @media (max-width:700px){ body:has(.fa-notice[data-on="1"]) .fa-privacy{padding-top:34px} }
+
+/* ---------------------------------------------------------------------------
+   Состояния при наведении, которых не было в исходной вёрстке.
+   Оформлены псевдоэлементами и свойствами, которых нет в inline-стилях, —
+   поэтому не конфликтуют с анимацией появления (fa-motion.js).
+   --------------------------------------------------------------------------- */
+
+/* Карточка на тёмном: оранжевая линия «прочерчивается» по нижней грани */
+.fa-card-dark,
+.fa-card-light{position:relative}
+.fa-card-dark::after,
+.fa-card-light::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:2px;
+  background:#FF4002;transform:scaleX(0);transform-origin:left;
+  transition:transform 380ms cubic-bezier(.2,.7,.3,1);pointer-events:none
+}
+.fa-card-dark:hover::after,
+.fa-card-light:hover::after{transform:scaleX(1)}
+
+/* Строка списка: подсветка и метка слева */
+.fa-row{transition:background-color 260ms ease,box-shadow 260ms ease,border-color 260ms ease}
+.fa-row-orange:hover{background:rgba(247,246,243,.10);box-shadow:inset 5px 0 0 #F7F6F3;border-bottom-color:#F7F6F3}
+.fa-row-light:hover{background:rgba(22,24,29,.045);box-shadow:inset 5px 0 0 #FF4002;border-bottom-color:#16181D}
+
+/* Шаги отбора: засечка становится акцентной */
+.fa-node{transition:transform 260ms cubic-bezier(.2,.7,.3,1)}
+.fa-node:hover{transform:translateY(-4px)}
+.fa-node .fa-tick{transition:background-color 260ms ease,height 260ms ease,width 260ms ease,top 260ms ease}
+.fa-node:hover .fa-tick{background:#FF4002;top:calc(50% - 13px);height:26px;width:2px}
+@media (max-width:900px){
+  .fa-node:hover{transform:translateX(4px)}
+  .fa-node:hover .fa-tick{top:8px;height:2px;width:16px}
+}
+
+/* Ссылки в подвале и меню: подчёркивание вырастает слева направо */
+.fa-hc3889f8{position:relative}
+
+@media (prefers-reduced-motion: reduce){
+  .fa-card-dark::after,.fa-card-light::after,.fa-node,.fa-node .fa-tick{transition:none}
+  .fa-node:hover{transform:none}
+}
+
+/* ---------------------------------------------------------------------------
+   Набор текста: строки не должны заканчиваться висячим словом,
+   а заголовки — рваться «лесенкой». Неразрывные пробелы после коротких
+   предлогов ставит src/i18n/typo.ts, здесь — балансировка строк.
+   --------------------------------------------------------------------------- */
+body{text-wrap:pretty}
+h1,h2,h3,h4{text-wrap:balance}
+p,li,figcaption,label{text-wrap:pretty}

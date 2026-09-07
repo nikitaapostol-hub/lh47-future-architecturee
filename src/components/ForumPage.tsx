@@ -8,25 +8,40 @@ import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import type { Dict } from '@/i18n/dict'
 import { path as langPath } from '@/i18n/links'
+import { post } from '@/lib/submit'
 import type { Lang } from '@/i18n/links'
 
-async function post(collection, body) {
-  const res = await fetch('/api/' + collection, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  })
-  if (!res.ok) throw new Error('submit failed: ' + res.status)
-  return res.json()
-}
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/
 
+type Speaker = {
+  name: string
+  role?: string
+  company?: string
+  photo?: { url?: string; alt?: string } | null
+}
+
 type Props = {
-  t: Dict; lang: Lang; forumDate?: string; countdownVisible?: boolean }
+  t: Dict
+  lang: Lang
+  forumDate?: string
+  countdownVisible?: boolean
+  speakers?: Speaker[]
+}
+
+/** Инициалы вместо фото, пока портрет не загружен. */
+function initials(name: string) {
+  return (name || '')
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((w) => w.charAt(0).toUpperCase())
+    .join('')
+}
 
 export default function ForumPage({
-  t, lang, forumDate, countdownVisible = true }: Props) {
+  t, lang, forumDate, countdownVisible = true, speakers: speakersProp = [] }: Props) {
+  const speakers = speakersProp.filter((s) => s && s.name)
 
   // "/forum" stays "/forum" in Russian and becomes "/ro/forum" elsewhere
   const lp = (p: string) => langPath(lang, p)
@@ -122,7 +137,7 @@ export default function ForumPage({
       document.getElementById('fa-' + Object.keys(n)[0])?.focus()
       return
     }
-    try { await post('forum-applications', d) } catch { /* keep the UX, log server-side */ }
+    try { await post('forum-applications', d, lang) } catch { /* keep the UX, log server-side */ }
     setErr({})
     setSent(true)
   }
@@ -1190,6 +1205,42 @@ export default function ForumPage({
                     {" "}
                   </div>
                   {" "}
+                  {speakers.length ? (
+                  <div style={{ display: "grid", gridTemplateColumns: ("var(--speakerCols)" as any), gap: "0", marginTop: "clamp(1px,0.2vw,2px)" } as CSSProperties}>
+                    {speakers.map((sp, i) => (
+                    <div key={i} className="fa-card-light" data-reveal="" data-delay={i * 80} style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "clamp(16px,1.6vw,22px)", padding: "clamp(18px,1.8vw,26px)", background: "#F7F6F3", boxShadow: "0 0 0 1px #C9C6BE" } as CSSProperties}>
+                      <div style={{ position: "relative", aspectRatio: "4 / 5", overflow: "hidden", background: "#16181D", display: "flex", alignItems: "center", justifyContent: "center" } as CSSProperties}>
+                        {sp.photo && sp.photo.url ? (
+                          <img src={sp.photo.url} alt={sp.photo.alt || sp.name} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "grayscale(1) contrast(1.05)" } as CSSProperties} />
+                        ) : (
+                          <span aria-hidden="true" style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(34px,3.4vw,52px)", letterSpacing: "-.05em", color: "#FF4002" } as CSSProperties}>
+                            {initials(sp.name)}
+                          </span>
+                        )}
+                      </div>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" } as CSSProperties}>
+                        <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#8E8B83" } as CSSProperties}>
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(17px,1.4vw,22px)", lineHeight: "1.16", letterSpacing: "-.025em" } as CSSProperties}>
+                          {sp.name}
+                        </span>
+                        {sp.company ? (
+                          <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#FF4002" } as CSSProperties}>
+                            {sp.company}
+                          </span>
+                        ) : null}
+                        {sp.role ? (
+                          <span style={{ fontSize: "14px", lineHeight: "1.5", color: "#6E7278" } as CSSProperties}>
+                            {sp.role}
+                          </span>
+                        ) : null}
+                      </div>
+                    </div>
+                    ))}
+                  </div>
+                  ) : null}
+                  {" "}
                 </div>
                 {" "}
               </section>
@@ -1520,7 +1571,7 @@ export default function ForumPage({
                         {" "}
                         <div>
                           <label htmlFor="fa-kind" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                            {t.k128}
+                            {t.k249}
                           </label>
                           {" "}
                           <select className="fa-hd277039" id="fa-kind" name="kind" onChange={onKind} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "#F7F6F3", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", appearance: "none", borderRadius: "0", transition: "border-color 200ms ease" } as CSSProperties}>
