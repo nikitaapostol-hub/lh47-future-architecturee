@@ -817,20 +817,32 @@ body:has(.fa-notice[data-on="1"]) .fa-privacy{padding-top:38px}
 .fa-arrow:disabled{opacity:.3;cursor:default}
 @media (prefers-reduced-motion: reduce){ .fa-track{scroll-behavior:auto} }
 
-/* Номинации: крупные строки во всю ширину. Наведение — заливка и стрелка */
-.fa-nom{color:inherit;text-decoration:none;
-  transition:background-color 260ms ease,color 260ms ease,padding-left 300ms cubic-bezier(.2,.7,.3,1)}
-.fa-nom .fa-nom-title,.fa-nom .fa-nom-hint{transition:color 260ms ease}
-.fa-nom .fa-nom-go{opacity:0;transform:translateX(-10px);
-  transition:opacity 240ms ease,transform 340ms cubic-bezier(.2,.7,.3,1)}
-.fa-nom:hover{background:#16181D!important;color:#F7F6F3!important;padding-left:clamp(16px,2vw,32px)!important}
+.fa-btn-light{transition:background-color 200ms ease,color 200ms ease,border-color 200ms ease}
+.fa-btn-light:hover{background:transparent!important;color:#F7F6F3!important;border-color:#F7F6F3!important}
+
+/* Графика секции номинаций: вертикальная сетка и контурный год */
+.fa-grid-lines{position:absolute;inset:0;pointer-events:none;
+  background-image:repeating-linear-gradient(to right,rgba(22,24,29,.07) 0 1px,transparent 1px 80px);
+  mask-image:linear-gradient(to bottom,transparent,#000 18%,#000 82%,transparent);
+  -webkit-mask-image:linear-gradient(to bottom,transparent,#000 18%,#000 82%,transparent)}
+.fa-ghost{-webkit-text-stroke:1px rgba(22,24,29,.22)}
+@media (max-width:700px){ .fa-ghost{display:none} .fa-grid-lines{background-size:44px 100%} }
+
+/* Номинации: крупные строки. При наведении заливается оранжевым слева направо */
+.fa-nom{position:relative;overflow:hidden;color:inherit;text-decoration:none;
+  transition:color 260ms ease,padding-left 320ms cubic-bezier(.2,.7,.3,1)}
+.fa-nom::before{content:"";position:absolute;left:0;top:0;bottom:0;width:100%;
+  background:#16181D;transform:scaleX(0);transform-origin:left;
+  transition:transform 420ms cubic-bezier(.2,.7,.3,1);z-index:0;pointer-events:none}
+.fa-nom > *{position:relative;z-index:1}
+.fa-nom .fa-nom-title{transition:color 260ms ease}
+.fa-nom .fa-nom-go{opacity:0;transform:translateX(-14px);
+  transition:opacity 240ms ease,transform 340ms cubic-bezier(.2,.7,.3,1),color 240ms ease}
+.fa-nom:hover::before,.fa-nom:focus-visible::before{transform:scaleX(1)}
+.fa-nom:hover{padding-left:clamp(14px,2vw,36px)!important}
 .fa-nom:hover .fa-nom-title{color:#F7F6F3!important}
-.fa-nom:hover .fa-nom-hint{color:#A7A29A!important}
-.fa-nom:hover .fa-nom-go{opacity:1;transform:translateX(0)}
-.fa-nom:focus-visible .fa-nom-go{opacity:1;transform:translateX(0)}
-.fa-nom .fa-nom-title{flex:1 1 auto;min-width:0}
-.fa-nom .fa-nom-hint{flex:0 0 auto}
-@media (max-width:700px){ .fa-nom{flex-wrap:wrap!important} .fa-nom .fa-nom-hint{white-space:normal!important} }
+.fa-nom:hover .fa-nom-go,.fa-nom:focus-visible .fa-nom-go{opacity:1;transform:translateX(0);color:#FF4002!important}
+@media (prefers-reduced-motion: reduce){ .fa-nom,.fa-nom::before,.fa-nom .fa-nom-go{transition:none} }
 
 /* Свободное место в составе: знак вопроса «зажигается» */
 .fa-slot{position:relative;transition:box-shadow 280ms ease,background-color 280ms ease}

@@ -1289,15 +1289,15 @@ export default function ForumPage({
                   <h2 data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(40px,8.4vw,140px)", lineHeight: ".88", letterSpacing: "-.05em", textTransform: "uppercase", maxWidth: "12ch" } as CSSProperties}>
                     {t.k10}
                     {" "}
-                    <span style={{ color: "#16181D" } as CSSProperties}>
+                    <span style={{ color: "#F7F6F3" } as CSSProperties}>
                       {t.k221}
                     </span>
                   </h2>
                   {" "}
                   <div style={{ display: "grid", gridTemplateColumns: ("var(--twoCols)" as any), gap: "0 clamp(32px,4vw,72px)", marginTop: "clamp(40px,5vw,72px)" } as CSSProperties}>
                     {" "}
-                    <div data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", paddingTop: "18px", borderTop: "2px solid #16181D" } as CSSProperties}>
-                      <span style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".14em", textTransform: "uppercase", color: "#16181D" } as CSSProperties}>
+                    <div data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", paddingTop: "18px", borderTop: "2px solid #F7F6F3" } as CSSProperties}>
+                      <span style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".14em", textTransform: "uppercase", color: "#F7F6F3" } as CSSProperties}>
                         {t.k269}
                       </span>
                       <p style={{ margin: "14px 0 0", fontSize: "clamp(16px,1.3vw,20px)", lineHeight: "1.55", maxWidth: "38ch" } as CSSProperties}>
@@ -1305,8 +1305,8 @@ export default function ForumPage({
                       </p>
                     </div>
                     {" "}
-                    <div data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(16px)", paddingTop: "18px", borderTop: "2px solid rgba(22,24,29,.28)" } as CSSProperties}>
-                      <span style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".14em", textTransform: "uppercase", color: "#16181D" } as CSSProperties}>
+                    <div data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(16px)", paddingTop: "18px", borderTop: "2px solid rgba(247,246,243,.45)" } as CSSProperties}>
+                      <span style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".14em", textTransform: "uppercase", color: "#F7F6F3" } as CSSProperties}>
                         {t.k272}
                       </span>
                       <p style={{ margin: "14px 0 0", fontSize: "clamp(16px,1.3vw,20px)", lineHeight: "1.55", maxWidth: "38ch" } as CSSProperties}>
@@ -1316,7 +1316,7 @@ export default function ForumPage({
                     {" "}
                   </div>
                   {" "}
-                  <a className="fa-h55d5336" href={lp("/award")} data-reveal="" data-delay="240" style={{ opacity: "0", transform: "translateY(16px)", alignSelf: "flex-start", display: "inline-flex", alignItems: "center", justifyContent: "space-between", gap: "20px", marginTop: "clamp(32px,4vw,56px)", padding: "18px 28px", background: "#16181D", color: "#F7F6F3", border: "1px solid #16181D", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
+                  <a className="fa-btn-light" href={lp("/award")} data-reveal="" data-delay="240" style={{ opacity: "0", transform: "translateY(16px)", alignSelf: "flex-start", display: "inline-flex", alignItems: "center", justifyContent: "space-between", gap: "20px", marginTop: "clamp(32px,4vw,56px)", padding: "18px 28px", background: "#F7F6F3", color: "#16181D", border: "1px solid #F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
                     {t.k225}
                     <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
                       {t.k416}
@@ -1367,13 +1367,8 @@ export default function ForumPage({
                     {" "}
                     <div data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", minHeight: "clamp(260px,22vw,340px)", padding: "clamp(28px,3vw,44px)", background: "#16181D", color: "#F7F6F3" } as CSSProperties}>
                       {" "}
-                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px" } as CSSProperties}>
-                        <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "#FF4002" } as CSSProperties}>
-                          {t.k230}
-                        </span>
-                        <span style={{ width: "8px", height: "8px", background: "#FF4002" } as CSSProperties}>
-                        </span>
-                      </div>
+                      <span aria-hidden="true" style={{ alignSelf: "flex-start", width: "8px", height: "8px", background: "#FF4002" } as CSSProperties}>
+                      </span>
                       {" "}
                       <h3 style={{ margin: "clamp(20px,2.4vw,32px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(30px,3.6vw,52px)", lineHeight: "1", letterSpacing: "-.04em", textTransform: "uppercase" } as CSSProperties}>
                         {t.k231}
@@ -1390,13 +1385,8 @@ export default function ForumPage({
                     {" "}
                     <div data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", minHeight: "clamp(260px,22vw,340px)", padding: "clamp(28px,3vw,44px)", background: "#F7F6F3", color: "#16181D" } as CSSProperties}>
                       {" "}
-                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px" } as CSSProperties}>
-                        <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "#FF4002" } as CSSProperties}>
-                          {t.k236}
-                        </span>
-                        <span style={{ width: "8px", height: "8px", border: "1px solid #16181D" } as CSSProperties}>
-                        </span>
-                      </div>
+                      <span aria-hidden="true" style={{ alignSelf: "flex-start", width: "8px", height: "8px", border: "1px solid #16181D" } as CSSProperties}>
+                      </span>
                       {" "}
                       <h3 style={{ margin: "clamp(20px,2.4vw,32px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(30px,3.6vw,52px)", lineHeight: "1", letterSpacing: "-.04em", textTransform: "uppercase" } as CSSProperties}>
                         {t.k237}

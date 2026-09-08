@@ -791,7 +791,7 @@ export default function CommunityPage({
                         </span>
                       </div>
                       {" "}
-                      <a className="fa-h7189809" href={lp("/forum")} style={{ display: "inline-flex", alignItems: "center", justifyContent: "space-between", gap: "20px", padding: "19px 32px", background: "#16181D", color: "#F7F6F3", border: "1px solid #16181D", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "15px", lineHeight: "1.2", transition: "background 220ms ease,color 220ms ease,border-color 220ms ease,transform 220ms ease" } as CSSProperties}>
+                      <a className="fa-btn-light" href={lp("/forum")} style={{ display: "inline-flex", alignItems: "center", justifyContent: "space-between", gap: "20px", padding: "19px 32px", background: "#F7F6F3", color: "#16181D", border: "1px solid #F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "15px", lineHeight: "1.2", transition: "background 220ms ease,color 220ms ease,border-color 220ms ease,transform 220ms ease" } as CSSProperties}>
                         {t.k81}
                         <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
                           {t.k416}

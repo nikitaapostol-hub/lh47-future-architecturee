@@ -1200,10 +1200,6 @@ export interface ContentForum {
      */
     title2?: string | null;
     /**
-     * Сейчас на сайте: «01 · по заявке и отбору»
-     */
-    aLabel?: string | null;
-    /**
      * Сейчас на сайте: «Участник»
      */
     aTitle?: string | null;
@@ -1227,10 +1223,6 @@ export interface ContentForum {
      * Сейчас на сайте: «Заявка на участие»
      */
     aCta?: string | null;
-    /**
-     * Сейчас на сайте: «02 · партнёрство»
-     */
-    bLabel?: string | null;
     /**
      * Сейчас на сайте: «Партнёр»
      */
@@ -2072,14 +2064,12 @@ export interface ContentForumSelect<T extends boolean = true> {
         label?: T;
         title1?: T;
         title2?: T;
-        aLabel?: T;
         aTitle?: T;
         aItem1?: T;
         aItem2?: T;
         aItem3?: T;
         aItem4?: T;
         aCta?: T;
-        bLabel?: T;
         bTitle?: T;
         bText?: T;
         bItem1?: T;

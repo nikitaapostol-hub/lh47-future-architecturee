@@ -368,13 +368,15 @@ export default function AwardPage({
                   {" "}
                   <h1 style={{ margin: "clamp(22px,2.8vw,44px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", textTransform: "uppercase", color: "#16181D" } as CSSProperties}>
                     {" "}
-                    <span style={{ display: "block", overflow: "hidden", paddingBottom: ".05em" } as CSSProperties}>
-                      <span style={{ display: "block", fontSize: "clamp(21px,5.5vw,92px)", lineHeight: ".92", letterSpacing: "-.05em", whiteSpace: "nowrap" } as CSSProperties}>
+                    <span style={{ display: "block", overflow: "hidden", paddingBottom: ".04em" } as CSSProperties}>
+                      <span style={{ display: "block", fontSize: "clamp(36px,8.4vw,140px)", lineHeight: ".88", letterSpacing: "-.055em", whiteSpace: "nowrap" } as CSSProperties}>
                         {t.k478}
-                        {" "}
-                        <span style={{ color: "#FF4002" } as CSSProperties}>
-                          {t.k479}
-                        </span>
+                      </span>
+                    </span>
+                    {" "}
+                    <span style={{ display: "block", overflow: "hidden", paddingBottom: ".05em" } as CSSProperties}>
+                      <span style={{ display: "block", fontSize: "clamp(36px,8.4vw,140px)", lineHeight: ".88", letterSpacing: "-.055em", color: "#FF4002", whiteSpace: "nowrap" } as CSSProperties}>
+                        {t.k479}
                       </span>
                     </span>
                     {" "}
@@ -563,9 +565,12 @@ export default function AwardPage({
                 {" "}
               </section>
               {" "}
-              <section id="nominations" style={{ padding: "clamp(64px,8vw,120px) 0", backgroundColor: "#EFEDE8" } as CSSProperties}>
+              <section id="nominations" style={{ position: "relative", overflow: "hidden", padding: "clamp(64px,8vw,120px) 0", backgroundColor: "#EFEDE8" } as CSSProperties}>
                 {" "}
-                <div style={{ maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
+                <div className="fa-grid-lines" aria-hidden="true">
+                </div>
+                {" "}
+                <div style={{ position: "relative", maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
                   {" "}
                   <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "24px", paddingBottom: "16px", borderBottom: "1px solid #C9C6BE" } as CSSProperties}>
                     {" "}
@@ -583,26 +588,23 @@ export default function AwardPage({
                     {" "}
                   </div>
                   {" "}
-                  <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(36px,4.4vw,68px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(40px,7vw,110px)", lineHeight: ".9", letterSpacing: "-.05em", textTransform: "uppercase" } as CSSProperties}>
-                    {t.k277}
-                  </h2>
-                  {" "}
-                  <div data-reveal="" data-delay="80" aria-hidden="true" style={{ opacity: "0", transform: "translateY(16px)", height: "4px", width: "clamp(96px,12vw,180px)", marginTop: "clamp(18px,2vw,26px)", background: "#FF4002" } as CSSProperties}>
+                  <div style={{ position: "relative", marginTop: "clamp(36px,4.4vw,68px)" } as CSSProperties}>
+                    <span className="fa-ghost" aria-hidden="true" style={{ position: "absolute", right: "0", bottom: "-.06em", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(56px,9vw,150px)", lineHeight: ".8", letterSpacing: "-.06em", textTransform: "uppercase", color: "transparent", pointerEvents: "none", whiteSpace: "nowrap" } as CSSProperties}>
+                      2026
+                    </span>
+                    <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(40px,7vw,110px)", lineHeight: ".9", letterSpacing: "-.05em", textTransform: "uppercase" } as CSSProperties}>
+                      {t.k277}
+                    </h2>
                   </div>
                   {" "}
-                  <div style={{ marginTop: "clamp(36px,4.4vw,60px)", borderTop: "2px solid #16181D" } as CSSProperties}>
+                  <div style={{ marginTop: "clamp(36px,4.4vw,64px)", borderTop: "2px solid #16181D" } as CSSProperties}>
                     {" "}
                     {nominations.map((n, i) => (
-                    <a key={i} className="fa-nom" href="#apply" data-reveal="" data-delay={i * 70} style={{ opacity: "0", transform: "translateY(14px)", position: "relative", display: "flex", flexWrap: "nowrap", alignItems: "baseline", justifyContent: "space-between", gap: "8px clamp(24px,3vw,56px)", padding: "clamp(22px,2.6vw,36px) clamp(52px,5vw,72px) clamp(22px,2.6vw,36px) 0", borderBottom: "1px solid #C9C6BE" } as CSSProperties}>
-                      <span className="fa-nom-title" style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(24px,3.4vw,54px)", lineHeight: "1", letterSpacing: "-.04em" } as CSSProperties}>
+                    <a key={i} className="fa-nom" href="#apply" data-reveal="" data-delay={i * 70} style={{ opacity: "0", transform: "translateY(14px)", position: "relative", display: "block", padding: "clamp(18px,2.2vw,32px) clamp(44px,4.4vw,72px) clamp(20px,2.4vw,34px) 0", borderBottom: "2px solid #16181D" } as CSSProperties}>
+                      <span className="fa-nom-title" style={{ display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(26px,4.4vw,74px)", lineHeight: ".96", letterSpacing: "-.05em", textTransform: "uppercase", color: "#FF4002" } as CSSProperties}>
                         {n.title}
                       </span>
-                      {n.hint ? (
-                        <span className="fa-nom-hint" style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", lineHeight: "1.45", letterSpacing: ".1em", textTransform: "uppercase", color: "#8E8B83", whiteSpace: "nowrap" } as CSSProperties}>
-                          {n.hint}
-                        </span>
-                      ) : null}
-                      <span className="fa-nom-go" aria-hidden="true" style={{ position: "absolute", right: "clamp(4px,1vw,16px)", top: "50%", marginTop: "-.6em", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "18px", color: "#FF4002" } as CSSProperties}>
+                      <span className="fa-nom-go" aria-hidden="true" style={{ position: "absolute", right: "clamp(0px,1vw,14px)", bottom: "clamp(20px,2.4vw,34px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "clamp(18px,2vw,30px)", lineHeight: "1", color: "#FF4002" } as CSSProperties}>
                         {t.k416}
                       </span>
                     </a>
