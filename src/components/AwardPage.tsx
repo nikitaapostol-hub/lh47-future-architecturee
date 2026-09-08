@@ -592,7 +592,7 @@ export default function AwardPage({
                     <span className="fa-ghost" aria-hidden="true" style={{ position: "absolute", right: "0", bottom: "-.06em", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(56px,9vw,150px)", lineHeight: ".8", letterSpacing: "-.06em", textTransform: "uppercase", color: "transparent", pointerEvents: "none", whiteSpace: "nowrap" } as CSSProperties}>
                       2026
                     </span>
-                    <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(40px,7vw,110px)", lineHeight: ".9", letterSpacing: "-.05em", textTransform: "uppercase" } as CSSProperties}>
+                    <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(40px,7vw,110px)", lineHeight: ".9", letterSpacing: "-.05em", textTransform: "uppercase", color: "#FF4002" } as CSSProperties}>
                       {t.k277}
                     </h2>
                   </div>
@@ -601,7 +601,7 @@ export default function AwardPage({
                     {" "}
                     {nominations.map((n, i) => (
                     <a key={i} className="fa-nom" href="#apply" data-reveal="" data-delay={i * 70} style={{ opacity: "0", transform: "translateY(14px)", position: "relative", display: "block", padding: "clamp(18px,2.2vw,32px) clamp(44px,4.4vw,72px) clamp(20px,2.4vw,34px) 0", borderBottom: "2px solid #16181D" } as CSSProperties}>
-                      <span className="fa-nom-title" style={{ display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(26px,4.4vw,74px)", lineHeight: ".96", letterSpacing: "-.05em", textTransform: "uppercase", color: "#FF4002" } as CSSProperties}>
+                      <span className="fa-nom-title" style={{ display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(26px,4.4vw,74px)", lineHeight: ".96", letterSpacing: "-.05em", textTransform: "uppercase", color: "#16181D" } as CSSProperties}>
                         {n.title}
                       </span>
                       <span className="fa-nom-go" aria-hidden="true" style={{ position: "absolute", right: "clamp(0px,1vw,14px)", bottom: "clamp(20px,2.4vw,34px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "clamp(18px,2vw,30px)", lineHeight: "1", color: "#FF4002" } as CSSProperties}>
