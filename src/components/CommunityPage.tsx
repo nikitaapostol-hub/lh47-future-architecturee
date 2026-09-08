@@ -680,12 +680,12 @@ export default function CommunityPage({
                       <h3 style={{ margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(19px,1.7vw,26px)", lineHeight: "1.1", letterSpacing: "-.025em" } as CSSProperties}>
                         {t.k432}
                       </h3>
-                      <p style={{ marginTop: "auto", fontSize: "15px", lineHeight: "1.55", color: "#8E9198" } as CSSProperties}>
+                      <p style={{ position: "relative", marginTop: "auto", paddingRight: "26px", fontSize: "15px", lineHeight: "1.55", color: "#8E9198" } as CSSProperties}>
                         {t.k433}
+                        <span aria-hidden="true" style={{ position: "absolute", right: "0", bottom: "0", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", color: "#FF4002" } as CSSProperties}>
+                          {t.k416}
+                        </span>
                       </p>
-                      <span aria-hidden="true" style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", color: "#FF4002" } as CSSProperties}>
-                        {t.k416}
-                      </span>
                     </a>
                     {" "}
                     <div className="fa-hc3889f8 fa-card-dark" data-reveal="" data-delay="300" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "16px", minHeight: "clamp(184px,13vw,236px)", padding: "clamp(20px,2vw,30px)", background: "#16181D", transition: "color 260ms ease" } as CSSProperties}>

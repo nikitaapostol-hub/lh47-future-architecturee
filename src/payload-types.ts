@@ -660,7 +660,7 @@ export interface ContentHome {
      */
     entry?: string | null;
     /**
-     * Сейчас на сайте: «Закрытое сообщество. Вступление — по заявке и модерации.»
+     * Сейчас на сайте: «Закрытое сообщество.»
      */
     note?: string | null;
   };
@@ -1170,10 +1170,6 @@ export interface ContentForum {
   };
   award?: {
     /**
-     * Сейчас на сайте: «Отдельный конкурс в рамках форума»
-     */
-    label?: string | null;
-    /**
      * Сейчас на сайте: «отрасли»
      */
     title2?: string | null;
@@ -1185,10 +1181,6 @@ export interface ContentForum {
      * Сейчас на сайте: «Конкурс студенческих идей: общественные пространства и облик городов Молдовы.»
      */
     text2?: string | null;
-    /**
-     * Сейчас на сайте: «Четыре номинации премии»
-     */
-    note?: string | null;
     /**
      * Сейчас на сайте: «Подать проект на премию»
      */
@@ -1207,10 +1199,6 @@ export interface ContentForum {
      * Сейчас на сайте: «участвовать»
      */
     title2?: string | null;
-    /**
-     * Сейчас на сайте: «Участие — по заявке и отбору, партнёрство — по договорённости. Заявки на премию подаются о…»
-     */
-    text?: string | null;
     /**
      * Сейчас на сайте: «01 · по заявке и отбору»
      */
@@ -1285,10 +1273,6 @@ export interface ContentForum {
      * Сейчас на сайте: «отбору»
      */
     title2?: string | null;
-    /**
-     * Сейчас на сайте: «Заполнение занимает две минуты»
-     */
-    note?: string | null;
     /**
      * Сейчас на сайте: «Презентация для партнёров отправляется на почту после заявки.»
      */
@@ -1503,10 +1487,6 @@ export interface ContentAward {
      */
     step4?: string | null;
     /**
-     * Сейчас на сайте: «Требования к материалам уточняются»
-     */
-    note?: string | null;
-    /**
      * Сейчас на сайте: «Заявки до 20 ноября»
      */
     marquee1?: string | null;
@@ -1528,10 +1508,6 @@ export interface ContentAward {
      * Сейчас на сайте: «до 20 ноября»
      */
     title2?: string | null;
-    /**
-     * Сейчас на сайте: «Заполнение занимает две минуты»
-     */
-    note?: string | null;
     /**
      * Сейчас на сайте: «Имя и фамилия»
      */
@@ -2085,11 +2061,9 @@ export interface ContentForumSelect<T extends boolean = true> {
   award?:
     | T
     | {
-        label?: T;
         title2?: T;
         text1?: T;
         text2?: T;
-        note?: T;
         cta?: T;
       };
   participation?:
@@ -2098,7 +2072,6 @@ export interface ContentForumSelect<T extends boolean = true> {
         label?: T;
         title1?: T;
         title2?: T;
-        text?: T;
         aLabel?: T;
         aTitle?: T;
         aItem1?: T;
@@ -2121,7 +2094,6 @@ export interface ContentForumSelect<T extends boolean = true> {
         sideWord?: T;
         title1?: T;
         title2?: T;
-        note?: T;
         note2?: T;
         fieldName?: T;
         fieldCompany?: T;
@@ -2199,7 +2171,6 @@ export interface ContentAwardSelect<T extends boolean = true> {
         step2?: T;
         step3?: T;
         step4?: T;
-        note?: T;
         marquee1?: T;
         marquee2?: T;
         marquee3?: T;
@@ -2209,7 +2180,6 @@ export interface ContentAwardSelect<T extends boolean = true> {
     | {
         title1?: T;
         title2?: T;
-        note?: T;
         fieldName?: T;
         fieldOrg?: T;
         fieldTrack?: T;

@@ -368,15 +368,13 @@ export default function AwardPage({
                   {" "}
                   <h1 style={{ margin: "clamp(22px,2.8vw,44px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", textTransform: "uppercase", color: "#16181D" } as CSSProperties}>
                     {" "}
-                    <span style={{ display: "block", overflow: "hidden", paddingBottom: ".04em" } as CSSProperties}>
-                      <span style={{ display: "block", fontSize: "clamp(48px,11.5vw,190px)", lineHeight: ".84", letterSpacing: "-.055em" } as CSSProperties}>
-                        {t.k478}
-                      </span>
-                    </span>
-                    {" "}
                     <span style={{ display: "block", overflow: "hidden", paddingBottom: ".05em" } as CSSProperties}>
-                      <span style={{ display: "block", fontSize: "clamp(26px,5.4vw,94px)", lineHeight: ".98", letterSpacing: "-.04em", color: "#FF4002", whiteSpace: "nowrap" } as CSSProperties}>
-                        {t.k479}
+                      <span style={{ display: "block", fontSize: "clamp(21px,5.5vw,92px)", lineHeight: ".92", letterSpacing: "-.05em", whiteSpace: "nowrap" } as CSSProperties}>
+                        {t.k478}
+                        {" "}
+                        <span style={{ color: "#FF4002" } as CSSProperties}>
+                          {t.k479}
+                        </span>
                       </span>
                     </span>
                     {" "}
@@ -592,23 +590,19 @@ export default function AwardPage({
                   <div data-reveal="" data-delay="80" aria-hidden="true" style={{ opacity: "0", transform: "translateY(16px)", height: "4px", width: "clamp(96px,12vw,180px)", marginTop: "clamp(18px,2vw,26px)", background: "#FF4002" } as CSSProperties}>
                   </div>
                   {" "}
-                  <div style={{ display: "grid", gridTemplateColumns: ("var(--nomCols)" as any), gap: "1px", marginTop: "clamp(36px,4.4vw,60px)", background: "#C9C6BE", borderTop: "1px solid #C9C6BE" } as CSSProperties}>
+                  <div style={{ marginTop: "clamp(36px,4.4vw,60px)", borderTop: "2px solid #16181D" } as CSSProperties}>
                     {" "}
                     {nominations.map((n, i) => (
-                    <a key={i} className="fa-nom" href="#apply" data-reveal="" data-delay={n.delay} style={{ opacity: "0", transform: "translateY(14px)", position: "relative", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "clamp(22px,2.6vw,38px)", minHeight: "clamp(200px,16vw,268px)", padding: "clamp(24px,2.6vw,34px) clamp(20px,2.2vw,30px)", background: "#F7F6F3" } as CSSProperties}>
-                      <span className="fa-nom-bar" aria-hidden="true" style={{ display: "block", width: "clamp(34px,3.4vw,52px)", height: "4px", background: "#FF4002" } as CSSProperties}>
+                    <a key={i} className="fa-nom" href="#apply" data-reveal="" data-delay={i * 70} style={{ opacity: "0", transform: "translateY(14px)", position: "relative", display: "flex", flexWrap: "nowrap", alignItems: "baseline", justifyContent: "space-between", gap: "8px clamp(24px,3vw,56px)", padding: "clamp(22px,2.6vw,36px) clamp(52px,5vw,72px) clamp(22px,2.6vw,36px) 0", borderBottom: "1px solid #C9C6BE" } as CSSProperties}>
+                      <span className="fa-nom-title" style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(24px,3.4vw,54px)", lineHeight: "1", letterSpacing: "-.04em" } as CSSProperties}>
+                        {n.title}
                       </span>
-                      <span style={{ display: "block" } as CSSProperties}>
-                        <span className="fa-nom-title" style={{ display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(19px,1.75vw,27px)", lineHeight: "1.1", letterSpacing: "-.03em" } as CSSProperties}>
-                          {n.title}
+                      {n.hint ? (
+                        <span className="fa-nom-hint" style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", lineHeight: "1.45", letterSpacing: ".1em", textTransform: "uppercase", color: "#8E8B83", whiteSpace: "nowrap" } as CSSProperties}>
+                          {n.hint}
                         </span>
-                        {n.hint ? (
-                          <span className="fa-nom-hint" style={{ display: "block", marginTop: "10px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontWeight: "400", fontSize: "11px", lineHeight: "1.45", letterSpacing: ".08em", textTransform: "uppercase", color: "#8E8B83" } as CSSProperties}>
-                            {n.hint}
-                          </span>
-                        ) : null}
-                      </span>
-                      <span className="fa-nom-go" aria-hidden="true" style={{ position: "absolute", right: "clamp(20px,2.2vw,30px)", bottom: "clamp(22px,2.4vw,32px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "16px", color: "#FF4002" } as CSSProperties}>
+                      ) : null}
+                      <span className="fa-nom-go" aria-hidden="true" style={{ position: "absolute", right: "clamp(4px,1vw,16px)", top: "50%", marginTop: "-.6em", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "18px", color: "#FF4002" } as CSSProperties}>
                         {t.k416}
                       </span>
                     </a>
@@ -780,10 +774,6 @@ export default function AwardPage({
                     {" "}
                   </div>
                   {" "}
-                  <div data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(16px)", marginTop: "clamp(32px,4vw,48px)", paddingTop: "20px", borderTop: "1px solid #DCDAD4", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", lineHeight: "1.7", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                    {t.k294}
-                  </div>
-                  {" "}
                 </div>
                 {" "}
               </section>
@@ -866,14 +856,6 @@ export default function AwardPage({
                     <br />
                     {t.k496}
                   </h2>
-                  {" "}
-                  <div data-reveal="" data-delay="100" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "12px 20px", marginTop: "24px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".14em", textTransform: "uppercase", color: "#FFFFFF" } as CSSProperties}>
-                    <span aria-hidden="true" style={{ width: "8px", height: "8px", background: "#FFFFFF" } as CSSProperties}>
-                    </span>
-                    <span>
-                      {t.k247}
-                    </span>
-                  </div>
                   {" "}
                   {!formOpen ? (
                     <div data-reveal="" data-delay="160" style={{ opacity: "0", transform: "translateY(16px)", marginTop: "clamp(36px,4.4vw,56px)", maxWidth: "820px", background: "#FFFFFF", color: "#16181D", padding: "clamp(26px,3.2vw,52px)", boxShadow: "14px 14px 0 rgba(255,255,255,.16)", font: "500 clamp(17px,1.6vw,22px)/1.5 Montserrat,Manrope,sans-serif", letterSpacing: "-.02em" } as CSSProperties}>

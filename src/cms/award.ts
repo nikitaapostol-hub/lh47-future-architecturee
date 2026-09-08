@@ -69,7 +69,6 @@ export const AWARD: PageContent = {
         { kind: 'text', name: 'step2', label: 'Шаг 2', key: 'k291' },
         { kind: 'text', name: 'step3', label: 'Шаг 3', key: 'k292' },
         { kind: 'text', name: 'step4', label: 'Шаг 4', key: 'k293' },
-        { kind: 'text', name: 'note', label: 'Подпись под шагами', key: 'k294' },
         { kind: 'text', name: 'marquee1', label: 'Бегущая строка — пункт 1', key: 'k494' },
         { kind: 'text', name: 'marquee2', label: 'Бегущая строка — пункт 2', key: 'k495' },
         { kind: 'text', name: 'marquee3', label: 'Бегущая строка — пункт 3', key: 'k297' },
@@ -81,7 +80,6 @@ export const AWARD: PageContent = {
       fields: [
         { kind: 'text', name: 'title1', label: 'Заголовок — строка 1', key: 'k298' },
         { kind: 'text', name: 'title2', label: 'Заголовок — строка 2', key: 'k496' },
-        { kind: 'text', name: 'note', label: 'Подпись под заголовком', key: 'k247' },
         { kind: 'text', name: 'fieldName', label: 'Поле «Имя и фамилия»', key: 'k300' },
         { kind: 'text', name: 'fieldOrg', label: 'Поле «Компания / вуз»', key: 'k301' },
         { kind: 'text', name: 'fieldTrack', label: 'Поле «Куда подаёте»', key: 'k302' },
