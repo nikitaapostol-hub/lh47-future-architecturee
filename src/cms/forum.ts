@@ -148,8 +148,8 @@ export const FORUM: PageContent = {
           ],
         },
         { kind: 'text', name: 'speakersTitle', label: 'Спикеры — заголовок', key: 'k217' },
-        { kind: 'text', name: 'speakersText', label: 'Спикеры — описание', key: 'k218', area: true },
-        { kind: 'text', name: 'speakersNote', label: 'Спикеры — подпись', key: 'k219' },
+        { kind: 'text', name: 'speakersNote', label: 'Спикеры — подпись справа', key: 'k219' },
+        { kind: 'text', name: 'slotTitle', label: 'Свободное место — подпись', key: 'k320' },
       ],
     },
     {

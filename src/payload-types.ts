@@ -770,7 +770,7 @@ export interface ContentHome {
      */
     partnersTitle?: string | null;
     /**
-     * Сейчас на сайте: «Материалы, площадки и производство — то, к чему резиденты получают доступ.»
+     * Сейчас на сайте: «Материалы, площадки и производство — доступ для резидентов.»
      */
     partnersText?: string | null;
   };
@@ -1058,7 +1058,7 @@ export interface ContentForum {
      */
     text?: string | null;
     /**
-     * Сейчас на сайте: «Шесть этапов жизни объекта — и кто отвечает на каждом»
+     * Сейчас на сайте: «Шесть этапов жизни объекта — и кто отвечает за каждый»
      */
     note?: string | null;
     /**
@@ -1146,7 +1146,7 @@ export interface ContentForum {
      */
     title?: string | null;
     /**
-     * Сейчас на сайте: «9 декабря 2026 · точное время программы публикуется позже»
+     * Сейчас на сайте: «9 декабря 2026 · точное расписание опубликуем позже»
      */
     note?: string | null;
     items?:
@@ -1160,13 +1160,13 @@ export interface ContentForum {
      */
     speakersTitle?: string | null;
     /**
-     * Сейчас на сайте: «Эксперты из Молдовы и других стран: девелоперы, инвесторы, архитекторы и представители гор…»
-     */
-    speakersText?: string | null;
-    /**
      * Сейчас на сайте: «Состав дополняется»
      */
     speakersNote?: string | null;
+    /**
+     * Сейчас на сайте: «Скоро»
+     */
+    slotTitle?: string | null;
   };
   award?: {
     /**
@@ -1178,7 +1178,7 @@ export interface ContentForum {
      */
     title2?: string | null;
     /**
-     * Сейчас на сайте: «Награждаем лучшие проекты, бюро и компании отрасли. Вручение — на форуме.»
+     * Сейчас на сайте: «Награждаем лучшие проекты, бюро и компании. Вручение — на форуме.»
      */
     text1?: string | null;
     /**
@@ -1186,7 +1186,7 @@ export interface ContentForum {
      */
     text2?: string | null;
     /**
-     * Сейчас на сайте: «Четыре номинации премии отрасли»
+     * Сейчас на сайте: «Четыре номинации премии»
      */
     note?: string | null;
     /**
@@ -1208,7 +1208,7 @@ export interface ContentForum {
      */
     title2?: string | null;
     /**
-     * Сейчас на сайте: «Участие в форуме — по заявке и отбору. Партнёрство — по договорённости. Приём проектов на …»
+     * Сейчас на сайте: «Участие — по заявке и отбору, партнёрство — по договорённости. Заявки на премию подаются о…»
      */
     text?: string | null;
     /**
@@ -1248,7 +1248,7 @@ export interface ContentForum {
      */
     bTitle?: string | null;
     /**
-     * Сейчас на сайте: «Форум — это не один день. Партнёр участвует в кампании до, во время и после: анонсы, digit…»
+     * Сейчас на сайте: «Форум — не один день. Партнёр в кампании до, во время и после: анонсы, digital, публикации…»
      */
     bText?: string | null;
     /**
@@ -1367,11 +1367,11 @@ export interface ContentAward {
      */
     event?: string | null;
     /**
-     * Сейчас на сайте: «Итоги»
+     * Сейчас на сайте: «Лучшее за год»
      */
     title1?: string | null;
     /**
-     * Сейчас на сайте: «архитектурной индустрии»
+     * Сейчас на сайте: «в архитектуре»
      */
     title2?: string | null;
     /**
@@ -1379,7 +1379,7 @@ export interface ContentAward {
      */
     leadName?: string | null;
     /**
-     * Сейчас на сайте: «— награда проектам, бюро и компаниям отрасли. Отдельно судим студенческий конкурс. Победит…»
+     * Сейчас на сайте: «— награда проектам, бюро и компаниям отрасли. Для студентов — отдельный конкурс. Победител…»
      */
     leadText?: string | null;
     /**
@@ -1417,7 +1417,7 @@ export interface ContentAward {
      */
     aText1?: string | null;
     /**
-     * Сейчас на сайте: «Подаются объекты и интерьеры, завершённые за последний год, а также продукты и практика ко…»
+     * Сейчас на сайте: «Принимаем объекты и интерьеры, завершённые за последний год.»
      */
     aText2?: string | null;
     /**
@@ -1429,23 +1429,15 @@ export interface ContentAward {
      */
     bText1?: string | null;
     /**
-     * Сейчас на сайте: «Тема года — идеи для общественных пространств и архитектурного облика городов Молдовы. При…»
+     * Сейчас на сайте: «Тема года — общественные пространства и облик городов Молдовы. Подойдут учебные, дипломные…»
      */
     bText2?: string | null;
   };
   nominations?: {
     /**
-     * Сейчас на сайте: «За что награждают»
-     */
-    label?: string | null;
-    /**
      * Сейчас на сайте: «Номинации»
      */
     title?: string | null;
-    /**
-     * Сейчас на сайте: «Четыре номинации премии отрасли»
-     */
-    note?: string | null;
     /**
      * Сейчас на сайте: «Именная номинация — в пакете партнёра форума»
      */
@@ -1481,7 +1473,7 @@ export interface ContentAward {
      */
     item3?: string | null;
     /**
-     * Сейчас на сайте: «Место в сообществе — резидентом или партнёром, по профилю компании»
+     * Сейчас на сайте: «Место в сообществе — резидентом или партнёром»
      */
     item4?: string | null;
   };
@@ -1573,7 +1565,7 @@ export interface ContentAward {
      */
     fieldDesc?: string | null;
     /**
-     * Сейчас на сайте: «Материалы принимаются ссылкой на облако или портфолио — загружать файлы не нужно»
+     * Сейчас на сайте: «Ссылка на облако или портфолио — файлы загружать не нужно»
      */
     hint?: string | null;
     /**
@@ -1609,6 +1601,10 @@ export interface ForumSetting {
    */
   forumDate?: string | null;
   countdownVisible?: boolean | null;
+  /**
+   * Карточки со знаком вопроса после объявленных спикеров — показывают, что состав ещё собирается. 0 — не показывать.
+   */
+  speakerSlots?: number | null;
   speakers?:
     | {
         /**
@@ -2083,8 +2079,8 @@ export interface ContentForumSelect<T extends boolean = true> {
               id?: T;
             };
         speakersTitle?: T;
-        speakersText?: T;
         speakersNote?: T;
+        slotTitle?: T;
       };
   award?:
     | T
@@ -2179,9 +2175,7 @@ export interface ContentAwardSelect<T extends boolean = true> {
   nominations?:
     | T
     | {
-        label?: T;
         title?: T;
-        note?: T;
         link?: T;
       };
   result?:
@@ -2241,6 +2235,7 @@ export interface ContentAwardSelect<T extends boolean = true> {
 export interface ForumSettingsSelect<T extends boolean = true> {
   forumDate?: T;
   countdownVisible?: T;
+  speakerSlots?: T;
   speakers?:
     | T
     | {

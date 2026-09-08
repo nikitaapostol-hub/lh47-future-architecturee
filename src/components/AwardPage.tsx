@@ -580,51 +580,39 @@ export default function AwardPage({
                     </div>
                     {" "}
                     <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                      {t.k276}
+                      {t.k269}
                     </span>
                     {" "}
                   </div>
                   {" "}
-                  <div data-reveal="" data-delay="40" style={{ opacity: "0", transform: "translateY(16px)", marginTop: "clamp(32px,4vw,48px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".14em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                    {t.k269}
-                  </div>
-                  {" "}
-                  <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(16px,1.6vw,22px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(40px,7vw,110px)", lineHeight: ".9", letterSpacing: "-.05em", textTransform: "uppercase" } as CSSProperties}>
+                  <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(36px,4.4vw,68px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(40px,7vw,110px)", lineHeight: ".9", letterSpacing: "-.05em", textTransform: "uppercase" } as CSSProperties}>
                     {t.k277}
                   </h2>
+                  {" "}
+                  <div data-reveal="" data-delay="80" aria-hidden="true" style={{ opacity: "0", transform: "translateY(16px)", height: "4px", width: "clamp(96px,12vw,180px)", marginTop: "clamp(18px,2vw,26px)", background: "#FF4002" } as CSSProperties}>
+                  </div>
                   {" "}
                   <div style={{ display: "grid", gridTemplateColumns: ("var(--nomCols)" as any), gap: "1px", marginTop: "clamp(36px,4.4vw,60px)", background: "#C9C6BE", borderTop: "1px solid #C9C6BE" } as CSSProperties}>
                     {" "}
                     {nominations.map((n, i) => (
-                    <div key={i} className="fa-ha311dfc" data-reveal="" data-delay={n.delay} style={{ opacity: "0", transform: "translateY(14px)", display: "flex", alignItems: "baseline", gap: "16px", padding: "clamp(22px,2.4vw,32px) clamp(18px,2vw,28px)", background: "#EFEDE8", transition: "background 240ms ease,color 240ms ease" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
-                        {n.no || String(i + 1).padStart(2, "0")}
+                    <a key={i} className="fa-nom" href="#apply" data-reveal="" data-delay={n.delay} style={{ opacity: "0", transform: "translateY(14px)", position: "relative", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "clamp(22px,2.6vw,38px)", minHeight: "clamp(200px,16vw,268px)", padding: "clamp(24px,2.6vw,34px) clamp(20px,2.2vw,30px)", background: "#F7F6F3" } as CSSProperties}>
+                      <span className="fa-nom-bar" aria-hidden="true" style={{ display: "block", width: "clamp(34px,3.4vw,52px)", height: "4px", background: "#FF4002" } as CSSProperties}>
                       </span>
-                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,22px)", lineHeight: "1.18", letterSpacing: "-.022em" } as CSSProperties}>
-                        {n.title}
+                      <span style={{ display: "block" } as CSSProperties}>
+                        <span className="fa-nom-title" style={{ display: "block", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(19px,1.75vw,27px)", lineHeight: "1.1", letterSpacing: "-.03em" } as CSSProperties}>
+                          {n.title}
+                        </span>
                         {n.hint ? (
-                          <span style={{ display: "block", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontWeight: "400", fontSize: "11px", lineHeight: "1.4", letterSpacing: ".08em", textTransform: "uppercase", color: "#8E8B83" } as CSSProperties}>
+                          <span className="fa-nom-hint" style={{ display: "block", marginTop: "10px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontWeight: "400", fontSize: "11px", lineHeight: "1.45", letterSpacing: ".08em", textTransform: "uppercase", color: "#8E8B83" } as CSSProperties}>
                             {n.hint}
                           </span>
                         ) : null}
                       </span>
-                    </div>
-                    ))}
-                  </div>
-                  {" "}
-                  <div data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", justifyContent: "space-between", gap: "12px 32px", marginTop: "24px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                    {" "}
-                    <span>
-                      {t.k278}
-                    </span>
-                    {" "}
-                    <a className="fa-h4c6dd28" href={lp("/forum") + "#participation"} style={{ display: "inline-flex", alignItems: "center", gap: "10px", color: "#16181D", borderBottom: "1px solid #C9C6BE", paddingBottom: "2px", transition: "border-color 200ms ease" } as CSSProperties}>
-                      {t.k279}
-                      <span aria-hidden="true">
+                      <span className="fa-nom-go" aria-hidden="true" style={{ position: "absolute", right: "clamp(20px,2.2vw,30px)", bottom: "clamp(22px,2.4vw,32px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "16px", color: "#FF4002" } as CSSProperties}>
                         {t.k416}
                       </span>
                     </a>
-                    {" "}
+                    ))}
                   </div>
                   {" "}
                 </div>

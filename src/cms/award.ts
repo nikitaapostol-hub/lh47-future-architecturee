@@ -41,10 +41,8 @@ export const AWARD: PageContent = {
       label: '03 · Номинации — обрамление',
       desc: 'Сами номинации редактируются в «Премия — настройки». Здесь — заголовки вокруг них.',
       fields: [
-        { kind: 'text', name: 'label', label: 'Надзаголовок', key: 'k276' },
         { kind: 'text', name: 'title', label: 'Заголовок', key: 'k277' },
-        { kind: 'text', name: 'note', label: 'Подпись слева', key: 'k278' },
-        { kind: 'text', name: 'link', label: 'Ссылка справа', key: 'k279' },
+        { kind: 'text', name: 'link', label: 'Подпись слева под сеткой', key: 'k279' },
       ],
     },
     {

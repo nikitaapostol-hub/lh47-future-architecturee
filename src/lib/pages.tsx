@@ -30,6 +30,7 @@ export async function Forum({ lang }: { lang: Lang }) {
         forumDate={s.forumDate as string}
         countdownVisible={s.countdownVisible !== false}
         speakers={(s.speakers as any) || []}
+        speakerSlots={typeof s.speakerSlots === 'number' ? s.speakerSlots : 4}
       />
     </>
   )

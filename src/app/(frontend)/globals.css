@@ -631,11 +631,11 @@ a:hover{color:#16181D}
 .fa-f27ceb91:focus{border-bottom-color:#16181D !important}
 
 /* ── responsive tokens (were JS-computed in the original build) ────────── */
-:root{--burgerDisplay:none;--chainDir:row;--chainHeight:212px;--chainPad:0;--formatCols:repeat(4,1fr);--memberCols:minmax(180px,1fr) minmax(0,2fr) minmax(0,1.6fr);--memberGap:24px 48px;--menuDisplay:none;--navDisplay:flex;--nomCols:repeat(4,1fr);--programCols:repeat(4,1fr);--speakerCols:repeat(4,1fr);--railDisplay:none;--stripBasis:0;--stripFrame:100%;--stripHeight:clamp(180px,20vw,268px);--twoCols:repeat(2,1fr);--wordsExtra:block;}
+:root{--burgerDisplay:none;--chainDir:row;--chainHeight:212px;--chainPad:0;--formatCols:repeat(4,1fr);--memberCols:minmax(180px,1fr) minmax(0,2fr) minmax(0,1.6fr);--memberGap:24px 48px;--menuDisplay:none;--navDisplay:flex;--nomCols:repeat(4,1fr);--programCols:repeat(4,1fr);--speakerCols:repeat(3,1fr);--speakerCard:calc((100% - 2px) / 3);--railDisplay:none;--stripBasis:0;--stripFrame:100%;--stripHeight:clamp(180px,20vw,268px);--twoCols:repeat(2,1fr);--wordsExtra:block;}
 @media (min-width:1440px){ :root{--railDisplay:flex;} }
-@media (max-width:1080px){ :root{--speakerCols:repeat(2,1fr);--burgerDisplay:inline-flex;--chainDir:column;--chainHeight:auto;--chainPad:0 0 0 20px;--formatCols:repeat(2,1fr);--memberCols:1fr;--memberGap:10px;--menuDisplay:block;--navDisplay:none;--programCols:repeat(2,1fr);--stripBasis:31%;--stripFrame:clamp(120px,30vw,180px);--stripHeight:auto;--twoCols:1fr;} }
+@media (max-width:1080px){ :root{--speakerCols:repeat(2,1fr);--speakerCard:calc((100% - 1px) / 2);--burgerDisplay:inline-flex;--chainDir:column;--chainHeight:auto;--chainPad:0 0 0 20px;--formatCols:repeat(2,1fr);--memberCols:1fr;--memberGap:10px;--menuDisplay:block;--navDisplay:none;--programCols:repeat(2,1fr);--stripBasis:31%;--stripFrame:clamp(120px,30vw,180px);--stripHeight:auto;--twoCols:1fr;} }
 @media (max-width:700px){ :root{--formatCols:1fr;--wordsExtra:none;} }
-@media (max-width:640px){ :root{--nomCols:1fr;--speakerCols:1fr;} }
+@media (max-width:640px){ :root{--nomCols:1fr;--speakerCols:1fr;--speakerCard:86%;} }
 /* ── award timeline: whole-string styles that switched at 1080px ───────── */
 .fa-axis{position:absolute;left:0;right:0;top:50%;bottom:auto;height:1px;width:auto;background:#DCDAD4;transform:scaleX(0);transform-origin:left}
 .fa-node{position:relative;flex:1 1 0;min-width:0;padding:0}
@@ -724,35 +724,35 @@ body:has(.fa-notice[data-on="1"]) header[data-header]{top:38px!important}
   white-space:nowrap;border:0}
 
 /* ── hover / focus из новой вёрстки ─────────────────────────────────── */
-.fa-h011a976:hover{background: #F7F6F3;color: #16181D;border-color: #F7F6F3}
-.fa-h10f47c2:hover{color: #F7F6F3;transform: translateX(4px)}
-.fa-h21d64df:hover{padding-left: 14px}
-.fa-h230b4f3:hover{background: #FF4002;color: #F7F6F3;border-color: #FF4002}
-.fa-h4c6dd28:hover{border-bottom-color: #16181D}
-.fa-h4ed6486:hover{padding-left: 18px}
-.fa-h55d5336:hover{background: #F7F6F3;color: #16181D}
-.fa-h58ee740:hover{background: #FF4002;color: #F7F6F3}
-.fa-h5fa00f1:hover{background: #16181D;color: #F7F6F3;border-color: #16181D}
-.fa-h69183df:hover{background: #16181D;color: #F7F6F3;transform: translateY(-10px)}
-.fa-h6ae611c:hover{color: #16181D}
-.fa-h6bd4330:hover{animation-play-state: paused}
-.fa-h6d4f325:hover{background: #16181D;color: #F7F6F3}
-.fa-h7189809:hover{background: #F7F6F3;color: #16181D;border-color: #F7F6F3;transform: translateY(-2px)}
-.fa-h77c075a:hover{background: #F1EFEA}
-.fa-h879d62b:hover{background: #FF4002;color: #F7F6F3;border-color: #FF4002;transform: translateY(-2px)}
-.fa-h88f6f23:hover{background: transparent;color: #16181D}
-.fa-h9b28a07:hover{color: #F7F6F3}
-.fa-h9cd382b:hover{transform: translateY(-2px);box-shadow: 0 12px 30px rgba(22,24,29,.22)}
-.fa-ha311dfc:hover{background: #16181D;color: #FFFFFF}
-.fa-hbb70728:hover{filter: brightness(0) invert(.14)}
-.fa-hbb9d53c:hover{background: #16181D;color: #F7F6F3;transform: translateY(-2px)}
-.fa-hbd8acac:focus{border-bottom-color: #16181D}
-.fa-hbe9e358:hover{background: rgba(22,24,29,.14)}
-.fa-hc263921:hover{background: #16181D;color: #F7F6F3;border-color: #16181D;transform: translateY(-2px)}
-.fa-hc3889f8:hover{color: #FF4002}
-.fa-hcb630f1:hover{background: #FFFFFF;color: #16181D}
-.fa-hd277039:focus{border-bottom-color: #FF4002}
-.fa-hdf939ad:hover{background: #FFFFFF;color: #16181D;border-color: #FFFFFF}
+.fa-h011a976:hover{background:#F7F6F3!important;color:#16181D!important;border-color:#F7F6F3!important}
+.fa-h10f47c2:hover{color:#F7F6F3!important;transform:translateX(4px)!important}
+.fa-h21d64df:hover{padding-left:14px!important}
+.fa-h230b4f3:hover{background:#FF4002!important;color:#F7F6F3!important;border-color:#FF4002!important}
+.fa-h4c6dd28:hover{border-bottom-color:#16181D!important}
+.fa-h4ed6486:hover{padding-left:18px!important}
+.fa-h55d5336:hover{background:#F7F6F3!important;color:#16181D!important}
+.fa-h58ee740:hover{background:#FF4002!important;color:#F7F6F3!important}
+.fa-h5fa00f1:hover{background:#16181D!important;color:#F7F6F3!important;border-color:#16181D!important}
+.fa-h69183df:hover{background:#16181D!important;color:#F7F6F3!important;transform:translateY(-10px)!important}
+.fa-h6ae611c:hover{color:#16181D!important}
+.fa-h6bd4330:hover{animation-play-state:paused!important}
+.fa-h6d4f325:hover{background:#16181D!important;color:#F7F6F3!important}
+.fa-h7189809:hover{background:#F7F6F3!important;color:#16181D!important;border-color:#F7F6F3!important;transform:translateY(-2px)!important}
+.fa-h77c075a:hover{background:#F1EFEA!important}
+.fa-h879d62b:hover{background:#FF4002!important;color:#F7F6F3!important;border-color:#FF4002!important;transform:translateY(-2px)!important}
+.fa-h88f6f23:hover{background:transparent!important;color:#16181D!important}
+.fa-h9b28a07:hover{color:#F7F6F3!important}
+.fa-h9cd382b:hover{transform:translateY(-2px)!important;box-shadow:0 12px 30px rgba(22,24,29,.22)!important}
+.fa-ha311dfc:hover{background:#16181D!important;color:#FFFFFF!important}
+.fa-hbb70728:hover{filter:brightness(0) invert(.14)!important}
+.fa-hbb9d53c:hover{background:#16181D!important;color:#F7F6F3!important;transform:translateY(-2px)!important}
+.fa-hbd8acac:focus{border-bottom-color:#16181D!important}
+.fa-hbe9e358:hover{background:rgba(22,24,29,.14)!important}
+.fa-hc263921:hover{background:#16181D!important;color:#F7F6F3!important;border-color:#16181D!important;transform:translateY(-2px)!important}
+.fa-hc3889f8:hover{color:#FF4002!important}
+.fa-hcb630f1:hover{background:#FFFFFF!important;color:#16181D!important}
+.fa-hd277039:focus{border-bottom-color:#FF4002!important}
+.fa-hdf939ad:hover{background:#FFFFFF!important;color:#16181D!important;border-color:#FFFFFF!important}
 
 /* ── 404 ─────────────────────────────────────────────────────────────── */
 .fa-404-card:hover{ background:#FF4002; color:#16181D }
@@ -797,11 +797,59 @@ body:has(.fa-notice[data-on="1"]) .fa-privacy{padding-top:38px}
 }
 
 /* Ссылки в подвале и меню: подчёркивание вырастает слева направо */
-.fa-hc3889f8{position:relative}
+.fa-hc3889f8,.fa-h6ae611c{position:relative}
+.fa-hc3889f8::after,.fa-h6ae611c::after{
+  content:"";position:absolute;left:0;right:0;bottom:-3px;height:1px;
+  background:currentColor;transform:scaleX(0);transform-origin:left;
+  transition:transform 300ms cubic-bezier(.2,.7,.3,1)
+}
+.fa-hc3889f8:hover::after,.fa-h6ae611c:hover::after{transform:scaleX(1)}
+
+/* Карточка спикера: портрет оживает, рамка тянется к акценту */
+.fa-card-light img{transition:filter 420ms ease,transform 620ms cubic-bezier(.2,.7,.3,1)}
+.fa-card-light:hover img{filter:grayscale(0) contrast(1)!important;transform:scale(1.04)}
+
+/* Карусель спикеров: горизонтальная лента со снапом, стрелки как в LH47 */
+.fa-track{-ms-overflow-style:none;scrollbar-width:none;scroll-padding-left:0}
+.fa-track::-webkit-scrollbar{display:none}
+.fa-arrow{transition:background-color 200ms ease,color 200ms ease,border-color 200ms ease}
+.fa-arrow:hover:not(:disabled){background:#16181D!important;color:#F7F6F3!important;border-color:#16181D!important}
+.fa-arrow:disabled{opacity:.3;cursor:default}
+@media (prefers-reduced-motion: reduce){ .fa-track{scroll-behavior:auto} }
+
+/* Номинации: карточка-ссылка. Крупный номер, стрелка появляется при наведении */
+.fa-nom{color:inherit;text-decoration:none;
+  transition:background-color 260ms ease,color 260ms ease}
+.fa-nom .fa-nom-hint,.fa-nom .fa-nom-title{transition:color 260ms ease}
+.fa-nom .fa-nom-bar{transition:width 340ms cubic-bezier(.2,.7,.3,1),background-color 260ms ease}
+.fa-nom:hover .fa-nom-bar{width:clamp(56px,6vw,92px)!important}
+.fa-nom .fa-nom-go{opacity:0;transform:translateX(-8px);
+  transition:opacity 260ms ease,transform 340ms cubic-bezier(.2,.7,.3,1),color 260ms ease}
+.fa-nom:hover{background:#16181D!important;color:#F7F6F3!important}
+.fa-nom:hover .fa-nom-title{color:#F7F6F3!important}
+.fa-nom:hover .fa-nom-hint{color:#A7A29A!important}
+.fa-nom:hover .fa-nom-go{color:#FF4002!important}
+.fa-nom:hover .fa-nom-go{opacity:1;transform:translateX(0)}
+.fa-nom:focus-visible .fa-nom-go{opacity:1;transform:translateX(0)}
+
+/* Свободное место в составе: знак вопроса «зажигается» */
+.fa-slot{position:relative;transition:box-shadow 280ms ease,background-color 280ms ease}
+.fa-slot::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:2px;
+  background:#C9C6BE;transform:scaleX(0);transform-origin:left;
+  transition:transform 380ms cubic-bezier(.2,.7,.3,1),background-color 280ms ease;pointer-events:none
+}
+.fa-slot:hover{background:#FFFFFF!important;box-shadow:0 0 0 1px #16181D!important}
+.fa-slot:hover::after{transform:scaleX(1);background:#FF4002}
+.fa-slot-mark{transition:color 320ms ease,transform 420ms cubic-bezier(.2,.7,.3,1)}
+.fa-slot:hover .fa-slot-mark{color:#FF4002!important;transform:translateY(-3px)}
 
 @media (prefers-reduced-motion: reduce){
-  .fa-card-dark::after,.fa-card-light::after,.fa-node,.fa-node .fa-tick{transition:none}
+  .fa-card-dark::after,.fa-card-light::after,.fa-node,.fa-node .fa-tick,
+  .fa-slot,.fa-slot::after,.fa-slot-mark,.fa-card-light img,
+  .fa-hc3889f8::after,.fa-h6ae611c::after{transition:none}
   .fa-node:hover{transform:none}
+  .fa-card-light:hover img,.fa-slot:hover .fa-slot-mark{transform:none}
 }
 
 /* ---------------------------------------------------------------------------
@@ -810,5 +858,4 @@ body:has(.fa-notice[data-on="1"]) .fa-privacy{padding-top:38px}
    предлогов ставит src/i18n/typo.ts, здесь — балансировка строк.
    --------------------------------------------------------------------------- */
 body{text-wrap:pretty}
-h1,h2,h3,h4{text-wrap:balance}
-p,li,figcaption,label{text-wrap:pretty}
+h1,h2,h3,h4,p,li,figcaption,label,dt,dd,blockquote{text-wrap:balance}

@@ -27,6 +27,7 @@ type Props = {
   forumDate?: string
   countdownVisible?: boolean
   speakers?: Speaker[]
+  speakerSlots?: number
 }
 
 /** Инициалы вместо фото, пока портрет не загружен. */
@@ -40,8 +41,35 @@ function initials(name: string) {
 }
 
 export default function ForumPage({
-  t, lang, forumDate, countdownVisible = true, speakers: speakersProp = [] }: Props) {
+  t, lang, forumDate, countdownVisible = true, speakers: speakersProp = [], speakerSlots = 4 }: Props) {
   const speakers = speakersProp.filter((s) => s && s.name)
+  /* Свободные места: показываем, что состав ещё собирается, и держим сетку целой. */
+  const slots = Array.from({ length: Math.max(0, Math.min(12, speakerSlots)) }, (_, i) => i)
+
+  /* Карусель спикеров: листаем на ширину карточки, стрелки гаснут на краях. */
+  const trackRef = useRef<HTMLDivElement | null>(null)
+  const [atStart, setAtStart] = useState(true)
+  const [atEnd, setAtEnd] = useState(false)
+  const syncArrows = useCallback(() => {
+    const el = trackRef.current
+    if (!el) return
+    const max = el.scrollWidth - el.clientWidth
+    setAtStart(el.scrollLeft <= 2)
+    setAtEnd(el.scrollLeft >= max - 2)
+  }, [])
+  const onTrackScroll = useCallback(() => syncArrows(), [syncArrows])
+  const slide = useCallback((dir: number) => {
+    const el = trackRef.current
+    if (!el) return
+    const card = el.querySelector('.fa-slide') as HTMLElement | null
+    const step = card ? card.getBoundingClientRect().width + 1 : el.clientWidth * 0.8
+    el.scrollBy({ left: step * dir, behavior: 'smooth' })
+  }, [])
+  useEffect(() => {
+    syncArrows()
+    window.addEventListener('resize', syncArrows)
+    return () => window.removeEventListener('resize', syncArrows)
+  }, [syncArrows, speakers.length, slots.length])
 
   // "/forum" stays "/forum" in Russian and becomes "/ro/forum" elsewhere
   const lp = (p: string) => langPath(lang, p)
@@ -1184,31 +1212,29 @@ export default function ForumPage({
                     {" "}
                   </div>
                   {" "}
-                  <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "28px 56px", marginTop: "clamp(48px,6vw,80px)", padding: "clamp(28px,3.4vw,56px)", background: "#16181D", color: "#F7F6F3" } as CSSProperties}>
-                    {" "}
-                    <div style={{ flex: "1 1 460px" } as CSSProperties}>
-                      <div style={{ display: "flex", alignItems: "center", gap: "14px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".14em", textTransform: "uppercase", color: "#FF4002" } as CSSProperties}>
-                        <span style={{ width: "32px", height: "1px", background: "#FF4002" } as CSSProperties}>
-                        </span>
-                        <span>
-                          {t.k217}
-                        </span>
+                  <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "12px 32px", marginTop: "clamp(56px,7vw,96px)", paddingBottom: "16px", borderBottom: "1px solid #C9C6BE" } as CSSProperties}>
+                    <h2 style={{ margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(30px,4.4vw,64px)", lineHeight: ".94", letterSpacing: "-.045em", textTransform: "uppercase" } as CSSProperties}>
+                      {t.k217}
+                    </h2>
+                    <div style={{ display: "flex", alignItems: "center", gap: "16px" } as CSSProperties}>
+                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
+                        {t.k219}
+                      </span>
+                      <div style={{ display: "flex", gap: "8px" } as CSSProperties}>
+                        <button className="fa-arrow" type="button" aria-label="←" onClick={() => slide(-1)} disabled={atStart} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: "44px", height: "44px", padding: "0", background: "transparent", border: "1px solid #C9C6BE", color: "#16181D", cursor: "pointer" } as CSSProperties}>
+                          <span aria-hidden="true">←</span>
+                        </button>
+                        <button className="fa-arrow" type="button" aria-label="→" onClick={() => slide(1)} disabled={atEnd} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: "44px", height: "44px", padding: "0", background: "transparent", border: "1px solid #C9C6BE", color: "#16181D", cursor: "pointer" } as CSSProperties}>
+                          <span aria-hidden="true">→</span>
+                        </button>
                       </div>
-                      <p style={{ margin: "20px 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(20px,2.2vw,32px)", lineHeight: "1.14", letterSpacing: "-.025em", maxWidth: "30ch" } as CSSProperties}>
-                        {t.k218}
-                      </p>
                     </div>
-                    {" "}
-                    <div style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", lineHeight: "1.7", letterSpacing: ".12em", textTransform: "uppercase", color: "#8E9198", maxWidth: "24ch" } as CSSProperties}>
-                      {t.k219}
-                    </div>
-                    {" "}
                   </div>
                   {" "}
-                  {speakers.length ? (
-                  <div style={{ display: "grid", gridTemplateColumns: ("var(--speakerCols)" as any), gap: "0", marginTop: "clamp(1px,0.2vw,2px)" } as CSSProperties}>
+                  {speakers.length || slots.length ? (
+                  <div ref={trackRef} onScroll={onTrackScroll} className="fa-track" style={{ display: "flex", gap: "1px", overflowX: "auto", scrollSnapType: "x mandatory", scrollBehavior: "smooth", marginTop: "clamp(1px,0.2vw,2px)" } as CSSProperties}>
                     {speakers.map((sp, i) => (
-                    <div key={i} className="fa-card-light" data-reveal="" data-delay={i * 80} style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", gap: "clamp(16px,1.6vw,22px)", padding: "clamp(18px,1.8vw,26px)", background: "#F7F6F3", boxShadow: "0 0 0 1px #C9C6BE" } as CSSProperties}>
+                    <div key={i} className="fa-card-light fa-slide" data-reveal="" data-delay={i * 80} style={{ opacity: "0", transform: "translateY(16px)", flex: "0 0 var(--speakerCard)", scrollSnapAlign: "start", display: "flex", flexDirection: "column", gap: "clamp(16px,1.6vw,22px)", padding: "clamp(18px,1.8vw,26px)", background: "#F7F6F3", boxShadow: "0 0 0 1px #C9C6BE" } as CSSProperties}>
                       <div style={{ position: "relative", aspectRatio: "4 / 5", overflow: "hidden", background: "#16181D", display: "flex", alignItems: "center", justifyContent: "center" } as CSSProperties}>
                         {sp.photo && sp.photo.url ? (
                           <img src={sp.photo.url} alt={sp.photo.alt || sp.name} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "grayscale(1) contrast(1.05)" } as CSSProperties} />
@@ -1235,6 +1261,23 @@ export default function ForumPage({
                             {sp.role}
                           </span>
                         ) : null}
+                      </div>
+                    </div>
+                    ))}
+                    {slots.map((n) => (
+                    <div key={'slot' + n} className="fa-slot fa-slide" data-reveal="" data-delay={(speakers.length + n) * 80} style={{ opacity: "0", transform: "translateY(16px)", flex: "0 0 var(--speakerCard)", scrollSnapAlign: "start", display: "flex", flexDirection: "column", gap: "clamp(16px,1.6vw,22px)", padding: "clamp(18px,1.8vw,26px)", background: "#F7F6F3", boxShadow: "0 0 0 1px #C9C6BE" } as CSSProperties}>
+                      <div style={{ position: "relative", aspectRatio: "4 / 5", overflow: "hidden", background: "#EFEDE8", display: "flex", alignItems: "center", justifyContent: "center" } as CSSProperties}>
+                        <span aria-hidden="true" className="fa-slot-mark" style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(34px,3.4vw,52px)", letterSpacing: "-.05em", color: "#C9C6BE" } as CSSProperties}>
+                          ?
+                        </span>
+                      </div>
+                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" } as CSSProperties}>
+                        <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#B4B0A8" } as CSSProperties}>
+                          {String(speakers.length + n + 1).padStart(2, "0")}
+                        </span>
+                        <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(17px,1.4vw,22px)", lineHeight: "1.16", letterSpacing: "-.025em", color: "#9A968E" } as CSSProperties}>
+                          {t.k320}
+                        </span>
                       </div>
                     </div>
                     ))}
