@@ -219,9 +219,10 @@
 (() => {
   // ---------- Настройки ----------
   const DAYS = 90;                  // 1 декабря 2026 — 28 февраля 2027
-  const START_MONEY = 6000;
+  const START_MONEY = 5500;
   const FOOD_PER_DAY = 110;
-  const DEBT_LIMIT = -3000;         // дальше — газ отключают за неуплату
+  const BILLS = 1300;               // свет, вода, интернет — раз в месяц
+  const DEBT_LIMIT = -2000;         // дальше — газ отключают за неуплату
 
   // Тарифы для населения (lei/м³ с НДС 8%): с 1 сентября 2026 — 20,30;
   // 23 сентября Energocom запросил 24 305 lei/1000 м³ без НДС ≈ 26,25 с НДС.
@@ -238,11 +239,15 @@
   const STOVE_M3 = 0.6;    // плита и горячая вода, м³/день
   const FLOW_MIN = 30, FLOW_MAX = 80;
 
+  // Время: один игровой час длится HOUR_MS реального времени на скорости 1×
+  const HOUR_MS = 700;
+
   const WORK = [
-    { name: 'Сидеть дома', sub: 'отдых, 0 lei',       pay: 0,   tired: -4 },
-    { name: 'На работу',   sub: '≈ 500 lei в будни',  pay: 500, tired: 0.5 },
-    { name: 'Работа + такси', sub: '≈ 850 lei, без выходных', pay: 850, tired: 2 },
+    { name: 'Сидеть дома', sub: 'отдых, 0 lei', pay: 0, tired: -3 },
+    { name: 'На работу', sub: '≈ 500 lei, пн–пт 8–18', pay: 500, tired: 0.5 },
+    { name: 'Работа + такси', sub: '≈ 820 lei, до 22:00, без выходных', pay: 820, tired: 1.2 },
   ];
+  const TAXI_WEEKEND = 350;
   const MONTHS = ['декабря', 'января', 'февраля', 'марта'];
   const WEEKDAYS = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
   const HOLIDAYS = { 24: 'Crăciun', 31: 'Anul Nou', 37: 'Crăciun (ст. стиль)', 38: 'Crăciun (ст. стиль)' };
@@ -252,31 +257,35 @@
   function newGame() {
     S = {
       day: 0,
+      hour: 6,
       money: START_MONEY,
       health: 100,
-      inside: 17,
-      flowSet: 60,
+      inside: 16,
+      flowSet: 55,
       flow: 20,
       power: true,
       pressure: 1.5,
       work: 1,
       tariff: TARIFF_START,
-      anreDay: Math.round(rnd(6, 18)),
-      outside: 1,
+      anreDay: Math.round(rnd(4, 14)),
+      dayOutside: 0,
+      outside: 0,
       coldSnap: 0,
-      boilerBroken: 0,
-      blackout: 0,
+      boilerBroken: 0,          // часов до конца ремонта
+      blackout: 0,              // часов без света
       gasCut: false,
       meter: 0,
       monthM3: 0, monthLei: 0,
-      lastM3: 0,
       paused: true,
       speed: 1,
       over: false,
       log: [],
     };
+    S.dayOutside = baseOutside(0);
+    S.outside = hourOutside(S.dayOutside, S.hour);
     logMsg(`Зима пришла. На счету ${fmt(START_MONEY)} lei, газ стоит ${lei(TARIFF_START)} lei/м³. Продержитесь до 1 марта.`);
     logMsg('Energocom уже подал в ANRE заявку на повышение до 26,25 lei/м³. Решение ждут в декабре.', 'bad');
+    logMsg('Совет: пока вы на работе, котёл можно убавить — дом остынет не сразу.');
     render();
   }
 
@@ -286,6 +295,7 @@
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const fmt = n => Math.round(n).toLocaleString('ru-RU');
   const lei = n => n.toFixed(2).replace('.', ',');
+  const hh = h => String(h).padStart(2, '0') + ':00';
 
   function dateLabel(day) {
     const d = Math.min(day, DAYS);
@@ -297,16 +307,26 @@
   const weekday = d => (1 + d) % 7;                     // 1 декабря 2026 — вторник
   const isDayOff = d => weekday(d) >= 5 || d in HOLIDAYS;
 
+  // где вы сейчас: дома или на работе
+  function isAway(day = S.day, hour = S.hour) {
+    if (S.work === 0 || S.health < 15) return false;
+    const off = isDayOff(day);
+    if (S.work === 1) return !off && hour >= 8 && hour < 18;
+    return off ? hour >= 10 && hour < 18 : hour >= 8 && hour < 22;
+  }
+
   function logMsg(text, kind = '') {
-    S.log.unshift({ d: dateLabel(S.day), text, kind });
+    S.log.unshift({ d: dateLabel(S.day) + ', ' + hh(S.hour), text, kind });
     if (S.log.length > 80) S.log.pop();
   }
 
   // Кишинёв: декабрь ≈ 0°C, январь ≈ −3°C, февраль ≈ −1°C
   function baseOutside(day) {
     const t = day / DAYS;
-    return 1.5 - 4.5 * Math.sin(Math.PI * t) + rnd(-4, 4);
+    return 1 - 5 * Math.sin(Math.PI * t) + rnd(-4, 4);
   }
+  // ночью холоднее, днём теплее
+  const hourOutside = (base, h) => base - 3 * Math.cos((h - 3) / 24 * 2 * Math.PI);
 
   // ---------- Физика котла и дома ----------
   function heating() { return S.power && !S.gasCut && S.boilerBroken === 0 && S.blackout === 0 && S.pressure >= 0.8; }
@@ -318,17 +338,20 @@
     return Math.min(BOILER_MAX, RAD_NOM * Math.pow(dT / 50, 1.3));
   }
 
-  // прогон суток по часам; возвращает { m3, avgIn }
-  function simulateDay(tin, tout, flowSet, on, apply) {
-    let m3 = 0, sum = 0;
-    for (let h = 0; h < 24; h++) {
-      const to = tout - 2.5 * Math.cos((h - 3) / 24 * 2 * Math.PI);   // ночью холоднее
-      const q = on ? radiatorKW(flowSet, tin) : 0;
-      m3 += q / KWH_PER_M3;
-      tin += (q + Q_INTERNAL - UA * (tin - to)) / C;
-      sum += tin;
+  // один час: возвращает сожжённые м³ и новую температуру
+  function heatHour(tin, tout, flowSet, on) {
+    const q = on ? radiatorKW(flowSet, tin) : 0;
+    return { m3: q / KWH_PER_M3, tin: tin + (q + Q_INTERNAL - UA * (tin - tout)) / C };
+  }
+
+  // прогноз на ближайшие 24 часа при текущей настройке
+  function forecastDay() {
+    let tin = S.inside, m3 = 0;
+    for (let i = 0; i < 24; i++) {
+      const r = heatHour(tin, hourOutside(S.dayOutside, (S.hour + i) % 24), S.flowSet, heating());
+      tin = r.tin; m3 += r.m3;
     }
-    return { m3, avgIn: sum / 24, tin };
+    return { tin, m3: m3 + (S.gasCut ? 0 : STOVE_M3) };
   }
 
   // ---------- Тарифы ----------
@@ -341,28 +364,31 @@
 
   // ---------- Случайные события ----------
   const EVENTS = [
-    { w: 5, run() { const eur = [50, 100, 150][Math.floor(rnd(0, 3))]; const sum = eur * 20;
+    { w: 3, run() { const eur = [50, 100][Math.floor(rnd(0, 2))]; const sum = eur * 20;
         S.money += sum; logMsg(`Сын прислал ${eur}€ из Италии: +${fmt(sum)} lei`, 'good'); } },
-    { w: 3, cond: () => S.coldSnap === 0, run() { S.coldSnap = Math.round(rnd(3, 6));
-        logMsg(`Прогноз: с севера идёт мороз до −18°C на ${S.coldSnap} дн.`, 'bad'); } },
-    { w: 2, cond: () => S.day > S.anreDay + 10, run() {
-        raiseTariff(S.tariff * rnd(1.05, 1.12), 'Цены на европейских биржах снова выросли, Energocom просит пересмотра, ANRE соглашается.'); } },
-    { w: 2, cond: () => S.day > 15, run() { S.money += 800;
-        logMsg('Пришла компенсация за отопительный сезон: +800 lei', 'good'); } },
-    { w: 2, cond: () => S.boilerBroken === 0, run() { S.money -= 1400; S.boilerBroken = 2;
-        logMsg('Котёл выдал ошибку E01 — не зажигается. Мастер: −1400 lei, 2 дня без отопления.', 'bad'); } },
-    { w: 2, cond: () => S.blackout === 0, run() { S.blackout = 1;
-        logMsg('Отключили свет — котёл без электричества не работает сутки.', 'bad'); } },
+    { w: 4, cond: () => S.coldSnap === 0, run() { S.coldSnap = Math.round(rnd(3, 7));
+        logMsg(`Прогноз: с севера идёт мороз до −20°C на ${S.coldSnap} дн.`, 'bad'); } },
+    { w: 3, cond: () => S.day > S.anreDay + 7, run() {
+        raiseTariff(S.tariff * rnd(1.06, 1.14), 'Цены на европейских биржах снова выросли, Energocom просит пересмотра, ANRE соглашается.'); } },
+    { w: 1, cond: () => S.day > 20, run() { S.money += 700;
+        logMsg('Пришла компенсация за отопительный сезон: +700 lei', 'good'); } },
+    { w: 2, cond: () => S.boilerBroken === 0, run() { S.money -= 1600; S.boilerBroken = 48;
+        logMsg('Котёл выдал ошибку E01 — не зажигается. Мастер: −1600 lei, 2 дня без отопления.', 'bad'); } },
+    { w: 3, cond: () => S.blackout === 0, run() { S.blackout = Math.round(rnd(6, 16));
+        logMsg(`Отключили свет на ${S.blackout} ч — котёл без электричества не работает.`, 'bad'); } },
     { w: 3, run() { S.pressure -= rnd(0.4, 0.6);
         logMsg('Подтекает кран на радиаторе — давление в системе упало.', 'bad'); } },
-    { w: 3, run() { S.inside += 2;
+    { w: 2, run() { S.inside += 2;
         logMsg('Сосед привёз мешок дров для печки: в доме теплее на 2°', 'good'); } },
-    { w: 2, run() { const loss = Math.round(rnd(400, 900)); S.money -= loss;
-        logMsg(`Заболел зуб. Стоматолог: −${loss} lei`, 'bad'); } },
-    { w: 2, run() { S.health = clamp(S.health + 8, 0, 100);
-        logMsg('Бабушка сварила зямэ и дала вина из погреба: +8 здоровья', 'good'); } },
-    { w: 2, cond: () => S.work > 0, run() { S.money += 700;
-        logMsg('Начальник выдал премию: +700 lei', 'good'); } },
+    { w: 3, run() { const loss = Math.round(rnd(500, 1200)); S.money -= loss;
+        const what = ['Заболел зуб, стоматолог', 'Лекарства из аптеки', 'Сломалась стиральная машина', 'Штраф за парковку'][Math.floor(rnd(0, 4))];
+        logMsg(`${what}: −${fmt(loss)} lei`, 'bad'); } },
+    { w: 2, run() { S.health = clamp(S.health + 6, 0, 100);
+        logMsg('Бабушка сварила зямэ и дала вина из погреба: +6 здоровья', 'good'); } },
+    { w: 1, cond: () => S.work > 0, run() { S.money += 600;
+        logMsg('Начальник выдал премию: +600 lei', 'good'); } },
+    { w: 2, cond: () => S.work > 0, run() { S.health = clamp(S.health - 8, 0, 100);
+        logMsg('На работе все чихают — вы подхватили простуду: −8 здоровья', 'bad'); } },
   ];
 
   function pickEvent() {
@@ -371,99 +397,102 @@
     for (const e of pool) { if ((r -= e.w) < 0) return e; }
   }
 
-  // ---------- Шаг симуляции: один день ----------
-  function step() {
-    if (S.over) return;
+  // ---------- Начало и конец суток ----------
+  function startDay() {
     const d = S.day;
-
-    // Месяц: счета и сводка по газу
     if (d === 31 || d === 62) {
       logMsg(`Итог месяца по газу: ${fmt(S.monthM3)} м³ на ${fmt(S.monthLei)} lei.`);
-      S.money -= 1100; logMsg('Счета за свет, воду и интернет: −1100 lei', 'bad');
+      S.money -= BILLS; logMsg(`Счета за свет, воду и интернет: −${fmt(BILLS)} lei`, 'bad');
       S.monthM3 = 0; S.monthLei = 0;
     }
-    if (d === 24) { S.money -= 700; S.health = clamp(S.health + 5, 0, 100); logMsg('Crăciun: стол для семьи −700 lei, +5 здоровья'); }
-    if (d === 30) { S.money -= 600; logMsg('Revelion! Шампанское и оливье: −600 lei'); }
-    if (d === 37) { S.health = clamp(S.health + 5, 0, 100); logMsg('Crăciun на старый стиль — колядующие принесли плацинды: +5 здоровья', 'good'); }
+    if (d === 24) { S.money -= 800; S.health = clamp(S.health + 4, 0, 100); logMsg('Crăciun: стол для семьи −800 lei, +4 здоровья'); }
+    if (d === 30) { S.money -= 700; logMsg('Revelion! Шампанское и оливье: −700 lei'); }
+    if (d === 37) { S.health = clamp(S.health + 4, 0, 100); logMsg('Crăciun на старый стиль — колядующие принесли плацинды: +4 здоровья', 'good'); }
 
-    // Решение ANRE по заявке Energocom
     if (d === S.anreDay) {
-      const t = Math.random() < 0.6 ? TARIFF_REQUESTED : rnd(24.5, TARIFF_REQUESTED);
+      const t = Math.random() < 0.7 ? TARIFF_REQUESTED : rnd(24.5, TARIFF_REQUESTED);
       raiseTariff(t, 'ANRE утвердило новый тариф по заявке Energocom (24 305 lei за 1000 м³ без НДС).');
     }
 
-    if (Math.random() < 0.14) pickEvent().run();
+    if (Math.random() < 0.2) pickEvent().run();
 
-    // Погода
-    S.outside = baseOutside(d) - (S.coldSnap > 0 ? rnd(8, 13) : 0);
+    S.dayOutside = baseOutside(d) - (S.coldSnap > 0 ? rnd(9, 15) : 0);
     if (S.coldSnap > 0) S.coldSnap--;
+  }
 
-    // Давление в системе потихоньку падает
-    S.pressure = Math.max(0, S.pressure - rnd(0.01, 0.04));
-
-    // Работа
-    const dayOff = isDayOff(d);
-    let w = WORK[S.work];
-    if (S.work === 1 && dayOff) w = WORK[0];              // выходной — сидим дома
-    let pay = w.pay;
-    if (S.work === 2 && dayOff) pay = 350;                // по выходным только такси
+  function endDay() {
+    const d = S.day, off = isDayOff(d);
+    let pay = 0, tired = WORK[0].tired;
+    if (S.health < 15) {
+      if (S.work > 0) logMsg('Вы слишком больны, чтобы работать. День без заработка.', 'bad');
+    } else if (S.work === 1 && !off) { pay = WORK[1].pay; tired = WORK[1].tired; }
+    else if (S.work === 2) { pay = off ? TAXI_WEEKEND : WORK[2].pay; tired = WORK[2].tired; }
+    if (pay && S.health < 35) pay *= 0.6;                 // работаете через силу
     if (pay) S.money += pay * rnd(0.9, 1.1);
     S.money -= FOOD_PER_DAY;
-
-    // Отопление
-    const on = heating();
-    if (S.power && !on && S.pressure < 0.8 && d % 3 === 0) logMsg('Котёл стоит с ошибкой E10: низкое давление. Подпитайте систему!', 'bad');
-    const r = simulateDay(S.inside, S.outside, S.flowSet, on);
-    const m3 = r.m3 + (S.gasCut ? 0 : STOVE_M3);
-    const cost = m3 * S.tariff;
-    S.money -= cost;
-    S.meter += m3; S.monthM3 += m3; S.monthLei += cost; S.lastM3 = m3;
-    S.inside = r.tin;
-    if (S.boilerBroken > 0) S.boilerBroken--;
-    if (S.blackout > 0) S.blackout--;
-
-    // Здоровье
-    const away = w.pay > 0;
-    let dh = -w.tired;
-    const exposure = away ? 0.55 : 1;                     // на работе в тепле
-    if (r.avgIn < 18) dh -= (18 - r.avgIn) * 0.7 * exposure;
-    else if (r.avgIn <= 24) dh += 2;
-    else dh -= (r.avgIn - 24) * 0.25;                     // духота тоже вредна
-    S.health = clamp(S.health + dh, 0, 100);
-
-    // Замёрзли трубы
-    if (S.inside < 2 && S.boilerBroken === 0 && Math.random() < 0.5) {
-      S.money -= 2000; S.boilerBroken = 3;
-      logMsg('Трубы замёрзли и лопнули! Сантехник: −2000 lei, 3 дня без отопления.', 'bad');
-    }
-
-    // Долги
-    if (!S.gasCut && S.money < DEBT_LIMIT) {
-      S.gasCut = true;
-      logMsg('Долг за газ слишком большой — газ отключили!', 'bad');
-    } else if (S.gasCut && S.money > 0) {
-      S.gasCut = false; S.money -= 250;
-      logMsg('Долг погашен, газ подключили обратно (−250 lei за подключение).', 'good');
-    }
+    S.health = clamp(S.health - tired, 0, 100);
 
     S.day++;
-
     if (S.health <= 0) return end(false, 'Вы слегли с воспалением лёгких. Зима победила.');
     if (S.day >= DAYS) {
       if (S.money < 0) return end(false, `Весна пришла, но вы должны ${fmt(-S.money)} lei. Придётся ехать на заработки в Италию…`);
       return end(true);
     }
-    render();
+  }
+
+  // ---------- Шаг симуляции: один час ----------
+  function tickHour() {
+    if (S.over) return;
+    if (S.hour === 0) startDay();
+
+    S.outside = hourOutside(S.dayOutside, S.hour);
+    S.pressure = Math.max(0, S.pressure - rnd(0.0005, 0.002));
+
+    const on = heating();
+    if (S.power && !on && S.pressure < 0.8 && S.hour === 8) logMsg('Котёл стоит с ошибкой E10: низкое давление. Подпитайте систему!', 'bad');
+    const r = heatHour(S.inside, S.outside, S.flowSet, on);
+    const m3 = r.m3 + (S.gasCut ? 0 : STOVE_M3 / 24);
+    const cost = m3 * S.tariff;
+    S.money -= cost;
+    S.meter += m3; S.monthM3 += m3; S.monthLei += cost;
+    S.inside = r.tin;
+    if (S.boilerBroken > 0) S.boilerBroken--;
+    if (S.blackout > 0) S.blackout--;
+
+    // Здоровье: дома холод бьёт сильнее, чем на работе
+    const exposure = isAway() ? 0.5 : (S.hour >= 23 || S.hour < 7 ? 0.6 : 1);   // ночью под одеялом
+    let dh = 0;
+    if (S.inside < 18) dh -= (18 - S.inside) * 0.8 * exposure;
+    else if (S.inside <= 24) dh += isAway() ? 1 : 2.5;
+    else dh -= (S.inside - 24) * 0.3;
+    S.health = clamp(S.health + dh / 24, 0, 100);
+    if (S.health <= 0) return end(false, 'Вы слегли с воспалением лёгких. Зима победила.');
+
+    if (S.inside < 2 && S.boilerBroken === 0 && Math.random() < 0.08) {
+      S.money -= 2500; S.boilerBroken = 72;
+      logMsg('Трубы замёрзли и лопнули! Сантехник: −2500 lei, 3 дня без отопления.', 'bad');
+    }
+
+    if (!S.gasCut && S.money < DEBT_LIMIT) {
+      S.gasCut = true;
+      logMsg('Долг за газ слишком большой — газ отключили!', 'bad');
+    } else if (S.gasCut && S.money > 300) {
+      S.gasCut = false; S.money -= 300;
+      logMsg('Долг погашен, газ подключили обратно (−300 lei за подключение).', 'good');
+    }
+
+    S.hour++;
+    if (S.hour === 24) { S.hour = 0; endDay(); }
+    if (!S.over) render();
   }
 
   // ---------- Игровой цикл ----------
-  const DAY_MS = 2200;
   let acc = 0, last = performance.now();
   function loop(now) {
     const dt = Math.min(now - last, 500); last = now;
     if (!S.paused && !S.over) {
       acc += dt * S.speed;
-      while (acc >= DAY_MS && !S.over) { acc -= DAY_MS; step(); }
+      while (acc >= HOUR_MS && !S.over) { acc -= HOUR_MS; tickHour(); }
     }
     // вода в котле плавно догоняет уставку
     const target = heating() ? S.flowSet : Math.max(S.inside, 15);
@@ -569,7 +598,8 @@
   function render() {
     const wd = WEEKDAYS[weekday(Math.min(S.day, DAYS - 1))];
     const hol = HOLIDAYS[S.day] ? ' · ' + HOLIDAYS[S.day] : '';
-    $('date').textContent = `${dateLabel(S.day)}, ${wd}${hol} · день ${Math.min(S.day + 1, DAYS)} из ${DAYS}`;
+    const where = S.over ? '' : isAway() ? ' · вы на работе' : ' · вы дома';
+    $('date').textContent = `${dateLabel(S.day)}, ${wd}${hol}, ${hh(S.hour)}${where} · день ${Math.min(S.day + 1, DAYS)} из ${DAYS}`;
     $('money').textContent = fmt(S.money) + ' lei';
     $('money').style.color = S.money < 0 ? 'var(--bad)' : '';
     setBar('moneyBar', S.money / 150, S.money < 1500 ? 'var(--bad)' : 'var(--accent)');
@@ -599,11 +629,10 @@
     $('meter').textContent = `Счётчик: ${fmt(S.meter)} м³`;
 
     // Прогноз на сутки при текущей настройке
-    const f = simulateDay(S.inside, S.outside, S.flowSet, heating());
-    const m3 = f.m3 + (S.gasCut ? 0 : STOVE_M3);
+    const f = forecastDay();
     $('forecast').innerHTML = heating()
-      ? `При ${S.flowSet}° на подаче: в доме будет <b>≈${f.tin.toFixed(0)}°C</b>, газ <b>≈${m3.toFixed(1)} м³</b> = <b>${fmt(m3 * S.tariff)} lei</b> в сутки.`
-      : `Отопление не работает. В доме будет <b>≈${f.tin.toFixed(0)}°C</b>, плита и вода: ${fmt(m3 * S.tariff)} lei в сутки.`;
+      ? `Если оставить ${S.flowSet}° на сутки: в доме будет <b>≈${f.tin.toFixed(0)}°C</b>, газ <b>≈${f.m3.toFixed(1)} м³</b> = <b>${fmt(f.m3 * S.tariff)} lei</b>.`
+      : `Отопление не работает. Через сутки в доме будет <b>≈${f.tin.toFixed(0)}°C</b>.`;
 
     [...$('workSeg').children].forEach((el, i) => { el.classList.toggle('on', i === S.work); el.disabled = S.over; });
 
@@ -625,8 +654,9 @@
         <li><b>Котёл</b>: ручка задаёт температуру воды в радиаторах, от 30 до 80°C. Горячее вода — теплее в доме, но тем больше газа сгорает, особенно в мороз.</li>
         <li><b>Газ</b> стоит ${lei(TARIFF_START)} lei/м³. Energocom уже просит 26,25, и цены будут расти дальше.</li>
         <li>Давление в системе падает. Ниже 0,8 bar котёл встаёт с ошибкой E10, тогда нажмите «Подпитать».</li>
-        <li><b>Работа</b> приносит деньги, в выходные и праздники вы дома. Пока вы на работе, холод дома вредит меньше.</li>
-        <li>При 18–24°C в доме здоровье восстанавливается, ниже 18°C падает.</li>
+        <li><b>Время идёт по часам.</b> Работа с 8 до 18 в будни, такси — ещё до 22:00 и по выходным. Пока вас нет, котёл можно убавить: дом остывает не сразу, а газ стоит денег.</li>
+        <li>При 18–24°C в доме здоровье восстанавливается, ниже 18°C падает — особенно когда вы дома. Больной человек зарабатывает меньше, а совсем больной не работает.</li>
+        <li>Зарплаты на полное отопление не хватит. Экономьте, берите подработку, но не загоните себя.</li>
         <li>Долг больше <b>${fmt(-DEBT_LIMIT)} lei</b> — газ отключат. Ниже 2°C в доме лопнут трубы.</li>
       </ul>
       <p class="hint">Пробел — пауза. Ручку можно крутить мышью, колёсиком, стрелками или клавишами +/−.</p>
@@ -650,9 +680,10 @@
   function draw(now) {
     if (!W) resize();
     const cold = clamp((-S.outside) / 20, 0, 1);
+    const light = clamp(Math.sin((S.hour - 7) / 10 * Math.PI), 0, 1);   // светло с 7 до 17
     const g = ctx.createLinearGradient(0, 0, 0, H);
-    g.addColorStop(0, `rgb(${20 - cold * 10}, ${34 - cold * 10}, ${64 + cold * 20})`);
-    g.addColorStop(1, '#2a3b5e');
+    g.addColorStop(0, `rgb(${Math.round(14 + light * 110 - cold * 10)}, ${Math.round(24 + light * 130 - cold * 10)}, ${Math.round(50 + light * 150)})`);
+    g.addColorStop(1, `rgb(${Math.round(36 + light * 150)}, ${Math.round(50 + light * 150)}, ${Math.round(84 + light * 140)})`);
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
 
     ctx.fillStyle = '#dfe8f5';
@@ -693,8 +724,7 @@
     }
 
     // человечек дома, если не на работе
-    const away = WORK[S.work].pay > 0 && !isDayOff(Math.min(S.day, DAYS - 1));
-    if (!away) {
+    if (!isAway()) {
       const px = hx - 26, py = H * 0.78;
       ctx.fillStyle = '#2d2d2d';
       ctx.beginPath(); ctx.arc(px, py - 34, 7, 0, Math.PI * 2); ctx.fill();
@@ -715,6 +745,7 @@
   // ---------- Старт ----------
   buildControls();
   newGame();
+  if (location.hash === '#test') window.__iarna = { get S() { return S; }, tickHour, newGame };
   showRules(true);
   requestAnimationFrame(loop);
 })();
