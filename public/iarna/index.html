@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Iarna: пережить зиму</title>
+<title>Iarna</title>
 <meta name="description" content="Простая браузерная игра: житель Молдовы пытается пережить зиму, балансируя между заработком и отоплением.">
 <style>
   :root {
@@ -17,23 +17,28 @@
     --bad: #ff6b6b;
     --cold: #6cc4ff;
     --hot: #ff8a3d;
+    --enamel: #eef1f4;
+    --enamel-edge: #c9d0d8;
+    --enamel-text: #2b3440;
+    --lcd: #a9c9a4;
+    --lcd-ink: #1d2b1c;
     --radius: 14px;
   }
   * { box-sizing: border-box; }
-  html, body { margin: 0; background: var(--bg); color: var(--text);
+  html, body { margin: 0; color-scheme: dark; background: var(--bg); color: var(--text);
     font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
   body { min-height: 100vh; }
-  .wrap { max-width: 980px; margin: 0 auto; padding: 16px; }
+  .wrap { max-width: 1020px; margin: 0 auto; padding: 16px; }
   header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
   h1 { margin: 0; font-size: 22px; letter-spacing: .3px; }
   h1 span { color: var(--accent); }
   .date { color: var(--muted); font-variant-numeric: tabular-nums; }
 
-  .grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 16px; margin-top: 14px; }
-  @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+  .grid { display: grid; grid-template-columns: 1.25fr 1fr; gap: 16px; margin-top: 14px; }
+  @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
 
   .card { background: var(--panel); border-radius: var(--radius); padding: 14px; }
-  .scene { position: relative; padding: 0; overflow: hidden; aspect-ratio: 16 / 10; }
+  .scene { position: relative; padding: 0; overflow: hidden; aspect-ratio: 16 / 10; max-width: 100%; }
   .scene canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
   .scene .badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,.45);
     padding: 4px 10px; border-radius: 999px; font-size: 13px; font-variant-numeric: tabular-nums; }
@@ -43,13 +48,49 @@
   .stat { background: var(--panel-2); border-radius: 10px; padding: 10px 12px; }
   .stat .label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; }
   .stat .value { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .stat .sub { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
   .bar { height: 6px; background: rgba(255,255,255,.08); border-radius: 3px; margin-top: 6px; overflow: hidden; }
   .bar > i { display: block; height: 100%; width: 50%; background: var(--good); transition: width .3s, background .3s; }
+  .up { color: var(--bad); }
+
+  /* ----- Котёл ----- */
+  .boiler { margin-top: 14px; background: linear-gradient(180deg, var(--enamel), #dde2e8);
+    border: 1px solid var(--enamel-edge); border-radius: 12px; padding: 12px; color: var(--enamel-text); }
+  .boiler-top { display: flex; justify-content: space-between; align-items: baseline; font-size: 12px;
+    letter-spacing: 1.5px; text-transform: uppercase; color: #6b7684; }
+  .boiler-top b { color: var(--enamel-text); letter-spacing: 2px; }
+  .boiler-body { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; margin-top: 8px; }
+  .lcd { background: var(--lcd); color: var(--lcd-ink); border-radius: 6px; padding: 8px 10px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace; box-shadow: inset 0 2px 6px rgba(0,0,0,.25);
+    min-height: 92px; display: grid; gap: 2px; font-variant-numeric: tabular-nums; }
+  .lcd .big { font-size: 30px; font-weight: 700; line-height: 1.05; display: flex; align-items: center; gap: 8px; }
+  .lcd .row2 { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; flex-wrap: wrap; }
+  .lcd .err { font-weight: 700; }
+  .flame { width: 18px; height: 22px; opacity: .15; transition: opacity .3s; }
+  .flame.on { opacity: 1; }
+  .knob-wrap { display: grid; justify-items: center; gap: 6px; }
+  .knob { width: 92px; height: 92px; border-radius: 50%; position: relative; cursor: grab; touch-action: none;
+    background: radial-gradient(circle at 35% 30%, #fff, #cfd6de 60%, #aab3be);
+    box-shadow: 0 3px 6px rgba(0,0,0,.3), inset 0 -2px 3px rgba(0,0,0,.15); border: 0; padding: 0; }
+  .knob:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  .knob .ptr { position: absolute; left: 50%; top: 8px; width: 4px; height: 22px; margin-left: -2px;
+    background: #d9480f; border-radius: 2px; }
+  .knob .dial { position: absolute; inset: 0; transition: transform .12s; }
+  .scale { font-size: 10px; color: #6b7684; display: flex; justify-content: space-between; width: 110px; }
+  .knob-btns { display: flex; gap: 6px; }
+  .kbtn { width: 34px; height: 30px; border-radius: 8px; border: 1px solid var(--enamel-edge); background: #fff;
+    font: inherit; font-weight: 700; color: var(--enamel-text); cursor: pointer; }
+  .boiler-bottom { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+  .sw { border: 1px solid var(--enamel-edge); background: #fff; color: var(--enamel-text); border-radius: 8px;
+    padding: 6px 10px; font: inherit; font-size: 13px; cursor: pointer; }
+  .sw.on { background: #2f7d4f; border-color: #2f7d4f; color: #fff; }
+  .sw.warn { background: #d9480f; border-color: #d9480f; color: #fff; }
+  .forecast { font-size: 13px; color: var(--muted); margin-top: 8px; font-variant-numeric: tabular-nums; }
+  .forecast b { color: var(--text); }
 
   .controls { margin-top: 14px; display: grid; gap: 14px; }
   .group-title { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .6px; margin-bottom: 6px; }
-  .seg { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
-  .seg.three { grid-template-columns: repeat(3, 1fr); }
+  .seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
   .seg button { background: var(--panel-2); color: var(--text); border: 2px solid transparent; border-radius: 10px;
     padding: 8px 4px; cursor: pointer; font: inherit; font-size: 13px; line-height: 1.2; }
   .seg button small { display: block; color: var(--muted); font-size: 11px; margin-top: 2px; }
@@ -61,22 +102,24 @@
   .btn { background: var(--accent); color: #1a1200; border: 0; border-radius: 10px; padding: 10px 16px;
     font: inherit; font-weight: 700; cursor: pointer; }
   .btn.ghost { background: var(--panel-2); color: var(--text); font-weight: 500; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-  .log { margin-top: 16px; max-height: 220px; overflow-y: auto; font-size: 14px; }
+  .log { margin-top: 16px; max-height: 240px; overflow-y: auto; font-size: 14px; }
   .log p { margin: 0; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
   .log p .d { color: var(--muted); font-variant-numeric: tabular-nums; margin-right: 6px; }
   .log p.good { color: var(--good); }
   .log p.bad { color: var(--bad); }
 
   .overlay { position: fixed; inset: 0; background: rgba(5,10,20,.82); display: none;
-    align-items: center; justify-content: center; padding: 16px; z-index: 10; }
+    align-items: center; justify-content: center; padding: 16px; z-index: 10; overflow-y: auto; }
   .overlay.show { display: flex; }
-  .modal { background: var(--panel); border-radius: var(--radius); max-width: 520px; width: 100%; padding: 22px; }
+  .modal { background: var(--panel); border-radius: var(--radius); max-width: 540px; width: 100%; padding: 22px; margin: auto; }
   .modal h2 { margin: 0 0 8px; }
   .modal ul { padding-left: 18px; color: var(--muted); }
   .modal ul b { color: var(--text); }
 
   .hint { color: var(--muted); font-size: 13px; }
+  @media (prefers-reduced-motion: reduce) { .knob .dial, .bar > i { transition: none; } }
 </style>
 </head>
 <body>
@@ -111,26 +154,51 @@
             <div class="bar"><i id="healthBar"></i></div>
           </div>
           <div class="stat">
-            <div class="label">Котёл</div>
-            <div class="value" id="boiler">0°C</div>
-            <div class="bar"><i id="boilerBar"></i></div>
-          </div>
-          <div class="stat">
             <div class="label">В доме</div>
             <div class="value" id="inside">0°C</div>
             <div class="bar"><i id="insideBar"></i></div>
           </div>
+          <div class="stat">
+            <div class="label">Газ, lei/м³</div>
+            <div class="value" id="tariff">20,30</div>
+            <div class="sub" id="tariffSub">с НДС</div>
+          </div>
         </div>
+
+        <div class="boiler" aria-label="Газовый котёл">
+          <div class="boiler-top"><b>Котёл 24 кВт</b><span id="meter">Счётчик: 0 м³</span></div>
+          <div class="boiler-body">
+            <div class="lcd" id="lcd">
+              <div class="row2"><span>ОТОПЛЕНИЕ</span><span id="lcdSet">УСТ 60°</span></div>
+              <div class="big">
+                <svg class="flame" id="flame" viewBox="0 0 18 22" aria-hidden="true"><path d="M9 1C10 6 15 8 15 14a6 6 0 0 1-12 0c0-3 2-5 3-6 0 2 1 3 2 3-1-4 0-7 1-10z" fill="currentColor"/></svg>
+                <span id="lcdFlow">--°</span>
+              </div>
+              <div class="row2"><span id="lcdPress">1.5 bar</span><span class="err" id="lcdErr"></span></div>
+            </div>
+            <div class="knob-wrap">
+              <button class="knob" id="knob" role="slider" aria-label="Температура подачи отопления"
+                aria-valuemin="30" aria-valuemax="80" aria-valuenow="60">
+                <span class="dial" id="dial"><span class="ptr"></span></span>
+              </button>
+              <div class="scale"><span>30°</span><span>55°</span><span>80°</span></div>
+              <div class="knob-btns">
+                <button class="kbtn" id="minus" aria-label="Уменьшить на 1°">−</button>
+                <button class="kbtn" id="plus" aria-label="Увеличить на 1°">+</button>
+              </div>
+            </div>
+          </div>
+          <div class="boiler-bottom">
+            <button class="sw" id="powerBtn">⏻ Отопление</button>
+            <button class="sw" id="refillBtn">Подпитать до 1,5 bar</button>
+          </div>
+        </div>
+        <div class="forecast" id="forecast"></div>
 
         <div class="controls">
           <div>
-            <div class="group-title">Температура котла</div>
-            <div class="seg" id="boilerSeg"></div>
-            <div class="hint" id="gasHint" style="margin-top:6px"></div>
-          </div>
-          <div>
             <div class="group-title">Чем заняться</div>
-            <div class="seg three" id="workSeg"></div>
+            <div class="seg" id="workSeg"></div>
           </div>
           <div class="row">
             <button class="btn" id="pauseBtn">Пауза</button>
@@ -150,24 +218,34 @@
 <script>
 (() => {
   // ---------- Настройки ----------
-  const DAYS = 90;                  // 1 декабря — 28 февраля
-  const START_MONEY = 3000;
-  const FOOD_PER_DAY = 90;
-  const DEBT_LIMIT = -2500;         // дальше — Moldovagaz отключает газ
+  const DAYS = 90;                  // 1 декабря 2026 — 28 февраля 2027
+  const START_MONEY = 6000;
+  const FOOD_PER_DAY = 110;
+  const DEBT_LIMIT = -3000;         // дальше — газ отключают за неуплату
 
-  const BOILER = [
-    { name: 'Выкл',   temp: 0,  gas: 0,  heat: 0 },
-    { name: 'Эко',    temp: 40, gas: 4,  heat: 11 },
-    { name: 'Норм',   temp: 55, gas: 7,  heat: 17 },
-    { name: 'Жарко',  temp: 70, gas: 10, heat: 23 },
-    { name: 'Максимум', temp: 85, gas: 14, heat: 29 },
-  ];
+  // Тарифы для населения (lei/м³ с НДС 8%): с 1 сентября 2026 — 20,30;
+  // 23 сентября Energocom запросил 24 305 lei/1000 м³ без НДС ≈ 26,25 с НДС.
+  const TARIFF_START = 20.30;
+  const TARIFF_REQUESTED = 26.25;
+
+  // Теплофизика дома (~90 м², кирпич, старые окна)
+  const UA = 0.24;         // теплопотери, кВт на 1°C разницы
+  const C = 9;             // теплоёмкость дома, кВт·ч на 1°C
+  const RAD_NOM = 7;       // мощность радиаторов при ΔT=50°C, кВт
+  const Q_INTERNAL = 0.3;  // люди, плита, техника, кВт
+  const BOILER_MAX = 24;   // кВт
+  const KWH_PER_M3 = 9.3 * 0.92;  // теплотворность газа × КПД котла
+  const STOVE_M3 = 0.6;    // плита и горячая вода, м³/день
+  const FLOW_MIN = 30, FLOW_MAX = 80;
+
   const WORK = [
-    { name: 'Сидеть дома', sub: '0 lei, отдых', pay: 0,   tired: -4, away: false },
-    { name: 'На работу',   sub: '≈ 300 lei',   pay: 300, tired: 1,  away: true },
-    { name: 'Две смены',   sub: '≈ 520 lei',   pay: 520, tired: 3.5, away: true },
+    { name: 'Сидеть дома', sub: 'отдых, 0 lei',       pay: 0,   tired: -4 },
+    { name: 'На работу',   sub: '≈ 500 lei в будни',  pay: 500, tired: 0.5 },
+    { name: 'Работа + такси', sub: '≈ 850 lei, без выходных', pay: 850, tired: 2 },
   ];
   const MONTHS = ['декабря', 'января', 'февраля', 'марта'];
+  const WEEKDAYS = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
+  const HOLIDAYS = { 24: 'Crăciun', 31: 'Anul Nou', 37: 'Crăciun (ст. стиль)', 38: 'Crăciun (ст. стиль)' };
 
   // ---------- Состояние ----------
   let S;
@@ -176,21 +254,29 @@
       day: 0,
       money: START_MONEY,
       health: 100,
-      inside: 16,
-      boiler: 2,
+      inside: 17,
+      flowSet: 60,
+      flow: 20,
+      power: true,
+      pressure: 1.5,
       work: 1,
-      tariff: 13,                 // lei за м³
-      outside: 2,
-      coldSnap: 0,                // сколько дней ещё длится мороз
-      boilerBroken: 0,            // дней без котла
+      tariff: TARIFF_START,
+      anreDay: Math.round(rnd(6, 18)),
+      outside: 1,
+      coldSnap: 0,
+      boilerBroken: 0,
       blackout: 0,
       gasCut: false,
+      meter: 0,
+      monthM3: 0, monthLei: 0,
+      lastM3: 0,
       paused: true,
       speed: 1,
       over: false,
       log: [],
     };
-    logMsg('Зима пришла. Котёл запущен, на счету 3000 lei. Продержитесь до 1 марта.');
+    logMsg(`Зима пришла. На счету ${fmt(START_MONEY)} lei, газ стоит ${lei(TARIFF_START)} lei/м³. Продержитесь до 1 марта.`);
+    logMsg('Energocom уже подал в ANRE заявку на повышение до 26,25 lei/м³. Решение ждут в декабре.', 'bad');
     render();
   }
 
@@ -199,6 +285,7 @@
   const rnd = (a, b) => a + Math.random() * (b - a);
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const fmt = n => Math.round(n).toLocaleString('ru-RU');
+  const lei = n => n.toFixed(2).replace('.', ',');
 
   function dateLabel(day) {
     const d = Math.min(day, DAYS);
@@ -207,107 +294,157 @@
     if (d < 90) return (d - 61) + ' ' + MONTHS[2];
     return '1 ' + MONTHS[3];
   }
+  const weekday = d => (1 + d) % 7;                     // 1 декабря 2026 — вторник
+  const isDayOff = d => weekday(d) >= 5 || d in HOLIDAYS;
 
   function logMsg(text, kind = '') {
     S.log.unshift({ d: dateLabel(S.day), text, kind });
-    if (S.log.length > 60) S.log.pop();
+    if (S.log.length > 80) S.log.pop();
   }
 
-  // Базовая температура: пик холода в середине января
+  // Кишинёв: декабрь ≈ 0°C, январь ≈ −3°C, февраль ≈ −1°C
   function baseOutside(day) {
     const t = day / DAYS;
-    return 3 - 10 * Math.sin(Math.PI * t) + rnd(-3, 3);
+    return 1.5 - 4.5 * Math.sin(Math.PI * t) + rnd(-4, 4);
+  }
+
+  // ---------- Физика котла и дома ----------
+  function heating() { return S.power && !S.gasCut && S.boilerBroken === 0 && S.blackout === 0 && S.pressure >= 0.8; }
+
+  // мощность радиаторов, кВт, при данной подаче и температуре в комнате
+  function radiatorKW(flow, tin) {
+    const dT = (flow - 5) - tin;          // средняя температура воды минус комната
+    if (dT <= 0) return 0;
+    return Math.min(BOILER_MAX, RAD_NOM * Math.pow(dT / 50, 1.3));
+  }
+
+  // прогон суток по часам; возвращает { m3, avgIn }
+  function simulateDay(tin, tout, flowSet, on, apply) {
+    let m3 = 0, sum = 0;
+    for (let h = 0; h < 24; h++) {
+      const to = tout - 2.5 * Math.cos((h - 3) / 24 * 2 * Math.PI);   // ночью холоднее
+      const q = on ? radiatorKW(flowSet, tin) : 0;
+      m3 += q / KWH_PER_M3;
+      tin += (q + Q_INTERNAL - UA * (tin - to)) / C;
+      sum += tin;
+    }
+    return { m3, avgIn: sum / 24, tin };
+  }
+
+  // ---------- Тарифы ----------
+  function raiseTariff(newT, why) {
+    const old = S.tariff;
+    S.tariff = +newT.toFixed(2);
+    const pct = Math.round((S.tariff / old - 1) * 100);
+    logMsg(`${why} Газ дорожает: ${lei(old)} → ${lei(S.tariff)} lei/м³ (+${pct}%).`, 'bad');
   }
 
   // ---------- Случайные события ----------
   const EVENTS = [
-    { w: 5, run() { const eur = [50, 100, 150][Math.floor(rnd(0, 3))]; const lei = eur * 20;
-        S.money += lei; logMsg(`Сын прислал ${eur}€ из Италии: +${fmt(lei)} lei`, 'good'); } },
-    { w: 3, run() { S.coldSnap = Math.round(rnd(3, 6));
-        logMsg(`Прогноз: с севера идёт мороз на ${S.coldSnap} дн. Держите котёл горячим!`, 'bad'); } },
-    { w: 2, run() { S.tariff = +(S.tariff * 1.15).toFixed(1);
-        logMsg(`ANRE повысило тариф на газ: теперь ${S.tariff} lei/м³`, 'bad'); } },
-    { w: 2, cond: () => S.day > 15, run() { S.money += 700;
-        logMsg('Пришла компенсация за холодный период: +700 lei', 'good'); } },
-    { w: 2, cond: () => S.boilerBroken === 0, run() { S.money -= 1200; S.boilerBroken = 2;
-        logMsg('Сломался котёл! Мастер взял 1200 lei, чинить 2 дня.', 'bad'); } },
+    { w: 5, run() { const eur = [50, 100, 150][Math.floor(rnd(0, 3))]; const sum = eur * 20;
+        S.money += sum; logMsg(`Сын прислал ${eur}€ из Италии: +${fmt(sum)} lei`, 'good'); } },
+    { w: 3, cond: () => S.coldSnap === 0, run() { S.coldSnap = Math.round(rnd(3, 6));
+        logMsg(`Прогноз: с севера идёт мороз до −18°C на ${S.coldSnap} дн.`, 'bad'); } },
+    { w: 2, cond: () => S.day > S.anreDay + 10, run() {
+        raiseTariff(S.tariff * rnd(1.05, 1.12), 'Цены на европейских биржах снова выросли, Energocom просит пересмотра, ANRE соглашается.'); } },
+    { w: 2, cond: () => S.day > 15, run() { S.money += 800;
+        logMsg('Пришла компенсация за отопительный сезон: +800 lei', 'good'); } },
+    { w: 2, cond: () => S.boilerBroken === 0, run() { S.money -= 1400; S.boilerBroken = 2;
+        logMsg('Котёл выдал ошибку E01 — не зажигается. Мастер: −1400 lei, 2 дня без отопления.', 'bad'); } },
     { w: 2, cond: () => S.blackout === 0, run() { S.blackout = 1;
-        logMsg('Отключили свет по всей республике — котёл без электричества не работает.', 'bad'); } },
-    { w: 3, run() { S.inside += 3;
-        logMsg('Сосед привёз мешок дров для печки: в доме теплее на 3°', 'good'); } },
-    { w: 2, run() { const loss = Math.round(rnd(300, 800)); S.money -= loss;
+        logMsg('Отключили свет — котёл без электричества не работает сутки.', 'bad'); } },
+    { w: 3, run() { S.pressure -= rnd(0.4, 0.6);
+        logMsg('Подтекает кран на радиаторе — давление в системе упало.', 'bad'); } },
+    { w: 3, run() { S.inside += 2;
+        logMsg('Сосед привёз мешок дров для печки: в доме теплее на 2°', 'good'); } },
+    { w: 2, run() { const loss = Math.round(rnd(400, 900)); S.money -= loss;
         logMsg(`Заболел зуб. Стоматолог: −${loss} lei`, 'bad'); } },
     { w: 2, run() { S.health = clamp(S.health + 8, 0, 100);
         logMsg('Бабушка сварила зямэ и дала вина из погреба: +8 здоровья', 'good'); } },
-    { w: 2, cond: () => S.work > 0, run() { S.money += 400;
-        logMsg('Начальник выдал премию: +400 lei', 'good'); } },
+    { w: 2, cond: () => S.work > 0, run() { S.money += 700;
+        logMsg('Начальник выдал премию: +700 lei', 'good'); } },
   ];
 
   function pickEvent() {
     const pool = EVENTS.filter(e => !e.cond || e.cond());
-    let total = pool.reduce((s, e) => s + e.w, 0);
-    let r = Math.random() * total;
+    let r = Math.random() * pool.reduce((s, e) => s + e.w, 0);
     for (const e of pool) { if ((r -= e.w) < 0) return e; }
   }
 
   // ---------- Шаг симуляции: один день ----------
   function step() {
     if (S.over) return;
+    const d = S.day;
 
-    // Праздники и счета
-    if (S.day === 24) { S.money -= 600; logMsg('Crăciun (25 декабря): стол для семьи −600 lei, зато праздник!'); S.health = clamp(S.health + 5, 0, 100); }
-    if (S.day === 30) { S.money -= 500; logMsg('Revelion! Шампанское и салаты: −500 lei'); }
-    if (S.day === 37) { logMsg('Crăciun на старый стиль (7 января) — колядующие принесли плацинды: +5 здоровья', 'good'); S.health = clamp(S.health + 5, 0, 100); }
-    if (S.day === 31 || S.day === 62) { S.money -= 1100; logMsg('Пришли счета за свет и воду: −1100 lei', 'bad'); }
+    // Месяц: счета и сводка по газу
+    if (d === 31 || d === 62) {
+      logMsg(`Итог месяца по газу: ${fmt(S.monthM3)} м³ на ${fmt(S.monthLei)} lei.`);
+      S.money -= 1100; logMsg('Счета за свет, воду и интернет: −1100 lei', 'bad');
+      S.monthM3 = 0; S.monthLei = 0;
+    }
+    if (d === 24) { S.money -= 700; S.health = clamp(S.health + 5, 0, 100); logMsg('Crăciun: стол для семьи −700 lei, +5 здоровья'); }
+    if (d === 30) { S.money -= 600; logMsg('Revelion! Шампанское и оливье: −600 lei'); }
+    if (d === 37) { S.health = clamp(S.health + 5, 0, 100); logMsg('Crăciun на старый стиль — колядующие принесли плацинды: +5 здоровья', 'good'); }
+
+    // Решение ANRE по заявке Energocom
+    if (d === S.anreDay) {
+      const t = Math.random() < 0.6 ? TARIFF_REQUESTED : rnd(24.5, TARIFF_REQUESTED);
+      raiseTariff(t, 'ANRE утвердило новый тариф по заявке Energocom (24 305 lei за 1000 м³ без НДС).');
+    }
 
     if (Math.random() < 0.14) pickEvent().run();
 
     // Погода
-    S.outside = baseOutside(S.day) - (S.coldSnap > 0 ? rnd(9, 14) : 0);
+    S.outside = baseOutside(d) - (S.coldSnap > 0 ? rnd(8, 13) : 0);
     if (S.coldSnap > 0) S.coldSnap--;
 
+    // Давление в системе потихоньку падает
+    S.pressure = Math.max(0, S.pressure - rnd(0.01, 0.04));
+
     // Работа
-    const w = WORK[S.work];
-    const isWeekend = S.day % 7 === 5 || S.day % 7 === 6;
-    const pay = isWeekend && w.pay ? w.pay * 0.5 : w.pay;
+    const dayOff = isDayOff(d);
+    let w = WORK[S.work];
+    if (S.work === 1 && dayOff) w = WORK[0];              // выходной — сидим дома
+    let pay = w.pay;
+    if (S.work === 2 && dayOff) pay = 350;                // по выходным только такси
     if (pay) S.money += pay * rnd(0.9, 1.1);
     S.money -= FOOD_PER_DAY;
 
-    // Котёл
-    const heating = !S.gasCut && S.boilerBroken === 0 && S.blackout === 0;
-    const b = heating ? BOILER[S.boiler] : BOILER[0];
-    const gasCost = b.gas * S.tariff;
-    S.money -= gasCost;
+    // Отопление
+    const on = heating();
+    if (S.power && !on && S.pressure < 0.8 && d % 3 === 0) logMsg('Котёл стоит с ошибкой E10: низкое давление. Подпитайте систему!', 'bad');
+    const r = simulateDay(S.inside, S.outside, S.flowSet, on);
+    const m3 = r.m3 + (S.gasCut ? 0 : STOVE_M3);
+    const cost = m3 * S.tariff;
+    S.money -= cost;
+    S.meter += m3; S.monthM3 += m3; S.monthLei += cost; S.lastM3 = m3;
+    S.inside = r.tin;
     if (S.boilerBroken > 0) S.boilerBroken--;
     if (S.blackout > 0) S.blackout--;
 
-    // Температура в доме тянется к равновесию
-    const target = S.outside + b.heat;
-    S.inside += (target - S.inside) * 0.45;
-
     // Здоровье
+    const away = w.pay > 0;
     let dh = -w.tired;
-    const exposure = w.away ? 0.55 : 1;           // на работе в тепле, дома мёрзнешь
-    if (S.inside < 16) dh -= (16 - S.inside) * 0.7 * exposure;
-    else if (S.inside <= 24) dh += 2;
-    else dh -= (S.inside - 24) * 0.4;              // слишком жарко — тоже нехорошо
+    const exposure = away ? 0.55 : 1;                     // на работе в тепле
+    if (r.avgIn < 18) dh -= (18 - r.avgIn) * 0.7 * exposure;
+    else if (r.avgIn <= 24) dh += 2;
+    else dh -= (r.avgIn - 24) * 0.25;                     // духота тоже вредна
     S.health = clamp(S.health + dh, 0, 100);
 
     // Замёрзли трубы
-    if (S.inside < 1 && S.boilerBroken === 0 && Math.random() < 0.5) {
-      S.money -= 1500; S.boilerBroken = 3;
-      logMsg('Трубы замёрзли и лопнули! Ремонт −1500 lei, 3 дня без отопления.', 'bad');
+    if (S.inside < 2 && S.boilerBroken === 0 && Math.random() < 0.5) {
+      S.money -= 2000; S.boilerBroken = 3;
+      logMsg('Трубы замёрзли и лопнули! Сантехник: −2000 lei, 3 дня без отопления.', 'bad');
     }
 
     // Долги
     if (!S.gasCut && S.money < DEBT_LIMIT) {
       S.gasCut = true;
-      logMsg('Долг слишком большой — Moldovagaz отключил газ!', 'bad');
+      logMsg('Долг за газ слишком большой — газ отключили!', 'bad');
     } else if (S.gasCut && S.money > 0) {
-      S.gasCut = false;
-      logMsg('Долг погашен, газ снова подключили.', 'good');
+      S.gasCut = false; S.money -= 250;
+      logMsg('Долг погашен, газ подключили обратно (−250 lei за подключение).', 'good');
     }
-    if (S.money < 0 && S.day % 7 === 0) logMsg('Вы в долгах — соседи начинают коситься.', 'bad');
 
     S.day++;
 
@@ -320,14 +457,18 @@
   }
 
   // ---------- Игровой цикл ----------
-  const DAY_MS = 1800;
+  const DAY_MS = 2200;
   let acc = 0, last = performance.now();
   function loop(now) {
-    const dt = now - last; last = now;
+    const dt = Math.min(now - last, 500); last = now;
     if (!S.paused && !S.over) {
       acc += dt * S.speed;
       while (acc >= DAY_MS && !S.over) { acc -= DAY_MS; step(); }
     }
+    // вода в котле плавно догоняет уставку
+    const target = heating() ? S.flowSet : Math.max(S.inside, 15);
+    S.flow += (target - S.flow) * Math.min(1, dt / 1500);
+    renderBoiler();
     draw(now);
     requestAnimationFrame(loop);
   }
@@ -337,70 +478,138 @@
     S.over = true; S.paused = true;
     render();
     const score = Math.max(0, Math.round(S.money / 10 + S.health * 10));
+    const gasLine = `За зиму сожгли <b>${fmt(S.meter)} м³</b> газа, последний тариф — <b>${lei(S.tariff)} lei/м³</b>.`;
     showModal(win
       ? `<h2>🌷 Вы пережили зиму!</h2>
          <p>Наступил Mărțișor. Осталось <b>${fmt(S.money)} lei</b>, здоровье <b>${Math.round(S.health)}</b>.</p>
+         <p>${gasLine}</p>
          <p>Очки: <b>${score}</b></p>
          <button class="btn" id="again">Ещё зиму</button>`
       : `<h2>🥶 Игра окончена</h2>
          <p>${reason}</p>
+         <p>${gasLine}</p>
          <p class="hint">Дожили до ${dateLabel(S.day)}.</p>
          <button class="btn" id="again">Попробовать снова</button>`);
-    $('again').onclick = () => { hideModal(); newGame(); S.paused = false; render(); };
+    $('again').onclick = () => { hideModal(); const sp = S.speed; newGame(); S.speed = sp; S.paused = false; render(); };
+  }
+
+  // ---------- Ручка котла ----------
+  const ANG_MIN = -135, ANG_MAX = 135;
+  const toAngle = t => ANG_MIN + (t - FLOW_MIN) / (FLOW_MAX - FLOW_MIN) * (ANG_MAX - ANG_MIN);
+  function setFlow(t) {
+    if (S.over) return;
+    S.flowSet = clamp(Math.round(t), FLOW_MIN, FLOW_MAX);
+    render();
+  }
+  function bindKnob() {
+    const knob = $('knob');
+    let drag = false;
+    const fromPointer = e => {
+      const r = knob.getBoundingClientRect();
+      const a = Math.atan2(e.clientX - (r.left + r.width / 2), -(e.clientY - (r.top + r.height / 2))) * 180 / Math.PI;
+      setFlow(FLOW_MIN + (clamp(a, ANG_MIN, ANG_MAX) - ANG_MIN) / (ANG_MAX - ANG_MIN) * (FLOW_MAX - FLOW_MIN));
+    };
+    knob.addEventListener('pointerdown', e => { drag = true; knob.setPointerCapture(e.pointerId); fromPointer(e); });
+    knob.addEventListener('pointermove', e => { if (drag) fromPointer(e); });
+    knob.addEventListener('pointerup', () => { drag = false; });
+    knob.addEventListener('wheel', e => { e.preventDefault(); setFlow(S.flowSet + (e.deltaY < 0 ? 1 : -1)); }, { passive: false });
+    knob.addEventListener('keydown', e => {
+      if (e.key === 'ArrowUp' || e.key === 'ArrowRight') { e.preventDefault(); setFlow(S.flowSet + 1); }
+      if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') { e.preventDefault(); setFlow(S.flowSet - 1); }
+    });
+    $('minus').onclick = () => setFlow(S.flowSet - 1);
+    $('plus').onclick = () => setFlow(S.flowSet + 1);
+    $('powerBtn').onclick = () => { if (!S.over) { S.power = !S.power; render(); } };
+    $('refillBtn').onclick = () => {
+      if (S.over) return;
+      if (S.pressure >= 1.45) return;
+      S.pressure = 1.5; logMsg('Открыли кран подпитки: давление снова 1,5 bar.', 'good'); render();
+    };
   }
 
   // ---------- UI ----------
   function buildControls() {
-    $('boilerSeg').innerHTML = BOILER.map((b, i) =>
-      `<button data-i="${i}">${b.name}<small>${b.temp ? b.temp + '°C' : '—'}</small></button>`).join('');
     $('workSeg').innerHTML = WORK.map((w, i) =>
       `<button data-i="${i}">${w.name}<small>${w.sub}</small></button>`).join('');
-    $('boilerSeg').onclick = e => { const t = e.target.closest('button'); if (t) { S.boiler = +t.dataset.i; render(); } };
     $('workSeg').onclick = e => { const t = e.target.closest('button'); if (t) { S.work = +t.dataset.i; render(); } };
     $('pauseBtn').onclick = () => { if (!S.over) { S.paused = !S.paused; render(); } };
     $('speedBtn').onclick = () => { S.speed = S.speed === 1 ? 2 : S.speed === 2 ? 4 : 1; render(); };
     $('helpBtn').onclick = () => { S.paused = true; render(); showRules(); };
+    bindKnob();
     document.addEventListener('keydown', e => {
-      if (e.code === 'Space' && !S.over && !$('overlay').classList.contains('show')) { e.preventDefault(); S.paused = !S.paused; render(); }
-      if (/^Digit[1-5]$/.test(e.code)) { S.boiler = +e.code.slice(5) - 1; render(); }
+      if ($('overlay').classList.contains('show')) return;
+      if (e.code === 'Space' && !S.over) { e.preventDefault(); S.paused = !S.paused; render(); }
+      if (document.activeElement === $('knob')) return;
+      if (e.key === '+' || e.key === '=') setFlow(S.flowSet + 1);
+      if (e.key === '-') setFlow(S.flowSet - 1);
     });
   }
 
   function setBar(id, pct, color) {
     const el = $(id); el.style.width = clamp(pct, 0, 100) + '%'; el.style.background = color;
   }
+  function tempColor(t) { return t < 16 ? 'var(--cold)' : t > 24 ? 'var(--hot)' : 'var(--good)'; }
 
-  function tempColor(t) { return t < 12 ? 'var(--cold)' : t > 25 ? 'var(--hot)' : 'var(--good)'; }
+  function boilerError() {
+    if (!S.power) return 'ВЫКЛ';
+    if (S.gasCut) return 'НЕТ ГАЗА';
+    if (S.blackout) return 'НЕТ СВЕТА';
+    if (S.boilerBroken) return 'E01';
+    if (S.pressure < 0.8) return 'E10';
+    return '';
+  }
+
+  function renderBoiler() {
+    const on = heating();
+    const burning = on && radiatorKW(S.flowSet, S.inside) > 0.05;
+    $('lcdFlow').textContent = Math.round(S.flow) + '°';
+    $('flame').classList.toggle('on', burning && !S.paused);
+  }
 
   function render() {
-    $('date').textContent = dateLabel(S.day) + ` · день ${Math.min(S.day + 1, DAYS)} из ${DAYS}`;
+    const wd = WEEKDAYS[weekday(Math.min(S.day, DAYS - 1))];
+    const hol = HOLIDAYS[S.day] ? ' · ' + HOLIDAYS[S.day] : '';
+    $('date').textContent = `${dateLabel(S.day)}, ${wd}${hol} · день ${Math.min(S.day + 1, DAYS)} из ${DAYS}`;
     $('money').textContent = fmt(S.money) + ' lei';
     $('money').style.color = S.money < 0 ? 'var(--bad)' : '';
-    setBar('moneyBar', S.money / 100, S.money < 1000 ? 'var(--bad)' : 'var(--accent)');
+    setBar('moneyBar', S.money / 150, S.money < 1500 ? 'var(--bad)' : 'var(--accent)');
 
     $('health').textContent = Math.round(S.health);
     setBar('healthBar', S.health, S.health < 35 ? 'var(--bad)' : 'var(--good)');
-
-    const heating = !S.gasCut && S.boilerBroken === 0 && S.blackout === 0;
-    const bt = heating ? BOILER[S.boiler].temp : 0;
-    $('boiler').textContent = heating ? bt + '°C' : (S.gasCut ? 'нет газа' : 'не работает');
-    setBar('boilerBar', bt / 85 * 100, bt > 60 ? 'var(--hot)' : 'var(--accent)');
 
     $('inside').textContent = S.inside.toFixed(1) + '°C';
     $('inside').style.color = tempColor(S.inside);
     setBar('insideBar', (S.inside + 5) / 35 * 100, tempColor(S.inside));
 
+    $('tariff').textContent = lei(S.tariff);
+    const pct = Math.round((S.tariff / TARIFF_START - 1) * 100);
+    $('tariffSub').innerHTML = pct > 0 ? `с НДС · <span class="up">▲ +${pct}% за зиму</span>` : 'с НДС · с 1 сентября 2026';
+
+    // Котёл
+    const err = boilerError();
+    $('lcdSet').textContent = `УСТ ${S.flowSet}°`;
+    $('lcdPress').textContent = S.pressure.toFixed(1) + ' bar';
+    $('lcdErr').textContent = err;
+    $('dial').style.transform = `rotate(${toAngle(S.flowSet)}deg)`;
+    $('knob').setAttribute('aria-valuenow', S.flowSet);
+    $('knob').setAttribute('aria-valuetext', S.flowSet + ' градусов');
+    $('powerBtn').classList.toggle('on', S.power);
+    $('powerBtn').textContent = S.power ? '⏻ Отопление вкл' : '⏻ Отопление выкл';
+    $('refillBtn').classList.toggle('warn', S.pressure < 1);
+    $('meter').textContent = `Счётчик: ${fmt(S.meter)} м³`;
+
+    // Прогноз на сутки при текущей настройке
+    const f = simulateDay(S.inside, S.outside, S.flowSet, heating());
+    const m3 = f.m3 + (S.gasCut ? 0 : STOVE_M3);
+    $('forecast').innerHTML = heating()
+      ? `При ${S.flowSet}° на подаче: в доме будет <b>≈${f.tin.toFixed(0)}°C</b>, газ <b>≈${m3.toFixed(1)} м³</b> = <b>${fmt(m3 * S.tariff)} lei</b> в сутки.`
+      : `Отопление не работает. В доме будет <b>≈${f.tin.toFixed(0)}°C</b>, плита и вода: ${fmt(m3 * S.tariff)} lei в сутки.`;
+
+    [...$('workSeg').children].forEach((el, i) => { el.classList.toggle('on', i === S.work); el.disabled = S.over; });
+
     $('outBadge').textContent = 'На улице: ' + S.outside.toFixed(0) + '°C' + (S.coldSnap > 0 ? ' · мороз' : '');
     $('speedBadge').textContent = (S.paused ? '⏸ пауза' : '▶ ' + S.speed + '×');
     $('pauseBtn').textContent = S.paused ? 'Играть' : 'Пауза';
-
-    const b = BOILER[S.boiler];
-    $('gasHint').textContent = b.gas
-      ? `Газ: ${b.gas} м³/день × ${S.tariff} lei = ${fmt(b.gas * S.tariff)} lei в день`
-      : 'Котёл выключен — бесплатно, но дом остывает до уличной температуры.';
-
-    [...$('boilerSeg').children].forEach((el, i) => { el.classList.toggle('on', i === S.boiler); el.disabled = S.over; });
-    [...$('workSeg').children].forEach((el, i) => { el.classList.toggle('on', i === S.work); el.disabled = S.over; });
 
     $('log').innerHTML = S.log.map(l => `<p class="${l.kind}"><span class="d">${l.d}</span>${l.text}</p>`).join('');
   }
@@ -411,15 +620,16 @@
   function showRules(first) {
     showModal(`
       <h2>Iarna ❄ как пережить зиму</h2>
-      <p>Вы живёте в доме под Кишинёвом. Впереди 90 дней зимы — продержитесь до 1 марта.</p>
+      <p>Вы живёте в кирпичном доме под Кишинёвом. Впереди 90 дней зимы, продержитесь до 1 марта.</p>
       <ul>
-        <li><b>Котёл</b>: чем горячее, тем теплее в доме, но газ дорогой и тариф может вырасти.</li>
-        <li><b>Работа</b> приносит деньги, но выматывает. Пока вы на работе, холод дома вредит меньше.</li>
-        <li>Ниже <b>16°C</b> в доме здоровье падает, 16–24°C — восстанавливается.</li>
-        <li>Долг больше <b>${fmt(-DEBT_LIMIT)} lei</b> — газ отключат. Ниже 0°C — лопнут трубы.</li>
-        <li>Если здоровье упадёт до нуля или к весне останутся долги — вы проиграли.</li>
+        <li><b>Котёл</b>: ручка задаёт температуру воды в радиаторах, от 30 до 80°C. Горячее вода — теплее в доме, но тем больше газа сгорает, особенно в мороз.</li>
+        <li><b>Газ</b> стоит ${lei(TARIFF_START)} lei/м³. Energocom уже просит 26,25, и цены будут расти дальше.</li>
+        <li>Давление в системе падает. Ниже 0,8 bar котёл встаёт с ошибкой E10, тогда нажмите «Подпитать».</li>
+        <li><b>Работа</b> приносит деньги, в выходные и праздники вы дома. Пока вы на работе, холод дома вредит меньше.</li>
+        <li>При 18–24°C в доме здоровье восстанавливается, ниже 18°C падает.</li>
+        <li>Долг больше <b>${fmt(-DEBT_LIMIT)} lei</b> — газ отключат. Ниже 2°C в доме лопнут трубы.</li>
       </ul>
-      <p class="hint">Пробел — пауза, клавиши 1–5 — режим котла.</p>
+      <p class="hint">Пробел — пауза. Ручку можно крутить мышью, колёсиком, стрелками или клавишами +/−.</p>
       <button class="btn" id="startBtn">${first ? 'Начать зиму' : 'Продолжить'}</button>`);
     $('startBtn').onclick = () => { hideModal(); S.paused = false; render(); };
   }
@@ -440,23 +650,19 @@
   function draw(now) {
     if (!W) resize();
     const cold = clamp((-S.outside) / 20, 0, 1);
-    // небо
     const g = ctx.createLinearGradient(0, 0, 0, H);
     g.addColorStop(0, `rgb(${20 - cold * 10}, ${34 - cold * 10}, ${64 + cold * 20})`);
     g.addColorStop(1, '#2a3b5e');
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
 
-    // земля/снег
     ctx.fillStyle = '#dfe8f5';
     ctx.fillRect(0, H * 0.78, W, H * 0.22);
 
     // дом
     const hx = W * 0.3, hy = H * 0.42, hw = W * 0.4, hh = H * 0.36;
     ctx.fillStyle = '#e9d8b4'; ctx.fillRect(hx, hy, hw, hh);
-    // крыша
     ctx.fillStyle = '#8a4b2d';
     ctx.beginPath(); ctx.moveTo(hx - 14, hy); ctx.lineTo(hx + hw / 2, hy - H * 0.2); ctx.lineTo(hx + hw + 14, hy); ctx.closePath(); ctx.fill();
-    // снег на крыше
     ctx.fillStyle = '#f4f8ff';
     ctx.beginPath(); ctx.moveTo(hx - 14, hy); ctx.lineTo(hx + hw / 2, hy - H * 0.2); ctx.lineTo(hx + hw + 14, hy);
     ctx.lineTo(hx + hw + 14, hy + 5); ctx.lineTo(hx + hw / 2, hy - H * 0.2 + 8); ctx.lineTo(hx - 14, hy + 5); ctx.closePath(); ctx.fill();
@@ -470,37 +676,33 @@
       ctx.fillRect(x, y, ww, wh); ctx.shadowBlur = 0;
       ctx.strokeStyle = '#5b3a24'; ctx.lineWidth = 3; ctx.strokeRect(x, y, ww, wh);
       ctx.beginPath(); ctx.moveTo(x + ww / 2, y); ctx.lineTo(x + ww / 2, y + wh); ctx.moveTo(x, y + wh / 2); ctx.lineTo(x + ww, y + wh / 2); ctx.stroke();
-      // иней при холоде
-      if (S.inside < 10) { ctx.fillStyle = `rgba(230,245,255,${clamp((10 - S.inside) / 12, 0, .7)})`; ctx.fillRect(x, y, ww, wh); }
+      if (S.inside < 12) { ctx.fillStyle = `rgba(230,245,255,${clamp((12 - S.inside) / 12, 0, .7)})`; ctx.fillRect(x, y, ww, wh); }
     });
-    // дверь
     ctx.fillStyle = '#5b3a24'; ctx.fillRect(hx + hw * 0.42, hy + hh * 0.45, hw * 0.16, hh * 0.55);
 
-    // труба и дым
-    const cx = hx + hw * 0.72, cy = hy - H * 0.12;
-    ctx.fillStyle = '#7a3e25'; ctx.fillRect(cx, cy, hw * 0.07, H * 0.1);
-    const heating = !S.gasCut && S.boilerBroken === 0 && S.blackout === 0;
-    const smoke = heating ? S.boiler : 0;
-    for (let i = 0; i < smoke * 3; i++) {
-      const t = ((now / 2500) + i / (smoke * 3)) % 1;
-      ctx.fillStyle = `rgba(220,225,235,${0.5 * (1 - t)})`;
+    // коаксиальный дымоход и пар — чем горячее подача, тем гуще
+    const cx = hx + hw + 2, cy = hy + hh * 0.15;
+    ctx.fillStyle = '#9aa4b1'; ctx.fillRect(cx, cy, 16, 6);
+    const smoke = heating() && !S.paused ? Math.round((S.flowSet - 25) / 6) : 0;
+    for (let i = 0; i < smoke; i++) {
+      const t = ((now / 2500) + i / smoke) % 1;
+      ctx.fillStyle = `rgba(220,225,235,${0.45 * (1 - t)})`;
       ctx.beginPath();
-      ctx.arc(cx + hw * 0.035 + Math.sin(t * 6 + i) * 8 + t * 30, cy - t * H * 0.3, 4 + t * 14, 0, Math.PI * 2);
+      ctx.arc(cx + 18 + t * 30 + Math.sin(t * 6 + i) * 6, cy - t * H * 0.3, 3 + t * 12, 0, Math.PI * 2);
       ctx.fill();
     }
 
-    // человечек: дома или ушёл
-    if (!WORK[S.work].away) {
-      const px = hx + hw + 26, py = H * 0.78;
+    // человечек дома, если не на работе
+    const away = WORK[S.work].pay > 0 && !isDayOff(Math.min(S.day, DAYS - 1));
+    if (!away) {
+      const px = hx - 26, py = H * 0.78;
       ctx.fillStyle = '#2d2d2d';
       ctx.beginPath(); ctx.arc(px, py - 34, 7, 0, Math.PI * 2); ctx.fill();
       ctx.fillStyle = '#b23a3a'; ctx.fillRect(px - 8, py - 27, 16, 20);
       ctx.fillStyle = '#2d2d2d'; ctx.fillRect(px - 7, py - 7, 5, 7); ctx.fillRect(px + 2, py - 7, 5, 7);
-      // кушма (шапка)
       ctx.fillStyle = '#1a1a1a'; ctx.fillRect(px - 7, py - 46, 14, 7);
     }
 
-    // снег
     const speed = S.paused ? 0.2 : 1;
     ctx.fillStyle = 'rgba(255,255,255,.9)';
     for (const f of flakes) {
