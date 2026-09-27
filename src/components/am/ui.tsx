@@ -91,8 +91,13 @@ export function Header({
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 1100px)')
     const off = () => mq.matches && setMenu(false)
+    const esc = (e: KeyboardEvent) => e.key === 'Escape' && setMenu(false)
     mq.addEventListener('change', off)
-    return () => mq.removeEventListener('change', off)
+    window.addEventListener('keydown', esc)
+    return () => {
+      mq.removeEventListener('change', off)
+      window.removeEventListener('keydown', esc)
+    }
   }, [])
 
   const items: { page: Page | null; href: string; label: string }[] = [
@@ -104,6 +109,7 @@ export function Header({
   const langs = ['ro', 'ru', 'en'] as Lang[]
 
   return (
+    <>
     <header style={{ ['--am-acc' as string]: a.color, position: 'sticky', top: 0, zIndex: 60, background: 'rgba(255,255,255,.94)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: '1px solid #E6E6E3' }}>
       <div style={{ maxWidth: '1440px', height: '72px', margin: '0 auto', padding: '0 clamp(20px,4vw,64px)', display: 'flex', alignItems: 'center', gap: '32px' }}>
         <a href={path(lang, '/')} aria-label="ARCH MAKERS" style={{ display: 'flex', alignItems: 'center', flex: '0 0 auto' }}>
@@ -154,8 +160,11 @@ export function Header({
           {menu ? t.cClose : t.cMenu}
         </button>
       </div>
+    </header>
+      {/* Меню — вне <header>: у шапки backdrop-filter, а он делает её «коробкой» для
+          position:fixed, и меню сжималось до высоты шапки. */}
       {menu && (
-        <div className="am-m" style={{ ['--am-acc' as string]: a.dark, position: 'fixed', left: 0, right: 0, top: '72px', bottom: 0, background: '#000', color: '#fff', padding: '32px clamp(20px,4vw,64px)', display: 'flex', flexDirection: 'column', gap: '32px', overflow: 'auto' }}>
+        <div className="am-m" role="dialog" aria-modal="true" aria-label={t.cMenu} style={{ ['--am-acc' as string]: a.dark, position: 'fixed', zIndex: 59, left: 0, right: 0, top: '72px', bottom: 0, overscrollBehavior: 'contain', background: '#000', color: '#fff', padding: '32px clamp(20px,4vw,64px)', display: 'flex', flexDirection: 'column', gap: '32px', overflow: 'auto' }}>
           <nav style={{ display: 'flex', flexDirection: 'column', fontFamily: W, fontWeight: 700, fontSize: '28px', lineHeight: 1.1 }}>
             {items.map((it) => (
               <a key={it.href} href={it.href} onClick={close} className="am-menu-link" style={{ padding: '16px 0', borderBottom: '1px solid #2B2B2B', ...(it.page === page ? { color: a.menuActive } : {}) }}>
@@ -182,7 +191,7 @@ export function Header({
           </a>
         </div>
       )}
-    </header>
+    </>
   )
 }
 
