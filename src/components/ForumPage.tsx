@@ -10,6 +10,7 @@ import type { Lang } from '@/i18n/links'
 import { post } from '@/lib/submit'
 import { Consent, EMAIL_RE, Footer, FormError, Header, INPUT, LABEL, W, no2 } from './am/ui'
 import type { S } from './am/ui'
+import Preloader from './Preloader'
 import { speakerCards } from './am/speakers'
 import type { SpeakerIn } from './am/speakers'
 
@@ -131,6 +132,7 @@ export default function ForumPage({ t, lang, forumDate, countdownVisible = true,
 
   return (
     <div lang={lang} className="sel-orange" style={{ background: '#fff', color: '#000', overflowX: 'clip' }}>
+      <Preloader label={t.cNavForum} accent="#E8461E" />
       <Header t={t} lang={lang} page="forum" cta={t.fCta} ctaHref="#apply" ctaMenu={t.fCtaMenu} onCta={pickGuest} />
 
       <main>
@@ -212,7 +214,7 @@ export default function ForumPage({ t, lang, forumDate, countdownVisible = true,
           <div className="am-g4p" style={{ display: 'grid', gap: '2px' }}>
             {PHOTOS.map((src, i) => (
               <div key={src} style={{ position: 'relative', aspectRatio: '4/3', background: '#1A1A1A', overflow: 'hidden' }}>
-                <div style={{ position: 'absolute', inset: 0, filter: 'grayscale(1)' }}>
+                <div className="am-zoom am-gray" style={{ position: 'absolute', inset: 0, filter: 'grayscale(1)' }}>
                   <img src={src} alt={t.fPhotoAlt} loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                 </div>
                 {i === 3 && (
@@ -231,8 +233,8 @@ export default function ForumPage({ t, lang, forumDate, countdownVisible = true,
             <h2 style={H2}>{t.fTopicsTitle}</h2>
             <div className="am-f2" style={{ display: 'grid', gap: '24px', marginTop: '32px' }}>
               {topics.map(([tag, title, text], i) => (
-                <article key={i} style={{ display: 'flex', flexDirection: 'column', background: '#F3F3F1', color: '#000' }}>
-                  <div style={{ position: 'relative', aspectRatio: '16/9', background: '#D9D9D6', overflow: 'hidden' }}>
+                <article key={i} className="am-card" style={{ display: 'flex', flexDirection: 'column', background: '#F3F3F1', color: '#000' }}>
+                  <div className="am-zoom" style={{ position: 'relative', aspectRatio: '16/9', background: '#D9D9D6', overflow: 'hidden' }}>
                     <span aria-hidden="true" style={{ position: 'absolute', right: 0, top: 0, zIndex: 1, width: '64px', height: '12px', background: TOPIC_ACC[i] }} />
                     <span aria-hidden="true" style={{ position: 'absolute', right: 0, top: 0, zIndex: 1, width: '12px', height: '64px', background: TOPIC_ACC[i] }} />
                     <img src={`/img/forum-topic-${i + 1}.jpg`} alt={tag} loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
@@ -255,10 +257,10 @@ export default function ForumPage({ t, lang, forumDate, countdownVisible = true,
                 </div>
                 <div className="am-g4p" style={{ display: 'grid', gap: '32px 24px', marginTop: '28px' }}>
                   {cards.map((s, i) => (
-                    <div key={i} style={{ position: 'relative' }}>
-                      <div style={{ position: 'relative', aspectRatio: '4/5', background: '#E4E4E2', overflow: 'hidden' }}>
+                    <div key={i} className="am-card" style={{ position: 'relative' }}>
+                      <div className="am-zoom" style={{ position: 'relative', aspectRatio: '4/5', background: '#E4E4E2', overflow: 'hidden' }}>
                         {s.img ? (
-                          <div style={{ position: 'absolute', inset: 0, filter: 'grayscale(1)' }}>
+                          <div className="am-gray" style={{ position: 'absolute', inset: 0, filter: 'grayscale(1)' }}>
                             {s.crop ? (
                               <img src={s.img} alt={s.name} loading="lazy" style={{ position: 'absolute', left: s.crop[0], top: s.crop[1], width: s.crop[2], maxWidth: 'none', height: 'auto', display: 'block' }} />
                             ) : (

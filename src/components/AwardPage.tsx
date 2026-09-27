@@ -7,8 +7,9 @@ import type { ChangeEvent, FormEvent } from 'react'
 import type { Dict } from '@/i18n/dict'
 import type { Lang } from '@/i18n/links'
 import { post, uploadFiles } from '@/lib/submit'
-import { Consent, Footer, FormError, Header, W, fill, no2 } from './am/ui'
+import { Arrow, Consent, Footer, FormError, Header, W, fill, no2 } from './am/ui'
 import type { S } from './am/ui'
+import Preloader from './Preloader'
 
 type Nomination = { no?: string | null; title?: string | null; hint?: string | null }
 
@@ -175,6 +176,7 @@ export default function AwardPage({ t, lang, deadlineDate, forumDate, nomination
 
   return (
     <div lang={lang} className="sel-yellow" style={{ background: '#fff', color: '#000', overflowX: 'clip' }}>
+      <Preloader label={t.cNavAward} accent="#E5D900" />
       <Header t={t} lang={lang} page="award" cta={t.aCta} ctaHref="#apply" ctaMenu={t.aCta} />
 
       <main>
@@ -215,13 +217,13 @@ export default function AwardPage({ t, lang, deadlineDate, forumDate, nomination
               <div className="am-f2" style={{ display: 'grid', gap: '10px', marginTop: '10px' }}>
                 <a href="#apply" className="hv-yellow" style={{ display: 'flex', flexDirection: 'column', gap: '6px', padding: '16px 18px', background: '#000', color: '#fff', transition: 'background 200ms,color 200ms' }}>
                   <span style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', fontFamily: W, fontWeight: 700, fontSize: '15px' }}>
-                    {t.aAward} <span aria-hidden="true">→</span>
+                    {t.aAward} <span className="am-arr" aria-hidden="true">→</span>
                   </span>
                   <span style={{ fontSize: '14px', lineHeight: 1.35, opacity: 0.8 }}>{t.aAwardNote}</span>
                 </a>
                 <a href="#student" className="hv-black" style={{ display: 'flex', flexDirection: 'column', gap: '6px', padding: '16px 18px', background: '#1A52A0', color: '#fff', transition: 'background 200ms' }}>
                   <span style={{ display: 'flex', justifyContent: 'space-between', gap: '12px', fontFamily: W, fontWeight: 700, fontSize: '15px' }}>
-                    {t.aStudent} <span aria-hidden="true">→</span>
+                    {t.aStudent} <span className="am-arr" aria-hidden="true">→</span>
                   </span>
                   <span style={{ fontSize: '14px', lineHeight: 1.35, opacity: 0.85 }}>{t.aStudentNote}</span>
                 </a>
@@ -247,7 +249,7 @@ export default function AwardPage({ t, lang, deadlineDate, forumDate, nomination
                 <a key={n.no} href="#apply" onClick={() => setNom(n.title)} className="hv-bgyellow" style={{ display: 'flex', flexDirection: 'column', minHeight: '200px', padding: '22px', borderRight: '1px solid #E6E6E3', borderBottom: '1px solid #E6E6E3', color: '#000', transition: 'background 240ms' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <span style={{ fontFamily: W, fontWeight: 800, fontSize: '30px', lineHeight: 1 }}>{n.no}</span>
-                    <span aria-hidden="true" style={{ position: 'relative', display: 'block', width: '24px', height: '24px' }}>
+                    <span aria-hidden="true" className="am-corner" style={{ position: 'relative', display: 'block', width: '24px', height: '24px' }}>
                       <i style={{ position: 'absolute', right: 0, top: 0, width: '100%', height: '28%', background: '#000' }} />
                       <i style={{ position: 'absolute', right: 0, top: 0, width: '28%', height: '100%', background: '#000' }} />
                     </span>
@@ -286,7 +288,7 @@ export default function AwardPage({ t, lang, deadlineDate, forumDate, nomination
                   <div style={{ fontFamily: W, fontWeight: 700, fontSize: '20px' }}>{t.cSent}</div>
                   <p style={{ marginTop: '10px', fontSize: '16px', lineHeight: 1.6, color: '#3A3A37' }}>{fill(t.aSentText, { nom: sentNom })}</p>
                   <button type="button" onClick={againA} className="hv-yellow" style={{ marginTop: '20px', ...SUBMIT, background: '#000', color: '#fff', cursor: 'pointer' }}>
-                    {t.aAgain}
+                    <Arrow s={t.aAgain} />
                   </button>
                 </div>
               ) : (
@@ -321,7 +323,7 @@ export default function AwardPage({ t, lang, deadlineDate, forumDate, nomination
                   </label>
                   <div style={{ gridColumn: '1/-1', paddingTop: '8px' }}>
                     <button type="submit" disabled={!!busyA} className="hv-yellow" style={{ ...SUBMIT, background: '#000', color: '#fff', cursor: busyA ? 'wait' : 'pointer' }}>
-                      {busyA || t.aSend}
+                      {busyA || <Arrow s={t.aSend} />}
                     </button>
                     <FormError>{errA}</FormError>
                     <Consent t={t} lang={lang} />
@@ -372,7 +374,7 @@ export default function AwardPage({ t, lang, deadlineDate, forumDate, nomination
                   </label>
                   <div style={{ gridColumn: '1/-1', paddingTop: '8px' }}>
                     <button type="submit" disabled={!!busyS} className="hv-yellow" style={{ ...SUBMIT, background: '#fff', color: '#000', cursor: busyS ? 'wait' : 'pointer' }}>
-                      {busyS || t.aStudentSend}
+                      {busyS || <Arrow s={t.aStudentSend} />}
                     </button>
                     <FormError dark>{errS}</FormError>
                     <Consent t={t} lang={lang} dark />

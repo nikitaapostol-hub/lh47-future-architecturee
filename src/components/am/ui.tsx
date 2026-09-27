@@ -30,10 +30,27 @@ export type Accent = {
   menuCtaInk: string
 }
 
-export const ACCENT: Record<Page, Accent> = {
-  home: { underline: 'inset 0 -2px 0 #1A52A0', ctaHover: 'hv-blue', menuActive: '#fff', menuCtaBg: '#fff', menuCtaInk: '#000' },
-  forum: { underline: 'inset 0 -2px 0 #E8461E', ctaHover: 'hv-orange', menuActive: '#E8461E', menuCtaBg: '#E8461E', menuCtaInk: '#000' },
-  award: { underline: 'inset 0 -3px 0 #E5D900', ctaHover: 'hv-yellow', menuActive: '#E5D900', menuCtaBg: '#E5D900', menuCtaInk: '#000' },
+export const ACCENT: Record<Page, Accent & { color: string; dark: string }> = {
+  home: { underline: 'inset 0 -2px 0 #1A52A0', ctaHover: 'hv-blue', menuActive: '#fff', menuCtaBg: '#fff', menuCtaInk: '#000', color: '#1A52A0', dark: '#E5D900' },
+  forum: { underline: 'inset 0 -2px 0 #E8461E', ctaHover: 'hv-orange', menuActive: '#E8461E', menuCtaBg: '#E8461E', menuCtaInk: '#000', color: '#E8461E', dark: '#E8461E' },
+  award: { underline: 'inset 0 -3px 0 #E5D900', ctaHover: 'hv-yellow', menuActive: '#E5D900', menuCtaBg: '#E5D900', menuCtaInk: '#000', color: '#E5D900', dark: '#E5D900' },
+}
+
+/** Текст со стрелкой в конце: стрелка при наведении уезжает вправо. */
+export function Arrow({ s, line = false }: { s: string; line?: boolean }) {
+  const m = s.match(/^(.*?)\s*→\s*$/)
+  const text = m ? m[1] : s
+  return (
+    <>
+      {line ? <span className="am-link-t">{text}</span> : text}
+      {m ? (
+        <>
+          {' '}
+          <span className="am-arr" aria-hidden="true">→</span>
+        </>
+      ) : null}
+    </>
+  )
 }
 
 /** Числа 01, 02… */
@@ -87,7 +104,7 @@ export function Header({
   const langs = ['ro', 'ru', 'en'] as Lang[]
 
   return (
-    <header style={{ position: 'sticky', top: 0, zIndex: 60, background: 'rgba(255,255,255,.94)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: '1px solid #E6E6E3' }}>
+    <header style={{ ['--am-acc' as string]: a.color, position: 'sticky', top: 0, zIndex: 60, background: 'rgba(255,255,255,.94)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: '1px solid #E6E6E3' }}>
       <div style={{ maxWidth: '1440px', height: '72px', margin: '0 auto', padding: '0 clamp(20px,4vw,64px)', display: 'flex', alignItems: 'center', gap: '32px' }}>
         <a href={path(lang, '/')} aria-label="ARCH MAKERS" style={{ display: 'flex', alignItems: 'center', flex: '0 0 auto' }}>
           <img src="/img/logo-v2.svg" alt="ARCH MAKERS" width={137} height={40} style={{ display: 'block', height: '40px', width: 'auto' }} />
@@ -99,7 +116,7 @@ export function Header({
                 {it.label}
               </a>
             ) : (
-              <a key={it.href} href={it.href} style={{ padding: '6px 0', color: '#55554F' }}>
+              <a key={it.href} href={it.href} className="am-nav" style={{ padding: '6px 0', color: '#55554F' }}>
                 {it.label}
               </a>
             ),
@@ -112,7 +129,7 @@ export function Header({
                 {l.toUpperCase()}
               </a>
             ) : (
-              <a key={l} href={path(l, PAGE_PATH[page])} hrefLang={l}>
+              <a key={l} href={path(l, PAGE_PATH[page])} hrefLang={l} className="am-lang" style={{ transition: 'color 200ms' }}>
                 {l.toUpperCase()}
               </a>
             ),
@@ -138,17 +155,17 @@ export function Header({
         </button>
       </div>
       {menu && (
-        <div className="am-m" style={{ position: 'fixed', left: 0, right: 0, top: '72px', bottom: 0, background: '#000', color: '#fff', padding: '32px clamp(20px,4vw,64px)', display: 'flex', flexDirection: 'column', gap: '32px', overflow: 'auto' }}>
+        <div className="am-m" style={{ ['--am-acc' as string]: a.dark, position: 'fixed', left: 0, right: 0, top: '72px', bottom: 0, background: '#000', color: '#fff', padding: '32px clamp(20px,4vw,64px)', display: 'flex', flexDirection: 'column', gap: '32px', overflow: 'auto' }}>
           <nav style={{ display: 'flex', flexDirection: 'column', fontFamily: W, fontWeight: 700, fontSize: '28px', lineHeight: 1.1 }}>
             {items.map((it) => (
-              <a key={it.href} href={it.href} onClick={close} style={{ padding: '16px 0', borderBottom: '1px solid #2B2B2B', ...(it.page === page ? { color: a.menuActive } : {}) }}>
+              <a key={it.href} href={it.href} onClick={close} className="am-menu-link" style={{ padding: '16px 0', borderBottom: '1px solid #2B2B2B', ...(it.page === page ? { color: a.menuActive } : {}) }}>
                 {it.label}
               </a>
             ))}
           </nav>
           <div style={{ display: 'flex', gap: '16px', fontSize: '14px', color: '#9A9A96' }}>
             {langs.map((l) => (
-              <a key={l} href={path(l, PAGE_PATH[page])} hrefLang={l} style={l === lang ? { color: '#fff' } : undefined}>
+              <a key={l} href={path(l, PAGE_PATH[page])} hrefLang={l} className="am-lang-dark" style={{ transition: 'color 200ms', ...(l === lang ? { color: '#fff' } : {}) }}>
                 {l.toUpperCase()}
               </a>
             ))}
@@ -184,7 +201,7 @@ export function Footer({ t, lang }: { t: Dict; lang: Lang }) {
   ].filter((s) => s.href && s.href.trim())
 
   return (
-    <footer id="contacts" style={{ background: '#000', color: '#fff', padding: 'clamp(48px,5vw,80px) 0 28px' }}>
+    <footer id="contacts" className="am-foot" style={{ background: '#000', color: '#fff', padding: 'clamp(48px,5vw,80px) 0 28px' }}>
       <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 clamp(20px,4vw,64px)' }}>
         <div className="am-g4" style={{ display: 'grid', gap: '32px' }}>
           <div>

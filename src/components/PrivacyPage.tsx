@@ -3,6 +3,9 @@
 import type { CSSProperties } from 'react'
 import { path } from '@/i18n/links'
 import type { Lang } from '@/i18n/links'
+import Preloader from './Preloader'
+
+const LABEL: Record<Lang, string> = { ru: 'Политика данных', ro: 'Politica datelor', en: 'Privacy policy' }
 
 type S = CSSProperties
 const W = "'Actay Wide',Onest,sans-serif"
@@ -55,6 +58,7 @@ export default function PrivacyPage({ lang }: { lang: Lang }) {
   const c = COPY[lang]
   return (
     <div lang={lang} className="sel-yellow" style={{ background: '#fff', color: '#000', minHeight: '100vh', overflowX: 'clip' }}>
+      <Preloader label={LABEL[lang]} accent="#E5D900" />
       <header style={{ position: 'sticky', top: 0, zIndex: 60, background: 'rgba(255,255,255,.94)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: '1px solid #E6E6E3' }}>
         <div style={{ maxWidth: '1440px', height: '72px', margin: '0 auto', padding: '0 clamp(20px,4vw,64px)', display: 'flex', alignItems: 'center', gap: '24px' }}>
           <a href={path(lang, '/')} aria-label="ARCH MAKERS" style={{ display: 'flex', alignItems: 'center', flex: '0 0 auto' }}>
@@ -62,7 +66,7 @@ export default function PrivacyPage({ lang }: { lang: Lang }) {
           </a>
           <div style={{ display: 'flex', gap: '10px', marginLeft: 'auto', fontSize: '13px', color: '#8A8A86' }}>
             {(['ro', 'ru', 'en'] as Lang[]).map((k) => (
-              <a key={k} href={path(k, '/privacy')} hrefLang={k} style={{ padding: '6px 2px', color: k === lang ? '#000' : '#8A8A86', fontWeight: k === lang ? 600 : 400 }}>
+              <a key={k} href={path(k, '/privacy')} hrefLang={k} className={k === lang ? undefined : 'am-lang'} style={{ padding: '6px 2px', color: k === lang ? '#000' : '#8A8A86', fontWeight: k === lang ? 600 : 400 }}>
                 {k.toUpperCase()}
               </a>
             ))}

@@ -7,8 +7,9 @@ import type { FormEvent } from 'react'
 import type { Dict } from '@/i18n/dict'
 import type { Lang } from '@/i18n/links'
 import { post } from '@/lib/submit'
-import { Consent, EMAIL_RE, Footer, FormError, Header, INPUT, LABEL, W, no2 } from './am/ui'
+import { Arrow, Consent, EMAIL_RE, Footer, FormError, Header, INPUT, LABEL, W, no2 } from './am/ui'
 import type { S } from './am/ui'
+import Preloader from './Preloader'
 
 type Props = { t: Dict; lang: Lang }
 
@@ -113,6 +114,7 @@ export default function CommunityPage({ t, lang }: Props) {
 
   return (
     <div lang={lang} className="sel-blue" style={{ background: '#fff', color: '#000', overflowX: 'clip' }}>
+      <Preloader label={t.cNavCommunity} accent="#1A52A0" />
       <Header t={t} lang={lang} page="home" cta={t.hCta} ctaHref="#join" ctaMenu={t.hCtaMenu} />
 
       <main>
@@ -182,8 +184,8 @@ export default function CommunityPage({ t, lang }: Props) {
               <p style={{ maxWidth: '44ch', fontSize: '17px', lineHeight: 1.6, color: '#55554F' }}>{t.hWhoNote}</p>
             </div>
             <div className="am-g2" style={{ display: 'grid', gap: '24px', marginTop: '32px' }}>
-              <article style={{ display: 'flex', flexDirection: 'column', background: '#F3F3F1' }}>
-                <div style={{ position: 'relative', aspectRatio: '2/1', overflow: 'hidden', background: '#D9D9D6' }}>
+              <article className="am-card" style={{ display: 'flex', flexDirection: 'column', background: '#F3F3F1' }}>
+                <div className="am-zoom" style={{ position: 'relative', aspectRatio: '2/1', overflow: 'hidden', background: '#D9D9D6' }}>
                   <img src="/img/il-residents.jpg" alt={t.hResidentsAlt} loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: 'clamp(24px,3vw,44px)' }}>
@@ -200,13 +202,13 @@ export default function CommunityPage({ t, lang }: Props) {
                       </div>
                     ))}
                   </div>
-                  <a href="#join" onClick={pickResident} style={{ alignSelf: 'flex-start', marginTop: 'auto', paddingTop: '32px', fontFamily: W, fontWeight: 700, fontSize: '14px' }}>
-                    {t.hBeResidentArrow}
+                  <a href="#join" onClick={pickResident} className="am-link" style={{ alignSelf: 'flex-start', marginTop: 'auto', paddingTop: '32px', fontFamily: W, fontWeight: 700, fontSize: '14px' }}>
+                    <Arrow s={t.hBeResidentArrow} line />
                   </a>
                 </div>
               </article>
-              <article style={{ display: 'flex', flexDirection: 'column', background: '#1A52A0', color: '#fff' }}>
-                <div style={{ position: 'relative', aspectRatio: '2/1', overflow: 'hidden', background: '#123C78' }}>
+              <article className="am-card" style={{ display: 'flex', flexDirection: 'column', background: '#1A52A0', color: '#fff' }}>
+                <div className="am-zoom" style={{ position: 'relative', aspectRatio: '2/1', overflow: 'hidden', background: '#123C78' }}>
                   <img src="/img/il-partners.jpg" alt={t.hPartnersAlt} loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: 'clamp(24px,3vw,44px)' }}>
@@ -216,8 +218,8 @@ export default function CommunityPage({ t, lang }: Props) {
                   </div>
                   <h3 style={{ marginTop: '24px', fontFamily: W, fontWeight: 700, fontSize: 'clamp(24px,2.2vw,34px)', lineHeight: 1.1, letterSpacing: '-.02em' }}>{t.hPartnersTitle}</h3>
                   <p style={{ marginTop: '20px', maxWidth: '44ch', fontSize: '17px', lineHeight: 1.6, color: '#E3EAF5' }}>{t.hPartnersText}</p>
-                  <a href="#join" onClick={pickPartner} className="lk-white" style={{ alignSelf: 'flex-start', marginTop: 'auto', paddingTop: '32px', fontFamily: W, fontWeight: 700, fontSize: '14px', color: '#fff' }}>
-                    {t.hBePartnerArrow}
+                  <a href="#join" onClick={pickPartner} className="am-link" style={{ alignSelf: 'flex-start', marginTop: 'auto', paddingTop: '32px', fontFamily: W, fontWeight: 700, fontSize: '14px', color: '#fff' }}>
+                    <Arrow s={t.hBePartnerArrow} line />
                   </a>
                 </div>
               </article>
@@ -319,7 +321,7 @@ export default function CommunityPage({ t, lang }: Props) {
                     )}
                   </div>
                   <button type="submit" disabled={busy} className="hv-blue" style={{ marginTop: '40px', ...BTN, border: 0, cursor: busy ? 'wait' : 'pointer' }}>
-                    {busy ? t.cSending : (isResident ? t.cSendApplication : t.hSendPartner) + ' →'}
+                    {busy ? t.cSending : <Arrow s={(isResident ? t.cSendApplication : t.hSendPartner) + ' →'} />}
                   </button>
                   <FormError>{error}</FormError>
                   <Consent t={t} lang={lang} />
