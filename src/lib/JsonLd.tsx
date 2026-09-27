@@ -23,9 +23,9 @@ export function OrgLd({ lang }: { lang: Lang }) {
       {
         '@type': 'Organization',
         '@id': ORG_ID,
-        name: 'Future Architecture',
+        name: 'ARCH MAKERS',
         url: SITE,
-        logo: SITE + '/img/5dd2fe9c60.png',
+        logo: SITE + '/img/logo-v2.svg',
         email: 'marketing@lh47arch.com',
         telephone: ['+37368199951', '+37368059311'],
         foundingDate: '2026',
@@ -40,7 +40,7 @@ export function OrgLd({ lang }: { lang: Lang }) {
         '@type': 'WebSite',
         '@id': SITE_ID,
         url: SITE,
-        name: 'Future Architecture',
+        name: 'ARCH MAKERS',
         inLanguage: LANGS,
         publisher: { '@id': ORG_ID },
       },
@@ -53,7 +53,7 @@ export function ForumLd({ lang, startDate }: { lang: Lang; startDate?: string })
   return tag({
     '@context': 'https://schema.org',
     '@type': 'Event',
-    name: 'Future Architecture Forum 2026',
+    name: 'ARCH MAKERS Forum 2026',
     startDate: startDate || '2026-12-09T10:00:00+02:00',
     eventStatus: 'https://schema.org/EventScheduled',
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
@@ -62,7 +62,7 @@ export function ForumLd({ lang, startDate }: { lang: Lang; startDate?: string })
     maximumAttendeeCapacity: 250,
     description:
       'Закрытый отраслевой форум: инвесторы, девелоперы, архитекторы и производители за одним столом.',
-    image: [SITE + '/img/5dd2fe9c60.png'],
+    image: [SITE + '/og-forum.png'],
     location: {
       '@type': 'Place',
       name: 'Range Rover Moldova',
@@ -90,14 +90,14 @@ export function AwardLd({ lang, deadline }: { lang: Lang; deadline?: string }) {
   return tag({
     '@context': 'https://schema.org',
     '@type': 'Event',
-    name: 'Future Architecture Award 2026',
+    name: 'ARCH MAKERS Award 2026',
     startDate: '2026-12-09T18:00:00+02:00',
     eventStatus: 'https://schema.org/EventScheduled',
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
     url: SITE + path(lang, '/award'),
     inLanguage: lang,
     description:
-      'Премия отрасли и студенческий конкурс Future Architecture Award. Церемония проходит в рамках форума.',
+      'Премия для архитекторов и дизайнеров в четырёх номинациях и студенческий конкурс. Победителей объявляют на ARCH MAKERS Forum.',
     location: {
       '@type': 'Place',
       name: 'Range Rover Moldova',

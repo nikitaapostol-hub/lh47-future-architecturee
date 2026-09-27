@@ -37,7 +37,7 @@ export const Mail: GlobalConfig = {
       type: 'text',
       label: 'Автоответ — тема',
       localized: true,
-      defaultValue: 'Заявка получена — Future Architecture',
+      defaultValue: 'Заявка получена — ARCH MAKERS',
       admin: { condition: (d) => d?.autoreply !== false },
     },
     {
@@ -46,7 +46,7 @@ export const Mail: GlobalConfig = {
       label: 'Автоответ — текст',
       localized: true,
       defaultValue:
-        'Здравствуйте!\n\nМы получили вашу заявку и вернёмся с ответом на этот адрес.\n\nFuture Architecture — сообщество архитекторов и дизайнеров Молдовы.\nfuture-arch.md',
+        'Здравствуйте!\n\nМы получили вашу заявку и вернёмся с ответом на этот адрес.\n\nARCH MAKERS — сообщество архитекторов и дизайнеров Молдовы.\nfuture-arch.md',
       admin: {
         condition: (d) => d?.autoreply !== false,
         description: 'Обычный текст. Абзацы — пустой строкой.',

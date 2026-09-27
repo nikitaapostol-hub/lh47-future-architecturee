@@ -1,1817 +1,400 @@
 'use client'
 
-/* Forum — ported from the original dc bundle.
-   Markup and inline styles are carried over verbatim; the values the old
-   runtime computed in JS are now CSS custom properties (see globals.css). */
+/* Форум 2026 (/forum) — макет design/Forum.dc.html
+   (варианты макета по умолчанию: цепочка «Линия», темы «Графит»). */
 
-import { Fragment, useCallback, useEffect, useRef, useState } from 'react'
-import type { CSSProperties } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import type { FormEvent } from 'react'
 import type { Dict } from '@/i18n/dict'
-import { path as langPath } from '@/i18n/links'
-import { post } from '@/lib/submit'
 import type { Lang } from '@/i18n/links'
-
-
-const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/
-
-type Speaker = {
-  name: string
-  role?: string
-  company?: string
-  photo?: { url?: string; alt?: string } | null
-}
+import { post } from '@/lib/submit'
+import { Consent, EMAIL_RE, Footer, FormError, Header, INPUT, LABEL, W, no2 } from './am/ui'
+import type { S } from './am/ui'
+import { speakerCards } from './am/speakers'
+import type { SpeakerIn } from './am/speakers'
 
 type Props = {
   t: Dict
   lang: Lang
   forumDate?: string
   countdownVisible?: boolean
-  speakers?: Speaker[]
-  speakerSlots?: number
+  speakers?: SpeakerIn[]
 }
 
-/** Инициалы вместо фото, пока портрет не загружен. */
-function initials(name: string) {
-  return (name || '')
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((w) => w.charAt(0).toUpperCase())
-    .join('')
-}
+const CAP: S = { fontSize: '12px', fontWeight: 600, letterSpacing: '.12em', textTransform: 'uppercase', color: '#55554F' }
+const H2: S = { fontFamily: W, fontWeight: 700, fontSize: 'clamp(28px,3vw,44px)', lineHeight: 1.05, letterSpacing: '-.025em' }
+const WRAP: S = { maxWidth: '1440px', margin: '0 auto', padding: '0 clamp(20px,4vw,64px)' }
+const BTN: S = { display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '14px', minHeight: '52px', padding: '0 26px', background: '#000', color: '#fff', fontFamily: W, fontWeight: 700, fontSize: '14px', textAlign: 'center', transition: 'background 200ms,color 200ms' }
+const PILL: S = { display: 'inline-flex', alignItems: 'center', height: '32px', padding: '0 12px', border: '1px solid rgba(255,255,255,.5)', fontSize: '12px', fontWeight: 600, letterSpacing: '.1em', textTransform: 'uppercase' }
 
-export default function ForumPage({
-  t, lang, forumDate, countdownVisible = true, speakers: speakersProp = [], speakerSlots = 4 }: Props) {
-  const speakers = speakersProp.filter((s) => s && s.name)
-  /* Свободные места: показываем, что состав ещё собирается, и держим сетку целой. */
-  const slots = Array.from({ length: Math.max(0, Math.min(12, speakerSlots)) }, (_, i) => i)
+const CHAIN_SQ = ['#E5D900', '#E8461E', '#1A52A0', '#000', '#E5D900', '#E8461E']
+/** Уголок на картинке темы: цвета бренда, чёрный заменён оранжевым (вариант «Графит»). */
+const TOPIC_ACC = ['#E8461E', '#1A52A0', '#E5D900', '#E8461E']
+const PHOTOS = ['/img/fo-photo-panel.jpg', '/img/fo-photo-group.jpg', '/img/0c1ebc8a38.jpg', '/img/ec5233a8df.jpg']
 
-  /* Карусель спикеров: листаем на ширину карточки, стрелки гаснут на краях. */
-  const trackRef = useRef<HTMLDivElement | null>(null)
-  const [atStart, setAtStart] = useState(true)
-  const [atEnd, setAtEnd] = useState(false)
-  const syncArrows = useCallback(() => {
-    const el = trackRef.current
-    if (!el) return
-    const max = el.scrollWidth - el.clientWidth
-    setAtStart(el.scrollLeft <= 2)
-    setAtEnd(el.scrollLeft >= max - 2)
-  }, [])
-  const onTrackScroll = useCallback(() => syncArrows(), [syncArrows])
-  const slide = useCallback((dir: number) => {
-    const el = trackRef.current
-    if (!el) return
-    const card = el.querySelector('.fa-slide') as HTMLElement | null
-    const step = card ? card.getBoundingClientRect().width + 1 : el.clientWidth * 0.8
-    el.scrollBy({ left: step * dir, behavior: 'smooth' })
-  }, [])
-  useEffect(() => {
-    syncArrows()
-    window.addEventListener('resize', syncArrows)
-    return () => window.removeEventListener('resize', syncArrows)
-  }, [syncArrows, speakers.length, slots.length])
+const pad = (n: number) => String(n).padStart(2, '0')
 
-  // "/forum" stays "/forum" in Russian and becomes "/ro/forum" elsewhere
-  const lp = (p: string) => langPath(lang, p)
-  const lhref = (c: Lang) => langPath(c, "/forum")
-  /* подсветка активного языка: на светлом фоне тёмная, на тёмном светлая */
-  const langColor = (c: Lang, on: string, off: string) => (c === lang ? on : off)
-
-  const [menu, setMenu] = useState(false)
-  const toggleMenu = useCallback(() => setMenu((m) => !m), [])
-  const closeMenu = useCallback(() => setMenu(false), [])
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 1080px)')
-    const off = () => setMenu(false)
-    mq.addEventListener('change', off)
-    return () => mq.removeEventListener('change', off)
-  }, [])
-
-  const [err, setErr] = useState<Record<string, string>>({})
+export default function ForumPage({ t, lang, forumDate, countdownVisible = true, speakers }: Props) {
+  const [track, setTrack] = useState<'guest' | 'partner'>('guest')
   const [sent, setSent] = useState(false)
-  const [hv, setHv] = useState('')
-  const data = useRef({ name: '', company: '', role: '', kind: '', email: '', phone: '' })
-  const kindEl = useRef<HTMLSelectElement | null>(null)
-  const kindRef = useCallback((el: HTMLSelectElement | null) => { kindEl.current = el }, [])
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
+  const [v, setV] = useState<Record<string, string>>({})
+  const [now, setNow] = useState(() => Date.now())
+  const [prog, setProg] = useState(0)
+  const progRef = useRef<HTMLDivElement>(null)
 
-  // hero glow follows the pointer (was componentDidMount in the original)
   useEffect(() => {
-    let raf: number | null = null
-    const onMove = (e: PointerEvent) => {
-      if (raf) return
-      raf = requestAnimationFrame(() => {
-        raf = null
-        const glow = document.querySelector('[data-hero-glow]') as HTMLElement | null
-        const hero = document.getElementById('top')
-        if (!glow || !hero) return
-        const r = hero.getBoundingClientRect()
-        if (r.bottom < 0) return
-        glow.style.left = Math.max(0, Math.min(r.width, e.clientX - r.left)) + 'px'
-        glow.style.top = Math.max(0, Math.min(r.height, e.clientY - r.top)) + 'px'
-        glow.style.transition =
-          'left 700ms cubic-bezier(.2,.8,.2,1), top 700ms cubic-bezier(.2,.8,.2,1)'
-      })
+    const id = setInterval(() => setNow(Date.now()), 1000)
+    return () => clearInterval(id)
+  }, [])
+
+  // заполнение шкалы программы по мере прокрутки
+  useEffect(() => {
+    let last = -1
+    const onS = () => {
+      const el = progRef.current
+      if (!el) return
+      const r = el.getBoundingClientRect()
+      const p = Math.min(1, Math.max(0, (window.innerHeight * 0.6 - r.top) / r.height))
+      if (Math.abs(p - last) > 0.004) {
+        last = p
+        setProg(p)
+      }
     }
-    window.addEventListener('pointermove', onMove, { passive: true })
-    return () => { window.removeEventListener('pointermove', onMove); if (raf) cancelAnimationFrame(raf) }
+    window.addEventListener('scroll', onS, { passive: true })
+    window.addEventListener('resize', onS)
+    onS()
+    return () => {
+      window.removeEventListener('scroll', onS)
+      window.removeEventListener('resize', onS)
+    }
   }, [])
 
-  useEffect(() => {
-    const FA = (window as any).FA
-    if (FA) { FA.scan(); FA.refresh() }
-  })
+  const pickGuest = () => setTrack('guest')
+  const pickPartner = () => setTrack('partner')
+  const partner = track === 'partner'
 
-  const field = (k: string) => (e: any) => {
-    ;(data.current as any)[k] = e.target.value
-    setErr((prev) => { if (!prev[k]) return prev; const n = { ...prev }; delete n[k]; return n })
-  }
+  const target = new Date(forumDate || '2026-12-09T10:00:00+02:00').getTime()
+  const sec = Math.max(0, target - now) / 1000
+  const countdown = [
+    [Math.floor(sec / 86400), t.fDays],
+    [Math.floor((sec % 86400) / 3600), t.fHours],
+    [Math.floor((sec % 3600) / 60), t.fMinutes],
+    [Math.floor(sec % 60), t.fSeconds],
+  ] as const
 
-  const card = (k: string) => ({
-    bg: hv === k ? '#16181D' : '#F7F6F3',
-    fg: hv === k ? '#F7F6F3' : '#16181D',
-    ghost: hv === k ? 'rgba(255,255,255,.07)' : '#EAE7E0',
-    tag: hv === k ? '#FF4002' : '#6E7278',
-    dot: hv === k ? '#FF4002' : '#C9C6BE',
-  })
-  const t1 = card('t1'), t2 = card('t2'), t3 = card('t3'), t4 = card('t4')
-  const onT1 = useCallback(() => setHv('t1'), [])
-  const onT2 = useCallback(() => setHv('t2'), [])
-  const onT3 = useCallback(() => setHv('t3'), [])
-  const onT4 = useCallback(() => setHv('t4'), [])
-  const hoverOff = useCallback(() => setHv(''), [])
+  const chain = [t.fChain1, t.fChain2, t.fChain3, t.fChain4, t.fChain5, t.fChain6]
+  const topics = [
+    [t.fTopic1Tag, t.fTopic1, t.fTopic1Text],
+    [t.fTopic2Tag, t.fTopic2, t.fTopic2Text],
+    [t.fTopic3Tag, t.fTopic3, t.fTopic3Text],
+    [t.fTopic4Tag, t.fTopic4, t.fTopic4Text],
+  ]
+  const program = [t.fProg1, t.fProg2, t.fProg3, t.fProg4, t.fProg5, t.fProg6, t.fProg7, t.fProg8]
+  const cards = speakerCards(speakers, lang)
 
-  const goPartner = useCallback(() => {
-    data.current.kind = 'Партнёр'
-    if (kindEl.current) kindEl.current.value = 'Партнёр'
-    const target = document.getElementById('apply')
-    if (!target) return
-    const y = target.getBoundingClientRect().top + window.scrollY - 80
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    window.scrollTo({ top: y, behavior: reduce ? 'auto' : 'smooth' })
-  }, [])
+  const fields = partner
+    ? [
+        { k: 'company', label: t.cCompanyName, type: 'text', auto: 'organization' },
+        { k: 'name', label: t.cContactPerson, type: 'text', auto: 'name' },
+        { k: 'phone', label: t.cFieldPhone, type: 'tel', auto: 'tel' },
+        { k: 'email', label: t.cFieldEmail, type: 'email', auto: 'email' },
+      ]
+    : [
+        { k: 'name', label: t.cFullName, type: 'text', auto: 'name' },
+        { k: 'company', label: t.fCompanyRole, type: 'text', auto: 'organization' },
+        { k: 'phone', label: t.cFieldPhone, type: 'tel', auto: 'tel' },
+        { k: 'email', label: t.cFieldEmail, type: 'email', auto: 'email' },
+      ]
+  const set = (k: string) => (e: { target: { value: string } }) => setV((p) => ({ ...p, [k]: e.target.value }))
 
-  const submit = async (e: any) => {
+  const submit = async (e: FormEvent) => {
     e.preventDefault()
-    const d = data.current
-    const n: Record<string, string> = {}
-    if (!d.name.trim()) n.name = t.k1
-    if (!d.company.trim()) n.company = t.k2
-    if (!d.role) n.role = t.k3
-    if (!d.kind) n.kind = t.k128
-    if (!EMAIL_RE.test(d.email.trim())) n.email = t.k4
-    if (d.phone.replace(/\D/g, '').length < 8) n.phone = t.k5
-    if (Object.keys(n).length) {
-      setErr(n)
-      document.getElementById('fa-' + Object.keys(n)[0])?.focus()
+    if (busy) return
+    const email = (v.email || '').trim()
+    if (!EMAIL_RE.test(email)) {
+      document.getElementById('am-apply-email')?.focus()
       return
     }
-    try { await post('forum-applications', d, lang) } catch { /* keep the UX, log server-side */ }
-    setErr({})
-    setSent(true)
+    setBusy(true)
+    setError('')
+    try {
+      await post('forum-applications', { kind: partner ? 'Партнёр' : 'Участник', name: v.name, company: v.company, phone: v.phone, email }, lang)
+      setSent(true)
+    } catch {
+      setError(t.cError)
+    } finally {
+      setBusy(false)
+    }
   }
 
-  const onName = field('name'), onCompany = field('company'), onRole = field('role')
-  const onKind = field('kind'), onEmail = field('email'), onPhone = field('phone')
-  const errName = err.name || '', errCompany = err.company || '', errRole = err.role || ''
-  const errKind = err.kind || '', errEmail = err.email || '', errPhone = err.phone || ''
-  const menuDisplay = menu ? ('var(--menuDisplay)' as any) : 'none'
-  const notSent = !sent
-  const countdownDisplay = countdownVisible === false ? 'none' : 'flex'
-  const forumDateValue = forumDate || '2026-12-09T10:00:00'
-
   return (
-    <>
-          <div style={{ background: "#F7F6F3", color: "#16181D", overflowX: "hidden" } as CSSProperties}>
-            {" "}
-            <header data-header="" data-header-solid="" style={{ position: "fixed", top: "0", left: "0", right: "0", zIndex: "60", background: "rgba(247,246,243,.94)", borderBottom: "1px solid #DCDAD4", transition: "background 300ms ease,border-color 300ms ease" } as CSSProperties}>
-              {" "}
-              <div data-header-inner="" style={{ maxWidth: "1720px", margin: "0 auto", padding: "20px clamp(20px,4.8vw,108px)", display: "flex", alignItems: "center", gap: "24px", transition: "padding 300ms ease" } as CSSProperties}>
-                {" "}
-                <a href={lp("/")} style={{ display: "flex", alignItems: "center", gap: "12px" } as CSSProperties}>
-                  {" "}
-                  <img src="/img/5dd2fe9c60.png" alt="" style={{ height: "30px", width: "auto", display: "block" } as CSSProperties} />
-                  {" "}
-                  <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "13px", letterSpacing: ".14em", textTransform: "uppercase", whiteSpace: "nowrap" } as CSSProperties}>
-                    {t.k401}
-                  </span>
-                  {" "}
+    <div lang={lang} className="sel-orange" style={{ background: '#fff', color: '#000', overflowX: 'clip' }}>
+      <Header t={t} lang={lang} page="forum" cta={t.fCta} ctaHref="#apply" ctaMenu={t.fCtaMenu} onCta={pickGuest} />
+
+      <main>
+        <section className="am-split am-hero" style={{ display: 'grid', background: '#E8461E', color: '#fff' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', padding: 'clamp(28px,3.4vw,48px) clamp(20px,4vw,64px) clamp(28px,3vw,44px) max(clamp(20px,4vw,64px),calc((100vw - 1440px)/2 + 64px))' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '8px 24px', paddingBottom: '16px', borderBottom: '1px solid rgba(255,255,255,.55)', fontSize: '12px', fontWeight: 600, letterSpacing: '.12em', textTransform: 'uppercase' }}>
+              <span>{t.fDatePlace}</span>
+              <span>{t.fSelection}</span>
+            </div>
+            <div style={{ marginTop: 'auto' }}>
+              <h1 style={{ fontFamily: W, fontWeight: 800, fontSize: 'clamp(36px,4.6vw,72px)', lineHeight: 0.94, letterSpacing: '-.03em', textTransform: 'uppercase' }}>
+                Arch
+                <br />
+                Makers
+                <br />
+                Forum <span style={{ color: '#000' }}>2026</span>
+              </h1>
+              <p style={{ marginTop: '18px', maxWidth: '34ch', fontFamily: W, fontWeight: 700, fontSize: 'clamp(19px,1.6vw,24px)', lineHeight: 1.25, letterSpacing: '-.01em' }}>{t.fLead}</p>
+              <p style={{ marginTop: '12px', maxWidth: '46ch', fontSize: '16px', fontWeight: 500, lineHeight: 1.55, color: '#fff' }}>{t.fText}</p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginTop: '24px' }}>
+                <a href="#apply" onClick={pickGuest} className="hv-white" style={BTN}>
+                  {t.fCta}
                 </a>
-                {" "}
-                <nav aria-label={t.k6} style={{ marginLeft: "auto", minWidth: "0", display: ("var(--navDisplay)" as any), alignItems: "center", gap: "24px", fontSize: "15px", color: "#5C5F66" } as CSSProperties}>
-                  {" "}
-                  <a className="fa-h6ae611c" href={lp("/")} style={{ transition: "color 200ms ease" } as CSSProperties}>
-                    {t.k35}
-                  </a>
-                  {" "}
-                  <a className="fa-h6ae611c" href="#topics" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                    {t.k129}
-                  </a>
-                  {" "}
-                  <a className="fa-h6ae611c" href="#participation" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                    {t.k11}
-                  </a>
-                  {" "}
-                  <a className="fa-h6ae611c" href={lp("/award")} style={{ transition: "color 200ms ease", position: "relative" } as CSSProperties}>
-                    {t.k10}
-                    <span aria-hidden="true" style={{ position: "absolute", top: "-2px", right: "-9px", width: "5px", height: "5px", background: "#FF4002" } as CSSProperties}>
-                    </span>
-                  </a>
-                  {" "}
-                  <a className="fa-h6ae611c" href="#contacts" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                    {t.k12}
-                  </a>
-                  {" "}
-                </nav>
-                {" "}
-                <div style={{ display: ("var(--navDisplay)" as any), alignItems: "center", gap: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em" } as CSSProperties}>
-                  {" "}
-                  <a href={lhref("ro")} style={{ color: langColor("ro", "#16181D", "#6E7278") } as CSSProperties}>
-                    {t.k402}
-                  </a>
-                  <span style={{ color: "#DCDAD4" } as CSSProperties}>
-                    {t.k403}
-                  </span>
-                  <a href={lhref("ru")} style={{ color: langColor("ru", "#16181D", "#6E7278") } as CSSProperties}>
-                    {t.k404}
-                  </a>
-                  <span style={{ color: "#DCDAD4" } as CSSProperties}>
-                    {t.k403}
-                  </span>
-                  <a href={lhref("en")} style={{ color: langColor("en", "#16181D", "#6E7278") } as CSSProperties}>
-                    {t.k405}
-                  </a>
-                  {" "}
-                </div>
-                {" "}
-                <a className="fa-h5fa00f1" href="#apply" style={{ display: ("var(--navDisplay)" as any), flex: "0 0 auto", alignItems: "center", padding: "12px 22px", background: "#FF4002", color: "#F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "14px", lineHeight: "1.2", whiteSpace: "nowrap", border: "1px solid #FF4002", transition: "background 200ms ease,color 200ms ease,border-color 200ms ease" } as CSSProperties}>
-                  {t.k130}
+                <a href="#apply" onClick={pickPartner} className="hv-white" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minHeight: '52px', padding: '0 26px', border: '1px solid #fff', color: '#fff', fontFamily: W, fontWeight: 700, fontSize: '14px', textAlign: 'center', transition: 'background 200ms,color 200ms' }}>
+                  {t.fPartnerOffer}
                 </a>
-                {" "}
-                <button type="button" aria-label={t.k15} onClick={toggleMenu} style={{ display: ("var(--burgerDisplay)" as any), marginLeft: "auto", flexDirection: "column", justifyContent: "center", gap: "6px", width: "44px", height: "44px", padding: "0", background: "transparent", border: "0", cursor: "pointer" } as CSSProperties}>
-                  {" "}
-                  <span style={{ display: "block", width: "22px", height: "1px", background: "#16181D" } as CSSProperties}>
-                  </span>
-                  <span style={{ display: "block", width: "22px", height: "1px", background: "#16181D" } as CSSProperties}>
-                  </span>
-                  {" "}
-                </button>
-                {" "}
               </div>
-              {" "}
-              <div style={{ display: menuDisplay, background: "#F7F6F3", borderTop: "1px solid #DCDAD4", padding: "8px clamp(20px,4.8vw,108px) 32px" } as CSSProperties}>
-                {" "}
-                <nav aria-label={t.k16} style={{ display: "flex", flexDirection: "column", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "22px" } as CSSProperties}>
-                  {" "}
-                  <a href={lp("/")} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                    {t.k35}
-                  </a>
-                  {" "}
-                  <a href="#topics" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                    {t.k129}
-                  </a>
-                  {" "}
-                  <a href="#participation" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                    {t.k11}
-                  </a>
-                  {" "}
-                  <a href={lp("/award")} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                    {t.k10}
-                  </a>
-                  {" "}
-                  <a href="#contacts" onClick={closeMenu} style={{ padding: "16px 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                    {t.k12}
-                  </a>
-                  {" "}
-                </nav>
-                {" "}
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px", marginTop: "24px" } as CSSProperties}>
-                  {" "}
-                  <div style={{ display: "flex", gap: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em" } as CSSProperties}>
-                    <a href={lhref("ro")} style={{ color: langColor("ro", "#16181D", "#6E7278") } as CSSProperties}>
-                      {t.k402}
-                    </a>
-                    <span style={{ color: "#DCDAD4" } as CSSProperties}>
-                      {t.k403}
-                    </span>
-                    <a href={lhref("ru")} style={{ color: langColor("ru", "#16181D", "#6E7278") } as CSSProperties}>
-                      {t.k404}
-                    </a>
-                    <span style={{ color: "#DCDAD4" } as CSSProperties}>
-                      {t.k403}
-                    </span>
-                    <a href={lhref("en")} style={{ color: langColor("en", "#16181D", "#6E7278") } as CSSProperties}>
-                      {t.k405}
-                    </a>
+            </div>
+            {countdownVisible && (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,minmax(0,1fr))', borderTop: '1px solid #fff' }} aria-live="off">
+                {countdown.map(([n, l], i) => (
+                  <div key={i} style={{ padding: '16px 8px 0 0' }}>
+                    <div suppressHydrationWarning style={{ fontFamily: W, fontWeight: 800, fontSize: 'clamp(28px,3vw,44px)', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>
+                      {pad(n)}
+                    </div>
+                    <div style={{ marginTop: '8px', fontSize: '12px', fontWeight: 600, letterSpacing: '.1em', textTransform: 'uppercase' }}>{l}</div>
                   </div>
-                  {" "}
-                  <a href="#apply" onClick={closeMenu} style={{ display: "inline-flex", alignItems: "center", padding: "12px 24px", background: "#FF4002", color: "#F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "14px", lineHeight: "1.2" } as CSSProperties}>
-                    {t.k130}
-                  </a>
-                  {" "}
-                </div>
-                {" "}
+                ))}
               </div>
-              {" "}
-              <div aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", bottom: "-1px", height: "2px", overflow: "hidden" } as CSSProperties}>
-                <div data-progress="" style={{ width: "100%", height: "2px", background: "#FF4002", transform: "scaleX(0)", transformOrigin: "left" } as CSSProperties}>
-                </div>
+            )}
+          </div>
+          <div className="am-ar-f" style={{ position: 'relative', minHeight: '100%', background: '#F3F3F1', overflow: 'hidden' }}>
+            <img src="/img/il-forum-hero.jpg" alt={t.fHeroAlt} fetchPriority="high" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', transform: 'scaleX(-1)', objectFit: 'cover', display: 'block' }} />
+          </div>
+        </section>
+
+        <section style={{ padding: 'clamp(48px,5vw,88px) 0' }}>
+          <div style={WRAP}>
+            <div style={CAP}>{t.fChainLabel}</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: '24px 64px', marginTop: '14px' }}>
+              <div>
+                <h2 style={{ maxWidth: '18ch', ...H2 }}>{t.fChainTitle}</h2>
               </div>
-              {" "}
-            </header>
-            {" "}
-            <main>
-              {" "}
-              <section id="top" style={{ position: "relative", overflow: "hidden", minHeight: "100svh", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "clamp(128px,17vh,188px) 0 clamp(24px,3vw,40px)", backgroundColor: "#FF4002", color: "#F7F6F3" } as CSSProperties}>
-                {" "}
-                <div aria-hidden="true" style={{ position: "absolute", top: "-10%", left: "-10%", right: "-10%", bottom: "-10%", pointerEvents: "none", backgroundImage: "repeating-linear-gradient(90deg,rgba(255,255,255,.14) 0 1px,transparent 1px 96px)", animation: "faPan 22s linear infinite" } as CSSProperties}>
+              <p style={{ maxWidth: '44ch', fontSize: '17px', lineHeight: 1.6, color: '#55554F' }}>{t.fChainText}</p>
+            </div>
+            <div className="am-g6 am-chain" style={{ display: 'grid', gap: '48px 0', marginTop: 'clamp(40px,4vw,64px)' }}>
+              {chain.map((title, i) => (
+                <div key={i} style={{ display: 'flex', flexDirection: 'column', paddingRight: '24px' }}>
+                  <div style={{ position: 'relative', height: '18px', marginRight: '-24px' }}>
+                    <span className="am-chain-line" style={{ position: 'absolute', left: 0, top: '8px', height: '2px', background: '#000' }} />
+                    <span style={{ position: 'absolute', left: 0, top: 0, width: '18px', height: '18px', background: CHAIN_SQ[i] }} />
+                  </div>
+                  <span style={{ marginTop: '28px', fontFamily: W, fontWeight: 800, fontSize: 'clamp(44px,4.4vw,72px)', lineHeight: 0.85, letterSpacing: '-.04em' }}>{no2(i)}</span>
+                  <h3 style={{ marginTop: '20px', maxWidth: '14ch', fontFamily: W, fontWeight: 700, fontSize: 'clamp(17px,1.3vw,20px)', lineHeight: 1.2 }}>{title}</h3>
                 </div>
-                {" "}
-                <div aria-hidden="true" style={{ position: "absolute", left: "50%", top: "42%", transform: "translate(-50%,-50%)", pointerEvents: "none", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "min(44vw,600px)", lineHeight: ".8", letterSpacing: "-.06em", color: "rgba(255,255,255,.16)", animation: "faGhost 9s ease-in-out infinite" } as CSSProperties}>
-                  {t.k467}
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section style={{ background: '#000', color: '#fff' }}>
+          <div style={{ maxWidth: '1440px', margin: '0 auto', padding: 'clamp(48px,5vw,80px) clamp(20px,4vw,64px) clamp(32px,4vw,56px)', display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', gap: '24px 56px' }}>
+            <div style={{ fontFamily: W, fontWeight: 800, fontSize: 'clamp(80px,11vw,168px)', lineHeight: 0.8, letterSpacing: '-.05em' }}>
+              {t.fCount}
+              <span style={{ color: '#E8461E' }}>+</span>
+            </div>
+            <p style={{ flex: '1 1 280px', maxWidth: '24ch', fontFamily: W, fontWeight: 700, fontSize: 'clamp(20px,2vw,30px)', lineHeight: 1.2 }}>{t.fCountText}</p>
+          </div>
+          <div className="am-g4p" style={{ display: 'grid', gap: '2px' }}>
+            {PHOTOS.map((src, i) => (
+              <div key={src} style={{ position: 'relative', aspectRatio: '4/3', background: '#1A1A1A', overflow: 'hidden' }}>
+                <div style={{ position: 'absolute', inset: 0, filter: 'grayscale(1)' }}>
+                  <img src={src} alt={t.fPhotoAlt} loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                 </div>
-                {" "}
-                <div aria-hidden="true" style={{ position: "absolute", left: "62%", top: "40%", width: "min(72vw,860px)", height: "min(72vw,860px)", pointerEvents: "none", transform: "translate(-50%,-50%)", background: "radial-gradient(circle,rgba(255,255,255,.30) 0%,rgba(255,255,255,.10) 44%,rgba(255,255,255,0) 68%)", animation: "faBreathe 8s ease-in-out infinite" } as CSSProperties}>
-                </div>
-                {" "}
-                <div style={{ position: "relative", maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)", width: "100%" } as CSSProperties}>
-                  {" "}
-                  <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: "12px 32px", paddingBottom: "14px", borderBottom: "1px solid rgba(255,255,255,.4)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "clamp(10px,.9vw,12px)", letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(247,246,243,.92)" } as CSSProperties}>
-                    {" "}
-                    <span>
-                      {t.k137}
-                    </span>
-                    <span>
-                      {t.k138}
-                    </span>
-                    {" "}
-                  </div>
-                  {" "}
-                  <h1 style={{ margin: "clamp(22px,2.8vw,44px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", textTransform: "uppercase", lineHeight: ".84", letterSpacing: "-.045em" } as CSSProperties}>
-                    {" "}
-                    <span style={{ display: "block", overflow: "hidden", paddingBottom: ".03em" } as CSSProperties}>
-                      <span style={{ display: "block", whiteSpace: "nowrap", fontSize: "clamp(24px,7vw,104px)" } as CSSProperties}>
-                        {t.k401}
-                      </span>
-                    </span>
-                    {" "}
-                    <span style={{ display: "block", overflow: "hidden", paddingBottom: ".03em" } as CSSProperties}>
-                      <span style={{ display: "flex", flexWrap: "nowrap", whiteSpace: "nowrap", alignItems: "baseline", gap: "0 .1em", fontSize: "clamp(46px,14vw,206px)", letterSpacing: "-.055em" } as CSSProperties}>
-                        {t.k440}
-                        <span style={{ color: "#16181D" } as CSSProperties}>
-                          {t.k467}
-                        </span>
-                      </span>
-                    </span>
-                    {" "}
-                  </h1>
-                  {" "}
-                  <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "28px 48px", marginTop: "clamp(24px,3vw,44px)" } as CSSProperties}>
-                    {" "}
-                    <div style={{ flex: "1 1 400px", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "clamp(18px,2vw,28px)" } as CSSProperties}>
-                      {" "}
-                      <p style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(20px,2.4vw,32px)", lineHeight: "1.12", letterSpacing: "-.025em", maxWidth: "22ch" } as CSSProperties}>
-                        {t.k468}
-                      </p>
-                      {" "}
-                      <div style={{ display: "flex", flexWrap: "wrap", gap: "14px" } as CSSProperties}>
-                        {" "}
-                        <a className="fa-hc263921" href="#apply" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "19px 38px", background: "#F7F6F3", color: "#16181D", border: "1px solid #F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", transition: "background 220ms ease,color 220ms ease,border-color 220ms ease,transform 220ms ease" } as CSSProperties}>
-                          {t.k140}
-                        </a>
-                        {" "}
-                        <button className="fa-h7189809" type="button" onClick={goPartner} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "19px 38px", background: "transparent", border: "1px solid rgba(255,255,255,.7)", color: "#F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", cursor: "pointer", transition: "background 220ms ease,color 220ms ease,border-color 220ms ease,transform 220ms ease" } as CSSProperties}>
-                          {t.k141}
-                        </button>
-                        {" "}
-                      </div>
-                      {" "}
-                    </div>
-                    {" "}
-                    <div style={{ display: "flex", alignItems: "center", gap: "12px", paddingBottom: "6px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "clamp(10px,.9vw,12px)", letterSpacing: ".12em", textTransform: "uppercase", color: "rgba(247,246,243,.92)" } as CSSProperties}>
-                      {" "}
-                      <span style={{ width: "8px", height: "8px", background: "#16181D", animation: "faPulse 2s ease-in-out infinite" } as CSSProperties}>
-                      </span>
-                      <span>
-                        {t.k142}
-                      </span>
-                      {" "}
-                    </div>
-                    {" "}
-                  </div>
-                  {" "}
-                  <div data-countdown="" data-target={forumDateValue} style={{ display: "flex", flexWrap: "wrap", marginTop: "clamp(28px,3.6vw,52px)", borderTop: "1px solid rgba(255,255,255,.45)", borderBottom: "1px solid rgba(255,255,255,.45)" } as CSSProperties}>
-                    {" "}
-                    <div className="fa-hbe9e358" style={{ flex: "1 1 0", minWidth: "96px", padding: "clamp(16px,2vw,26px) clamp(12px,1.6vw,22px)", transition: "background 260ms ease" } as CSSProperties}>
-                      <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(38px,5.6vw,86px)", lineHeight: ".9", letterSpacing: "-.045em", fontVariantNumeric: "tabular-nums" } as CSSProperties}>
-                        <span data-cd="d">
-                          {t.k469}
-                        </span>
-                      </div>
-                      <div style={{ marginTop: "clamp(8px,1vw,14px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(247,246,243,.86)" } as CSSProperties}>
-                        {t.k143}
-                      </div>
-                    </div>
-                    {" "}
-                    <div className="fa-hbe9e358" style={{ flex: "1 1 0", minWidth: "96px", padding: "clamp(16px,2vw,26px) clamp(12px,1.6vw,22px)", borderLeft: "1px solid rgba(255,255,255,.45)", transition: "background 260ms ease" } as CSSProperties}>
-                      <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(38px,5.6vw,86px)", lineHeight: ".9", letterSpacing: "-.045em", fontVariantNumeric: "tabular-nums" } as CSSProperties}>
-                        <span data-cd="h">
-                          {t.k469}
-                        </span>
-                      </div>
-                      <div style={{ marginTop: "clamp(8px,1vw,14px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(247,246,243,.86)" } as CSSProperties}>
-                        {t.k144}
-                      </div>
-                    </div>
-                    {" "}
-                    <div className="fa-hbe9e358" style={{ flex: "1 1 0", minWidth: "96px", padding: "clamp(16px,2vw,26px) clamp(12px,1.6vw,22px)", borderLeft: "1px solid rgba(255,255,255,.45)", transition: "background 260ms ease" } as CSSProperties}>
-                      <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(38px,5.6vw,86px)", lineHeight: ".9", letterSpacing: "-.045em", fontVariantNumeric: "tabular-nums" } as CSSProperties}>
-                        <span data-cd="m">
-                          {t.k469}
-                        </span>
-                      </div>
-                      <div style={{ marginTop: "clamp(8px,1vw,14px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(247,246,243,.86)" } as CSSProperties}>
-                        {t.k145}
-                      </div>
-                    </div>
-                    {" "}
-                    <div className="fa-hbe9e358" style={{ flex: "1 1 0", minWidth: "96px", padding: "clamp(16px,2vw,26px) clamp(12px,1.6vw,22px)", borderLeft: "1px solid rgba(255,255,255,.45)", transition: "background 260ms ease" } as CSSProperties}>
-                      <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(38px,5.6vw,86px)", lineHeight: ".9", letterSpacing: "-.045em", fontVariantNumeric: "tabular-nums" } as CSSProperties}>
-                        <span data-cd="s">
-                          {t.k469}
-                        </span>
-                      </div>
-                      <div style={{ marginTop: "clamp(8px,1vw,14px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(247,246,243,.86)" } as CSSProperties}>
-                        {t.k146}
-                      </div>
-                    </div>
-                    {" "}
-                    <div style={{ flex: "1 1 200px", minWidth: "180px", display: "flex", flexDirection: "column", justifyContent: "flex-end", gap: "8px", padding: "clamp(16px,2vw,26px) clamp(12px,1.6vw,22px)", borderLeft: "1px solid rgba(255,255,255,.45)" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(247,246,243,.86)" } as CSSProperties}>
-                        {t.k147}
-                      </span>
-                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(15px,1.4vw,20px)", letterSpacing: "-.01em" } as CSSProperties}>
-                        {t.k148}
-                      </span>
-                    </div>
-                    {" "}
-                  </div>
-                  {" "}
-                  <div aria-hidden="true" style={{ display: "flex", alignItems: "center", gap: "12px", marginTop: "clamp(20px,2.4vw,32px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".14em", textTransform: "uppercase", color: "rgba(247,246,243,.82)" } as CSSProperties}>
-                    <span style={{ display: "block", width: "1px", height: "34px", background: "#16181D", animation: "faScroll 2.6s ease-in-out infinite" } as CSSProperties}>
-                    </span>
-                    <span>
-                      {t.k42}
-                    </span>
-                  </div>
-                  {" "}
-                </div>
-                {" "}
-              </section>
-              {" "}
-              <div style={{ overflow: "hidden", background: "#16181D", padding: "18px 0" } as CSSProperties}>
-                {" "}
-                <div data-marquee="" style={{ display: "flex", width: "max-content", animation: "faMarquee 60s linear infinite", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "13px", letterSpacing: ".1em", textTransform: "uppercase", color: "#F7F6F3" } as CSSProperties}>
-                  {" "}
-                  <div style={{ display: "flex", gap: "24px", paddingRight: "24px" } as CSSProperties}>
-                    <span>
-                      {t.k149}
-                    </span>
-                    <span style={{ color: "#FF4002" } as CSSProperties}>
-                      {t.k417}
-                    </span>
-                    <span>
-                      {t.k150}
-                    </span>
-                    <span style={{ color: "#FF4002" } as CSSProperties}>
-                      {t.k417}
-                    </span>
-                    <span>
-                      {t.k151}
-                    </span>
-                    <span style={{ color: "#FF4002" } as CSSProperties}>
-                      {t.k417}
-                    </span>
-                    <span>
-                      {t.k152}
-                    </span>
-                    <span style={{ color: "#FF4002" } as CSSProperties}>
-                      {t.k417}
-                    </span>
-                    <span>
-                      {t.k153}
-                    </span>
-                    <span style={{ color: "#FF4002" } as CSSProperties}>
-                      {t.k417}
-                    </span>
-                    <span>
-                      {t.k154}
-                    </span>
-                    <span style={{ color: "#FF4002" } as CSSProperties}>
-                      {t.k417}
-                    </span>
-                    <span>
-                      {t.k155}
-                    </span>
-                    <span style={{ color: "#FF4002" } as CSSProperties}>
-                      {t.k417}
-                    </span>
-                    <span>
-                      {t.k156}
-                    </span>
-                    <span style={{ color: "#FF4002" } as CSSProperties}>
-                      {t.k417}
-                    </span>
-                  </div>
-                  {" "}
-                  <div aria-hidden="true" style={{ display: "flex", gap: "24px", paddingRight: "24px" } as CSSProperties}>
-                    <span>
-                      {t.k149}
-                    </span>
-                    <span style={{ color: "#FF4002" } as CSSProperties}>
-                      {t.k417}
-                    </span>
-                    <span>
-                      {t.k150}
-                    </span>
-                    <span style={{ color: "#FF4002" } as CSSProperties}>
-                      {t.k417}
-                    </span>
-                    <span>
-                      {t.k151}
-                    </span>
-                    <span style={{ color: "#FF4002" } as CSSProperties}>
-                      {t.k417}
-                    </span>
-                    <span>
-                      {t.k152}
-                    </span>
-                    <span style={{ color: "#FF4002" } as CSSProperties}>
-                      {t.k417}
-                    </span>
-                    <span>
-                      {t.k153}
-                    </span>
-                    <span style={{ color: "#FF4002" } as CSSProperties}>
-                      {t.k417}
-                    </span>
-                    <span>
-                      {t.k154}
-                    </span>
-                    <span style={{ color: "#FF4002" } as CSSProperties}>
-                      {t.k417}
-                    </span>
-                    <span>
-                      {t.k155}
-                    </span>
-                    <span style={{ color: "#FF4002" } as CSSProperties}>
-                      {t.k417}
-                    </span>
-                    <span>
-                      {t.k156}
-                    </span>
-                    <span style={{ color: "#FF4002" } as CSSProperties}>
-                      {t.k417}
-                    </span>
-                  </div>
-                  {" "}
-                </div>
-                {" "}
+                {i === 3 && (
+                  <>
+                    <span aria-hidden="true" style={{ position: 'absolute', right: 0, bottom: 0, width: '26%', height: '10%', background: '#E8461E', pointerEvents: 'none' }} />
+                    <span aria-hidden="true" style={{ position: 'absolute', right: 0, bottom: 0, width: '9%', height: '28%', background: '#E8461E', pointerEvents: 'none' }} />
+                  </>
+                )}
               </div>
-              {" "}
-              <section aria-hidden="true" style={{ overflow: "hidden", backgroundColor: "#F7F6F3", padding: "clamp(36px,5vw,80px) 0", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                {" "}
-                <div data-scrolltext="" data-speed="-4" style={{ overflow: "hidden", willChange: "transform" } as CSSProperties}>
-                  {" "}
-                  <div data-marquee="" style={{ display: "flex", width: "max-content", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(38px,8.4vw,128px)", lineHeight: ".96", letterSpacing: "-.05em", textTransform: "uppercase", animation: "faMarquee 72s linear infinite" } as CSSProperties}>
-                    {" "}
-                    <div style={{ display: "flex", gap: ".3em", paddingRight: ".3em" } as CSSProperties}>
-                      <span style={{ color: "#16181D" } as CSSProperties}>
-                        {t.k157}
-                      </span>
-                      <span style={{ color: "#C9C6BE" } as CSSProperties}>
-                        {t.k158}
-                      </span>
-                      <span style={{ color: "#FF4002" } as CSSProperties}>
-                        {t.k159}
-                      </span>
-                      <span style={{ color: "#16181D" } as CSSProperties}>
-                        {t.k160}
-                      </span>
-                      <span style={{ color: "#C9C6BE" } as CSSProperties}>
-                        {t.k161}
-                      </span>
-                    </div>
-                    {" "}
-                    <div style={{ display: "flex", gap: ".3em", paddingRight: ".3em" } as CSSProperties}>
-                      <span style={{ color: "#16181D" } as CSSProperties}>
-                        {t.k157}
-                      </span>
-                      <span style={{ color: "#C9C6BE" } as CSSProperties}>
-                        {t.k158}
-                      </span>
-                      <span style={{ color: "#FF4002" } as CSSProperties}>
-                        {t.k159}
-                      </span>
-                      <span style={{ color: "#16181D" } as CSSProperties}>
-                        {t.k160}
-                      </span>
-                      <span style={{ color: "#C9C6BE" } as CSSProperties}>
-                        {t.k161}
-                      </span>
-                    </div>
-                    {" "}
+            ))}
+          </div>
+        </section>
+
+        <section style={{ padding: 'clamp(48px,5vw,88px) 0' }}>
+          <div style={WRAP}>
+            <h2 style={H2}>{t.fTopicsTitle}</h2>
+            <div className="am-f2" style={{ display: 'grid', gap: '24px', marginTop: '32px' }}>
+              {topics.map(([tag, title, text], i) => (
+                <article key={i} style={{ display: 'flex', flexDirection: 'column', background: '#F3F3F1', color: '#000' }}>
+                  <div style={{ position: 'relative', aspectRatio: '16/9', background: '#D9D9D6', overflow: 'hidden' }}>
+                    <span aria-hidden="true" style={{ position: 'absolute', right: 0, top: 0, zIndex: 1, width: '64px', height: '12px', background: TOPIC_ACC[i] }} />
+                    <span aria-hidden="true" style={{ position: 'absolute', right: 0, top: 0, zIndex: 1, width: '12px', height: '64px', background: TOPIC_ACC[i] }} />
+                    <img src={`/img/forum-topic-${i + 1}.jpg`} alt={tag} loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                   </div>
-                  {" "}
+                  <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: 'clamp(24px,3vw,40px)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', paddingBottom: '14px', borderBottom: '1px solid #000', fontSize: '12px', fontWeight: 600, letterSpacing: '.12em', textTransform: 'uppercase' }}>
+                      <span style={{ color: '#E8461E' }}>{no2(i)}</span>
+                    </div>
+                    <h3 style={{ marginTop: '24px', maxWidth: '28ch', fontFamily: W, fontWeight: 700, fontSize: 'clamp(20px,1.8vw,28px)', lineHeight: 1.15, letterSpacing: '-.015em' }}>{title}</h3>
+                    <p style={{ marginTop: 'auto', paddingTop: '24px', maxWidth: '52ch', fontSize: '16px', lineHeight: 1.55, fontWeight: 500 }}>{text}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            {cards.length > 0 && (
+              <>
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: '16px 48px', marginTop: 'clamp(56px,6vw,96px)' }}>
+                  <h2 style={H2}>{t.fSpeakers}</h2>
                 </div>
-                {" "}
-                <div data-scrolltext="" data-speed="4" style={{ overflow: "hidden", willChange: "transform" } as CSSProperties}>
-                  {" "}
-                  <div data-marquee="" style={{ display: "flex", width: "max-content", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(38px,8.4vw,128px)", lineHeight: ".96", letterSpacing: "-.05em", textTransform: "uppercase", animation: "faMarquee 88s linear infinite reverse" } as CSSProperties}>
-                    {" "}
-                    <div style={{ display: "flex", gap: ".3em", paddingRight: ".3em" } as CSSProperties}>
-                      <span style={{ color: "#16181D" } as CSSProperties}>
-                        {t.k161}
-                      </span>
-                      <span style={{ color: "#C9C6BE" } as CSSProperties}>
-                        {t.k160}
-                      </span>
-                      <span style={{ color: "#16181D" } as CSSProperties}>
-                        {t.k159}
-                      </span>
-                      <span style={{ color: "#FF4002" } as CSSProperties}>
-                        {t.k158}
-                      </span>
-                      <span style={{ color: "#C9C6BE" } as CSSProperties}>
-                        {t.k157}
-                      </span>
-                    </div>
-                    {" "}
-                    <div style={{ display: "flex", gap: ".3em", paddingRight: ".3em" } as CSSProperties}>
-                      <span style={{ color: "#16181D" } as CSSProperties}>
-                        {t.k161}
-                      </span>
-                      <span style={{ color: "#C9C6BE" } as CSSProperties}>
-                        {t.k160}
-                      </span>
-                      <span style={{ color: "#16181D" } as CSSProperties}>
-                        {t.k159}
-                      </span>
-                      <span style={{ color: "#FF4002" } as CSSProperties}>
-                        {t.k158}
-                      </span>
-                      <span style={{ color: "#C9C6BE" } as CSSProperties}>
-                        {t.k157}
-                      </span>
-                    </div>
-                    {" "}
-                  </div>
-                  {" "}
-                </div>
-                {" "}
-              </section>
-              {" "}
-              <section style={{ position: "relative", overflow: "hidden", padding: "clamp(80px,10vw,160px) 0", backgroundColor: "#16181D", color: "#F7F6F3", backgroundImage: "repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,rgba(255,255,255,.06) 0 1px,transparent 1px 80px)", backgroundAttachment: "fixed" } as CSSProperties}>
-                {" "}
-                <div style={{ position: "relative", maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
-                  {" "}
-                  <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "24px", paddingBottom: "16px", borderBottom: "1px solid #3A3D44" } as CSSProperties}>
-                    {" "}
-                    <div style={{ display: "flex", alignItems: "center", gap: "16px" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".12em", textTransform: "uppercase", color: "#FF4002" } as CSSProperties}>
-                        {t.k162}
-                      </span>
-                      <span data-draw="" style={{ width: "40px", height: "1px", background: "#FF4002", transform: "scaleX(0)", transformOrigin: "left" } as CSSProperties}>
-                      </span>
-                    </div>
-                    {" "}
-                    <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#8E9198" } as CSSProperties}>
-                      {t.k163}
-                    </span>
-                    {" "}
-                  </div>
-                  {" "}
-                  <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(36px,4.4vw,64px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(40px,7.4vw,116px)", lineHeight: ".9", letterSpacing: "-.045em", textTransform: "uppercase", maxWidth: "13ch" } as CSSProperties}>
-                    {t.k164}
-                  </h2>
-                  {" "}
-                  <p data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(28px,3vw,44px) 0 0", fontSize: "clamp(18px,1.6vw,27px)", lineHeight: "1.45", letterSpacing: "-.01em", color: "#B9BBC0", maxWidth: "50ch" } as CSSProperties}>
-                    {t.k165}
-                  </p>
-                  {" "}
-                  <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "baseline", justifyContent: "space-between", gap: "12px 32px", marginTop: "clamp(44px,5.4vw,80px)", paddingBottom: "14px", borderBottom: "2px solid #FF4002", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase" } as CSSProperties}>
-                    {" "}
-                    <span style={{ color: "#F7F6F3" } as CSSProperties}>
-                      {t.k166}
-                    </span>
-                    <span style={{ color: "#8E9198" } as CSSProperties}>
-                      {t.k167}
-                    </span>
-                    {" "}
-                  </div>
-                  {" "}
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(184px,1fr))", gap: "1px", marginTop: "1px", background: "#3A3D44", outline: "1px solid #3A3D44" } as CSSProperties}>
-                    {" "}
-                    <div className="fa-h58ee740" data-reveal="" data-delay="0" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "28px", minHeight: "clamp(188px,13.6vw,236px)", padding: "clamp(22px,2.2vw,30px)", background: "#16181D", transition: "background 280ms ease,color 280ms ease" } as CSSProperties}>
-                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(32px,3.4vw,54px)", lineHeight: "1", letterSpacing: "-.045em", opacity: ".34" } as CSSProperties}>
-                        {t.k420}
-                      </span>
-                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,23px)", lineHeight: "1.18", letterSpacing: "-.02em" } as CSSProperties}>
-                        {t.k168}
-                        <span style={{ display: "block", marginTop: "10px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontWeight: "400", fontSize: "10px", letterSpacing: ".1em", textTransform: "uppercase", opacity: ".62" } as CSSProperties}>
-                          {t.k169}
-                        </span>
-                      </span>
-                    </div>
-                    {" "}
-                    <div className="fa-h58ee740" data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "28px", minHeight: "clamp(188px,13.6vw,236px)", padding: "clamp(22px,2.2vw,30px)", background: "#16181D", transition: "background 280ms ease,color 280ms ease" } as CSSProperties}>
-                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(32px,3.4vw,54px)", lineHeight: "1", letterSpacing: "-.045em", opacity: ".34" } as CSSProperties}>
-                        {t.k422}
-                      </span>
-                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,23px)", lineHeight: "1.18", letterSpacing: "-.02em" } as CSSProperties}>
-                        {t.k170}
-                        <span style={{ display: "block", marginTop: "10px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontWeight: "400", fontSize: "10px", letterSpacing: ".1em", textTransform: "uppercase", opacity: ".62" } as CSSProperties}>
-                          {t.k171}
-                        </span>
-                      </span>
-                    </div>
-                    {" "}
-                    <div className="fa-h58ee740" data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "28px", minHeight: "clamp(188px,13.6vw,236px)", padding: "clamp(22px,2.2vw,30px)", background: "#16181D", transition: "background 280ms ease,color 280ms ease" } as CSSProperties}>
-                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(32px,3.4vw,54px)", lineHeight: "1", letterSpacing: "-.045em", opacity: ".34" } as CSSProperties}>
-                        {t.k428}
-                      </span>
-                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,23px)", lineHeight: "1.18", letterSpacing: "-.02em" } as CSSProperties}>
-                        {t.k157}
-                        <span style={{ display: "block", marginTop: "10px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontWeight: "400", fontSize: "10px", letterSpacing: ".1em", textTransform: "uppercase", opacity: ".62" } as CSSProperties}>
-                          {t.k172}
-                        </span>
-                      </span>
-                    </div>
-                    {" "}
-                    <div className="fa-h58ee740" data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "28px", minHeight: "clamp(188px,13.6vw,236px)", padding: "clamp(22px,2.2vw,30px)", background: "#16181D", transition: "background 280ms ease,color 280ms ease" } as CSSProperties}>
-                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(32px,3.4vw,54px)", lineHeight: "1", letterSpacing: "-.045em", opacity: ".34" } as CSSProperties}>
-                        {t.k429}
-                      </span>
-                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,23px)", lineHeight: "1.18", letterSpacing: "-.02em" } as CSSProperties}>
-                        {t.k173}
-                        <span style={{ display: "block", marginTop: "10px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontWeight: "400", fontSize: "10px", letterSpacing: ".1em", textTransform: "uppercase", opacity: ".62" } as CSSProperties}>
-                          {t.k174}
-                        </span>
-                      </span>
-                    </div>
-                    {" "}
-                    <div className="fa-h58ee740" data-reveal="" data-delay="240" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "28px", minHeight: "clamp(188px,13.6vw,236px)", padding: "clamp(22px,2.2vw,30px)", background: "#16181D", transition: "background 280ms ease,color 280ms ease" } as CSSProperties}>
-                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(32px,3.4vw,54px)", lineHeight: "1", letterSpacing: "-.045em", opacity: ".34" } as CSSProperties}>
-                        {t.k431}
-                      </span>
-                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,23px)", lineHeight: "1.18", letterSpacing: "-.02em" } as CSSProperties}>
-                        {t.k175}
-                        <span style={{ display: "block", marginTop: "10px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontWeight: "400", fontSize: "10px", letterSpacing: ".1em", textTransform: "uppercase", opacity: ".62" } as CSSProperties}>
-                          {t.k176}
-                        </span>
-                      </span>
-                    </div>
-                    {" "}
-                    <div className="fa-h58ee740" data-reveal="" data-delay="300" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "28px", minHeight: "clamp(188px,13.6vw,236px)", padding: "clamp(22px,2.2vw,30px)", background: "#16181D", transition: "background 280ms ease,color 280ms ease" } as CSSProperties}>
-                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(32px,3.4vw,54px)", lineHeight: "1", letterSpacing: "-.045em", opacity: ".34" } as CSSProperties}>
-                        {t.k434}
-                      </span>
-                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(17px,1.5vw,23px)", lineHeight: "1.18", letterSpacing: "-.02em" } as CSSProperties}>
-                        {t.k177}
-                        <span style={{ display: "block", marginTop: "10px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontWeight: "400", fontSize: "10px", letterSpacing: ".1em", textTransform: "uppercase", opacity: ".62" } as CSSProperties}>
-                          {t.k178}
-                        </span>
-                      </span>
-                    </div>
-                    {" "}
-                  </div>
-                  {" "}
-                </div>
-                {" "}
-              </section>
-              {" "}
-              <section id="audience" style={{ position: "relative", overflow: "hidden", padding: "clamp(80px,10vw,160px) 0", backgroundColor: "#EFEDE8" } as CSSProperties}>
-                {" "}
-                <div style={{ position: "relative", maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
-                  {" "}
-                  <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "24px", paddingBottom: "16px", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                    {" "}
-                    <div style={{ display: "flex", alignItems: "center", gap: "16px" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em", color: "#FF4002" } as CSSProperties}>
-                        {t.k422}
-                      </span>
-                      <span data-draw="" style={{ width: "40px", height: "1px", background: "#FF4002", transform: "scaleX(0)", transformOrigin: "left" } as CSSProperties}>
-                      </span>
-                    </div>
-                    {" "}
-                    <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                      {t.k182}
-                    </span>
-                    {" "}
-                  </div>
-                  {" "}
-                  <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "32px 56px", marginTop: "clamp(36px,4.4vw,64px)" } as CSSProperties}>
-                    {" "}
-                    <div data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", alignItems: "flex-end", gap: "clamp(20px,2.4vw,36px)" } as CSSProperties}>
-                      {" "}
-                      <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(84px,15vw,232px)", lineHeight: ".8", letterSpacing: "-.055em" } as CSSProperties}>
-                        <span data-count="250" data-suffix="+">
-                          {t.k442}
-                        </span>
-                      </span>
-                      {" "}
-                    </div>
-                    {" "}
-                  </div>
-                  {" "}
-                  <div style={{ marginTop: "clamp(48px,6vw,88px)", borderTop: "2px solid #16181D" } as CSSProperties}>
-                    {" "}
-                    <div className="fa-h21d64df" data-reveal="" data-delay="0" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", padding: "clamp(20px,2.2vw,32px) 0", borderBottom: "1px solid #DCDAD4", transition: "padding 240ms ease" } as CSSProperties}>
-                      {" "}
-                      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px" } as CSSProperties}>
-                        <span style={{ flex: "0 0 40px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", color: "#FF4002" } as CSSProperties}>
-                          {t.k420}
-                        </span>
-                        <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(20px,2vw,31px)", lineHeight: "1.14", letterSpacing: "-.022em" } as CSSProperties}>
-                          {t.k184}
-                        </span>
-                        <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(28px,3.2vw,50px)", lineHeight: "1", letterSpacing: "-.035em", color: "#FF4002" } as CSSProperties}>
-                          {t.k470}
-                        </span>
-                      </div>
-                      {" "}
-                      <div aria-hidden="true" style={{ position: "absolute", left: "0", bottom: "-1px", width: "30%", height: "2px", background: "#FF4002" } as CSSProperties}>
-                      </div>
-                      {" "}
-                    </div>
-                    {" "}
-                    <div className="fa-h21d64df" data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", padding: "clamp(20px,2.2vw,32px) 0", borderBottom: "1px solid #DCDAD4", transition: "padding 240ms ease" } as CSSProperties}>
-                      {" "}
-                      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px" } as CSSProperties}>
-                        <span style={{ flex: "0 0 40px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
-                          {t.k422}
-                        </span>
-                        <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(20px,2vw,31px)", lineHeight: "1.14", letterSpacing: "-.022em" } as CSSProperties}>
-                          {t.k59}
-                        </span>
-                        <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(28px,3.2vw,50px)", lineHeight: "1", letterSpacing: "-.035em", color: "#16181D" } as CSSProperties}>
-                          {t.k471}
-                        </span>
-                      </div>
-                      {" "}
-                      <div aria-hidden="true" style={{ position: "absolute", left: "0", bottom: "-1px", width: "25%", height: "2px", background: "#16181D" } as CSSProperties}>
-                      </div>
-                      {" "}
-                    </div>
-                    {" "}
-                    <div className="fa-h21d64df" data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", padding: "clamp(20px,2.2vw,32px) 0", borderBottom: "1px solid #DCDAD4", transition: "padding 240ms ease" } as CSSProperties}>
-                      {" "}
-                      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px" } as CSSProperties}>
-                        <span style={{ flex: "0 0 40px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
-                          {t.k428}
-                        </span>
-                        <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(20px,2vw,31px)", lineHeight: "1.14", letterSpacing: "-.022em" } as CSSProperties}>
-                          {t.k57}
-                        </span>
-                        <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(28px,3.2vw,50px)", lineHeight: "1", letterSpacing: "-.035em", color: "#16181D" } as CSSProperties}>
-                          {t.k472}
-                        </span>
-                      </div>
-                      {" "}
-                      <div aria-hidden="true" style={{ position: "absolute", left: "0", bottom: "-1px", width: "20%", height: "2px", background: "#16181D" } as CSSProperties}>
-                      </div>
-                      {" "}
-                    </div>
-                    {" "}
-                    <div className="fa-h21d64df" data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", padding: "clamp(20px,2.2vw,32px) 0", borderBottom: "1px solid #DCDAD4", transition: "padding 240ms ease" } as CSSProperties}>
-                      {" "}
-                      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px" } as CSSProperties}>
-                        <span style={{ flex: "0 0 40px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
-                          {t.k429}
-                        </span>
-                        <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(20px,2vw,31px)", lineHeight: "1.14", letterSpacing: "-.022em" } as CSSProperties}>
-                          {t.k53}
-                        </span>
-                        <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(28px,3.2vw,50px)", lineHeight: "1", letterSpacing: "-.035em", color: "#16181D" } as CSSProperties}>
-                          {t.k473}
-                        </span>
-                      </div>
-                      {" "}
-                      <div aria-hidden="true" style={{ position: "absolute", left: "0", bottom: "-1px", width: "15%", height: "2px", background: "#16181D" } as CSSProperties}>
-                      </div>
-                      {" "}
-                    </div>
-                    {" "}
-                    <div className="fa-h21d64df" data-reveal="" data-delay="240" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", padding: "clamp(20px,2.2vw,32px) 0", borderBottom: "1px solid #DCDAD4", transition: "padding 240ms ease" } as CSSProperties}>
-                      {" "}
-                      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "baseline", gap: "10px 32px" } as CSSProperties}>
-                        <span style={{ flex: "0 0 40px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".1em", color: "#8E8B83" } as CSSProperties}>
-                          {t.k431}
-                        </span>
-                        <span style={{ flex: "1 1 320px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(20px,2vw,31px)", lineHeight: "1.14", letterSpacing: "-.022em" } as CSSProperties}>
-                          {t.k185}
-                        </span>
-                        <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(28px,3.2vw,50px)", lineHeight: "1", letterSpacing: "-.035em", color: "#16181D" } as CSSProperties}>
-                          {t.k474}
-                        </span>
-                      </div>
-                      {" "}
-                      <div aria-hidden="true" style={{ position: "absolute", left: "0", bottom: "-1px", width: "10%", height: "2px", background: "#16181D" } as CSSProperties}>
-                      </div>
-                      {" "}
-                    </div>
-                    {" "}
-                  </div>
-                  {" "}
-                </div>
-                {" "}
-              </section>
-              {" "}
-              <section id="topics" style={{ padding: "clamp(64px,8vw,120px) 0", backgroundColor: "#F7F6F3" } as CSSProperties}>
-                {" "}
-                <div style={{ maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
-                  {" "}
-                  <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "24px", paddingBottom: "16px", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                    {" "}
-                    <div style={{ display: "flex", alignItems: "center", gap: "16px" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em", color: "#FF4002" } as CSSProperties}>
-                        {t.k428}
-                      </span>
-                      <span data-draw="" style={{ width: "40px", height: "1px", background: "#FF4002", transform: "scaleX(0)", transformOrigin: "left" } as CSSProperties}>
-                      </span>
-                    </div>
-                    {" "}
-                    <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                      {t.k194}
-                    </span>
-                    {" "}
-                  </div>
-                  {" "}
-                  <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(32px,4vw,48px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(34px,6.4vw,96px)", lineHeight: ".9", letterSpacing: "-.045em", textTransform: "uppercase", maxWidth: "24ch" } as CSSProperties}>
-                    <span style={{ color: "#FF4002" } as CSSProperties}>
-                      {t.k195}
-                    </span>
-                    {" "}
-                    {t.k196}
-                  </h2>
-                  {" "}
-                  <div style={{ position: "relative", marginTop: "clamp(40px,5vw,64px)" } as CSSProperties}>
-                    {" "}
-                    <div data-strip="" style={{ display: "flex", gap: "1px", overflowX: "auto", scrollSnapType: "x mandatory", scrollbarWidth: "none" } as CSSProperties}>
-                      {" "}
-                      <article className="fa-h69183df" data-reveal="" data-delay="0" style={{ opacity: "0", transform: "translateY(16px)", flex: "1 0 clamp(240px,21vw,330px)", scrollSnapAlign: "start", position: "relative", overflow: "hidden", outline: "1px solid #DCDAD4", display: "flex", flexDirection: "column", minHeight: "clamp(316px,25vw,372px)", padding: "30px 28px", background: "#F7F6F3", color: "#16181D", transition: "background 300ms ease,color 300ms ease,transform 300ms ease" } as CSSProperties}>
-                        {" "}
-                        <span aria-hidden="true" style={{ position: "absolute", right: "14px", top: "2px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(84px,7vw,118px)", lineHeight: "1", letterSpacing: "-.055em", color: "#EAE7E0", transition: "color 300ms ease" } as CSSProperties}>
-                          {t.k420}
-                        </span>
-                        {" "}
-                        <div style={{ position: "relative", display: "flex", alignItems: "center", gap: "12px" } as CSSProperties}>
-                          <span style={{ width: "8px", height: "8px", background: "#C9C6BE" } as CSSProperties}>
-                          </span>
-                          <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                            {t.k175}
-                          </span>
-                        </div>
-                        {" "}
-                        <h3 style={{ position: "relative", margin: "32px 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(20px,1.8vw,26px)", lineHeight: "1.16", letterSpacing: "-.02em", maxWidth: "20ch" } as CSSProperties}>
-                          {t.k197}
-                        </h3>
-                        {" "}
-                        <p style={{ position: "relative", marginTop: "auto", paddingTop: "26px", fontSize: "15px", lineHeight: "1.55", opacity: ".62" } as CSSProperties}>
-                          {t.k198}
-                        </p>
-                        {" "}
-                      </article>
-                      {" "}
-                      <article className="fa-h69183df" data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", flex: "1 0 clamp(240px,21vw,330px)", scrollSnapAlign: "start", position: "relative", overflow: "hidden", outline: "1px solid #DCDAD4", display: "flex", flexDirection: "column", minHeight: "clamp(316px,25vw,372px)", padding: "30px 28px", background: "#F7F6F3", color: "#16181D", transition: "background 300ms ease,color 300ms ease,transform 300ms ease" } as CSSProperties}>
-                        {" "}
-                        <span aria-hidden="true" style={{ position: "absolute", right: "14px", top: "2px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(84px,7vw,118px)", lineHeight: "1", letterSpacing: "-.055em", color: "#EAE7E0", transition: "color 300ms ease" } as CSSProperties}>
-                          {t.k422}
-                        </span>
-                        {" "}
-                        <div style={{ position: "relative", display: "flex", alignItems: "center", gap: "12px" } as CSSProperties}>
-                          <span style={{ width: "8px", height: "8px", background: "#C9C6BE" } as CSSProperties}>
-                          </span>
-                          <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                            {t.k199}
-                          </span>
-                        </div>
-                        {" "}
-                        <h3 style={{ position: "relative", margin: "32px 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(20px,1.8vw,26px)", lineHeight: "1.16", letterSpacing: "-.02em", maxWidth: "20ch" } as CSSProperties}>
-                          {t.k200}
-                        </h3>
-                        {" "}
-                        <p style={{ position: "relative", marginTop: "auto", paddingTop: "26px", fontSize: "15px", lineHeight: "1.55", opacity: ".62" } as CSSProperties}>
-                          {t.k201}
-                        </p>
-                        {" "}
-                      </article>
-                      {" "}
-                      <article className="fa-h69183df" data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", flex: "1 0 clamp(240px,21vw,330px)", scrollSnapAlign: "start", position: "relative", overflow: "hidden", outline: "1px solid #DCDAD4", display: "flex", flexDirection: "column", minHeight: "clamp(316px,25vw,372px)", padding: "30px 28px", background: "#F7F6F3", color: "#16181D", transition: "background 300ms ease,color 300ms ease,transform 300ms ease" } as CSSProperties}>
-                        {" "}
-                        <span aria-hidden="true" style={{ position: "absolute", right: "14px", top: "2px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(84px,7vw,118px)", lineHeight: "1", letterSpacing: "-.055em", color: "#EAE7E0", transition: "color 300ms ease" } as CSSProperties}>
-                          {t.k428}
-                        </span>
-                        {" "}
-                        <div style={{ position: "relative", display: "flex", alignItems: "center", gap: "12px" } as CSSProperties}>
-                          <span style={{ width: "8px", height: "8px", background: "#C9C6BE" } as CSSProperties}>
-                          </span>
-                          <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                            {t.k30}
-                          </span>
-                        </div>
-                        {" "}
-                        <h3 style={{ position: "relative", margin: "32px 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(20px,1.8vw,26px)", lineHeight: "1.16", letterSpacing: "-.02em", maxWidth: "20ch" } as CSSProperties}>
-                          {t.k202}
-                        </h3>
-                        {" "}
-                        <p style={{ position: "relative", marginTop: "auto", paddingTop: "26px", fontSize: "15px", lineHeight: "1.55", opacity: ".62" } as CSSProperties}>
-                          {t.k203}
-                        </p>
-                        {" "}
-                      </article>
-                      {" "}
-                      <article className="fa-h69183df" data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(16px)", flex: "1 0 clamp(240px,21vw,330px)", scrollSnapAlign: "start", position: "relative", overflow: "hidden", outline: "1px solid #DCDAD4", display: "flex", flexDirection: "column", minHeight: "clamp(316px,25vw,372px)", padding: "30px 28px", background: "#F7F6F3", color: "#16181D", transition: "background 300ms ease,color 300ms ease,transform 300ms ease" } as CSSProperties}>
-                        {" "}
-                        <span aria-hidden="true" style={{ position: "absolute", right: "14px", top: "2px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(84px,7vw,118px)", lineHeight: "1", letterSpacing: "-.055em", color: "#EAE7E0", transition: "color 300ms ease" } as CSSProperties}>
-                          {t.k429}
-                        </span>
-                        {" "}
-                        <div style={{ position: "relative", display: "flex", alignItems: "center", gap: "12px" } as CSSProperties}>
-                          <span style={{ width: "8px", height: "8px", background: "#C9C6BE" } as CSSProperties}>
-                          </span>
-                          <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                            {t.k204}
-                          </span>
-                        </div>
-                        {" "}
-                        <h3 style={{ position: "relative", margin: "32px 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(20px,1.8vw,26px)", lineHeight: "1.16", letterSpacing: "-.02em", maxWidth: "20ch" } as CSSProperties}>
-                          {t.k205}
-                        </h3>
-                        {" "}
-                        <p style={{ position: "relative", marginTop: "auto", paddingTop: "26px", fontSize: "15px", lineHeight: "1.55", opacity: ".62" } as CSSProperties}>
-                          {t.k206}
-                        </p>
-                        {" "}
-                      </article>
-                      {" "}
-                    </div>
-                    {" "}
-                    <div style={{ display: "flex", alignItems: "center", gap: "16px", marginTop: "24px" } as CSSProperties}>
-                      {" "}
-                      <div style={{ flex: "1 1 auto", height: "1px", background: "#DCDAD4", overflow: "hidden" } as CSSProperties}>
-                        <div data-strip-progress="" style={{ height: "1px", background: "#FF4002", transform: "scaleX(.2)", transformOrigin: "left", transition: "transform 140ms linear" } as CSSProperties}>
-                        </div>
-                      </div>
-                      {" "}
-                      <span style={{ flex: "0 0 auto", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "10px", letterSpacing: ".12em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        {t.k475}
-                      </span>
-                      {" "}
-                    </div>
-                    {" "}
-                  </div>
-                  {" "}
-                </div>
-                {" "}
-              </section>
-              {" "}
-              <section id="program" style={{ padding: "clamp(56px,7vw,104px) 0 clamp(64px,8vw,120px)", backgroundColor: "#F7F6F3" } as CSSProperties}>
-                {" "}
-                <div style={{ maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
-                  {" "}
-                  <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "24px", paddingBottom: "16px", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                    {" "}
-                    <div style={{ display: "flex", alignItems: "center", gap: "16px" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em", color: "#FF4002" } as CSSProperties}>
-                        {t.k429}
-                      </span>
-                      <span data-draw="" style={{ width: "40px", height: "1px", background: "#FF4002", transform: "scaleX(0)", transformOrigin: "left" } as CSSProperties}>
-                      </span>
-                    </div>
-                    {" "}
-                    <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                      {t.k207}
-                    </span>
-                    {" "}
-                  </div>
-                  {" "}
-                  <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "24px 40px", marginTop: "clamp(32px,4vw,48px)" } as CSSProperties}>
-                    {" "}
-                    <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(34px,6.4vw,96px)", lineHeight: ".9", letterSpacing: "-.045em", textTransform: "uppercase", maxWidth: "18ch" } as CSSProperties}>
-                      <span style={{ color: "#FF4002" } as CSSProperties}>
-                        {t.k207}
-                      </span>
-                    </h2>
-                    {" "}
-                    <p data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", maxWidth: "40ch", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", lineHeight: "1.7", letterSpacing: ".1em", textTransform: "uppercase", color: "#5C5F66" } as CSSProperties}>
-                      {t.k210}
-                    </p>
-                    {" "}
-                  </div>
-                  {" "}
-                  <div style={{ display: "grid", gridTemplateColumns: ("var(--programCols)" as any), gap: "1px", marginTop: "clamp(36px,4.4vw,60px)", background: "#DCDAD4", outline: "1px solid #DCDAD4" } as CSSProperties}>
-                    {" "}
-                    <div className="fa-h55d5336" data-reveal="" data-delay="0" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", display: "flex", flexDirection: "column", gap: "12px", minHeight: "clamp(120px,9vw,150px)", padding: "clamp(16px,1.6vw,24px)", background: "#EFEDE8", transition: "background 260ms ease,color 260ms ease" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#B4B0A6" } as CSSProperties}>
-                        {t.k420}
-                      </span>
-                      <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.1vw,18px)", lineHeight: "1.22", letterSpacing: "-.02em" } as CSSProperties}>
-                        {t.k211}
-                      </span>
-                      <span aria-hidden="true" style={{ position: "absolute", right: "clamp(10px,1vw,16px)", bottom: "clamp(14px,1.4vw,20px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "13px", color: "#FF4002" } as CSSProperties}>
-                        {t.k416}
-                      </span>
-                    </div>
-                    {" "}
-                    <div className="fa-h55d5336" data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", display: "flex", flexDirection: "column", gap: "12px", minHeight: "clamp(120px,9vw,150px)", padding: "clamp(16px,1.6vw,24px)", background: "#EFEDE8", transition: "background 260ms ease,color 260ms ease" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#B4B0A6" } as CSSProperties}>
-                        {t.k422}
-                      </span>
-                      <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.1vw,18px)", lineHeight: "1.22", letterSpacing: "-.02em" } as CSSProperties}>
-                        {t.k132}
-                      </span>
-                      <span aria-hidden="true" style={{ position: "absolute", right: "clamp(10px,1vw,16px)", bottom: "clamp(14px,1.4vw,20px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "13px", color: "#FF4002" } as CSSProperties}>
-                        {t.k416}
-                      </span>
-                    </div>
-                    {" "}
-                    <div className="fa-h55d5336" data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", display: "flex", flexDirection: "column", gap: "12px", minHeight: "clamp(120px,9vw,150px)", padding: "clamp(16px,1.6vw,24px)", background: "#EFEDE8", transition: "background 260ms ease,color 260ms ease" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#B4B0A6" } as CSSProperties}>
-                        {t.k428}
-                      </span>
-                      <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.1vw,18px)", lineHeight: "1.22", letterSpacing: "-.02em" } as CSSProperties}>
-                        {t.k133}
-                      </span>
-                      <span aria-hidden="true" style={{ position: "absolute", right: "clamp(10px,1vw,16px)", bottom: "clamp(14px,1.4vw,20px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "13px", color: "#FF4002" } as CSSProperties}>
-                        {t.k416}
-                      </span>
-                    </div>
-                    {" "}
-                    <div className="fa-h55d5336" data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", display: "flex", flexDirection: "column", gap: "12px", minHeight: "clamp(120px,9vw,150px)", padding: "clamp(16px,1.6vw,24px)", background: "#EFEDE8", transition: "background 260ms ease,color 260ms ease" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#B4B0A6" } as CSSProperties}>
-                        {t.k429}
-                      </span>
-                      <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.1vw,18px)", lineHeight: "1.22", letterSpacing: "-.02em" } as CSSProperties}>
-                        {t.k213}
-                      </span>
-                      <span aria-hidden="true" style={{ position: "absolute", right: "clamp(10px,1vw,16px)", bottom: "clamp(14px,1.4vw,20px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "13px", color: "#FF4002" } as CSSProperties}>
-                        {t.k416}
-                      </span>
-                    </div>
-                    {" "}
-                    <div className="fa-h55d5336" data-reveal="" data-delay="240" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", display: "flex", flexDirection: "column", gap: "12px", minHeight: "clamp(120px,9vw,150px)", padding: "clamp(16px,1.6vw,24px)", background: "#EFEDE8", transition: "background 260ms ease,color 260ms ease" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#B4B0A6" } as CSSProperties}>
-                        {t.k431}
-                      </span>
-                      <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.1vw,18px)", lineHeight: "1.22", letterSpacing: "-.02em" } as CSSProperties}>
-                        {t.k135}
-                      </span>
-                      <span aria-hidden="true" style={{ position: "absolute", right: "clamp(10px,1vw,16px)", bottom: "clamp(14px,1.4vw,20px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "13px", color: "#FF4002" } as CSSProperties}>
-                        {t.k416}
-                      </span>
-                    </div>
-                    {" "}
-                    <div className="fa-h55d5336" data-reveal="" data-delay="300" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", display: "flex", flexDirection: "column", gap: "12px", minHeight: "clamp(120px,9vw,150px)", padding: "clamp(16px,1.6vw,24px)", background: "#EFEDE8", transition: "background 260ms ease,color 260ms ease" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#B4B0A6" } as CSSProperties}>
-                        {t.k434}
-                      </span>
-                      <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.1vw,18px)", lineHeight: "1.22", letterSpacing: "-.02em" } as CSSProperties}>
-                        {t.k215}
-                      </span>
-                      <span aria-hidden="true" style={{ position: "absolute", right: "clamp(10px,1vw,16px)", bottom: "clamp(14px,1.4vw,20px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "13px", color: "#FF4002" } as CSSProperties}>
-                        {t.k416}
-                      </span>
-                    </div>
-                    {" "}
-                    <div className="fa-h55d5336" data-reveal="" data-delay="360" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", display: "flex", flexDirection: "column", gap: "12px", minHeight: "clamp(120px,9vw,150px)", padding: "clamp(16px,1.6vw,24px)", background: "#EFEDE8", transition: "background 260ms ease,color 260ms ease" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#B4B0A6" } as CSSProperties}>
-                        {t.k436}
-                      </span>
-                      <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.1vw,18px)", lineHeight: "1.22", letterSpacing: "-.02em" } as CSSProperties}>
-                        {t.k136}
-                      </span>
-                      <span aria-hidden="true" style={{ position: "absolute", right: "clamp(10px,1vw,16px)", bottom: "clamp(14px,1.4vw,20px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "13px", color: "#FF4002" } as CSSProperties}>
-                        {t.k416}
-                      </span>
-                    </div>
-                    {" "}
-                    <div className="fa-h55d5336" data-reveal="" data-delay="420" style={{ opacity: "0", transform: "translateY(16px)", position: "relative", display: "flex", flexDirection: "column", gap: "12px", minHeight: "clamp(120px,9vw,150px)", padding: "clamp(16px,1.6vw,24px)", background: "#EFEDE8", transition: "background 260ms ease,color 260ms ease" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#B4B0A6" } as CSSProperties}>
-                        {t.k438}
-                      </span>
-                      <span style={{ marginTop: "auto", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(14px,1.1vw,18px)", lineHeight: "1.22", letterSpacing: "-.02em" } as CSSProperties}>
-                        {t.k216}
-                      </span>
-                    </div>
-                    {" "}
-                  </div>
-                  {" "}
-                  <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "12px 32px", marginTop: "clamp(56px,7vw,96px)", paddingBottom: "16px", borderBottom: "1px solid #C9C6BE" } as CSSProperties}>
-                    <h2 style={{ margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(30px,4.4vw,64px)", lineHeight: ".94", letterSpacing: "-.045em", textTransform: "uppercase" } as CSSProperties}>
-                      {t.k217}
-                    </h2>
-                    <div style={{ display: "flex", alignItems: "center", gap: "16px" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                        {t.k219}
-                      </span>
-                      <div style={{ display: "flex", gap: "8px" } as CSSProperties}>
-                        <button className="fa-arrow" type="button" aria-label="←" onClick={() => slide(-1)} disabled={atStart} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: "44px", height: "44px", padding: "0", background: "transparent", border: "1px solid #C9C6BE", color: "#16181D", cursor: "pointer" } as CSSProperties}>
-                          <span aria-hidden="true">←</span>
-                        </button>
-                        <button className="fa-arrow" type="button" aria-label="→" onClick={() => slide(1)} disabled={atEnd} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: "44px", height: "44px", padding: "0", background: "transparent", border: "1px solid #C9C6BE", color: "#16181D", cursor: "pointer" } as CSSProperties}>
-                          <span aria-hidden="true">→</span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                  {" "}
-                  {speakers.length || slots.length ? (
-                  <div ref={trackRef} onScroll={onTrackScroll} className="fa-track" style={{ display: "flex", gap: "1px", overflowX: "auto", scrollSnapType: "x mandatory", scrollBehavior: "smooth", marginTop: "clamp(1px,0.2vw,2px)" } as CSSProperties}>
-                    {speakers.map((sp, i) => (
-                    <div key={i} className="fa-card-light fa-slide" data-reveal="" data-delay={i * 80} style={{ opacity: "0", transform: "translateY(16px)", flex: "0 0 var(--speakerCard)", scrollSnapAlign: "start", display: "flex", flexDirection: "column", gap: "clamp(16px,1.6vw,22px)", padding: "clamp(18px,1.8vw,26px)", background: "#F7F6F3", boxShadow: "0 0 0 1px #C9C6BE" } as CSSProperties}>
-                      <div style={{ position: "relative", aspectRatio: "4 / 5", overflow: "hidden", background: "#16181D", display: "flex", alignItems: "center", justifyContent: "center" } as CSSProperties}>
-                        {sp.photo && sp.photo.url ? (
-                          <img src={sp.photo.url} alt={sp.photo.alt || sp.name} loading="lazy" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", filter: "grayscale(1) contrast(1.05)" } as CSSProperties} />
+                <div className="am-g4p" style={{ display: 'grid', gap: '32px 24px', marginTop: '28px' }}>
+                  {cards.map((s, i) => (
+                    <div key={i} style={{ position: 'relative' }}>
+                      <div style={{ position: 'relative', aspectRatio: '4/5', background: '#E4E4E2', overflow: 'hidden' }}>
+                        {s.img ? (
+                          <div style={{ position: 'absolute', inset: 0, filter: 'grayscale(1)' }}>
+                            {s.crop ? (
+                              <img src={s.img} alt={s.name} loading="lazy" style={{ position: 'absolute', left: s.crop[0], top: s.crop[1], width: s.crop[2], maxWidth: 'none', height: 'auto', display: 'block' }} />
+                            ) : (
+                              <img src={s.img} alt={s.name} loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 20%', display: 'block' }} />
+                            )}
+                          </div>
                         ) : (
-                          <span aria-hidden="true" style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(34px,3.4vw,52px)", letterSpacing: "-.05em", color: "#FF4002" } as CSSProperties}>
-                            {initials(sp.name)}
-                          </span>
+                          <div aria-hidden="true" style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'flex-end', padding: 'clamp(16px,1.6vw,24px)', background: '#1A52A0', color: '#fff', fontFamily: W, fontWeight: 900, fontSize: 'clamp(56px,6vw,96px)', lineHeight: 0.85, letterSpacing: '-.04em' }}>
+                            {s.initials}
+                          </div>
                         )}
                       </div>
-                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" } as CSSProperties}>
-                        <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#8E8B83" } as CSSProperties}>
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                        <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(17px,1.4vw,22px)", lineHeight: "1.16", letterSpacing: "-.025em" } as CSSProperties}>
-                          {sp.name}
-                        </span>
-                        {sp.company ? (
-                          <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#FF4002" } as CSSProperties}>
-                            {sp.company}
-                          </span>
-                        ) : null}
-                        {sp.role ? (
-                          <span style={{ fontSize: "14px", lineHeight: "1.5", color: "#6E7278" } as CSSProperties}>
-                            {sp.role}
-                          </span>
-                        ) : null}
-                      </div>
+                      <div style={{ marginTop: '16px', paddingRight: '16px', fontFamily: W, fontWeight: 700, fontSize: '18px', lineHeight: 1.2 }}>{s.name}</div>
+                      {s.role && <p style={{ marginTop: '6px', paddingRight: '16px', fontSize: '14px', lineHeight: 1.45, color: '#55554F' }}>{s.role}</p>}
                     </div>
-                    ))}
-                    {slots.map((n) => (
-                    <div key={'slot' + n} className="fa-slot fa-slide" data-reveal="" data-delay={(speakers.length + n) * 80} style={{ opacity: "0", transform: "translateY(16px)", flex: "0 0 var(--speakerCard)", scrollSnapAlign: "start", display: "flex", flexDirection: "column", gap: "clamp(16px,1.6vw,22px)", padding: "clamp(18px,1.8vw,26px)", background: "#F7F6F3", boxShadow: "0 0 0 1px #C9C6BE" } as CSSProperties}>
-                      <div style={{ position: "relative", aspectRatio: "4 / 5", overflow: "hidden", background: "#EFEDE8", display: "flex", alignItems: "center", justifyContent: "center" } as CSSProperties}>
-                        <span aria-hidden="true" className="fa-slot-mark" style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(34px,3.4vw,52px)", letterSpacing: "-.05em", color: "#C9C6BE" } as CSSProperties}>
-                          ?
-                        </span>
-                      </div>
-                      <div style={{ display: "flex", flexDirection: "column", gap: "8px" } as CSSProperties}>
-                        <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".12em", color: "#B4B0A8" } as CSSProperties}>
-                          {String(speakers.length + n + 1).padStart(2, "0")}
-                        </span>
-                        <span style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(17px,1.4vw,22px)", lineHeight: "1.16", letterSpacing: "-.025em", color: "#9A968E" } as CSSProperties}>
-                          {t.k320}
-                        </span>
-                      </div>
-                    </div>
-                    ))}
-                  </div>
-                  ) : null}
-                  {" "}
+                  ))}
                 </div>
-                {" "}
-              </section>
-              {" "}
-              <section id="award" style={{ position: "relative", overflow: "hidden", padding: "clamp(72px,9vw,144px) 0", backgroundColor: "#FF4002", color: "#F7F6F3" } as CSSProperties}>
-                {" "}
-                <div style={{ position: "relative", maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
-                  {" "}
-                  <h2 data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(40px,8.4vw,140px)", lineHeight: ".88", letterSpacing: "-.05em", textTransform: "uppercase", maxWidth: "12ch" } as CSSProperties}>
-                    {t.k10}
-                    {" "}
-                    <span style={{ color: "#F7F6F3" } as CSSProperties}>
-                      {t.k221}
-                    </span>
-                  </h2>
-                  {" "}
-                  <div style={{ display: "grid", gridTemplateColumns: ("var(--twoCols)" as any), gap: "0 clamp(32px,4vw,72px)", marginTop: "clamp(40px,5vw,72px)" } as CSSProperties}>
-                    {" "}
-                    <div data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", paddingTop: "18px", borderTop: "2px solid #F7F6F3" } as CSSProperties}>
-                      <span style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".14em", textTransform: "uppercase", color: "#F7F6F3" } as CSSProperties}>
-                        {t.k269}
-                      </span>
-                      <p style={{ margin: "14px 0 0", fontSize: "clamp(16px,1.3vw,20px)", lineHeight: "1.55", maxWidth: "38ch" } as CSSProperties}>
-                        {t.k222}
-                      </p>
-                    </div>
-                    {" "}
-                    <div data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(16px)", paddingTop: "18px", borderTop: "2px solid rgba(247,246,243,.45)" } as CSSProperties}>
-                      <span style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".14em", textTransform: "uppercase", color: "#F7F6F3" } as CSSProperties}>
-                        {t.k272}
-                      </span>
-                      <p style={{ margin: "14px 0 0", fontSize: "clamp(16px,1.3vw,20px)", lineHeight: "1.55", maxWidth: "38ch" } as CSSProperties}>
-                        {t.k223}
-                      </p>
-                    </div>
-                    {" "}
-                  </div>
-                  {" "}
-                  <a className="fa-btn-light" href={lp("/award")} data-reveal="" data-delay="240" style={{ opacity: "0", transform: "translateY(16px)", alignSelf: "flex-start", display: "inline-flex", alignItems: "center", justifyContent: "space-between", gap: "20px", marginTop: "clamp(32px,4vw,56px)", padding: "18px 28px", background: "#F7F6F3", color: "#16181D", border: "1px solid #F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
-                    {t.k225}
-                    <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
-                      {t.k416}
-                    </span>
-                  </a>
-                  {" "}
-                </div>
-                {" "}
-              </section>
-              {" "}
-              <section id="participation" style={{ padding: "clamp(64px,8vw,120px) 0", backgroundColor: "#F7F6F3" } as CSSProperties}>
-                {" "}
-                <div style={{ maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
-                  {" "}
-                  <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "24px", paddingBottom: "16px", borderBottom: "1px solid #DCDAD4" } as CSSProperties}>
-                    {" "}
-                    <div style={{ display: "flex", alignItems: "center", gap: "16px" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em", color: "#FF4002" } as CSSProperties}>
-                        {t.k431}
-                      </span>
-                      <span data-draw="" style={{ width: "40px", height: "1px", background: "#FF4002", transform: "scaleX(0)", transformOrigin: "left" } as CSSProperties}>
-                      </span>
-                    </div>
-                    {" "}
-                    <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                      {t.k11}
-                    </span>
-                    {" "}
-                  </div>
-                  {" "}
-                  <div data-reveal="" data-delay="40" style={{ opacity: "0", transform: "translateY(16px)", marginTop: "clamp(32px,4vw,48px)", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".16em", textTransform: "uppercase", color: "#FF4002" } as CSSProperties}>
-                    {t.k97}
-                  </div>
-                  {" "}
-                  <div style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-end", justifyContent: "space-between", gap: "24px 40px", marginTop: "clamp(20px,2.4vw,32px)" } as CSSProperties}>
-                    {" "}
-                    <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(40px,8vw,124px)", lineHeight: ".88", letterSpacing: "-.05em", textTransform: "uppercase", color: "#16181D" } as CSSProperties}>
-                      {t.k227}
-                      {" "}
-                      <span style={{ color: "#FF4002" } as CSSProperties}>
-                        {t.k228}
-                      </span>
-                    </h2>
-                    {" "}
-                  </div>
-                  {" "}
-                  <div style={{ display: "grid", gridTemplateColumns: ("var(--twoCols,1fr 1fr)" as any), gap: "1px", marginTop: "clamp(32px,4vw,48px)", background: "#DCDAD4", outline: "1px solid #DCDAD4" } as CSSProperties}>
-                    {" "}
-                    <div data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", minHeight: "clamp(260px,22vw,340px)", padding: "clamp(28px,3vw,44px)", background: "#16181D", color: "#F7F6F3" } as CSSProperties}>
-                      {" "}
-                      <span aria-hidden="true" style={{ alignSelf: "flex-start", width: "8px", height: "8px", background: "#FF4002" } as CSSProperties}>
-                      </span>
-                      {" "}
-                      <h3 style={{ margin: "clamp(20px,2.4vw,32px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(30px,3.6vw,52px)", lineHeight: "1", letterSpacing: "-.04em", textTransform: "uppercase" } as CSSProperties}>
-                        {t.k231}
-                      </h3>
-                      {" "}
-                      <a className="fa-h011a976" href="#apply" style={{ alignSelf: "flex-start", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "16px", marginTop: "auto", padding: "18px 36px", background: "#FF4002", color: "#F7F6F3", border: "1px solid #FF4002", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", transition: "background 200ms ease,color 200ms ease,border-color 200ms ease" } as CSSProperties}>
-                        {t.k140}
-                        <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
-                          {t.k416}
-                        </span>
-                      </a>
-                      {" "}
-                    </div>
-                    {" "}
-                    <div data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexDirection: "column", minHeight: "clamp(260px,22vw,340px)", padding: "clamp(28px,3vw,44px)", background: "#F7F6F3", color: "#16181D" } as CSSProperties}>
-                      {" "}
-                      <span aria-hidden="true" style={{ alignSelf: "flex-start", width: "8px", height: "8px", border: "1px solid #16181D" } as CSSProperties}>
-                      </span>
-                      {" "}
-                      <h3 style={{ margin: "clamp(20px,2.4vw,32px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(30px,3.6vw,52px)", lineHeight: "1", letterSpacing: "-.04em", textTransform: "uppercase" } as CSSProperties}>
-                        {t.k237}
-                      </h3>
-                      {" "}
-                      <button className="fa-h6d4f325" type="button" onClick={goPartner} style={{ alignSelf: "flex-start", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "16px", marginTop: "auto", padding: "18px 36px", border: "1px solid #16181D", background: "transparent", color: "#16181D", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", cursor: "pointer", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
-                        {t.k240}
-                        <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
-                          {t.k416}
-                        </span>
-                      </button>
-                      {" "}
-                    </div>
-                    {" "}
-                  </div>
-                  {" "}
-                  <div data-reveal="" data-delay="180" style={{ opacity: "0", transform: "translateY(16px)", marginTop: "28px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                    {t.k241}
-                  </div>
-                  {" "}
-                  <div data-reveal="" data-delay="240" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "28px 48px", marginTop: "clamp(48px,6vw,88px)", padding: "clamp(28px,3.4vw,56px)", background: "#16181D", color: "#F7F6F3" } as CSSProperties}>
-                    {" "}
-                    <h3 style={{ margin: "0", flex: "1 1 420px", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "800", fontSize: "clamp(22px,2.4vw,36px)", lineHeight: "1.1", letterSpacing: "-.025em", maxWidth: "26ch" } as CSSProperties}>
-                      {t.k242}
-                    </h3>
-                    {" "}
-                    <a className="fa-h55d5336" href={lp("/")} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "16px", padding: "19px 38px", border: "1px solid #F7F6F3", color: "#F7F6F3", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", transition: "background 200ms ease,color 200ms ease" } as CSSProperties}>
-                      {t.k243}
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
-                        {t.k416}
-                      </span>
-                    </a>
-                    {" "}
-                  </div>
-                  {" "}
-                </div>
-                {" "}
-              </section>
-              {" "}
-              <section id="apply" style={{ position: "relative", overflow: "hidden", padding: "clamp(72px,9vw,140px) 0 clamp(64px,8vw,120px)", backgroundColor: "#16181D", color: "#F7F6F3", backgroundImage: "repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,rgba(255,255,255,.06) 0 1px,transparent 1px 80px)" } as CSSProperties}>
-                {" "}
-                <div aria-hidden="true" style={{ position: "absolute", left: "0", right: "0", bottom: "0", pointerEvents: "none", overflow: "hidden", lineHeight: "0" } as CSSProperties}>
-                  <svg viewBox="0 0 1000 150" preserveAspectRatio="none" style={{ display: "block", width: "100%", height: "auto" } as CSSProperties}>
-                    <text x="0" y="122" textLength="1000" lengthAdjust="spacingAndGlyphs" style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "150px", textTransform: "uppercase", fill: "rgba(255,64,2,.20)" } as CSSProperties}>
-                      {t.k476}
-                    </text>
-                  </svg>
-                </div>
-                {" "}
-                <div style={{ position: "relative", maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
-                  {" "}
-                  <div data-reveal="" style={{ opacity: "0", transform: "translateY(16px)", display: "flex", alignItems: "baseline", justifyContent: "space-between", gap: "24px", paddingBottom: "16px", borderBottom: "1px solid #3A3D44" } as CSSProperties}>
-                    {" "}
-                    <div style={{ display: "flex", alignItems: "center", gap: "16px" } as CSSProperties}>
-                      <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px", letterSpacing: ".08em", color: "#FF4002" } as CSSProperties}>
-                        {t.k434}
-                      </span>
-                      <span data-draw="" style={{ width: "40px", height: "1px", background: "#FF4002", transform: "scaleX(0)", transformOrigin: "left" } as CSSProperties}>
-                      </span>
-                    </div>
-                    {" "}
-                    <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#8E9198" } as CSSProperties}>
-                      {t.k130}
-                    </span>
-                    {" "}
-                  </div>
-                  {" "}
-                  <h2 data-reveal="" data-delay="60" style={{ opacity: "0", transform: "translateY(16px)", margin: "clamp(32px,4vw,48px) 0 0", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(34px,5.6vw,84px)", lineHeight: ".92", letterSpacing: "-.045em", textTransform: "uppercase", maxWidth: "20ch" } as CSSProperties}>
-                    {t.k245}
-                    {" "}
-                    <span style={{ color: "#FF4002" } as CSSProperties}>
-                      {t.k246}
-                    </span>
-                  </h2>
-                  {" "}
-                  <p data-reveal="" data-delay="120" style={{ opacity: "0", transform: "translateY(16px)", margin: "16px 0 0", fontSize: "16px", lineHeight: "1.6", color: "#B9BBC0", maxWidth: "65ch" } as CSSProperties}>
-                    {t.k248}
-                  </p>
-                  {" "}
-                  {notSent ? (
-                  <>
-                    {" "}
-                    <form onSubmit={submit} noValidate data-reveal="" data-delay="160" style={{ opacity: "0", transform: "translateY(16px)", marginTop: "clamp(36px,4.4vw,56px)", maxWidth: "960px", background: "#F7F6F3", color: "#16181D", padding: "clamp(26px,3.2vw,52px)", boxShadow: "14px 14px 0 #FF4002" } as CSSProperties}>
-                      {" "}
-                      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: "8px 48px" } as CSSProperties}>
-                        {" "}
-                        <div>
-                          <label htmlFor="fa-name" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                            {t.k112}
-                          </label>
-                          <input className="fa-hd277039" id="fa-name" name="name" type="text" autoComplete="name" onInput={onName} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
-                          <div style={{ minHeight: "16px", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".06em", color: "#FF4002" } as CSSProperties}>
-                            {errName}
-                          </div>
-                        </div>
-                        {" "}
-                        <div>
-                          <label htmlFor="fa-company" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                            {t.k113}
-                          </label>
-                          <input className="fa-hd277039" id="fa-company" name="company" type="text" autoComplete="organization" onInput={onCompany} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
-                          <div style={{ minHeight: "16px", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".06em", color: "#FF4002" } as CSSProperties}>
-                            {errCompany}
-                          </div>
-                        </div>
-                        {" "}
-                        <div>
-                          <label htmlFor="fa-role" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                            {t.k7}
-                          </label>
-                          {" "}
-                          <select className="fa-hd277039" id="fa-role" name="role" onChange={onRole} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "#F7F6F3", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", appearance: "none", borderRadius: "0", transition: "border-color 200ms ease" } as CSSProperties}>
-                            {" "}
-                            <option value="">
-                              {t.k115}
-                            </option>
-                            {" "}
-                            <option value="Архитектор или дизайнер">
-                              {t.k116}
-                            </option>
-                            {" "}
-                            <option value="Девелопер или застройщик">
-                              {t.k117}
-                            </option>
-                            {" "}
-                            <option value="Производитель или поставщик">
-                              {t.k118}
-                            </option>
-                            {" "}
-                            <option value="Инвестор или бизнес">
-                              {t.k119}
-                            </option>
-                            {" "}
-                          </select>
-                          {" "}
-                          <div style={{ minHeight: "16px", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".06em", color: "#FF4002" } as CSSProperties}>
-                            {errRole}
-                          </div>
-                          {" "}
-                        </div>
-                        {" "}
-                        <div>
-                          <label htmlFor="fa-kind" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                            {t.k249}
-                          </label>
-                          {" "}
-                          <select className="fa-hd277039" id="fa-kind" name="kind" onChange={onKind} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "#F7F6F3", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", appearance: "none", borderRadius: "0", transition: "border-color 200ms ease" } as CSSProperties}>
-                            {" "}
-                            <option value="">
-                              {t.k115}
-                            </option>
-                            {" "}
-                            <option value="Участник">
-                              {t.k231}
-                            </option>
-                            {" "}
-                            <option value="Партнёр">
-                              {t.k237}
-                            </option>
-                            {" "}
-                          </select>
-                          {" "}
-                          <div style={{ minHeight: "16px", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".06em", color: "#FF4002" } as CSSProperties}>
-                            {errKind}
-                          </div>
-                          {" "}
-                        </div>
-                        {" "}
-                        <div>
-                          <label htmlFor="fa-email" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                            {t.k455}
-                          </label>
-                          <input className="fa-hd277039" id="fa-email" name="email" type="email" autoComplete="email" onInput={onEmail} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
-                          <div style={{ minHeight: "16px", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".06em", color: "#FF4002" } as CSSProperties}>
-                            {errEmail}
-                          </div>
-                        </div>
-                        {" "}
-                        <div>
-                          <label htmlFor="fa-phone" style={{ display: "block", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".08em", textTransform: "uppercase", color: "#6E7278" } as CSSProperties}>
-                            {t.k120}
-                          </label>
-                          <input className="fa-hd277039" id="fa-phone" name="phone" type="tel" autoComplete="tel" onInput={onPhone} style={{ width: "100%", marginTop: "8px", padding: "12px 0", background: "transparent", border: "0", borderBottom: "1px solid #C9C6BE", color: "#16181D", fontSize: "16px", outline: "none", transition: "border-color 200ms ease" } as CSSProperties} />
-                          <div style={{ minHeight: "16px", marginTop: "8px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".06em", color: "#FF4002" } as CSSProperties}>
-                            {errPhone}
-                          </div>
-                        </div>
-                        {" "}
-                      </div>
-                      {" "}
-                      <button className="fa-h5fa00f1" type="submit" style={{ marginTop: "40px", display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "16px", padding: "18px 36px", background: "#FF4002", color: "#F7F6F3", border: "1px solid #FF4002", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "600", fontSize: "15px", lineHeight: "1.2", whiteSpace: "nowrap", cursor: "pointer", transition: "background 200ms ease,color 200ms ease,border-color 200ms ease" } as CSSProperties}>
-                        {t.k121}
-                        <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "12px" } as CSSProperties}>
-                          {t.k416}
-                        </span>
-                      </button>
-                      {" "}
-                    </form>
-                    {" "}
-                  </>
-                  ) : null}
-                  {" "}
-                  {sent ? (
-                  <>
-                    {" "}
-                    <div style={{ marginTop: "clamp(36px,4.4vw,56px)", padding: "clamp(26px,3.2vw,48px)", background: "#F7F6F3", color: "#16181D", maxWidth: "65ch", boxShadow: "14px 14px 0 #FF4002" } as CSSProperties}>
-                      {" "}
-                      <div style={{ fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "700", fontSize: "clamp(20px,1.9vw,24px)" } as CSSProperties}>
-                        {t.k122}
-                      </div>
-                      {" "}
-                      <p style={{ margin: "16px 0 0", fontSize: "16px", lineHeight: "1.6", color: "#5C5F66" } as CSSProperties}>
-                        {t.k250}
-                      </p>
-                      {" "}
-                    </div>
-                    {" "}
-                  </>
-                  ) : null}
-                  {" "}
-                </div>
-                {" "}
-              </section>
-              {" "}
-            </main>
-            {" "}
-            <footer id="contacts" style={{ position: "relative", overflow: "hidden", backgroundColor: "#16181D", color: "#F7F6F3", padding: "clamp(40px,5vw,64px) 0 40px", backgroundImage: "repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 1px,transparent 1px 80px),repeating-linear-gradient(0deg,rgba(255,255,255,.06) 0 1px,transparent 1px 80px)", backgroundAttachment: "fixed" } as CSSProperties}>
-              {" "}
-              <div aria-hidden="true" style={{ position: "absolute", left: "-10%", top: "-30%", width: "min(64vw,720px)", height: "min(64vw,720px)", pointerEvents: "none", borderRadius: "50%", background: "radial-gradient(circle,rgba(255,64,2,.28),rgba(255,64,2,0) 68%)" } as CSSProperties}>
-              </div>
-              {" "}
-              <div aria-hidden="true" style={{ position: "relative", overflow: "hidden", paddingBottom: "clamp(28px,3.4vw,48px)", WebkitMaskImage: "linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent)", maskImage: "linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent)" } as CSSProperties}>
-                {" "}
-                <div data-marquee="" style={{ display: "flex", width: "max-content", animation: "faMarquee 54s linear infinite", fontFamily: "Montserrat,Manrope,sans-serif", fontWeight: "900", fontSize: "clamp(52px,10vw,150px)", lineHeight: ".9", letterSpacing: "-.05em", textTransform: "uppercase", color: "rgba(247,246,243,.17)" } as CSSProperties}>
-                  {" "}
-                  <div style={{ display: "flex", gap: ".3em", paddingRight: ".3em" } as CSSProperties}>
-                    <span>
-                      {t.k401}
-                    </span>
-                    <span style={{ color: "#FF4002" } as CSSProperties}>
-                      {t.k417}
-                    </span>
-                    <span>
-                      {t.k9}
-                    </span>
-                    <span style={{ color: "#FF4002" } as CSSProperties}>
-                      {t.k417}
-                    </span>
-                  </div>
-                  {" "}
-                  <div style={{ display: "flex", gap: ".3em", paddingRight: ".3em" } as CSSProperties}>
-                    <span>
-                      {t.k401}
-                    </span>
-                    <span style={{ color: "#FF4002" } as CSSProperties}>
-                      {t.k417}
-                    </span>
-                    <span>
-                      {t.k9}
-                    </span>
-                    <span style={{ color: "#FF4002" } as CSSProperties}>
-                      {t.k417}
-                    </span>
-                  </div>
-                  {" "}
-                </div>
-                {" "}
-              </div>
-              {" "}
-              <div style={{ position: "relative", maxWidth: "1720px", margin: "0 auto", padding: "0 clamp(20px,4.8vw,108px)" } as CSSProperties}>
-                {" "}
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "48px", borderTop: "1px solid #3A3D44", paddingTop: "clamp(40px,5vw,56px)" } as CSSProperties}>
-                  {" "}
-                  <div style={{ flex: "1 1 260px" } as CSSProperties}>
-                    {" "}
-                    <img src="/img/0ce5b0d8a0.png" alt={t.k401} style={{ height: "104px", width: "auto", display: "block" } as CSSProperties} />
-                    {" "}
-                    <p style={{ margin: "24px 0 0", fontSize: "15px", lineHeight: "1.6", color: "#8E9198", maxWidth: "32ch" } as CSSProperties}>
-                      {t.k251}
-                    </p>
-                    {" "}
-                  </div>
-                  {" "}
-                  <nav aria-label={t.k125} style={{ flex: "0 1 176px", display: "flex", flexDirection: "column", gap: "12px", fontSize: "15px", color: "#B9BBC0" } as CSSProperties}>
-                    {" "}
-                    <a className="fa-hc3889f8" href={lp("/")} style={{ transition: "color 200ms ease" } as CSSProperties}>
-                      {t.k35}
-                    </a>
-                    {" "}
-                    <a className="fa-hc3889f8" href="#topics" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                      {t.k194}
-                    </a>
-                    {" "}
-                    <a className="fa-hc3889f8" href="#participation" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                      {t.k11}
-                    </a>
-                    {" "}
-                    <a className="fa-hc3889f8" href={lp("/award")} style={{ transition: "color 200ms ease" } as CSSProperties}>
-                      {t.k10}
-                    </a>
-                    {" "}
-                    <a className="fa-hc3889f8" href="#apply" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                      {t.k130}
-                    </a>
-                    {" "}
-                  </nav>
-                  {" "}
-                  <div style={{ flex: "0 1 280px", display: "flex", flexDirection: "column", gap: "12px", fontSize: "15px", color: "#B9BBC0" } as CSSProperties}>
-                    {" "}
-                    <a className="fa-hc3889f8" href="mailto:marketing@lh47arch.com" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                      {t.k457}
-                    </a>
-                    {" "}
-                    <a className="fa-hc3889f8" href="mailto:marketing@instylehome.md" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                      {t.k458}
-                    </a>
-                    {" "}
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" } as CSSProperties}>
-                      <a className="fa-hc3889f8" href="tel:+37368199951" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                        {t.k459}
-                      </a>
-                      <span style={{ color: "#8E9198" } as CSSProperties}>
-                        {t.k460}
-                      </span>
-                    </div>
-                    {" "}
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" } as CSSProperties}>
-                      <a className="fa-hc3889f8" href="tel:+37368059311" style={{ transition: "color 200ms ease" } as CSSProperties}>
-                        {t.k461}
-                      </a>
-                      <span style={{ color: "#8E9198" } as CSSProperties}>
-                        {t.k462}
-                      </span>
-                    </div>
-                    {" "}
-                  </div>
-                  {" "}
-                  <div className="fa-social" style={{ flex: "0 1 160px", color: "#B9BBC0" } as CSSProperties}>
-                    {" "}
-                    <a href="#" aria-label={t.k463}>
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-                        <rect x="3" y="3" width="18" height="18" rx="5">
-                        </rect>
-                        <circle cx="12" cy="12" r="4.2">
-                        </circle>
-                        <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none">
-                        </circle>
-                      </svg>
-                      <span className="fa-sr">
-                        {t.k463}
-                      </span>
-                    </a>
-                    {" "}
-                    <a href="#" aria-label={t.k464}>
-                      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5H16.7V3.6c-.3-.04-1.3-.13-2.47-.13-2.44 0-4.11 1.49-4.11 4.23V9.9H7.4V13h2.72v8h3.38z">
-                        </path>
-                      </svg>
-                      <span className="fa-sr">
-                        {t.k464}
-                      </span>
-                    </a>
-                    {" "}
-                    <a href="#" aria-label={t.k465}>
-                      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                        <path d="M6.94 8.6H3.9V21h3.04V8.6zM5.42 3A1.8 1.8 0 105.4 6.6 1.8 1.8 0 005.42 3zM21 14.2c0-3.4-1.82-4.98-4.24-4.98-1.96 0-2.83 1.08-3.32 1.84V8.6H10.4c.04.86 0 12.4 0 12.4h3.04v-6.92c0-.33.02-.66.12-.9.27-.66.87-1.34 1.9-1.34 1.33 0 1.87 1.02 1.87 2.5V21H21v-6.8z">
-                        </path>
-                      </svg>
-                      <span className="fa-sr">
-                        {t.k465}
-                      </span>
-                    </a>
-                    {" "}
-                  </div>
-                  {" "}
-                </div>
-                {" "}
-                <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "16px 32px", marginTop: "clamp(40px,5vw,64px)", paddingTop: "24px", borderTop: "1px solid #3A3D44" } as CSSProperties}>
-                  {" "}
-                  <span style={{ fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#8E9198" } as CSSProperties}>
-                    {t.k126}
-                  </span>
-                  {" "}
-                  <img src="/img/d65b278e9b.png" alt={t.k444} style={{ height: "24px", width: "auto", display: "block", filter: "brightness(0) invert(.62)", opacity: ".9" } as CSSProperties} />
-                  {" "}
-                  <img src="/img/d7f7cfad4d.png" alt={t.k450} style={{ height: "18px", width: "auto", display: "block", filter: "brightness(0) invert(.62)", opacity: ".9" } as CSSProperties} />
-                  {" "}
-                </div>
-                {" "}
-                <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: "16px 32px", marginTop: "32px", fontFamily: "'JetBrains Mono',ui-monospace,monospace", fontSize: "11px", letterSpacing: ".1em", textTransform: "uppercase", color: "#8E9198" } as CSSProperties}>
-                  {" "}
-                  <div style={{ display: "flex", gap: "8px" } as CSSProperties}>
-                    <a href={lhref("ro")} style={{ color: langColor("ro", "#F7F6F3", "inherit") } as CSSProperties}>
-                      {t.k402}
-                    </a>
-                    <span style={{ color: "#3A3D44" } as CSSProperties}>
-                      {t.k403}
-                    </span>
-                    <a href={lhref("ru")} style={{ color: langColor("ru", "#F7F6F3", "inherit") } as CSSProperties}>
-                      {t.k404}
-                    </a>
-                    <span style={{ color: "#3A3D44" } as CSSProperties}>
-                      {t.k403}
-                    </span>
-                    <a href={lhref("en")} style={{ color: langColor("en", "#F7F6F3", "inherit") } as CSSProperties}>
-                      {t.k405}
-                    </a>
-                  </div>
-                  {" "}
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "8px 24px" } as CSSProperties}>
-                    <span>
-                      {t.k466}
-                    </span>
-                    <a className="fa-h9b28a07" href={lp("/privacy")} style={{ transition: "color 200ms ease" } as CSSProperties}>
-                      {t.k127}
-                    </a>
-                  </div>
-                  {" "}
-                </div>
-                {" "}
-              </div>
-              {" "}
-            </footer>
-            {" "}
+              </>
+            )}
           </div>
-    </>
+        </section>
+
+        <section style={{ position: 'relative', overflow: 'hidden', padding: '0 0 clamp(48px,5vw,88px)' }}>
+          <div style={{ position: 'relative', ...WRAP }}>
+            <div className="am-split" style={{ display: 'grid', gap: '32px clamp(40px,6vw,112px)', alignItems: 'start', paddingTop: 'clamp(48px,5vw,72px)', borderTop: '1px solid #E6E6E3' }}>
+              <div style={{ position: 'relative', alignSelf: 'stretch', display: 'flex', flexDirection: 'column', gap: 'clamp(24px,3vw,40px)' }}>
+                <div style={{ position: 'relative', padding: 'clamp(28px,3vw,48px) 0 clamp(28px,3vw,48px) clamp(28px,3vw,48px)' }}>
+                  <span aria-hidden="true" style={{ position: 'absolute', left: 0, top: 0, width: 'clamp(56px,5vw,88px)', height: '12px', background: '#E8461E' }} />
+                  <span aria-hidden="true" style={{ position: 'absolute', left: 0, top: 0, width: '12px', height: 'clamp(56px,5vw,88px)', background: '#E8461E' }} />
+                  <span aria-hidden="true" style={{ position: 'absolute', right: 0, bottom: 0, width: 'clamp(56px,5vw,88px)', height: '12px', background: '#000' }} />
+                  <span aria-hidden="true" style={{ position: 'absolute', right: 0, bottom: 0, width: '12px', height: 'clamp(56px,5vw,88px)', background: '#000' }} />
+                  <h2 style={{ fontFamily: W, fontWeight: 800, fontSize: 'clamp(40px,5.4vw,88px)', lineHeight: 0.92, letterSpacing: '-.04em', textTransform: 'uppercase' }}>
+                    {t.fProgram1}
+                    <br />
+                    {t.fProgram2}
+                  </h2>
+                </div>
+                <div className="am-prog-img" style={{ position: 'relative', flex: 1, background: '#E8461E', overflow: 'hidden' }}>
+                  <img src="/img/fo-program-photo.jpg" alt={t.fProgramAlt} loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 70%', display: 'block' }} />
+                </div>
+              </div>
+              <div ref={progRef} style={{ position: 'relative', borderTop: '2px solid #000' }}>
+                <span aria-hidden="true" style={{ position: 'absolute', left: '6px', top: '36px', bottom: '36px', width: '2px', background: '#D9D9D6' }} />
+                <span aria-hidden="true" style={{ position: 'absolute', left: '6px', top: '36px', width: '2px', height: 'calc((100% - 72px) * ' + prog.toFixed(3) + ')', maxHeight: 'calc(100% - 72px)', background: '#E8461E', transition: 'height 200ms linear' }} />
+                {program.map((title, i) => {
+                  const on = (i + 0.5) / program.length <= prog
+                  return (
+                    <div key={i} style={{ position: 'relative', display: 'flex', alignItems: 'center', padding: '24px 0 24px 44px', borderBottom: '1px solid #D9D9D6' }}>
+                      <span aria-hidden="true" style={{ position: 'absolute', left: 0, top: '50%', width: '14px', height: '14px', marginTop: '-7px', background: on ? '#E8461E' : '#fff', border: '2px solid ' + (on ? '#E8461E' : '#C9C9C5'), transition: 'background 300ms,border-color 300ms' }} />
+                      <h3 style={{ fontFamily: W, fontWeight: 700, fontSize: 'clamp(19px,1.7vw,26px)', lineHeight: 1.2, letterSpacing: '-.01em', color: on ? '#000' : '#8A8A86', transition: 'color 300ms' }}>{title}</h3>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="am-split" style={{ display: 'grid', background: '#1A52A0', color: '#fff' }}>
+          <div className="am-ar-fside" style={{ position: 'relative', minHeight: '100%', background: '#123C78', overflow: 'hidden' }}>
+            <img src="/img/il-facade.jpg" alt={t.fFacadeAlt} loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+          </div>
+          <div style={{ padding: 'clamp(40px,4.4vw,72px) max(clamp(20px,4vw,64px),calc((100vw - 1440px)/2 + 64px)) clamp(40px,4.4vw,72px) clamp(20px,4vw,64px)' }}>
+            <div style={{ ...CAP, color: '#C8D6EC' }}>{t.fPartnersLabel}</div>
+            <h2 style={{ marginTop: '14px', maxWidth: '16ch', ...H2 }}>{t.fPartnersTitle}</h2>
+            <p style={{ marginTop: '24px', maxWidth: '40ch', fontSize: 'clamp(18px,1.4vw,21px)', lineHeight: 1.5 }}>{t.fPartnersText}</p>
+            <div style={{ marginTop: '36px', paddingTop: '18px', borderTop: '1px solid #fff', display: 'grid', gridTemplateColumns: '44px minmax(0,1fr)', gap: '8px' }}>
+              <span style={{ fontWeight: 600, color: '#E5D900' }}>01</span>
+              <span style={{ fontSize: '17px', lineHeight: 1.45 }}>{t.fBenefit1}</span>
+            </div>
+            <div style={{ marginTop: '24px', paddingTop: '18px', borderTop: '1px solid #fff', display: 'grid', gridTemplateColumns: '44px minmax(0,1fr)', gap: '8px' }}>
+              <span style={{ fontWeight: 600, color: '#E5D900' }}>02</span>
+              <div>
+                <div style={{ fontSize: '17px', lineHeight: 1.45 }}>{t.fBenefit2}</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '14px' }}>
+                  <span style={PILL}>{t.fBefore}</span>
+                  <span style={PILL}>{t.fDuring}</span>
+                  <span style={PILL}>{t.fAfter}</span>
+                </div>
+              </div>
+            </div>
+            <a href="#apply" onClick={pickPartner} className="hv-yellow" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '14px', minHeight: '56px', marginTop: '40px', padding: '0 28px', background: '#fff', color: '#000', fontFamily: W, fontWeight: 700, fontSize: '14px', textAlign: 'center', transition: 'background 200ms' }}>
+              {t.fGetOffer}
+            </a>
+          </div>
+        </section>
+
+        <section id="apply" style={{ padding: 'clamp(48px,5vw,88px) 0' }}>
+          <div className="am-split" style={{ ...WRAP, display: 'grid', gap: 'clamp(40px,6vw,112px)', alignItems: 'start' }}>
+            <div>
+              <h2 style={{ maxWidth: '14ch', ...H2 }}>{t.fApplyTitle}</h2>
+              <div style={{ marginTop: '40px', paddingTop: '20px', borderTop: '1px solid #000', fontFamily: W, fontWeight: 700, fontSize: 'clamp(20px,1.8vw,26px)', lineHeight: 1.3 }}>
+                {t.fApplyDate}
+                <br />
+                <span style={{ color: '#55554F' }}>{t.fApplyPlace}</span>
+              </div>
+            </div>
+            <div style={{ position: 'relative', background: '#F3F3F1', padding: 'clamp(24px,3.4vw,56px)' }}>
+              <span aria-hidden="true" style={{ position: 'absolute', right: 0, top: 0, width: '64px', height: '12px', background: '#E8461E' }} />
+              <span aria-hidden="true" style={{ position: 'absolute', right: 0, top: 0, width: '12px', height: '64px', background: '#E8461E' }} />
+              {sent ? (
+                <div role="status" style={{ padding: '32px 0' }}>
+                  <div style={{ fontFamily: W, fontWeight: 700, fontSize: '28px' }}>{t.cSent}</div>
+                  <p style={{ marginTop: '14px', fontSize: '16px', lineHeight: 1.6, color: '#55554F' }}>{t.fSentText}</p>
+                </div>
+              ) : (
+                <form onSubmit={submit}>
+                  <div role="radiogroup" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', border: '1px solid #000', maxWidth: '420px' }}>
+                    <button type="button" role="radio" aria-checked={!partner} onClick={pickGuest} style={{ height: '48px', border: 0, cursor: 'pointer', fontFamily: W, fontWeight: 700, fontSize: '13px', background: partner ? '#fff' : '#000', color: partner ? '#000' : '#fff' }}>
+                      {t.fGuest}
+                    </button>
+                    <button type="button" role="radio" aria-checked={partner} onClick={pickPartner} style={{ height: '48px', border: 0, cursor: 'pointer', fontFamily: W, fontWeight: 700, fontSize: '13px', background: partner ? '#000' : '#fff', color: partner ? '#fff' : '#000' }}>
+                      {t.cPartner}
+                    </button>
+                  </div>
+                  <div className="am-f2" style={{ display: 'grid', gap: '24px 32px', marginTop: '36px' }}>
+                    {fields.map((f) => (
+                      <label key={track + f.k} style={{ display: 'block' }}>
+                        <span style={LABEL}>{f.label}</span>
+                        <input id={'am-apply-' + f.k} name={f.k} required type={f.type} autoComplete={f.auto} value={v[f.k] || ''} onChange={set(f.k)} className="fc-orange" style={INPUT} />
+                      </label>
+                    ))}
+                  </div>
+                  <button type="submit" disabled={busy} className="hv-orange" style={{ marginTop: '40px', ...BTN, border: 0, cursor: busy ? 'wait' : 'pointer' }}>
+                    {busy ? t.cSending : partner ? t.fGetOffer : t.fCta}
+                  </button>
+                  <FormError>{error}</FormError>
+                  <Consent t={t} lang={lang} />
+                </form>
+              )}
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <Footer t={t} lang={lang} />
+    </div>
   )
 }

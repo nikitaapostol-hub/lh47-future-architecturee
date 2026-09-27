@@ -40,3 +40,23 @@ export async function post(collection: string, body: Record<string, unknown>, la
   track('form_submit', { form: collection, language: lang })
   return res.json()
 }
+
+/** Загрузка файлов заявки в приватное хранилище Vercel Blob прямо из браузера.
+    Возвращает строки «имя — ссылка» для поля «Файлы проекта»; ссылка открывается
+    только после входа в админку. */
+export async function uploadFiles(files: File[], folder: string): Promise<string> {
+  if (!files.length) return ''
+  const { upload } = await import('@vercel/blob/client')
+  const stamp = new Date().toISOString().slice(0, 10)
+  const out: string[] = []
+  for (const f of files) {
+    const safe = f.name.replace(/[^\w.\-]+/g, '_').slice(-80) || 'file'
+    const blob = await upload(`applications/${folder}/${stamp}/${safe}`, f, {
+      access: 'private',
+      handleUploadUrl: '/api/attach',
+      contentType: f.type || undefined,
+    })
+    out.push(`${f.name} — ${window.location.origin}/api/attach?p=${encodeURIComponent(blob.pathname)}`)
+  }
+  return out.join('\n')
+}

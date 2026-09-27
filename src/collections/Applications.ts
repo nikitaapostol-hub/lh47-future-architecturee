@@ -105,10 +105,10 @@ function notify(title: string, rows: (doc: any) => MailRow[]) {
       try {
         a = await payload.findGlobal({ slug: 'mail', locale })
       } catch {}
-      const subject = a?.autoreplySubject || 'Заявка получена — Future Architecture'
+      const subject = a?.autoreplySubject || 'Заявка получена — ARCH MAKERS'
       const body =
         a?.autoreplyBody ||
-        'Здравствуйте!\n\nМы получили вашу заявку и вернёмся с ответом на этот адрес.\n\nFuture Architecture\nfuture-arch.md'
+        'Здравствуйте!\n\nМы получили вашу заявку и вернёмся с ответом на этот адрес.\n\nARCH MAKERS\nfuture-arch.md'
       await sendSafe(payload, { to: doc.email, subject, html: autoreplyHtml(body) })
     }
     return doc
@@ -139,9 +139,9 @@ export const ForumApplications: CollectionConfig = {
   },
   fields: [
     { name: 'name', type: 'text', label: 'Имя', required: true },
-    { name: 'company', type: 'text', label: 'Компания', required: true },
+    { name: 'company', type: 'text', label: 'Компания и должность', required: true },
     { name: 'role', type: 'text', label: 'Позиция' },
-    { name: 'kind', type: 'text', label: 'Тип обращения' },
+    { name: 'kind', type: 'text', label: 'Участник или партнёр' },
     { name: 'email', type: 'email', label: 'Почта', required: true },
     { name: 'phone', type: 'text', label: 'Телефон' },
     STATUS,
@@ -156,25 +156,33 @@ export const CommunityApplications: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     group: 'Заявки',
-    defaultColumns: ['name', 'company', 'role', 'email', 'status', 'submittedAt'],
-    description: 'Форма на главной странице.',
+    defaultColumns: ['name', 'track', 'company', 'role', 'email', 'status', 'submittedAt'],
+    description: 'Форма на главной странице: резиденты и партнёры.',
   },
   access: inboxAccess,
   hooks: {
     afterChange: [
       notify('Заявка в сообщество', (d) => [
+        { label: 'Формат', value: d.track },
         { label: 'Имя', value: d.name },
+        { label: 'Профессия', value: d.role },
+        { label: 'Место работы', value: d.employment },
         { label: 'Компания', value: d.company },
-        { label: 'Позиция', value: d.role },
+        { label: 'Направление', value: d.field },
+        { label: 'Сайт', value: d.website },
         { label: 'Почта', value: d.email },
         { label: 'Телефон', value: d.phone },
       ]),
     ],
   },
   fields: [
-    { name: 'name', type: 'text', label: 'Имя', required: true },
-    { name: 'company', type: 'text', label: 'Компания', required: true },
-    { name: 'role', type: 'text', label: 'Позиция' },
+    { name: 'track', type: 'text', label: 'Формат участия', admin: { description: 'Резидент или партнёр.' } },
+    { name: 'name', type: 'text', label: 'Имя / контактное лицо', required: true },
+    { name: 'company', type: 'text', label: 'Компания' },
+    { name: 'role', type: 'text', label: 'Профессия' },
+    { name: 'employment', type: 'text', label: 'Работает на себя или в компании' },
+    { name: 'field', type: 'text', label: 'Направление деятельности' },
+    { name: 'website', type: 'text', label: 'Сайт' },
     { name: 'email', type: 'email', label: 'Почта', required: true },
     { name: 'phone', type: 'text', label: 'Телефон' },
     STATUS,
@@ -189,33 +197,52 @@ export const AwardApplications: CollectionConfig = {
   admin: {
     useAsTitle: 'name',
     group: 'Заявки',
-    defaultColumns: ['name', 'org', 'track', 'nomination', 'status', 'submittedAt'],
-    description: 'Форма на странице премии — премия отрасли и студенческий конкурс.',
+    defaultColumns: ['name', 'project', 'track', 'nomination', 'status', 'submittedAt'],
+    description: 'Форма на странице премии — премия и студенческий конкурс.',
   },
   access: inboxAccess,
   hooks: {
     afterChange: [
       notify('Заявка на премию', (d) => [
-        { label: 'Имя', value: d.name },
-        { label: 'Компания / вуз', value: d.org },
         { label: 'Куда подаёт', value: d.track },
         { label: 'Номинация', value: d.nomination },
-        { label: 'Почта', value: d.email },
+        { label: 'Проект', value: d.project },
+        { label: 'Авторы', value: d.name },
+        { label: 'Компания / вуз', value: d.org },
+        { label: 'Факультет', value: d.faculty },
+        { label: 'Год начала учёбы', value: d.studyStart },
+        { label: 'Местоположение', value: d.location },
+        { label: 'Площадь', value: d.area },
+        { label: 'Год реализации', value: d.year },
         { label: 'Телефон', value: d.phone },
-        { label: 'Материалы', value: d.url },
-        { label: 'О проекте', value: d.desc },
+        { label: 'Почта', value: d.email },
+        { label: 'Описание', value: d.desc },
+        { label: 'Файлы', value: d.files },
+        { label: 'Ссылка на материалы', value: d.url },
       ]),
     ],
   },
   fields: [
-    { name: 'name', type: 'text', label: 'Имя и фамилия', required: true },
-    { name: 'org', type: 'text', label: 'Компания / учебное заведение', required: true },
     { name: 'track', type: 'text', label: 'Куда подаёт' },
     { name: 'nomination', type: 'text', label: 'Номинация' },
-    { name: 'email', type: 'email', label: 'Почта', required: true },
+    { name: 'project', type: 'text', label: 'Название проекта' },
+    { name: 'name', type: 'text', label: 'Авторы / автор', required: true },
+    { name: 'org', type: 'text', label: 'Компания / учебное заведение', required: true },
+    { name: 'faculty', type: 'text', label: 'Факультет' },
+    { name: 'studyStart', type: 'text', label: 'Год начала учёбы' },
+    { name: 'location', type: 'text', label: 'Местоположение' },
+    { name: 'area', type: 'text', label: 'Площадь' },
+    { name: 'year', type: 'text', label: 'Год реализации' },
+    { name: 'email', type: 'email', label: 'Почта' },
     { name: 'phone', type: 'text', label: 'Телефон' },
-    { name: 'url', type: 'text', label: 'Ссылка на материалы' },
     { name: 'desc', type: 'textarea', label: 'Описание проекта' },
+    {
+      name: 'files',
+      type: 'textarea',
+      label: 'Файлы проекта',
+      admin: { description: 'Имя файла и ссылка, по одному в строке. Файлы лежат в закрытом хранилище: ссылка открывается, только когда вы вошли в админку.' },
+    },
+    { name: 'url', type: 'text', label: 'Ссылка на материалы' },
     STATUS,
     NOTE,
     ...META,

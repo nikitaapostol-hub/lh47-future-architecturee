@@ -36,7 +36,7 @@ function email() {
   const port = Number(process.env.SMTP_PORT || 465)
   return nodemailerAdapter({
     defaultFromAddress: process.env.SMTP_FROM || process.env.SMTP_USER || 'no-reply@lh47arch.com',
-    defaultFromName: process.env.SMTP_FROM_NAME || 'Future Architecture',
+    defaultFromName: process.env.SMTP_FROM_NAME || 'ARCH MAKERS',
     transport: nodemailer.createTransport({
       host,
       port,
@@ -50,7 +50,7 @@ export default buildConfig({
   admin: {
     user: Users.slug,
     importMap: { baseDir: path.resolve(dirname) },
-    meta: { titleSuffix: '· Future Architecture' },
+    meta: { titleSuffix: '· ARCH MAKERS' },
   },
   // Интерфейс админки на русском.
   i18n: { supportedLanguages: { ru }, fallbackLanguage: 'ru' },

@@ -94,10 +94,10 @@ export interface Config {
   };
   fallbackLocale: ('false' | 'none' | 'null') | false | null | ('ru' | 'ro' | 'en') | ('ru' | 'ro' | 'en')[];
   globals: {
-    'content-common': ContentCommon;
-    'content-home': ContentHome;
-    'content-forum': ContentForum;
-    'content-award': ContentAward;
+    'page-common': PageCommon;
+    'page-home': PageHome;
+    'page-forum': PageForum;
+    'page-award': PageAward;
     'forum-settings': ForumSetting;
     'award-settings': AwardSetting;
     seo: Seo;
@@ -105,10 +105,10 @@ export interface Config {
     mail: Mail;
   };
   globalsSelect: {
-    'content-common': ContentCommonSelect<false> | ContentCommonSelect<true>;
-    'content-home': ContentHomeSelect<false> | ContentHomeSelect<true>;
-    'content-forum': ContentForumSelect<false> | ContentForumSelect<true>;
-    'content-award': ContentAwardSelect<false> | ContentAwardSelect<true>;
+    'page-common': PageCommonSelect<false> | PageCommonSelect<true>;
+    'page-home': PageHomeSelect<false> | PageHomeSelect<true>;
+    'page-forum': PageForumSelect<false> | PageForumSelect<true>;
+    'page-award': PageAwardSelect<false> | PageAwardSelect<true>;
     'forum-settings': ForumSettingsSelect<false> | ForumSettingsSelect<true>;
     'award-settings': AwardSettingsSelect<false> | AwardSettingsSelect<true>;
     seo: SeoSelect<false> | SeoSelect<true>;
@@ -189,16 +189,23 @@ export interface Media {
   focalY?: number | null;
 }
 /**
- * Форма на главной странице.
+ * Форма на главной странице: резиденты и партнёры.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "community-applications".
  */
 export interface CommunityApplication {
   id: number;
+  /**
+   * Резидент или партнёр.
+   */
+  track?: string | null;
   name: string;
-  company: string;
+  company?: string | null;
   role?: string | null;
+  employment?: string | null;
+  field?: string | null;
+  website?: string | null;
   email: string;
   phone?: string | null;
   status?: ('new' | 'progress' | 'accepted' | 'declined') | null;
@@ -240,21 +247,31 @@ export interface ForumApplication {
   createdAt: string;
 }
 /**
- * Форма на странице премии — премия отрасли и студенческий конкурс.
+ * Форма на странице премии — премия и студенческий конкурс.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "award-applications".
  */
 export interface AwardApplication {
   id: number;
-  name: string;
-  org: string;
   track?: string | null;
   nomination?: string | null;
-  email: string;
+  project?: string | null;
+  name: string;
+  org: string;
+  faculty?: string | null;
+  studyStart?: string | null;
+  location?: string | null;
+  area?: string | null;
+  year?: string | null;
+  email?: string | null;
   phone?: string | null;
-  url?: string | null;
   desc?: string | null;
+  /**
+   * Имя файла и ссылка, по одному в строке. Файлы лежат в закрытом хранилище: ссылка открывается, только когда вы вошли в админку.
+   */
+  files?: string | null;
+  url?: string | null;
   status?: ('new' | 'progress' | 'accepted' | 'declined') | null;
   /**
    * Видна только в админке.
@@ -399,9 +416,13 @@ export interface MediaSelect<T extends boolean = true> {
  * via the `definition` "community-applications_select".
  */
 export interface CommunityApplicationsSelect<T extends boolean = true> {
+  track?: T;
   name?: T;
   company?: T;
   role?: T;
+  employment?: T;
+  field?: T;
+  website?: T;
   email?: T;
   phone?: T;
   status?: T;
@@ -438,14 +459,21 @@ export interface ForumApplicationsSelect<T extends boolean = true> {
  * via the `definition` "award-applications_select".
  */
 export interface AwardApplicationsSelect<T extends boolean = true> {
-  name?: T;
-  org?: T;
   track?: T;
   nomination?: T;
+  project?: T;
+  name?: T;
+  org?: T;
+  faculty?: T;
+  studyStart?: T;
+  location?: T;
+  area?: T;
+  year?: T;
   email?: T;
   phone?: T;
-  url?: T;
   desc?: T;
+  files?: T;
+  url?: T;
   status?: T;
   note?: T;
   lang?: T;
@@ -496,76 +524,38 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
- * Меняется сразу на всех страницах и во всех языках (переключатель локали — вверху справа).
+ * Меняется сразу на всех страницах. Язык — переключатель локали вверху справа. Пустое поле = остаётся текст, который стоит на сайте сейчас.
  *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "content-common".
+ * via the `definition` "page-common".
  */
-export interface ContentCommon {
+export interface PageCommon {
   id: number;
   nav?: {
     /**
-     * Сейчас на сайте: «Позиция»
+     * Сейчас на сайте: «Сообщество»
      */
-    navPosition?: string | null;
-    /**
-     * Сейчас на сайте: «Форматы»
-     */
-    navFormats?: string | null;
+    community?: string | null;
     /**
      * Сейчас на сайте: «Форум 2026»
      */
-    navForum?: string | null;
+    forum?: string | null;
     /**
-     * Сейчас на сайте: «Премия»
+     * Сейчас на сайте: «Премия и конкурсы»
      */
-    navAward?: string | null;
-    /**
-     * Сейчас на сайте: «Участие»
-     */
-    navParticipation?: string | null;
+    award?: string | null;
     /**
      * Сейчас на сайте: «Контакты»
      */
-    navContacts?: string | null;
+    contacts?: string | null;
     /**
-     * Сейчас на сайте: «Сообщество»
+     * Сейчас на сайте: «Меню»
      */
-    navCommunity?: string | null;
+    menu?: string | null;
     /**
-     * Сейчас на сайте: «Программа»
+     * Сейчас на сайте: «Закрыть»
      */
-    navProgram?: string | null;
-    /**
-     * Сейчас на сайте: «Заявка»
-     */
-    navApplication?: string | null;
-    /**
-     * Сейчас на сайте: «Вступить»
-     */
-    ctaJoin?: string | null;
-    /**
-     * Сейчас на сайте: «Подать заявку»
-     */
-    ctaApply?: string | null;
-    /**
-     * Сейчас на сайте: «О сообществе»
-     */
-    ctaAbout?: string | null;
-    /**
-     * Сейчас на сайте: «листайте»
-     */
-    scrollHint?: string | null;
-  };
-  notice?: {
-    /**
-     * Сейчас на сайте: «Премия отрасли 2026 — приём заявок открыт»
-     */
-    noticeTitle?: string | null;
-    /**
-     * Сейчас на сайте: «Подать заявку»
-     */
-    noticeCta?: string | null;
+    close?: string | null;
   };
   contacts?: {
     /**
@@ -581,7 +571,7 @@ export interface ContentCommon {
      */
     phone1?: string | null;
     /**
-     * Сейчас на сайте: «– InStyle Home»
+     * Сейчас на сайте: «InStyle Home»
      */
     phone1Label?: string | null;
     /**
@@ -589,43 +579,97 @@ export interface ContentCommon {
      */
     phone2?: string | null;
     /**
-     * Сейчас на сайте: «– LH47»
+     * Сейчас на сайте: «LH47»
      */
     phone2Label?: string | null;
     /**
-     * Сейчас на сайте: «Instagram»
+     * Полный адрес, https://… Пустое поле — иконки нет.
      */
-    social1?: string | null;
+    instagram?: string | null;
     /**
-     * Сейчас на сайте: «Facebook»
+     * Пустое поле — иконки нет.
      */
-    social2?: string | null;
+    facebook?: string | null;
     /**
-     * Сейчас на сайте: «LinkedIn»
+     * Пустое поле — иконки нет.
      */
-    social3?: string | null;
+    linkedin?: string | null;
   };
   footer?: {
     /**
-     * Сейчас на сайте: «Сообщество архитекторов и дизайнеров в Молдове»
+     * Сейчас на сайте: «Люди / Идеи / Пространства»
      */
-    taglineHome?: string | null;
+    tagline?: string | null;
     /**
-     * Сейчас на сайте: «Форум и профессиональное сообщество архитектуры, дизайна и девелопмента в Молдове»
+     * Сейчас на сайте: «Почта»
      */
-    taglineInner?: string | null;
+    emailLabel?: string | null;
     /**
-     * Сейчас на сайте: «Партнёры»
+     * Сейчас на сайте: «Телефон»
      */
-    partners?: string | null;
+    phoneLabel?: string | null;
+    /**
+     * Сейчас на сайте: «Основатели»
+     */
+    founders?: string | null;
     /**
      * Сейчас на сайте: «Политика данных»
      */
     privacy?: string | null;
     /**
-     * Сейчас на сайте: «© 2026 Future Architecture»
+     * Сейчас на сайте: «© 2026 ARCH MAKERS»
      */
     copyright?: string | null;
+  };
+  forms?: {
+    /**
+     * Сейчас на сайте: «Заявка отправлена»
+     */
+    sent?: string | null;
+    /**
+     * Сейчас на сайте: «Имя и фамилия»
+     */
+    fullName?: string | null;
+    /**
+     * Сейчас на сайте: «Название компании»
+     */
+    companyName?: string | null;
+    /**
+     * Сейчас на сайте: «Контактное лицо»
+     */
+    contactPerson?: string | null;
+    /**
+     * Сейчас на сайте: «Телефон»
+     */
+    phone?: string | null;
+    /**
+     * Сейчас на сайте: «E-mail»
+     */
+    email?: string | null;
+    /**
+     * Сейчас на сайте: «Партнёр»
+     */
+    partner?: string | null;
+    /**
+     * Сейчас на сайте: «Отправить заявку»
+     */
+    send?: string | null;
+    /**
+     * Сейчас на сайте: «Отправляя заявку, вы соглашаетесь с»
+     */
+    consent?: string | null;
+    /**
+     * Сейчас на сайте: «политикой обработки данных»
+     */
+    consentLink?: string | null;
+    /**
+     * Сейчас на сайте: «Отправляем…»
+     */
+    sending?: string | null;
+    /**
+     * Сейчас на сайте: «Не получилось отправить. Попробуйте ещё раз или напишите на marketing@lh47arch.com.»
+     */
+    error?: string | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -634,161 +678,176 @@ export interface ContentCommon {
  * Страница future-arch.md. Пустое поле = остаётся текст, который стоит на сайте сейчас.
  *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "content-home".
+ * via the `definition` "page-home".
  */
-export interface ContentHome {
+export interface PageHome {
   id: number;
   hero?: {
     /**
-     * Сейчас на сайте: «Est. 2026 · Кишинёв»
+     * Сейчас на сайте: «Профессиональное сообщество»
      */
     eyebrow?: string | null;
     /**
-     * Сейчас на сайте: «Сообщество архитекторов»
+     * Сейчас на сайте: «Кишинёв · 2026»
      */
-    title1?: string | null;
+    place?: string | null;
     /**
-     * Сейчас на сайте: «и дизайнеров в Молдове»
+     * Сейчас на сайте: «Сообщество архитекторов, дизайнеров и представителей индустрий Молдовы. Объединяем людей д…»
      */
-    title2?: string | null;
+    lead?: string | null;
     /**
-     * Сейчас на сайте: «Архитектура и дизайн»
+     * Сейчас на сайте: «Стать резидентом»
      */
-    kicker?: string | null;
+    beResident?: string | null;
     /**
-     * Сейчас на сайте: «Вступление по заявке»
+     * Сейчас на сайте: «Стать партнёром»
      */
-    entry?: string | null;
+    bePartner?: string | null;
     /**
-     * Сейчас на сайте: «Закрытое сообщество.»
+     * Сейчас на сайте: «Люди»
      */
-    note?: string | null;
+    word1?: string | null;
+    /**
+     * Сейчас на сайте: «Идеи»
+     */
+    word2?: string | null;
+    /**
+     * Сейчас на сайте: «Пространства»
+     */
+    word3?: string | null;
+    /**
+     * Сейчас на сайте: «Вступить»
+     */
+    cta?: string | null;
+    /**
+     * Сейчас на сайте: «Вступить в сообщество»
+     */
+    ctaMenu?: string | null;
+    /**
+     * Сейчас на сайте: «Иллюстрация: площадь с цветными объёмами»
+     */
+    alt?: string | null;
   };
-  tags?: {
+  mission?: {
     /**
-     * Сейчас на сайте: «Архитектура»
-     */
-    tagArchitecture?: string | null;
-    /**
-     * Сейчас на сайте: «Дизайн»
-     */
-    tagDesign?: string | null;
-    /**
-     * Сейчас на сайте: «Дизайн интерьера»
-     */
-    tagInterior?: string | null;
-    /**
-     * Сейчас на сайте: «Градостроительство»
-     */
-    tagUrban?: string | null;
-    /**
-     * Сейчас на сайте: «Независимая практика»
-     */
-    tagPractice?: string | null;
-    /**
-     * Сейчас на сайте: «Бюро и студии»
-     */
-    tagStudios?: string | null;
-    /**
-     * Сейчас на сайте: «Закрытый круг»
-     */
-    tagCircle?: string | null;
-    /**
-     * Сейчас на сайте: «Рекомендации»
-     */
-    tagRecs?: string | null;
-    /**
-     * Сейчас на сайте: «ArchiMinds»
-     */
-    tagArchiminds?: string | null;
-    /**
-     * Сейчас на сайте: «Экспертиза»
-     */
-    tagExpertise?: string | null;
-    /**
-     * Сейчас на сайте: «Нетворкинг»
-     */
-    tagNetworking?: string | null;
-    /**
-     * Сейчас на сайте: «Кишинёв»
-     */
-    tagCity?: string | null;
-    /**
-     * Сейчас на сайте: «Молдова»
-     */
-    tagCountry?: string | null;
-  };
-  position?: {
-    /**
-     * Это же слово используется в тегах шапки.
-     */
-    title1?: string | null;
-    /**
-     * Сейчас на сайте: «больше не работает»
-     */
-    title2?: string | null;
-    /**
-     * Сейчас на сайте: «в одиночку»
-     */
-    title3?: string | null;
-    /**
-     * Сейчас на сайте: «Сильный проект собирает архитектора, девелопера и производителя в одну команду.»
-     */
-    text?: string | null;
-  };
-  composition?: {
-    /**
-     * Сейчас на сайте: «Состав»
+     * Сейчас на сайте: «01 / Миссия»
      */
     label?: string | null;
     /**
-     * Сейчас на сайте: «Кто внутри»
+     * Сейчас на сайте: «Сильные проекты создаются вместе»
      */
-    title1?: string | null;
+    title?: string | null;
     /**
-     * Сейчас на сайте: «сообщества»
+     * Сейчас на сайте: «Миссия сообщества — объединять профессионалов, чтобы вместе создавать более сильные проект…»
      */
-    title2?: string | null;
+    text?: string | null;
+    /**
+     * Пустой список — на сайте стоят тексты по умолчанию. Строка N заменяет N-й пункт, пустое поле в строке оставляет исходный текст. Сейчас на сайте (RU):
+     * 1. Диалог — Разные взгляды делают профессиональную среду сильнее.
+     * 2. Опыт — Опыт становится ценнее, когда им делятся.
+     * 3. Сотрудничество — Сильные идеи рождаются на пересечении людей и компетенций.
+     * 4. Ответственность — Архитектура и дизайн формируют среду, в которой живут люди.
+     */
+    values?:
+      | {
+          title?: string | null;
+          text?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  who?: {
+    /**
+     * Сейчас на сайте: «02 / Состав»
+     */
+    label?: string | null;
+    /**
+     * Сейчас на сайте: «Кто внутри сообщества»
+     */
+    title?: string | null;
+    /**
+     * Сейчас на сайте: «Два формата участия»
+     */
+    note?: string | null;
     /**
      * Сейчас на сайте: «Резиденты»
      */
-    residentsLabel?: string | null;
+    residents?: string | null;
     /**
-     * Сейчас на сайте: «Архитекторы»
+     * Сейчас на сайте: «По заявке»
      */
-    residentsTitle1?: string | null;
+    residentsTerm?: string | null;
     /**
-     * Сейчас на сайте: «и дизайнеры»
+     * Сейчас на сайте: «Архитекторы и дизайнеры»
      */
-    residentsTitle2?: string | null;
+    residentsTitle?: string | null;
     /**
-     * Сейчас на сайте: «Бюро, студии, частная практика — те, кто проектирует.»
+     * Пустой список — на сайте стоят тексты по умолчанию. Строка N заменяет N-й пункт, пустое поле в строке оставляет исходный текст. Сейчас на сайте (RU):
+     * 1. Профессиональная среда и обмен опытом
+     * 2. Новые заказчики и партнёры
+     * 3. Доступ к материалам и производствам
+     * 4. Возможность представить свои проекты
+     * 5. Закрытые встречи, поездки и публикации
      */
-    residentsText?: string | null;
+    perks?:
+      | {
+          text?: string | null;
+          id?: string | null;
+        }[]
+      | null;
     /**
-     * Сейчас на сайте: «Девелоперы, производители, поставщики и бренды»
+     * Сейчас на сайте: «Стать резидентом →»
+     */
+    residentsLink?: string | null;
+    /**
+     * Сейчас на сайте: «Руки, архитектурная книга, чертежи»
+     */
+    residentsAlt?: string | null;
+    /**
+     * Сейчас на сайте: «Партнёры»
+     */
+    partners?: string | null;
+    /**
+     * Сейчас на сайте: «По договорённости»
+     */
+    partnersTerm?: string | null;
+    /**
+     * Сейчас на сайте: «Производители, поставщики и представители брендов»
      */
     partnersTitle?: string | null;
     /**
-     * Сейчас на сайте: «Материалы, площадки и производство — доступ для резидентов.»
+     * Сейчас на сайте: «Партнёры и представители индустрии, которые помогают идеям расти: знакомят с материалами и…»
      */
     partnersText?: string | null;
+    /**
+     * Сейчас на сайте: «Стать партнёром →»
+     */
+    partnersLink?: string | null;
+    /**
+     * Сейчас на сайте: «Руки, образцы материалов»
+     */
+    partnersAlt?: string | null;
   };
   formats?: {
     /**
-     * Сейчас на сайте: «Инструменты»
+     * Сейчас на сайте: «03 / Инструменты»
      */
     label?: string | null;
     /**
-     * Сейчас на сайте: «Восемь рабочих»
+     * Сейчас на сайте: «Форматы взаимодействия»
      */
-    title1?: string | null;
+    title?: string | null;
     /**
-     * Сейчас на сайте: «форматов»
-     */
-    title2?: string | null;
-    /**
-     * Порядок и количество зафиксированы вёрсткой — меняются названия и описания.
+     * Пустой список — на сайте стоят тексты по умолчанию. Строка N заменяет N-й пункт, пустое поле в строке оставляет исходный текст. Сейчас на сайте (RU):
+     * 1. ARCH MAKERS Forum — Главное ежегодное событие сообщества
+     * 2. ArchiMinds — Ежемесячные образовательные встречи с экспертами
+     * 3. Партнёрская программа — Специальные условия от производителей
+     * 4. База специалистов — Закрытая база контактов и рекомендаций
+     * 5. Премии — Признание лучших проектов и профессионалов
+     * 6. Журнал — Публикации в ежегодном издании сообщества
+     * 7. Подкасты — Интервью и разборы проектов с резидентами
+     * 8. Профессиональные поездки — Выставки, биеннале, фабрики и архитектурные объекты
+     * 9. Закрытые презентации — Новые материалы и технологии раньше, чем они выйдут на рынок
      */
     items?:
       | {
@@ -798,158 +857,73 @@ export interface ContentHome {
         }[]
       | null;
   };
-  forum?: {
+  join?: {
     /**
-     * Сейчас на сайте: «Главное событие»
+     * Сейчас на сайте: «04 / Участие»
      */
     label?: string | null;
     /**
-     * Сейчас на сайте: «Range Rover Moldova · Кишинёв · 9 декабря 2026»
+     * Сейчас на сайте: «Вступление в сообщество»
      */
-    venue?: string | null;
+    title?: string | null;
     /**
-     * Сейчас на сайте: «Future Architecture»
-     */
-    title1?: string | null;
-    /**
-     * Сейчас на сайте: «Forum»
-     */
-    title2?: string | null;
-    /**
-     * Сейчас на сайте: «Один день. Инвестор, девелопер, архитектор и производитель — за одним столом.»
+     * Сейчас на сайте: «Вступление — по заявке. Выберите формат участия и заполните короткую анкету. Мы свяжемся с…»
      */
     text?: string | null;
     /**
-     * Сейчас на сайте: «250»
-     */
-    statValue?: string | null;
-    /**
-     * Сейчас на сайте: «участников»
-     */
-    statLabel?: string | null;
-    /**
-     * Сейчас на сайте: «Страница форума»
-     */
-    cta?: string | null;
-  };
-  founders?: {
-    /**
-     * Сейчас на сайте: «Основание»
-     */
-    label?: string | null;
-    /**
-     * Сейчас на сайте: «Основатели сообщества»
-     */
-    title?: string | null;
-    /**
-     * Сейчас на сайте: «Архитектурное бюро LH47 ARCH»
-     */
-    bureauLabel?: string | null;
-    /**
-     * Сейчас на сайте: «LH47 arch.»
-     */
-    bureauName?: string | null;
-    stats?:
-      | {
-          value?: string | null;
-          label?: string | null;
-          id?: string | null;
-        }[]
-      | null;
-    /**
-     * Сейчас на сайте: «Медиа-партнёр»
-     */
-    mediaLabel?: string | null;
-    /**
-     * Сейчас на сайте: «InStyle Home»
-     */
-    mediaName?: string | null;
-    /**
-     * Сейчас на сайте: «20»
-     */
-    mediaValue?: string | null;
-    /**
-     * Сейчас на сайте: «Журнал об архитектуре и интерьере. Публикует проекты участников сообщества.»
-     */
-    mediaText?: string | null;
-  };
-  participation?: {
-    /**
-     * Сейчас на сайте: «Форматы участия»
-     */
-    label?: string | null;
-    /**
-     * Сейчас на сайте: «Вступление и партнёрство»
-     */
-    title?: string | null;
-    /**
      * Сейчас на сайте: «Резидент»
      */
-    residentTitle?: string | null;
+    resident?: string | null;
     /**
-     * Сейчас на сайте: «Архитекторы и дизайнеры»
+     * Сейчас на сайте: «Производители и бренды»
      */
-    residentText?: string | null;
+    partnersShort?: string | null;
     /**
-     * Сейчас на сайте: «Партнёр»
+     * Сейчас на сайте: «Работаете на себя или в компании?»
      */
-    partnerTitle?: string | null;
+    empQuestion?: string | null;
     /**
-     * Сейчас на сайте: «Условия участия — по запросу»
+     * Сейчас на сайте: «Работаю на себя»
      */
-    terms?: string | null;
+    empSelf?: string | null;
     /**
-     * Сейчас на сайте: «Запросить условия»
+     * Сейчас на сайте: «Работаю в компании»
      */
-    partnerCta?: string | null;
+    empCompany?: string | null;
     /**
-     * Сейчас на сайте: «СООБЩЕСТВО»
+     * Сейчас на сайте: «В какой компании»
      */
-    sideWord?: string | null;
-  };
-  form?: {
+    whichCompany?: string | null;
     /**
-     * Сейчас на сайте: «Вступление»
+     * Сейчас на сайте: «Название студии или бренда (если есть)»
      */
-    label?: string | null;
+    studioName?: string | null;
     /**
-     * Сейчас на сайте: «по заявке и»
+     * Сейчас на сайте: «Необязательно»
      */
-    title1?: string | null;
+    optional?: string | null;
     /**
-     * Сейчас на сайте: «модерации»
+     * Сейчас на сайте: «Профессия»
      */
-    title2?: string | null;
+    profession?: string | null;
     /**
-     * Сейчас на сайте: «Имя»
+     * Сейчас на сайте: «Архитектор, дизайнер интерьера…»
      */
-    fieldName?: string | null;
+    professionPh?: string | null;
     /**
-     * Сейчас на сайте: «Компания»
+     * Сейчас на сайте: «Направление деятельности»
      */
-    fieldCompany?: string | null;
+    field?: string | null;
     /**
-     * Сейчас на сайте: «Например: архитектор, руководитель бюро»
+     * Сейчас на сайте: «Сайт»
      */
-    fieldRoleHint?: string | null;
+    site?: string | null;
     /**
-     * Сейчас на сайте: «E-mail»
+     * Сейчас на сайте: «Отправить заявку партнёра»
      */
-    fieldEmail?: string | null;
+    sendPartner?: string | null;
     /**
-     * Сейчас на сайте: «Телефон»
-     */
-    fieldPhone?: string | null;
-    /**
-     * Сейчас на сайте: «Отправить заявку»
-     */
-    submit?: string | null;
-    /**
-     * Сейчас на сайте: «Заявка отправлена»
-     */
-    sentTitle?: string | null;
-    /**
-     * Сейчас на сайте: «Ответ придёт на указанную почту после модерации.»
+     * Сейчас на сайте: «Ответ придёт на указанную почту после рассмотрения.»
      */
     sentText?: string | null;
   };
@@ -957,180 +931,118 @@ export interface ContentHome {
   createdAt?: string | null;
 }
 /**
- * Дата форума и показ таймера живут в разделе «Форум — настройки». Здесь — тексты.
+ * Страница future-arch.md/forum. Дата, таймер и спикеры — в разделе «Настройки → Форум». Пустое поле = остаётся текст, который стоит на сайте сейчас.
  *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "content-forum".
+ * via the `definition` "page-forum".
  */
-export interface ContentForum {
+export interface PageForum {
   id: number;
   hero?: {
     /**
-     * Сейчас на сайте: «2026»
+     * Сейчас на сайте: «9 декабря 2026 · Кишинёв, Range Rover Moldova»
      */
-    year?: string | null;
+    datePlace?: string | null;
     /**
-     * Сейчас на сайте: «Кишинёв · Молдова»
+     * Сейчас на сайте: «Участие по отбору»
      */
-    place?: string | null;
+    selection?: string | null;
     /**
-     * Сейчас на сайте: «Закрытый формат · частное мероприятие»
+     * Сейчас на сайте: «Закрытая встреча тех, кто определяет будущее недвижимости Молдовы»
      */
-    format?: string | null;
+    lead?: string | null;
     /**
-     * Сейчас на сайте: «Future Architecture»
-     */
-    title1?: string | null;
-    /**
-     * Сейчас на сайте: «Forum»
-     */
-    title2?: string | null;
-    /**
-     * Сейчас на сайте: «Рынку нужен открытый диалог»
-     */
-    claim?: string | null;
-    /**
-     * Сейчас на сайте: «Заявка на участие»
-     */
-    ctaApply?: string | null;
-    /**
-     * Сейчас на сайте: «Стать партнёром»
-     */
-    ctaPartner?: string | null;
-    /**
-     * Сейчас на сайте: «Приём заявок открыт · 9 декабря 2026»
-     */
-    status?: string | null;
-    /**
-     * Сейчас на сайте: «до начала форума»
-     */
-    countdownNote?: string | null;
-    /**
-     * Сейчас на сайте: «9 декабря 2026 · Кишинёв»
-     */
-    dateLine?: string | null;
-  };
-  marquee?: {
-    /**
-     * Сейчас на сайте: «250+ участников»
-     */
-    m1?: string | null;
-    /**
-     * Сейчас на сайте: «по заявке и отбору»
-     */
-    m2?: string | null;
-    /**
-     * Сейчас на сайте: «Кишинёв»
-     */
-    m3?: string | null;
-    /**
-     * Сейчас на сайте: «9 декабря 2026»
-     */
-    m4?: string | null;
-    /**
-     * Сейчас на сайте: «закрытый формат»
-     */
-    m5?: string | null;
-    /**
-     * Сейчас на сайте: «Range Rover Moldova»
-     */
-    m6?: string | null;
-    /**
-     * Сейчас на сайте: «премия отрасли»
-     */
-    m7?: string | null;
-    /**
-     * Сейчас на сайте: «закрытый ужин»
-     */
-    m8?: string | null;
-  };
-  chain?: {
-    /**
-     * Сейчас на сайте: «Задача»
-     */
-    label?: string | null;
-    /**
-     * Сейчас на сайте: «Цепочка стоимости»
-     */
-    title?: string | null;
-    /**
-     * Сейчас на сайте: «Успешный проект — результат работы всей цепочки: от инвестора и владельца земли до архитек…»
+     * Сейчас на сайте: «Более 250 девелоперов, инвесторов, архитекторов, производителей и представителей города об…»
      */
     text?: string | null;
     /**
-     * Сейчас на сайте: «Шесть этапов жизни объекта — и кто отвечает за каждый»
+     * Сейчас на сайте: «Подать заявку»
      */
-    note?: string | null;
+    cta?: string | null;
     /**
-     * Сейчас на сайте: «Форум собирает всю цепочку в один день»
+     * Сейчас на сайте: «Подать заявку на участие»
      */
-    note2?: string | null;
+    ctaMenu?: string | null;
     /**
-     * Сейчас на сайте: «Среда»
+     * Сейчас на сайте: «Предложение для партнёров»
      */
-    tag2?: string | null;
+    partnerOffer?: string | null;
     /**
-     * Сейчас на сайте: «Ликвидность»
+     * Сейчас на сайте: «дней»
      */
-    tag3?: string | null;
+    days?: string | null;
     /**
-     * Сейчас на сайте: «Инфраструктура»
+     * Сейчас на сайте: «часов»
      */
-    tag4?: string | null;
+    hours?: string | null;
     /**
-     * Сейчас на сайте: «Ценность»
+     * Сейчас на сайте: «минут»
      */
-    tag5?: string | null;
+    minutes?: string | null;
     /**
-     * Сейчас на сайте: «Контекст»
+     * Сейчас на сайте: «секунд»
      */
-    tag6?: string | null;
+    seconds?: string | null;
+    /**
+     * Сейчас на сайте: «Иллюстрация: навес и площадь»
+     */
+    alt?: string | null;
+  };
+  chain?: {
+    /**
+     * Сейчас на сайте: «Цепочка стоимости»
+     */
+    label?: string | null;
+    /**
+     * Сейчас на сайте: «В одном зале — все, кто влияет на результат проекта»
+     */
+    title?: string | null;
+    /**
+     * Сейчас на сайте: «От выбора земли и финансирования до продаж и управления готовым объектом. Форум помогает у…»
+     */
+    text?: string | null;
+    /**
+     * Пустой список — на сайте стоят тексты по умолчанию. Строка N заменяет N-й пункт, пустое поле в строке оставляет исходный текст. Сейчас на сайте (RU):
+     * 1. Земля и развитие города
+     * 2. Инвестиции и финансирование
+     * 3. Концепция и архитектура
+     * 4. Строительство и технологии
+     * 5. Маркетинг и продажи
+     * 6. Управление и эксплуатация
+     */
     stages?:
       | {
           title?: string | null;
-          role?: string | null;
           id?: string | null;
         }[]
       | null;
   };
-  hall?: {
-    /**
-     * Сейчас на сайте: «Состав зала»
-     */
-    label?: string | null;
+  count?: {
     /**
      * Сейчас на сайте: «250»
      */
-    statValue?: string | null;
+    number?: string | null;
     /**
-     * Сейчас на сайте: «участников»
+     * Сейчас на сайте: «участников, которые формируют рынок недвижимости Молдовы»
      */
-    statLabel?: string | null;
+    text?: string | null;
     /**
-     * Сейчас на сайте: «по заявке и отбору»
+     * Сейчас на сайте: «Фото форума»
      */
-    entry?: string | null;
-    groups?:
-      | {
-          title?: string | null;
-          share?: string | null;
-          id?: string | null;
-        }[]
-      | null;
+    alt?: string | null;
   };
   topics?: {
     /**
-     * Сейчас на сайте: «Направления»
+     * Сейчас на сайте: «Темы форума»
      */
-    label?: string | null;
+    title?: string | null;
     /**
-     * Сейчас на сайте: «Темы»
+     * Пустой список — на сайте стоят тексты по умолчанию. Строка N заменяет N-й пункт, пустое поле в строке оставляет исходный текст. Сейчас на сайте (RU):
+     * 1. Ценность — Какие архитектурные решения повышают привлекательность и коммерческий результат проекта — За что покупатель готов платить, какие решения помогают выделить объект среди конкурентов и как заложить эту ценность на этапе концепции.
+     * 2. Опыт — Решения международных девелоперов, которые можно применять в Молдове — Реализованные проекты, технологии и стандарты жилого девелопмента. Что уже работает на других рынках и что можно адаптировать к местным условиям.
+     * 3. Город — Кишинёв 2035: где появятся новые точки роста — Территории будущей застройки, транспорт, инфраструктура и новые центры притяжения. Как развитие города может повлиять на спрос и стоимость земли.
+     * 4. Спрос — Какие форматы недвижимости формируют новый спрос — Wellness, промышленная и коммерческая недвижимость. Практический разговор о направлениях, которые открывают новые возможности для инвесторов и девелоперов.
      */
-    title1?: string | null;
-    /**
-     * Сейчас на сайте: «программы форума»
-     */
-    title2?: string | null;
     items?:
       | {
           tag?: string | null;
@@ -1139,16 +1051,31 @@ export interface ContentForum {
           id?: string | null;
         }[]
       | null;
+    /**
+     * Сейчас на сайте: «Спикеры»
+     */
+    speakers?: string | null;
   };
   program?: {
     /**
-     * Сейчас на сайте: «Программа дня»
+     * Сейчас на сайте: «Программа»
      */
-    title?: string | null;
+    title1?: string | null;
     /**
-     * Сейчас на сайте: «9 декабря 2026 · точное расписание опубликуем позже»
+     * Сейчас на сайте: «дня»
      */
-    note?: string | null;
+    title2?: string | null;
+    /**
+     * Пустой список — на сайте стоят тексты по умолчанию. Строка N заменяет N-й пункт, пустое поле в строке оставляет исходный текст. Сейчас на сайте (RU):
+     * 1. Регистрация и welcome-кофе
+     * 2. Открытие
+     * 3. Первая сессия
+     * 4. Обед и нетворкинг
+     * 5. Вторая сессия
+     * 6. Премия и студенческий конкурс
+     * 7. Фуршет
+     * 8. Закрытый ужин
+     */
     items?:
       | {
           title?: string | null;
@@ -1156,169 +1083,75 @@ export interface ContentForum {
         }[]
       | null;
     /**
-     * Сейчас на сайте: «Спикеры»
+     * Сейчас на сайте: «Человек у оранжевой стены»
      */
-    speakersTitle?: string | null;
-    /**
-     * Сейчас на сайте: «Состав дополняется»
-     */
-    speakersNote?: string | null;
-    /**
-     * Сейчас на сайте: «Скоро»
-     */
-    slotTitle?: string | null;
+    alt?: string | null;
   };
-  award?: {
+  partners?: {
     /**
-     * Сейчас на сайте: «отрасли»
-     */
-    title2?: string | null;
-    /**
-     * Сейчас на сайте: «Награждаем лучшие проекты, бюро и компании. Вручение — на форуме.»
-     */
-    text1?: string | null;
-    /**
-     * Сейчас на сайте: «Конкурс студенческих идей: общественные пространства и облик городов Молдовы.»
-     */
-    text2?: string | null;
-    /**
-     * Сейчас на сайте: «Подать проект на премию»
-     */
-    cta?: string | null;
-  };
-  participation?: {
-    /**
-     * Сейчас на сайте: «Участие в форуме»
+     * Сейчас на сайте: «Партнёрам»
      */
     label?: string | null;
     /**
-     * Сейчас на сайте: «Как»
+     * Сейчас на сайте: «Возможности для партнёров»
      */
-    title1?: string | null;
+    title?: string | null;
     /**
-     * Сейчас на сайте: «участвовать»
+     * Сейчас на сайте: «Для партнёров это возможность представить компанию ключевым игрокам рынка, выстроить новые…»
      */
-    title2?: string | null;
+    text?: string | null;
+    /**
+     * Сейчас на сайте: «Прямой контакт с профессиональным сообществом»
+     */
+    benefit1?: string | null;
+    /**
+     * Сейчас на сайте: «Присутствие на форуме, в ежегодном журнале сообщества и в медиаканалах»
+     */
+    benefit2?: string | null;
+    /**
+     * Сейчас на сайте: «До»
+     */
+    before?: string | null;
+    /**
+     * Сейчас на сайте: «Во время»
+     */
+    during?: string | null;
+    /**
+     * Сейчас на сайте: «После мероприятия»
+     */
+    after?: string | null;
+    /**
+     * Сейчас на сайте: «Получить предложение»
+     */
+    cta?: string | null;
+    /**
+     * Сейчас на сайте: «Фасад: бетонные ламели и небо»
+     */
+    alt?: string | null;
+  };
+  apply?: {
+    /**
+     * Сейчас на сайте: «Заявка на участие в форуме»
+     */
+    title?: string | null;
+    /**
+     * Сейчас на сайте: «9 декабря 2026»
+     */
+    date?: string | null;
+    /**
+     * Сейчас на сайте: «Кишинёв, Range Rover Moldova»
+     */
+    place?: string | null;
     /**
      * Сейчас на сайте: «Участник»
      */
-    aTitle?: string | null;
+    guest?: string | null;
     /**
-     * Сейчас на сайте: «Доступ к 250+ участникам рынка»
+     * Сейчас на сайте: «Компания и должность»
      */
-    aItem1?: string | null;
+    companyRole?: string | null;
     /**
-     * Сейчас на сайте: «Темы программы форума»
-     */
-    aItem2?: string | null;
-    /**
-     * Сейчас на сайте: «Две сессии выступлений и панельные дискуссии»
-     */
-    aItem3?: string | null;
-    /**
-     * Сейчас на сайте: «Обед, фуршет и нетворкинг в течение дня»
-     */
-    aItem4?: string | null;
-    /**
-     * Сейчас на сайте: «Заявка на участие»
-     */
-    aCta?: string | null;
-    /**
-     * Сейчас на сайте: «Партнёр»
-     */
-    bTitle?: string | null;
-    /**
-     * Сейчас на сайте: «Форум — не один день. Партнёр в кампании до, во время и после: анонсы, digital, публикации…»
-     */
-    bText?: string | null;
-    /**
-     * Сейчас на сайте: «Прямой контакт с 250 участниками зала»
-     */
-    bItem1?: string | null;
-    /**
-     * Сейчас на сайте: «Места закрытого ужина закреплены за партнёрами»
-     */
-    bItem2?: string | null;
-    /**
-     * Сейчас на сайте: «Запросить презентацию»
-     */
-    bCta?: string | null;
-    /**
-     * Сейчас на сайте: «Позиции партнёрства и полные условия — в презентации»
-     */
-    bNote?: string | null;
-    /**
-     * Сейчас на сайте: «Форум создаёт первый контакт. Сообщество делает его рабочим.»
-     */
-    outro?: string | null;
-  };
-  form?: {
-    /**
-     * Сейчас на сайте: «ЗАЯВКА»
-     */
-    sideWord?: string | null;
-    /**
-     * Сейчас на сайте: «Участие по заявке и»
-     */
-    title1?: string | null;
-    /**
-     * Сейчас на сайте: «отбору»
-     */
-    title2?: string | null;
-    /**
-     * Сейчас на сайте: «Презентация для партнёров отправляется на почту после заявки.»
-     */
-    note2?: string | null;
-    /**
-     * Сейчас на сайте: «Имя»
-     */
-    fieldName?: string | null;
-    /**
-     * Сейчас на сайте: «Компания»
-     */
-    fieldCompany?: string | null;
-    /**
-     * Сейчас на сайте: «E-mail»
-     */
-    fieldEmail?: string | null;
-    /**
-     * Сейчас на сайте: «Телефон»
-     */
-    fieldPhone?: string | null;
-    /**
-     * Сейчас на сайте: «Тип обращения»
-     */
-    fieldKind?: string | null;
-    /**
-     * Сейчас на сайте: «Выберите»
-     */
-    selectPlaceholder?: string | null;
-    /**
-     * Сейчас на сайте: «Архитектор или дизайнер»
-     */
-    optionArchitect?: string | null;
-    /**
-     * Сейчас на сайте: «Девелопер или застройщик»
-     */
-    optionDeveloper?: string | null;
-    /**
-     * Сейчас на сайте: «Производитель или поставщик»
-     */
-    optionManufacturer?: string | null;
-    /**
-     * Сейчас на сайте: «Инвестор или бизнес»
-     */
-    optionInvestor?: string | null;
-    /**
-     * Сейчас на сайте: «Отправить заявку»
-     */
-    submit?: string | null;
-    /**
-     * Сейчас на сайте: «Заявка отправлена»
-     */
-    sentTitle?: string | null;
-    /**
-     * Сейчас на сайте: «Ответ придёт на указанную почту. Презентация для партнёров отправляется в ответном письме.»
+     * Сейчас на сайте: «Ответ придёт на указанную почту. Партнёрам в ответном письме отправим презентацию.»
      */
     sentText?: string | null;
   };
@@ -1326,102 +1159,88 @@ export interface ContentForum {
   createdAt?: string | null;
 }
 /**
- * Номинации, жюри, дедлайн и таймер — в разделе «Премия — настройки». Здесь — тексты страницы.
+ * Страница future-arch.md/award. Номинации, дедлайн и флаг «приём открыт» — в разделе «Настройки → Премия». Пустое поле = остаётся текст, который стоит на сайте сейчас.
  *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "content-award".
+ * via the `definition` "page-award".
  */
-export interface ContentAward {
+export interface PageAward {
   id: number;
   hero?: {
     /**
-     * Сейчас на сайте: «Премия отрасли и студенческий конкурс · Кишинёв»
+     * Сейчас на сайте: «Архитектура и дизайн»
      */
     eyebrow?: string | null;
     /**
-     * Сейчас на сайте: «Future Architecture Forum 2026»
+     * Сейчас на сайте: «Приём заявок открыт»
      */
-    event?: string | null;
+    open?: string | null;
     /**
-     * Сейчас на сайте: «Лучшее за год»
+     * Сейчас на сайте: «Представьте свой проект в одной из четырёх номинаций. Принимаем реализованные проекты и ко…»
      */
-    title1?: string | null;
+    lead?: string | null;
     /**
-     * Сейчас на сайте: «в архитектуре»
+     * Сейчас на сайте: «Заявки до»
      */
-    title2?: string | null;
+    deadlineLabel?: string | null;
     /**
-     * Сейчас на сайте: «Future Architecture Award»
+     * Сейчас на сайте: «Осталось {days} дн.»
      */
-    leadName?: string | null;
+    daysLeft?: string | null;
     /**
-     * Сейчас на сайте: «— награда проектам, бюро и компаниям отрасли. Для студентов — отдельный конкурс. Победител…»
+     * Сейчас на сайте: «Победители»
      */
-    leadText?: string | null;
+    winners?: string | null;
     /**
-     * Сейчас на сайте: «Заявки принимаются до 20 ноября»
+     * Сейчас на сайте: «Победителей объявят на сцене ARCH MAKERS Forum»
      */
-    deadlineLine?: string | null;
+    winnersText?: string | null;
     /**
-     * Сейчас на сайте: «осталось до конца приёма заявок»
+     * Сейчас на сайте: «Выберите, где участвовать»
      */
-    countdownNote?: string | null;
+    choose?: string | null;
     /**
-     * Сейчас на сайте: «Подать проект компании»
+     * Сейчас на сайте: «Премия»
      */
-    ctaCompany?: string | null;
+    award?: string | null;
     /**
-     * Сейчас на сайте: «Подать студенческую работу»
+     * Сейчас на сайте: «Для архитекторов и дизайнеров: 4 номинации»
      */
-    ctaStudent?: string | null;
-  };
-  tracks?: {
-    /**
-     * Сейчас на сайте: «Участники»
-     */
-    label?: string | null;
-    /**
-     * Сейчас на сайте: «Кто может подать заявку»
-     */
-    title?: string | null;
-    /**
-     * Сейчас на сайте: «Премия отрасли»
-     */
-    aTitle?: string | null;
-    /**
-     * Сейчас на сайте: «Для архитектурных бюро, дизайн-студий и профильных компаний — девелоперов, производителей …»
-     */
-    aText1?: string | null;
-    /**
-     * Сейчас на сайте: «Принимаем объекты и интерьеры, завершённые за последний год.»
-     */
-    aText2?: string | null;
+    awardNote?: string | null;
     /**
      * Сейчас на сайте: «Студенческий конкурс»
      */
-    bTitle?: string | null;
+    student?: string | null;
     /**
-     * Сейчас на сайте: «Для студентов архитектуры и дизайна.»
+     * Сейчас на сайте: «Для студентов: проект общественного пространства»
      */
-    bText1?: string | null;
+    studentNote?: string | null;
     /**
-     * Сейчас на сайте: «Тема года — общественные пространства и облик городов Молдовы. Подойдут учебные, дипломные…»
+     * Сейчас на сайте: «Подать проект»
      */
-    bText2?: string | null;
+    cta?: string | null;
+    /**
+     * Сейчас на сайте: «Иллюстрация: жёлтый портал на подиуме»
+     */
+    alt?: string | null;
   };
   nominations?: {
     /**
-     * Сейчас на сайте: «Номинации»
+     * Сейчас на сайте: «01 / Номинации»
+     */
+    label?: string | null;
+    /**
+     * Сейчас на сайте: «Четыре номинации»
      */
     title?: string | null;
     /**
-     * Сейчас на сайте: «Именная номинация — в пакете партнёра форума»
+     * Сейчас на сайте: «Выберите номинацию — форма заявки откроется с ней.»
      */
-    link?: string | null;
+    text?: string | null;
   };
-  result?: {
+  prize?: {
     /**
-     * Сейчас на сайте: «Награда»
+     * Сейчас на сайте: «02 / Награда»
      */
     label?: string | null;
     /**
@@ -1429,129 +1248,166 @@ export interface ContentAward {
      */
     title?: string | null;
     /**
-     * Сейчас на сайте: «Награду вручают на сцене форума, в зале»
+     * Пустой список — на сайте стоят тексты по умолчанию. Строка N заменяет N-й пункт, пустое поле в строке оставляет исходный текст. Сейчас на сайте (RU):
+     * 1. Вручение награды на сцене ARCH MAKERS Forum 9 декабря — с представлением проекта и его авторов
+     * 2. Публикация проекта в ежегодном журнале ARCH MAKERS
+     * 3. Бесплатное членство в сообществе ARCH MAKERS на 2027 год
+     * 4. Подарки от партнёров сообщества и форума
      */
-    item1?: string | null;
-    /**
-     * Сейчас на сайте: «250»
-     */
-    item1Value?: string | null;
-    /**
-     * Сейчас на сайте: «человек»
-     */
-    item1Unit?: string | null;
-    /**
-     * Сейчас на сайте: «Проект выходит публикацией в InStyle Home»
-     */
-    item2?: string | null;
-    /**
-     * Сейчас на сайте: «Фото и видео церемонии — для сайта, соцсетей и презентаций»
-     */
-    item3?: string | null;
-    /**
-     * Сейчас на сайте: «Место в сообществе — резидентом или партнёром»
-     */
-    item4?: string | null;
-  };
-  how?: {
-    /**
-     * Сейчас на сайте: «Отбор»
-     */
-    label?: string | null;
-    /**
-     * Сейчас на сайте: «Как проходит отбор»
-     */
-    title?: string | null;
-    /**
-     * Сейчас на сайте: «Заявка до 20 ноября»
-     */
-    step1?: string | null;
-    /**
-     * Сейчас на сайте: «Проверка материалов»
-     */
-    step2?: string | null;
-    /**
-     * Сейчас на сайте: «Оценка жюри»
-     */
-    step3?: string | null;
-    /**
-     * Сейчас на сайте: «Победители на форуме 9 декабря»
-     */
-    step4?: string | null;
-    /**
-     * Сейчас на сайте: «Заявки до 20 ноября»
-     */
-    marquee1?: string | null;
-    /**
-     * Сейчас на сайте: «Future Architecture Award 2026»
-     */
-    marquee2?: string | null;
-    /**
-     * Сейчас на сайте: «Награждение 9 декабря · Кишинёв»
-     */
-    marquee3?: string | null;
+    items?:
+      | {
+          text?: string | null;
+          id?: string | null;
+        }[]
+      | null;
   };
   form?: {
     /**
-     * Сейчас на сайте: «Заявки принимаются»
+     * Сейчас на сайте: «03 / Заявка»
      */
-    title1?: string | null;
+    label?: string | null;
     /**
-     * Сейчас на сайте: «до 20 ноября»
+     * Сейчас на сайте: «Заявка на премию»
      */
-    title2?: string | null;
-    /**
-     * Сейчас на сайте: «Имя и фамилия»
-     */
-    fieldName?: string | null;
-    /**
-     * Сейчас на сайте: «Компания или учебное заведение»
-     */
-    fieldOrg?: string | null;
-    /**
-     * Сейчас на сайте: «Куда подаёте»
-     */
-    fieldTrack?: string | null;
+    title?: string | null;
     /**
      * Сейчас на сайте: «Номинация»
      */
-    fieldNomination?: string | null;
+    nomination?: string | null;
     /**
-     * Сейчас на сайте: «E-mail»
+     * Сейчас на сайте: «Выберите номинацию»
      */
-    fieldEmail?: string | null;
+    chooseNom?: string | null;
     /**
-     * Сейчас на сайте: «Телефон»
+     * Сейчас на сайте: «Название проекта»
      */
-    fieldPhone?: string | null;
+    project?: string | null;
     /**
-     * Сейчас на сайте: «Ссылка на материалы проекта»
+     * Сейчас на сайте: «Авторы проекта»
      */
-    fieldUrl?: string | null;
+    authors?: string | null;
     /**
-     * Сейчас на сайте: «Коротко о проекте»
+     * Сейчас на сайте: «Имя Фамилия»
      */
-    fieldDesc?: string | null;
+    authorsPh?: string | null;
     /**
-     * Сейчас на сайте: «Ссылка на облако или портфолио — файлы загружать не нужно»
+     * Сейчас на сайте: «Компания»
      */
-    hint?: string | null;
+    company?: string | null;
     /**
-     * Сейчас на сайте: «Отправить заявку»
+     * Сейчас на сайте: «Бюро или студия»
      */
-    submit?: string | null;
+    companyPh?: string | null;
     /**
-     * Сейчас на сайте: «Заявка отправлена»
+     * Сейчас на сайте: «Местоположение»
      */
-    sentTitle?: string | null;
+    location?: string | null;
     /**
-     * Сейчас на сайте: «Ответ придёт на указанную почту после проверки материалов.»
+     * Сейчас на сайте: «Кишинёв»
+     */
+    locationPh?: string | null;
+    /**
+     * Сейчас на сайте: «Площадь»
+     */
+    area?: string | null;
+    /**
+     * Сейчас на сайте: «240 м²»
+     */
+    areaPh?: string | null;
+    /**
+     * Сейчас на сайте: «Год реализации»
+     */
+    year?: string | null;
+    /**
+     * Сейчас на сайте: «2025 или концепция»
+     */
+    yearPh?: string | null;
+    /**
+     * Сейчас на сайте: «Описание проекта»
+     */
+    desc?: string | null;
+    /**
+     * Сейчас на сайте: «Идея, задача, ключевые решения»
+     */
+    descPh?: string | null;
+    /**
+     * Сейчас на сайте: «Прикрепить файл»
+     */
+    attach?: string | null;
+    /**
+     * Сейчас на сайте: «PDF, JPG, PNG или ZIP, до 20 МБ каждый»
+     */
+    filesHint?: string | null;
+    /**
+     * Сейчас на сайте: «Отправить заявку →»
+     */
+    send?: string | null;
+    /**
+     * Сейчас на сайте: «Номинация: {nom}. Ответим после проверки материалов. Победителей объявят 9 декабря на сцен…»
      */
     sentText?: string | null;
     /**
-     * Сейчас на сайте: «Награды вручают на форуме. Сообщество работает между форумами.»
+     * Сейчас на сайте: «Подать ещё одну номинацию →»
      */
-    outro?: string | null;
+    again?: string | null;
+  };
+  student?: {
+    /**
+     * Сейчас на сайте: «Для студентов»
+     */
+    label?: string | null;
+    /**
+     * Сейчас на сайте: «Студенческий»
+     */
+    title1?: string | null;
+    /**
+     * Сейчас на сайте: «конкурс»
+     */
+    title2?: string | null;
+    /**
+     * Сейчас на сайте: «Как могут измениться общественные пространства нашего города?»
+     */
+    question?: string | null;
+    /**
+     * Сейчас на сайте: «Предложите решение для места, где люди встречаются и отдыхают: площади, парка, улицы или н…»
+     */
+    text?: string | null;
+    /**
+     * Сейчас на сайте: «Автор проекта»
+     */
+    author?: string | null;
+    /**
+     * Сейчас на сайте: «Учебное заведение»
+     */
+    school?: string | null;
+    /**
+     * Сейчас на сайте: «Факультет»
+     */
+    faculty?: string | null;
+    /**
+     * Сейчас на сайте: «Год начала учёбы»
+     */
+    studyYear?: string | null;
+    /**
+     * Сейчас на сайте: «Парк, улица, площадь»
+     */
+    locationPh?: string | null;
+    /**
+     * Сейчас на сайте: «1 200 м²»
+     */
+    areaPh?: string | null;
+    /**
+     * Сейчас на сайте: «Подать работу →»
+     */
+    send?: string | null;
+    /**
+     * Сейчас на сайте: «Работа отправлена. Мы свяжемся с вами по телефону. Награждение — 9 декабря на форуме.»
+     */
+    sentText?: string | null;
+    /**
+     * Сейчас на сайте: «Иллюстрация: общественное пространство»
+     */
+    alt?: string | null;
   };
   updatedAt?: string | null;
   createdAt?: string | null;
@@ -1570,7 +1426,7 @@ export interface ForumSetting {
   forumDate?: string | null;
   countdownVisible?: boolean | null;
   /**
-   * Карточки со знаком вопроса после объявленных спикеров — показывают, что состав ещё собирается. 0 — не показывать.
+   * В дизайне ARCH MAKERS не используется.
    */
   speakerSlots?: number | null;
   speakers?:
@@ -1580,15 +1436,15 @@ export interface ForumSetting {
          */
         name: string;
         /**
-         * Короткое название — печатается оранжевым под именем.
+         * Показывается под именем, только если поле «Кто он» пустое.
          */
         company?: string | null;
         /**
-         * Одно-два предложения: должность и чем известен.
+         * Строка под именем: должность и чем известен. Например: «Основатель Simpals, 999.md и Point.md».
          */
         role?: string | null;
         /**
-         * Вертикальный кадр 4:5, от 800 px по короткой стороне. Пока фото нет, в карточке стоят инициалы.
+         * Вертикальный кадр 4:5, от 800 px по короткой стороне. Для Волошина, Разлоги, Мырзы и Ионицэ портреты уже встроены в сайт — загружать не нужно. У остальных без фото в карточке стоят инициалы.
          */
         photo?: (number | null) | Media;
         id?: string | null;
@@ -1627,7 +1483,7 @@ export interface AwardSetting {
         no?: string | null;
         title: string;
         /**
-         * Короткая расшифровка. Показывается в списке номинаций под названием.
+         * Надпись над названием в карточке номинации: «Архитектура» или «Интерьер».
          */
         hint?: string | null;
         id?: string | null;
@@ -1641,14 +1497,14 @@ export interface AwardSetting {
         no?: string | null;
         title: string;
         /**
-         * Короткая расшифровка. Показывается в списке номинаций под названием.
+         * Надпись над названием в карточке номинации: «Архитектура» или «Интерьер».
          */
         hint?: string | null;
         id?: string | null;
       }[]
     | null;
   /**
-   * Пока состав не утверждён — держите выключенным.
+   * В дизайне ARCH MAKERS блока жюри нет.
    */
   juryVisible?: boolean | null;
   jury?:
@@ -1771,31 +1627,18 @@ export interface Mail {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "content-common_select".
+ * via the `definition` "page-common_select".
  */
-export interface ContentCommonSelect<T extends boolean = true> {
+export interface PageCommonSelect<T extends boolean = true> {
   nav?:
     | T
     | {
-        navPosition?: T;
-        navFormats?: T;
-        navForum?: T;
-        navAward?: T;
-        navParticipation?: T;
-        navContacts?: T;
-        navCommunity?: T;
-        navProgram?: T;
-        navApplication?: T;
-        ctaJoin?: T;
-        ctaApply?: T;
-        ctaAbout?: T;
-        scrollHint?: T;
-      };
-  notice?:
-    | T
-    | {
-        noticeTitle?: T;
-        noticeCta?: T;
+        community?: T;
+        forum?: T;
+        award?: T;
+        contacts?: T;
+        menu?: T;
+        close?: T;
       };
   contacts?:
     | T
@@ -1806,18 +1649,35 @@ export interface ContentCommonSelect<T extends boolean = true> {
         phone1Label?: T;
         phone2?: T;
         phone2Label?: T;
-        social1?: T;
-        social2?: T;
-        social3?: T;
+        instagram?: T;
+        facebook?: T;
+        linkedin?: T;
       };
   footer?:
     | T
     | {
-        taglineHome?: T;
-        taglineInner?: T;
-        partners?: T;
+        tagline?: T;
+        emailLabel?: T;
+        phoneLabel?: T;
+        founders?: T;
         privacy?: T;
         copyright?: T;
+      };
+  forms?:
+    | T
+    | {
+        sent?: T;
+        fullName?: T;
+        companyName?: T;
+        contactPerson?: T;
+        phone?: T;
+        email?: T;
+        partner?: T;
+        send?: T;
+        consent?: T;
+        consentLink?: T;
+        sending?: T;
+        error?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1825,63 +1685,67 @@ export interface ContentCommonSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "content-home_select".
+ * via the `definition` "page-home_select".
  */
-export interface ContentHomeSelect<T extends boolean = true> {
+export interface PageHomeSelect<T extends boolean = true> {
   hero?:
     | T
     | {
         eyebrow?: T;
-        title1?: T;
-        title2?: T;
-        kicker?: T;
-        entry?: T;
-        note?: T;
+        place?: T;
+        lead?: T;
+        beResident?: T;
+        bePartner?: T;
+        word1?: T;
+        word2?: T;
+        word3?: T;
+        cta?: T;
+        ctaMenu?: T;
+        alt?: T;
       };
-  tags?:
-    | T
-    | {
-        tagArchitecture?: T;
-        tagDesign?: T;
-        tagInterior?: T;
-        tagUrban?: T;
-        tagPractice?: T;
-        tagStudios?: T;
-        tagCircle?: T;
-        tagRecs?: T;
-        tagArchiminds?: T;
-        tagExpertise?: T;
-        tagNetworking?: T;
-        tagCity?: T;
-        tagCountry?: T;
-      };
-  position?:
-    | T
-    | {
-        title1?: T;
-        title2?: T;
-        title3?: T;
-        text?: T;
-      };
-  composition?:
+  mission?:
     | T
     | {
         label?: T;
-        title1?: T;
-        title2?: T;
-        residentsLabel?: T;
-        residentsTitle1?: T;
-        residentsTitle2?: T;
-        residentsText?: T;
+        title?: T;
+        text?: T;
+        values?:
+          | T
+          | {
+              title?: T;
+              text?: T;
+              id?: T;
+            };
+      };
+  who?:
+    | T
+    | {
+        label?: T;
+        title?: T;
+        note?: T;
+        residents?: T;
+        residentsTerm?: T;
+        residentsTitle?: T;
+        perks?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        residentsLink?: T;
+        residentsAlt?: T;
+        partners?: T;
+        partnersTerm?: T;
         partnersTitle?: T;
         partnersText?: T;
+        partnersLink?: T;
+        partnersAlt?: T;
       };
   formats?:
     | T
     | {
         label?: T;
-        title1?: T;
-        title2?: T;
+        title?: T;
         items?:
           | T
           | {
@@ -1890,62 +1754,25 @@ export interface ContentHomeSelect<T extends boolean = true> {
               id?: T;
             };
       };
-  forum?:
+  join?:
     | T
     | {
         label?: T;
-        venue?: T;
-        title1?: T;
-        title2?: T;
+        title?: T;
         text?: T;
-        statValue?: T;
-        statLabel?: T;
-        cta?: T;
-      };
-  founders?:
-    | T
-    | {
-        label?: T;
-        title?: T;
-        bureauLabel?: T;
-        bureauName?: T;
-        stats?:
-          | T
-          | {
-              value?: T;
-              label?: T;
-              id?: T;
-            };
-        mediaLabel?: T;
-        mediaName?: T;
-        mediaValue?: T;
-        mediaText?: T;
-      };
-  participation?:
-    | T
-    | {
-        label?: T;
-        title?: T;
-        residentTitle?: T;
-        residentText?: T;
-        partnerTitle?: T;
-        terms?: T;
-        partnerCta?: T;
-        sideWord?: T;
-      };
-  form?:
-    | T
-    | {
-        label?: T;
-        title1?: T;
-        title2?: T;
-        fieldName?: T;
-        fieldCompany?: T;
-        fieldRoleHint?: T;
-        fieldEmail?: T;
-        fieldPhone?: T;
-        submit?: T;
-        sentTitle?: T;
+        resident?: T;
+        partnersShort?: T;
+        empQuestion?: T;
+        empSelf?: T;
+        empCompany?: T;
+        whichCompany?: T;
+        studioName?: T;
+        optional?: T;
+        profession?: T;
+        professionPh?: T;
+        field?: T;
+        site?: T;
+        sendPartner?: T;
         sentText?: T;
       };
   updatedAt?: T;
@@ -1954,35 +1781,24 @@ export interface ContentHomeSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "content-forum_select".
+ * via the `definition` "page-forum_select".
  */
-export interface ContentForumSelect<T extends boolean = true> {
+export interface PageForumSelect<T extends boolean = true> {
   hero?:
     | T
     | {
-        year?: T;
-        place?: T;
-        format?: T;
-        title1?: T;
-        title2?: T;
-        claim?: T;
-        ctaApply?: T;
-        ctaPartner?: T;
-        status?: T;
-        countdownNote?: T;
-        dateLine?: T;
-      };
-  marquee?:
-    | T
-    | {
-        m1?: T;
-        m2?: T;
-        m3?: T;
-        m4?: T;
-        m5?: T;
-        m6?: T;
-        m7?: T;
-        m8?: T;
+        datePlace?: T;
+        selection?: T;
+        lead?: T;
+        text?: T;
+        cta?: T;
+        ctaMenu?: T;
+        partnerOffer?: T;
+        days?: T;
+        hours?: T;
+        minutes?: T;
+        seconds?: T;
+        alt?: T;
       };
   chain?:
     | T
@@ -1990,42 +1806,24 @@ export interface ContentForumSelect<T extends boolean = true> {
         label?: T;
         title?: T;
         text?: T;
-        note?: T;
-        note2?: T;
-        tag2?: T;
-        tag3?: T;
-        tag4?: T;
-        tag5?: T;
-        tag6?: T;
         stages?:
           | T
           | {
               title?: T;
-              role?: T;
               id?: T;
             };
       };
-  hall?:
+  count?:
     | T
     | {
-        label?: T;
-        statValue?: T;
-        statLabel?: T;
-        entry?: T;
-        groups?:
-          | T
-          | {
-              title?: T;
-              share?: T;
-              id?: T;
-            };
+        number?: T;
+        text?: T;
+        alt?: T;
       };
   topics?:
     | T
     | {
-        label?: T;
-        title1?: T;
-        title2?: T;
+        title?: T;
         items?:
           | T
           | {
@@ -2034,69 +1832,43 @@ export interface ContentForumSelect<T extends boolean = true> {
               text?: T;
               id?: T;
             };
+        speakers?: T;
       };
   program?:
     | T
     | {
-        title?: T;
-        note?: T;
+        title1?: T;
+        title2?: T;
         items?:
           | T
           | {
               title?: T;
               id?: T;
             };
-        speakersTitle?: T;
-        speakersNote?: T;
-        slotTitle?: T;
+        alt?: T;
       };
-  award?:
-    | T
-    | {
-        title2?: T;
-        text1?: T;
-        text2?: T;
-        cta?: T;
-      };
-  participation?:
+  partners?:
     | T
     | {
         label?: T;
-        title1?: T;
-        title2?: T;
-        aTitle?: T;
-        aItem1?: T;
-        aItem2?: T;
-        aItem3?: T;
-        aItem4?: T;
-        aCta?: T;
-        bTitle?: T;
-        bText?: T;
-        bItem1?: T;
-        bItem2?: T;
-        bCta?: T;
-        bNote?: T;
-        outro?: T;
+        title?: T;
+        text?: T;
+        benefit1?: T;
+        benefit2?: T;
+        before?: T;
+        during?: T;
+        after?: T;
+        cta?: T;
+        alt?: T;
       };
-  form?:
+  apply?:
     | T
     | {
-        sideWord?: T;
-        title1?: T;
-        title2?: T;
-        note2?: T;
-        fieldName?: T;
-        fieldCompany?: T;
-        fieldEmail?: T;
-        fieldPhone?: T;
-        fieldKind?: T;
-        selectPlaceholder?: T;
-        optionArchitect?: T;
-        optionDeveloper?: T;
-        optionManufacturer?: T;
-        optionInvestor?: T;
-        submit?: T;
-        sentTitle?: T;
+        title?: T;
+        date?: T;
+        place?: T;
+        guest?: T;
+        companyRole?: T;
         sentText?: T;
       };
   updatedAt?: T;
@@ -2105,84 +1877,89 @@ export interface ContentForumSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "content-award_select".
+ * via the `definition` "page-award_select".
  */
-export interface ContentAwardSelect<T extends boolean = true> {
+export interface PageAwardSelect<T extends boolean = true> {
   hero?:
     | T
     | {
         eyebrow?: T;
-        event?: T;
-        title1?: T;
-        title2?: T;
-        leadName?: T;
-        leadText?: T;
-        deadlineLine?: T;
-        countdownNote?: T;
-        ctaCompany?: T;
-        ctaStudent?: T;
-      };
-  tracks?:
-    | T
-    | {
-        label?: T;
-        title?: T;
-        aTitle?: T;
-        aText1?: T;
-        aText2?: T;
-        bTitle?: T;
-        bText1?: T;
-        bText2?: T;
+        open?: T;
+        lead?: T;
+        deadlineLabel?: T;
+        daysLeft?: T;
+        winners?: T;
+        winnersText?: T;
+        choose?: T;
+        award?: T;
+        awardNote?: T;
+        student?: T;
+        studentNote?: T;
+        cta?: T;
+        alt?: T;
       };
   nominations?:
     | T
     | {
+        label?: T;
         title?: T;
-        link?: T;
+        text?: T;
       };
-  result?:
+  prize?:
     | T
     | {
         label?: T;
         title?: T;
-        item1?: T;
-        item1Value?: T;
-        item1Unit?: T;
-        item2?: T;
-        item3?: T;
-        item4?: T;
-      };
-  how?:
-    | T
-    | {
-        label?: T;
-        title?: T;
-        step1?: T;
-        step2?: T;
-        step3?: T;
-        step4?: T;
-        marquee1?: T;
-        marquee2?: T;
-        marquee3?: T;
+        items?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
       };
   form?:
     | T
     | {
+        label?: T;
+        title?: T;
+        nomination?: T;
+        chooseNom?: T;
+        project?: T;
+        authors?: T;
+        authorsPh?: T;
+        company?: T;
+        companyPh?: T;
+        location?: T;
+        locationPh?: T;
+        area?: T;
+        areaPh?: T;
+        year?: T;
+        yearPh?: T;
+        desc?: T;
+        descPh?: T;
+        attach?: T;
+        filesHint?: T;
+        send?: T;
+        sentText?: T;
+        again?: T;
+      };
+  student?:
+    | T
+    | {
+        label?: T;
         title1?: T;
         title2?: T;
-        fieldName?: T;
-        fieldOrg?: T;
-        fieldTrack?: T;
-        fieldNomination?: T;
-        fieldEmail?: T;
-        fieldPhone?: T;
-        fieldUrl?: T;
-        fieldDesc?: T;
-        hint?: T;
-        submit?: T;
-        sentTitle?: T;
+        question?: T;
+        text?: T;
+        author?: T;
+        school?: T;
+        faculty?: T;
+        studyYear?: T;
+        locationPh?: T;
+        areaPh?: T;
+        send?: T;
         sentText?: T;
-        outro?: T;
+        alt?: T;
       };
   updatedAt?: T;
   createdAt?: T;

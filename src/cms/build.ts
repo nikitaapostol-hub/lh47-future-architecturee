@@ -23,18 +23,25 @@ function payloadField(f: Field): PayloadField {
       },
     } as PayloadField
   }
+  // Без defaultValue: иначе при первом сохранении в румынской или английской
+  // локали в базу легли бы русские строки. Пустой список = тексты из кода.
+  const current = f.rows
+    .map((row, i) => `${i + 1}. ` + f.cols.map((c) => base[row[c.name] as string] ?? '').filter(Boolean).join(' — '))
+    .join('\n')
   return {
     name: f.name,
     type: 'array',
     label: f.label,
     localized: true,
     labels: { singular: f.itemLabel, plural: f.label },
-    minRows: f.rows.length,
     maxRows: f.rows.length,
-    admin: { description: f.desc, initCollapsed: true },
-    defaultValue: f.rows.map((row) =>
-      Object.fromEntries(f.cols.map((c) => [c.name, base[row[c.name] as string] ?? ''])),
-    ),
+    admin: {
+      description:
+        (f.desc ? f.desc + ' ' : '') +
+        'Пустой список — на сайте стоят тексты по умолчанию. Строка N заменяет N-й пункт, пустое поле в строке оставляет исходный текст. Сейчас на сайте (RU):\n' +
+        current,
+      initCollapsed: true,
+    },
     fields: f.cols.map((c) => ({
       name: c.name,
       type: c.area ? 'textarea' : 'text',

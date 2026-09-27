@@ -34,53 +34,53 @@ type Page = '/' | '/forum' | '/award'
 const COPY: Record<Page, Record<Lang, { title: string; description: string }>> = {
   '/': {
     ru: {
-      title: 'Future Architecture – профессиональное сообщество',
+      title: 'ARCH MAKERS — сообщество архитекторов и дизайнеров Молдовы',
       description:
-        'Закрытое сообщество архитекторов и дизайнеров Молдовы: восемь рабочих форматов, ежемесячные встречи ArchiMinds, форум и премия отрасли. Вступление по заявке и модерации.',
+        'Профессиональное сообщество архитекторов, дизайнеров и представителей индустрий Молдовы: форум, премия, встречи ArchiMinds, журнал и поездки. Вступление по заявке.',
     },
     ro: {
-      title: 'Future Architecture – comunitatea profesională',
+      title: 'ARCH MAKERS — comunitatea arhitecților și designerilor din Moldova',
       description:
-        'Comunitate închisă a arhitecților și designerilor din Moldova: opt formate de lucru, întâlniri lunare ArchiMinds, forum și premiul industriei. Aderare pe bază de cerere și moderare.',
+        'Comunitatea profesională a arhitecților, designerilor și reprezentanților industriilor din Moldova: forum, premiu, întâlniri ArchiMinds, revistă și călătorii. Aderare pe bază de cerere.',
     },
     en: {
-      title: 'Future Architecture – professional community',
+      title: 'ARCH MAKERS — community of architects and designers in Moldova',
       description:
-        'A closed community of architects and designers in Moldova: eight working formats, monthly ArchiMinds meetings, a forum and an industry award. Membership by application and moderation.',
+        'A professional community of architects, designers and industry representatives in Moldova: a forum, an award, ArchiMinds meetings, a magazine and trips. Membership by application.',
     },
   },
   '/forum': {
     ru: {
-      title: 'Future Architecture Forum Moldova 2026',
+      title: 'ARCH MAKERS Forum 2026 — 9 декабря, Кишинёв',
       description:
-        'Закрытый отраслевой форум 9 декабря 2026 в Кишинёве, площадка Range Rover Moldova. 250 участников: инвесторы, девелоперы, архитекторы и производители за одним столом. Участие по заявке и отбору, без взноса.',
+        'Закрытая встреча тех, кто определяет будущее недвижимости Молдовы. Более 250 девелоперов, инвесторов, архитекторов и производителей. 9 декабря 2026, Range Rover Moldova. Участие по отбору.',
     },
     ro: {
-      title: 'Future Architecture Forum Moldova 2026',
+      title: 'ARCH MAKERS Forum 2026 — 9 decembrie, Chișinău',
       description:
-        'Forum închis al industriei, 9 decembrie 2026, Chișinău, locație Range Rover Moldova. 250 de participanți: investitori, dezvoltatori, arhitecți și producători la aceeași masă. Participare pe bază de cerere și selecție, fără taxă.',
+        'O întâlnire închisă a celor care definesc viitorul imobiliarelor din Moldova. Peste 250 de dezvoltatori, investitori, arhitecți și producători. 9 decembrie 2026, Range Rover Moldova. Participare pe bază de selecție.',
     },
     en: {
-      title: 'Future Architecture Forum Moldova 2026',
+      title: 'ARCH MAKERS Forum 2026 — 9 December, Chișinău',
       description:
-        'A closed industry forum on 9 December 2026 in Chișinău, at Range Rover Moldova. 250 participants: investors, developers, architects and manufacturers at one table. Entry by application and selection, no fee.',
+        'A closed meeting of the people shaping the future of real estate in Moldova. More than 250 developers, investors, architects and manufacturers. 9 December 2026, Range Rover Moldova. Attendance by selection.',
     },
   },
   '/award': {
     ru: {
-      title: 'Future Architecture Award 2026 · Премия отрасли и студенческий конкурс',
+      title: 'ARCH MAKERS Award 2026 — премия и студенческий конкурс',
       description:
-        'Future Architecture Award 2026: премия отрасли для проектов, компаний и профессионалов и отдельный студенческий конкурс. Заявки до 20 ноября, победителей объявляют 9 декабря на форуме в Кишинёве.',
+        'Премия для архитекторов и дизайнеров в четырёх номинациях и студенческий конкурс. Заявки до 20 ноября, победителей объявят 9 декабря на сцене ARCH MAKERS Forum.',
     },
     ro: {
-      title: 'Future Architecture Award 2026 · Premiul industriei și concursul studențesc',
+      title: 'ARCH MAKERS Award 2026 — premiu și concurs studențesc',
       description:
-        'Future Architecture Award 2026: premiul industriei pentru proiecte, companii și profesioniști și un concurs separat pentru studenți. Cereri până pe 20 noiembrie, câștigătorii se anunță pe 9 decembrie la forumul din Chișinău.',
+        'Premiu pentru arhitecți și designeri în patru nominalizări și un concurs studențesc. Cereri până pe 20 noiembrie, câștigătorii vor fi anunțați pe 9 decembrie pe scena ARCH MAKERS Forum.',
     },
     en: {
-      title: 'Future Architecture Award 2026 · Industry award and student competition',
+      title: 'ARCH MAKERS Award 2026 — award and student competition',
       description:
-        'Future Architecture Award 2026: an industry award for projects, companies and professionals, plus a separate student competition. Applications until 20 November, winners announced on 9 December at the forum in Chișinău.',
+        'An award for architects and designers in four categories, plus a student competition. Applications until 20 November, winners announced on 9 December on stage at ARCH MAKERS Forum.',
     },
   },
 }
@@ -111,7 +111,7 @@ export async function meta(lang: Lang, page: Page): Promise<Metadata> {
     },
     openGraph: {
       type: 'website',
-      siteName: 'Future Architecture',
+      siteName: 'ARCH MAKERS',
       title: c.title,
       description: c.description,
       url,
@@ -130,17 +130,17 @@ export async function meta(lang: Lang, page: Page): Promise<Metadata> {
 
 const PRIVACY: Record<Lang, { title: string; description: string }> = {
   ru: {
-    title: 'Политика обработки персональных данных · Future Architecture',
+    title: 'Политика обработки персональных данных · ARCH MAKERS',
     description:
       'Какие данные собирают формы сайта future-arch.md, зачем они нужны, сколько хранятся и как их удалить.',
   },
   ro: {
-    title: 'Politica de prelucrare a datelor cu caracter personal · Future Architecture',
+    title: 'Politica de prelucrare a datelor cu caracter personal · ARCH MAKERS',
     description:
       'Ce date colectează formularele site-ului future-arch.md, de ce sunt necesare, cât se păstrează și cum pot fi șterse.',
   },
   en: {
-    title: 'Personal data processing policy · Future Architecture',
+    title: 'Personal data processing policy · ARCH MAKERS',
     description:
       'What data the forms on future-arch.md collect, why it is needed, how long it is kept and how to have it deleted.',
   },
@@ -161,7 +161,7 @@ export function privacyMeta(lang: Lang): Metadata {
     robots: { index: true, follow: true },
     openGraph: {
       type: 'article',
-      siteName: 'Future Architecture',
+      siteName: 'ARCH MAKERS',
       title: c.title,
       description: c.description,
       url: SITE + path(lang, '/privacy'),

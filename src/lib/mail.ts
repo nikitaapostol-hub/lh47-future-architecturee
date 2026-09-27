@@ -27,7 +27,7 @@ export function notifyHtml(title: string, rows: MailRow[], footer?: string) {
   return `<!doctype html><html><body style="margin:0;background:#F7F6F3;padding:32px 16px">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:620px;margin:0 auto;background:#FFFFFF;border:1px solid #E6E3DD">
     <tr><td style="padding:24px 28px;border-bottom:3px solid ${BRAND}">
-      <div style="font:11px/1 -apple-system,Segoe UI,Roboto,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#6E7278">Future Architecture</div>
+      <div style="font:11px/1 -apple-system,Segoe UI,Roboto,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#6E7278">ARCH MAKERS</div>
       <div style="margin-top:10px;font:700 22px/1.25 -apple-system,Segoe UI,Roboto,sans-serif;color:${INK}">${esc(title)}</div>
     </td></tr>
     <tr><td style="padding:8px 28px 24px">
@@ -46,7 +46,7 @@ export function autoreplyHtml(text: string) {
   return `<!doctype html><html><body style="margin:0;background:#F7F6F3;padding:32px 16px">
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:620px;margin:0 auto;background:#FFFFFF;border:1px solid #E6E3DD">
     <tr><td style="padding:24px 28px;border-bottom:3px solid ${BRAND}">
-      <div style="font:11px/1 -apple-system,Segoe UI,Roboto,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#6E7278">Future Architecture</div>
+      <div style="font:11px/1 -apple-system,Segoe UI,Roboto,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#6E7278">ARCH MAKERS</div>
     </td></tr>
     <tr><td style="padding:24px 28px">${paragraphs}</td></tr>
   </table></body></html>`

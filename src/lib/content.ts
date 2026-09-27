@@ -12,12 +12,21 @@ import { AWARD } from '@/cms/award'
 import type { PageContent } from '@/cms/types'
 
 async function overrides(p: PageContent, lang: Lang) {
-  return applyContent(p, await getGlobal(p.slug, lang), lang)
+  return applyContent(p, await getGlobal(p.slug, lang, false), lang)
 }
 
-/** Тексты для одной из страниц: общие + свои. */
-export async function texts(page: 'home' | 'forum' | 'award', lang: Lang): Promise<Dict> {
-  const own = page === 'home' ? HOME : page === 'forum' ? FORUM : AWARD
-  const [common, self] = await Promise.all([overrides(COMMON, lang), overrides(own, lang)])
-  return { ...dict[lang], ...common, ...self }
+/** Тексты для страницы: общие + свои. Без page — только общие (политика, 404). */
+export async function texts(page: 'home' | 'forum' | 'award' | null, lang: Lang): Promise<Dict> {
+  const own = page === 'home' ? HOME : page === 'forum' ? FORUM : page === 'award' ? AWARD : null
+  const [common, self] = await Promise.all([
+    overrides(COMMON, lang),
+    own ? overrides(own, lang) : Promise.resolve({}),
+  ])
+  const all: Record<string, string> = { ...dict[lang], ...common, ...self }
+  // В браузер уходят только тексты этой страницы и общие (c*): словарь всех страниц
+  // заметно утяжелил бы каждую из них.
+  const own2 = page === 'home' ? 'h' : page === 'forum' ? 'f' : page === 'award' ? 'a' : ''
+  const out: Record<string, string> = {}
+  for (const k in all) if (k[0] === 'c' || (own2 && k[0] === own2)) out[k] = all[k]
+  return out as Dict
 }

@@ -49,8 +49,8 @@ export const ForumSettings: GlobalConfig = {
               min: 0,
               max: 12,
               admin: {
-                description:
-                  'Карточки со знаком вопроса после объявленных спикеров — показывают, что состав ещё собирается. 0 — не показывать.',
+                hidden: true,
+                description: 'В дизайне ARCH MAKERS не используется.',
               },
             },
             {
@@ -85,14 +85,14 @@ export const ForumSettings: GlobalConfig = {
                   type: 'text',
                   label: 'Компания',
                   localized: true,
-                  admin: { description: 'Короткое название — печатается оранжевым под именем.' },
+                  admin: { description: 'Показывается под именем, только если поле «Кто он» пустое.' },
                 },
                 {
                   name: 'role',
                   type: 'textarea',
                   label: 'Кто он',
                   localized: true,
-                  admin: { description: 'Одно-два предложения: должность и чем известен.' },
+                  admin: { description: 'Строка под именем: должность и чем известен. Например: «Основатель Simpals, 999.md и Point.md».' },
                 },
                 {
                   name: 'photo',
@@ -101,7 +101,7 @@ export const ForumSettings: GlobalConfig = {
                   label: 'Портрет',
                   admin: {
                     description:
-                      'Вертикальный кадр 4:5, от 800 px по короткой стороне. Пока фото нет, в карточке стоят инициалы.',
+                      'Вертикальный кадр 4:5, от 800 px по короткой стороне. Для Волошина, Разлоги, Мырзы и Ионицэ портреты уже встроены в сайт — загружать не нужно. У остальных без фото в карточке стоят инициалы.',
                   },
                 },
               ],
@@ -124,9 +124,9 @@ const NOMINATION_FIELDS = [
   {
     name: 'hint',
     type: 'text' as const,
-    label: 'Уточнение',
+    label: 'Раздел',
     localized: true,
-    admin: { description: 'Короткая расшифровка. Показывается в списке номинаций под названием.' },
+    admin: { description: 'Надпись над названием в карточке номинации: «Архитектура» или «Интерьер».' },
   },
 ]
 
@@ -230,14 +230,14 @@ export const AwardSettings: GlobalConfig = {
               type: 'checkbox',
               label: 'Показывать блок жюри',
               defaultValue: false,
-              admin: { description: 'Пока состав не утверждён — держите выключенным.' },
+              admin: { hidden: true, description: 'В дизайне ARCH MAKERS блока жюри нет.' },
             },
             {
               name: 'jury',
               type: 'array',
               label: 'Жюри',
               labels: { singular: 'Член жюри', plural: 'Члены жюри' },
-              admin: { condition: (data) => data?.juryVisible === true },
+              admin: { hidden: true },
               fields: [
                 { name: 'no', type: 'text', label: 'Номер', admin: { width: '20%' } },
                 { name: 'name', type: 'text', label: 'Имя', required: true },

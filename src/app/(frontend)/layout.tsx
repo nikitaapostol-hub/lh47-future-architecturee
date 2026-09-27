@@ -3,7 +3,7 @@ import Shell from '@/lib/Shell'
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://future-arch.md'),
-  title: 'Future Architecture',
+  title: 'ARCH MAKERS',
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: '48x48' },
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     apple: '/apple-touch-icon.png',
   },
   manifest: '/site.webmanifest',
-  description: 'Future Architecture — профессиональное сообщество, форум и премия отрасли.',
+  description: 'ARCH MAKERS — профессиональное сообщество архитекторов и дизайнеров Молдовы, форум и премия.',
 }
 
 export default function RuLayout({ children }: { children: React.ReactNode }) {

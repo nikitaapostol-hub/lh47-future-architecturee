@@ -30,14 +30,17 @@ export async function Forum({ lang }: { lang: Lang }) {
         forumDate={s.forumDate as string}
         countdownVisible={s.countdownVisible !== false}
         speakers={(s.speakers as any) || []}
-        speakerSlots={typeof s.speakerSlots === 'number' ? s.speakerSlots : 4}
       />
     </>
   )
 }
 
 export async function Award({ lang }: { lang: Lang }) {
-  const [s, t] = await Promise.all([getGlobal('award-settings', lang), texts('award', lang)])
+  const [s, f, t] = await Promise.all([
+    getGlobal('award-settings', lang),
+    getGlobal('forum-settings', lang),
+    texts('award', lang),
+  ])
   return (
     <>
       <OrgLd lang={lang} />
@@ -45,11 +48,8 @@ export async function Award({ lang }: { lang: Lang }) {
       <AwardPage
         t={t}
         lang={lang}
-        deadlineLabel={s.deadlineLabel as string}
         deadlineDate={s.deadlineDate as string}
-        countdownVisible={s.countdownVisible !== false}
-        juryVisible={s.juryVisible === true}
-        jury={(s.jury as any) || []}
+        forumDate={f.forumDate as string}
         nominations={(s.nominations as any) || []}
         studentNominations={(s.studentNominations as any) || []}
         formOpen={s.formOpen !== false}

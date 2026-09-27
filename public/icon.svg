@@ -1,7 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Future Architecture">
-  <rect width="512" height="512" fill="#16181D"/>
-  <circle cx="176" cy="256" r="76" fill="#FF4002"/>
-  <path d="M170 148 L246 106 L246 404 L170 404 Z" fill="#F7F6F3"/>
-  <path d="M274 128 L274 246 L370 288 L370 170 Z" fill="none" stroke="#F7F6F3" stroke-width="14" stroke-linejoin="miter"/>
-  <path d="M274 268 L370 310 L370 428 L274 386 Z" fill="#F7F6F3"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="160 207 395 395"><rect x="160" y="207" width="395" height="395" rx="56" fill="#fff"/><polygon fill="#e5d900" points="193.7 240.4 381.3 240.4 381.3 287.4 287.4 287.4 287.4 334.2 193.7 334.2 193.7 240.4"/><polygon fill="#ff4002" points="193.6 568.8 193.6 381.2 240.6 381.2 240.6 475.1 287.5 475.1 287.5 568.8 193.6 568.8"/><polygon fill="#1a52a0" points="428.3 240.4 521.5 240.4 521.5 381.2 474.6 381.2 474.6 287.3 428.3 287.3 428.3 240.4"/><polygon fill="#000" points="522.1 568.7 334.5 568.7 334.5 521.7 428.3 521.7 428.3 474.8 522.1 474.8 522.1 568.7"/></svg>
