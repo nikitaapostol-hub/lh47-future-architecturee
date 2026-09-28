@@ -73,7 +73,7 @@ const seo: Tab = {
 
 const analytics: Tab = {
   label: 'Аналитика',
-  description: 'Коды счётчиков. Пустое поле — скрипт не грузится и сайт не тормозит.',
+  description: 'Коды счётчиков. Пустое поле — берётся код из настроек Vercel (так сейчас подключены GTM и GA4), а если нет и там — скрипт не грузится.',
   fields: [
     { name: 'analyticsEnabled', type: 'checkbox', label: 'Счётчики включены', defaultValue: true },
     {
