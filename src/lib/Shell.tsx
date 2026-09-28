@@ -2,10 +2,11 @@ import '../app/(frontend)/globals.css'
 import { AnalyticsScripts, VerificationMeta, resolveAnalytics } from '@/components/Analytics'
 import { getGlobal } from '@/lib/settings'
 import type { Lang } from '@/i18n/links'
+import LivePreview from '@/components/LivePreview'
 
 /** Заставка: первый заход за сессию — полная, дальше — короткая.
     Отметку ставим до первой отрисовки, чтобы не было мигания. */
-const PRE = `try{var s=sessionStorage;if(s.getItem('am-pre')){document.documentElement.setAttribute('data-pre','quick')}else{s.setItem('am-pre','1')}}catch(e){}`
+const PRE = `try{if(window.self!==window.top){document.documentElement.setAttribute('data-pre','off')}else{var s=sessionStorage;if(s.getItem('am-pre')){document.documentElement.setAttribute('data-pre','quick')}else{s.setItem('am-pre','1')}}}catch(e){}`
 
 /** The <html> shell. Each language has its own root layout so the
     lang attribute is correct in the HTML that leaves the server. */
@@ -16,7 +17,15 @@ export default async function Shell({
   lang: Lang
   children: React.ReactNode
 }) {
-  const cfg = resolveAnalytics(await getGlobal('analytics'))
+  const g: any = await getGlobal('settings')
+  const cfg = resolveAnalytics({
+    enabled: g.analyticsEnabled,
+    gtmId: g.gtmId,
+    ga4Id: g.ga4Id,
+    searchConsoleToken: g.searchConsoleToken,
+    yandexId: g.yandexId,
+    metaPixelId: g.metaPixelId,
+  })
   return (
     <html lang={lang} suppressHydrationWarning>
       <head>
@@ -28,6 +37,7 @@ export default async function Shell({
       </head>
       <body>
         {children}
+        <LivePreview />
         <AnalyticsScripts cfg={cfg} />
       </body>
     </html>

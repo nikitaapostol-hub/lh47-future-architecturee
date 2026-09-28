@@ -9,22 +9,23 @@ import { COMMON } from '@/cms/common'
 import { HOME } from '@/cms/home'
 import { FORUM } from '@/cms/forum'
 import { AWARD } from '@/cms/award'
-import type { PageContent } from '@/cms/types'
 
-async function overrides(p: PageContent, lang: Lang) {
-  return applyContent(p, await getGlobal(p.slug, lang, false), lang)
-}
+type Page = 'home' | 'forum' | 'award'
 
-/** Тексты для страницы: общие + свои. Без page — только общие (политика, 404). */
-export async function texts(page: 'home' | 'forum' | 'award' | null, lang: Lang): Promise<Dict> {
-  const own = page === 'home' ? HOME : page === 'forum' ? FORUM : page === 'award' ? AWARD : null
+/** Тексты для страницы: общие + свои. `own` — уже загруженный раздел страницы,
+    чтобы не ходить в базу дважды. */
+export async function texts(page: Page | null, lang: Lang, own?: any): Promise<Dict> {
+  const desc = page === 'home' ? HOME : page === 'forum' ? FORUM : page === 'award' ? AWARD : null
   const [common, self] = await Promise.all([
-    overrides(COMMON, lang),
-    own ? overrides(own, lang) : Promise.resolve({}),
+    getGlobal(COMMON.slug),
+    desc ? (own ? Promise.resolve(own) : getGlobal(desc.slug)) : Promise.resolve(null),
   ])
-  const all: Record<string, string> = { ...dict[lang], ...common, ...self }
-  // В браузер уходят только тексты этой страницы и общие (c*): словарь всех страниц
-  // заметно утяжелил бы каждую из них.
+  const all: Record<string, string> = {
+    ...dict[lang],
+    ...applyContent(COMMON, common, lang),
+    ...(desc ? applyContent(desc, self, lang) : {}),
+  }
+  // В браузер уходят только тексты этой страницы и общие (c*).
   const own2 = page === 'home' ? 'h' : page === 'forum' ? 'f' : page === 'award' ? 'a' : ''
   const out: Record<string, string> = {}
   for (const k in all) if (k[0] === 'c' || (own2 && k[0] === own2)) out[k] = all[k]

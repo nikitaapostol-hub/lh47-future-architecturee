@@ -19,7 +19,6 @@ type Props = {
   deadlineDate?: string
   forumDate?: string
   nominations?: Nomination[]
-  studentNominations?: Nomination[]
   formOpen?: boolean
   formClosedText?: string
 }

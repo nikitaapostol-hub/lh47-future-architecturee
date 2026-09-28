@@ -4,26 +4,16 @@ import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { ru } from '@payloadcms/translations/languages/ru'
 import nodemailer from 'nodemailer'
 import sharp from 'sharp'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
-import {
-  ForumApplications,
-  CommunityApplications,
-  AwardApplications,
-} from './collections/Applications'
-import { ForumSettings, AwardSettings } from './globals/Settings'
-import { Seo } from './globals/Seo'
-import { Analytics } from './globals/Analytics'
-import { Mail } from './globals/Mail'
-import { buildGlobal } from './cms/build'
-import { COMMON } from './cms/common'
-import { HOME } from './cms/home'
-import { FORUM } from './cms/forum'
-import { AWARD } from './cms/award'
+import { ForumApplications, CommunityApplications, AwardApplications } from './collections/Applications'
+import { HomePage, ForumPage, AwardPage, CommonPage } from './globals/pages'
+import { SiteSettings } from './globals/SiteSettings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -47,34 +37,35 @@ function email() {
 }
 
 export default buildConfig({
+  serverURL: process.env.NEXT_PUBLIC_SITE_URL || '',
   admin: {
     user: Users.slug,
     importMap: { baseDir: path.resolve(dirname) },
-    meta: { titleSuffix: '· ARCH MAKERS' },
+    meta: {
+      titleSuffix: ' · ARCH MAKERS',
+      icons: [{ rel: 'icon', type: 'image/svg+xml', url: '/icon.svg' }],
+    },
+    components: {
+      graphics: {
+        Logo: '/components/admin/Brand#Logo',
+        Icon: '/components/admin/Brand#Icon',
+      },
+    },
+    // Первый экран админки — один блок: новые заявки и ссылки на страницы.
+    dashboard: {
+      widgets: [
+        { slug: 'welcome', label: 'ARCH MAKERS', Component: '/components/admin/Welcome#Welcome', minWidth: 'full', maxWidth: 'full' },
+      ],
+      defaultLayout: [{ widgetSlug: 'welcome', width: 'full' }],
+    },
+    dateFormat: 'dd.MM.yyyy, HH:mm',
   },
   // Интерфейс админки на русском.
   i18n: { supportedLanguages: { ru }, fallbackLanguage: 'ru' },
-  localization: {
-    locales: [
-      { label: 'Русский', code: 'ru' },
-      { label: 'Română', code: 'ro' },
-      { label: 'English', code: 'en' },
-    ],
-    defaultLocale: 'ru',
-    fallback: true,
-  },
-  collections: [Users, Media, CommunityApplications, ForumApplications, AwardApplications],
-  globals: [
-    buildGlobal(COMMON),
-    buildGlobal(HOME),
-    buildGlobal(FORUM),
-    buildGlobal(AWARD),
-    ForumSettings,
-    AwardSettings,
-    Seo,
-    Analytics,
-    Mail,
-  ],
+  // Языков сайта три, но переключатель в админке не нужен:
+  // каждое поле хранит RU, RO и EN рядом (см. cms/build.ts → l3).
+  collections: [CommunityApplications, ForumApplications, AwardApplications, Media, Users],
+  globals: [HomePage, ForumPage, AwardPage, CommonPage, SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: { outputFile: path.resolve(dirname, 'payload-types.ts') },
@@ -82,13 +73,20 @@ export default buildConfig({
     // Vercel's Neon integration injects the connection string under its own
     // name, so accept the usual aliases rather than forcing a manual copy.
     pool: {
-      connectionString:
-        process.env.DATABASE_URI ||
-        process.env.POSTGRES_URL ||
-        process.env.DATABASE_URL ||
-        '',
+      connectionString: process.env.DATABASE_URI || process.env.POSTGRES_URL || process.env.DATABASE_URL || '',
     },
   }),
+  plugins: [
+    // Фото спикеров и картинки для соцсетей — в публичное хранилище Vercel Blob
+    // arch-makers-media. Файл идёт из браузера прямо в хранилище (clientUploads),
+    // поэтому проходят и большие фото. Без токена (локально) — папка media.
+    vercelBlobStorage({
+      enabled: Boolean(process.env.MEDIA_READ_WRITE_TOKEN),
+      collections: { media: true },
+      token: process.env.MEDIA_READ_WRITE_TOKEN,
+      clientUploads: true,
+    }),
+  ],
   email: email(),
   sharp,
 })

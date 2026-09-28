@@ -240,4 +240,5 @@ export const en: Dict = {
   aStudentAreaPh: "1,200 m²",
   aStudentSent: "Your entry has been sent. We will contact you by phone. The awards ceremony is on 9 December at the forum.",
   aStudentSend: "Submit your entry →",
+  aClosed: "Applications are closed. Winners will be announced on 9 December at the forum in Chișinău.",
 }

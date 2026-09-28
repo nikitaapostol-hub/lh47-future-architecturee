@@ -240,4 +240,5 @@ export const ro: Dict = {
   aStudentAreaPh: "1 200 m²",
   aStudentSent: "Lucrarea a fost trimisă. Vă vom contacta telefonic. Decernarea — pe 9 decembrie, la forum.",
   aStudentSend: "Trimite lucrarea →",
+  aClosed: "Înscrierile s-au încheiat. Câștigătorii vor fi anunțați pe 9 decembrie la forumul din Chișinău.",
 }

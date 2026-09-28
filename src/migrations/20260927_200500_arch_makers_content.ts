@@ -64,6 +64,12 @@ const OLD_NOMINATIONS = [
 const sameSet = (a: string[], b: string[]) => a.length === b.length && a.every((x) => b.includes(x))
 
 export async function up({ payload, req }: MigrateUpArgs): Promise<void> {
+  // С 28.09.2026 этих разделов в админке нет (данные переносит …_admin_data).
+  // На боевой базе миграция уже выполнена; на чистой — просто пропускаем.
+  if (!payload.config.globals.some((g) => (g.slug as string) === 'forum-settings')) {
+    payload.logger.info('[arch-makers] старые разделы настроек уже убраны — пропускаю')
+    return
+  }
   // ——— спикеры
   const forum: any = await payload.findGlobal({ slug: 'forum-settings' as any, locale: 'ru' as any, fallbackLocale: 'none' as any, req })
   const names: string[] = (forum?.speakers || []).map((s: any) => String(s?.name || '').trim()).filter(Boolean)

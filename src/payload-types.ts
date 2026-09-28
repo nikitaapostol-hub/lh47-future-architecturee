@@ -67,11 +67,11 @@ export interface Config {
   };
   blocks: {};
   collections: {
-    users: User;
-    media: Media;
     'community-applications': CommunityApplication;
     'forum-applications': ForumApplication;
     'award-applications': AwardApplication;
+    media: Media;
+    users: User;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -79,11 +79,11 @@ export interface Config {
   };
   collectionsJoins: {};
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
     'community-applications': CommunityApplicationsSelect<false> | CommunityApplicationsSelect<true>;
     'forum-applications': ForumApplicationsSelect<false> | ForumApplicationsSelect<true>;
     'award-applications': AwardApplicationsSelect<false> | AwardApplicationsSelect<true>;
+    media: MediaSelect<false> | MediaSelect<true>;
+    users: UsersSelect<false> | UsersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -92,31 +92,24 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('ru' | 'ro' | 'en') | ('ru' | 'ro' | 'en')[];
+  fallbackLocale: null;
   globals: {
-    'page-common': PageCommon;
-    'page-home': PageHome;
-    'page-forum': PageForum;
-    'page-award': PageAward;
-    'forum-settings': ForumSetting;
-    'award-settings': AwardSetting;
-    seo: Seo;
-    analytics: Analytics;
-    mail: Mail;
+    home: Home;
+    forum: Forum;
+    award: Award;
+    common: Common;
+    settings: Setting;
   };
   globalsSelect: {
-    'page-common': PageCommonSelect<false> | PageCommonSelect<true>;
-    'page-home': PageHomeSelect<false> | PageHomeSelect<true>;
-    'page-forum': PageForumSelect<false> | PageForumSelect<true>;
-    'page-award': PageAwardSelect<false> | PageAwardSelect<true>;
-    'forum-settings': ForumSettingsSelect<false> | ForumSettingsSelect<true>;
-    'award-settings': AwardSettingsSelect<false> | AwardSettingsSelect<true>;
-    seo: SeoSelect<false> | SeoSelect<true>;
-    analytics: AnalyticsSelect<false> | AnalyticsSelect<true>;
-    mail: MailSelect<false> | MailSelect<true>;
+    home: HomeSelect<false> | HomeSelect<true>;
+    forum: ForumSelect<false> | ForumSelect<true>;
+    award: AwardSelect<false> | AwardSelect<true>;
+    common: CommonSelect<false> | CommonSelect<true>;
+    settings: SettingsSelect<false> | SettingsSelect<true>;
   };
-  locale: 'ru' | 'ro' | 'en';
+  locale: null;
   widgets: {
+    welcome: WelcomeWidget;
     collections: CollectionsWidget;
   };
   user: User;
@@ -142,51 +135,6 @@ export interface UserAuthOperations {
     email: string;
     password: string;
   };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users".
- */
-export interface User {
-  id: number;
-  name?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
-  sessions?:
-    | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
-      }[]
-    | null;
-  password?: string | null;
-  collection: 'users';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: number;
-  alt?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
 }
 /**
  * Форма на главной странице: резиденты и партнёры.
@@ -286,6 +234,51 @@ export interface AwardApplication {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: number;
+  alt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users".
+ */
+export interface User {
+  id: number;
+  name?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  email: string;
+  resetPasswordToken?: string | null;
+  resetPasswordExpiration?: string | null;
+  salt?: string | null;
+  hash?: string | null;
+  loginAttempts?: number | null;
+  lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
+  password?: string | null;
+  collection: 'users';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -309,14 +302,6 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
-        relationTo: 'users';
-        value: number | User;
-      } | null)
-    | ({
-        relationTo: 'media';
-        value: number | Media;
-      } | null)
-    | ({
         relationTo: 'community-applications';
         value: number | CommunityApplication;
       } | null)
@@ -327,6 +312,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'award-applications';
         value: number | AwardApplication;
+      } | null)
+    | ({
+        relationTo: 'media';
+        value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'users';
+        value: number | User;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -369,47 +362,6 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "users_select".
- */
-export interface UsersSelect<T extends boolean = true> {
-  name?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
-  sessions?:
-    | T
-    | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media_select".
- */
-export interface MediaSelect<T extends boolean = true> {
-  alt?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -485,6 +437,47 @@ export interface AwardApplicationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_select".
+ */
+export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "users_select".
+ */
+export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  email?: T;
+  resetPasswordToken?: T;
+  resetPasswordExpiration?: T;
+  salt?: T;
+  hash?: T;
+  loginAttempts?: T;
+  lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -524,1256 +517,1562 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   createdAt?: T;
 }
 /**
- * Меняется сразу на всех страницах. Язык — переключатель локали вверху справа. Пустое поле = остаётся текст, который стоит на сайте сейчас.
+ * Все тексты главной страницы. Сохраните — и через пару секунд они на сайте.
  *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "page-common".
+ * via the `definition` "home".
  */
-export interface PageCommon {
-  id: number;
-  nav?: {
-    /**
-     * Сейчас на сайте: «Сообщество»
-     */
-    community?: string | null;
-    /**
-     * Сейчас на сайте: «Форум 2026»
-     */
-    forum?: string | null;
-    /**
-     * Сейчас на сайте: «Премия и конкурсы»
-     */
-    award?: string | null;
-    /**
-     * Сейчас на сайте: «Контакты»
-     */
-    contacts?: string | null;
-    /**
-     * Сейчас на сайте: «Меню»
-     */
-    menu?: string | null;
-    /**
-     * Сейчас на сайте: «Закрыть»
-     */
-    close?: string | null;
-  };
-  contacts?: {
-    /**
-     * Сейчас на сайте: «marketing@lh47arch.com»
-     */
-    email1?: string | null;
-    /**
-     * Сейчас на сайте: «marketing@instylehome.md»
-     */
-    email2?: string | null;
-    /**
-     * Сейчас на сайте: «(+373) 68 199 951»
-     */
-    phone1?: string | null;
-    /**
-     * Сейчас на сайте: «InStyle Home»
-     */
-    phone1Label?: string | null;
-    /**
-     * Сейчас на сайте: «(+373) 68 059 311»
-     */
-    phone2?: string | null;
-    /**
-     * Сейчас на сайте: «LH47»
-     */
-    phone2Label?: string | null;
-    /**
-     * Полный адрес, https://… Пустое поле — иконки нет.
-     */
-    instagram?: string | null;
-    /**
-     * Пустое поле — иконки нет.
-     */
-    facebook?: string | null;
-    /**
-     * Пустое поле — иконки нет.
-     */
-    linkedin?: string | null;
-  };
-  footer?: {
-    /**
-     * Сейчас на сайте: «Люди / Идеи / Пространства»
-     */
-    tagline?: string | null;
-    /**
-     * Сейчас на сайте: «Почта»
-     */
-    emailLabel?: string | null;
-    /**
-     * Сейчас на сайте: «Телефон»
-     */
-    phoneLabel?: string | null;
-    /**
-     * Сейчас на сайте: «Основатели»
-     */
-    founders?: string | null;
-    /**
-     * Сейчас на сайте: «Политика данных»
-     */
-    privacy?: string | null;
-    /**
-     * Сейчас на сайте: «© 2026 ARCH MAKERS»
-     */
-    copyright?: string | null;
-  };
-  forms?: {
-    /**
-     * Сейчас на сайте: «Заявка отправлена»
-     */
-    sent?: string | null;
-    /**
-     * Сейчас на сайте: «Имя и фамилия»
-     */
-    fullName?: string | null;
-    /**
-     * Сейчас на сайте: «Название компании»
-     */
-    companyName?: string | null;
-    /**
-     * Сейчас на сайте: «Контактное лицо»
-     */
-    contactPerson?: string | null;
-    /**
-     * Сейчас на сайте: «Телефон»
-     */
-    phone?: string | null;
-    /**
-     * Сейчас на сайте: «E-mail»
-     */
-    email?: string | null;
-    /**
-     * Сейчас на сайте: «Партнёр»
-     */
-    partner?: string | null;
-    /**
-     * Сейчас на сайте: «Отправить заявку»
-     */
-    send?: string | null;
-    /**
-     * Сейчас на сайте: «Отправляя заявку, вы соглашаетесь с»
-     */
-    consent?: string | null;
-    /**
-     * Сейчас на сайте: «политикой обработки данных»
-     */
-    consentLink?: string | null;
-    /**
-     * Сейчас на сайте: «Отправляем…»
-     */
-    sending?: string | null;
-    /**
-     * Сейчас на сайте: «Не получилось отправить. Попробуйте ещё раз или напишите на marketing@lh47arch.com.»
-     */
-    error?: string | null;
-  };
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * Страница future-arch.md. Пустое поле = остаётся текст, который стоит на сайте сейчас.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "page-home".
- */
-export interface PageHome {
+export interface Home {
   id: number;
   hero?: {
-    /**
-     * Сейчас на сайте: «Профессиональное сообщество»
-     */
-    eyebrow?: string | null;
-    /**
-     * Сейчас на сайте: «Кишинёв · 2026»
-     */
-    place?: string | null;
-    /**
-     * Сейчас на сайте: «Сообщество архитекторов, дизайнеров и представителей индустрий Молдовы. Объединяем людей д…»
-     */
-    lead?: string | null;
-    /**
-     * Сейчас на сайте: «Стать резидентом»
-     */
-    beResident?: string | null;
-    /**
-     * Сейчас на сайте: «Стать партнёром»
-     */
-    bePartner?: string | null;
-    /**
-     * Сейчас на сайте: «Люди»
-     */
-    word1?: string | null;
-    /**
-     * Сейчас на сайте: «Идеи»
-     */
-    word2?: string | null;
-    /**
-     * Сейчас на сайте: «Пространства»
-     */
-    word3?: string | null;
-    /**
-     * Сейчас на сайте: «Вступить»
-     */
-    cta?: string | null;
-    /**
-     * Сейчас на сайте: «Вступить в сообщество»
-     */
-    ctaMenu?: string | null;
-    /**
-     * Сейчас на сайте: «Иллюстрация: площадь с цветными объёмами»
-     */
-    alt?: string | null;
+    eyebrow?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    place?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    lead?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    beResident?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    bePartner?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    word1?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    word2?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    word3?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    cta?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    ctaMenu?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
   };
   mission?: {
-    /**
-     * Сейчас на сайте: «01 / Миссия»
-     */
-    label?: string | null;
-    /**
-     * Сейчас на сайте: «Сильные проекты создаются вместе»
-     */
-    title?: string | null;
-    /**
-     * Сейчас на сайте: «Миссия сообщества — объединять профессионалов, чтобы вместе создавать более сильные проект…»
-     */
-    text?: string | null;
-    /**
-     * Пустой список — на сайте стоят тексты по умолчанию. Строка N заменяет N-й пункт, пустое поле в строке оставляет исходный текст. Сейчас на сайте (RU):
-     * 1. Диалог — Разные взгляды делают профессиональную среду сильнее.
-     * 2. Опыт — Опыт становится ценнее, когда им делятся.
-     * 3. Сотрудничество — Сильные идеи рождаются на пересечении людей и компетенций.
-     * 4. Ответственность — Архитектура и дизайн формируют среду, в которой живут люди.
-     */
+    label?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    title?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    text?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
     values?:
       | {
-          title?: string | null;
-          text?: string | null;
+          title?: {
+            ru?: string | null;
+            ro?: string | null;
+            en?: string | null;
+          };
+          text?: {
+            ru?: string | null;
+            ro?: string | null;
+            en?: string | null;
+          };
           id?: string | null;
         }[]
       | null;
   };
   who?: {
-    /**
-     * Сейчас на сайте: «02 / Состав»
-     */
-    label?: string | null;
-    /**
-     * Сейчас на сайте: «Кто внутри сообщества»
-     */
-    title?: string | null;
-    /**
-     * Сейчас на сайте: «Два формата участия»
-     */
-    note?: string | null;
-    /**
-     * Сейчас на сайте: «Резиденты»
-     */
-    residents?: string | null;
-    /**
-     * Сейчас на сайте: «По заявке»
-     */
-    residentsTerm?: string | null;
-    /**
-     * Сейчас на сайте: «Архитекторы и дизайнеры»
-     */
-    residentsTitle?: string | null;
-    /**
-     * Пустой список — на сайте стоят тексты по умолчанию. Строка N заменяет N-й пункт, пустое поле в строке оставляет исходный текст. Сейчас на сайте (RU):
-     * 1. Профессиональная среда и обмен опытом
-     * 2. Новые заказчики и партнёры
-     * 3. Доступ к материалам и производствам
-     * 4. Возможность представить свои проекты
-     * 5. Закрытые встречи, поездки и публикации
-     */
+    label?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    title?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    note?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    residents?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    residentsTerm?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    residentsTitle?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
     perks?:
       | {
-          text?: string | null;
+          text?: {
+            ru?: string | null;
+            ro?: string | null;
+            en?: string | null;
+          };
           id?: string | null;
         }[]
       | null;
-    /**
-     * Сейчас на сайте: «Стать резидентом →»
-     */
-    residentsLink?: string | null;
-    /**
-     * Сейчас на сайте: «Руки, архитектурная книга, чертежи»
-     */
-    residentsAlt?: string | null;
-    /**
-     * Сейчас на сайте: «Партнёры»
-     */
-    partners?: string | null;
-    /**
-     * Сейчас на сайте: «По договорённости»
-     */
-    partnersTerm?: string | null;
-    /**
-     * Сейчас на сайте: «Производители, поставщики и представители брендов»
-     */
-    partnersTitle?: string | null;
-    /**
-     * Сейчас на сайте: «Партнёры и представители индустрии, которые помогают идеям расти: знакомят с материалами и…»
-     */
-    partnersText?: string | null;
-    /**
-     * Сейчас на сайте: «Стать партнёром →»
-     */
-    partnersLink?: string | null;
-    /**
-     * Сейчас на сайте: «Руки, образцы материалов»
-     */
-    partnersAlt?: string | null;
+    residentsLink?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    partners?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    partnersTerm?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    partnersTitle?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    partnersText?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    partnersLink?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
   };
   formats?: {
-    /**
-     * Сейчас на сайте: «03 / Инструменты»
-     */
-    label?: string | null;
-    /**
-     * Сейчас на сайте: «Форматы взаимодействия»
-     */
-    title?: string | null;
-    /**
-     * Пустой список — на сайте стоят тексты по умолчанию. Строка N заменяет N-й пункт, пустое поле в строке оставляет исходный текст. Сейчас на сайте (RU):
-     * 1. ARCH MAKERS Forum — Главное ежегодное событие сообщества
-     * 2. ArchiMinds — Ежемесячные образовательные встречи с экспертами
-     * 3. Партнёрская программа — Специальные условия от производителей
-     * 4. База специалистов — Закрытая база контактов и рекомендаций
-     * 5. Премии — Признание лучших проектов и профессионалов
-     * 6. Журнал — Публикации в ежегодном издании сообщества
-     * 7. Подкасты — Интервью и разборы проектов с резидентами
-     * 8. Профессиональные поездки — Выставки, биеннале, фабрики и архитектурные объекты
-     * 9. Закрытые презентации — Новые материалы и технологии раньше, чем они выйдут на рынок
-     */
+    label?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    title?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
     items?:
       | {
-          title?: string | null;
-          text?: string | null;
+          title?: {
+            ru?: string | null;
+            ro?: string | null;
+            en?: string | null;
+          };
+          text?: {
+            ru?: string | null;
+            ro?: string | null;
+            en?: string | null;
+          };
           id?: string | null;
         }[]
       | null;
   };
   join?: {
-    /**
-     * Сейчас на сайте: «04 / Участие»
-     */
-    label?: string | null;
-    /**
-     * Сейчас на сайте: «Вступление в сообщество»
-     */
-    title?: string | null;
-    /**
-     * Сейчас на сайте: «Вступление — по заявке. Выберите формат участия и заполните короткую анкету. Мы свяжемся с…»
-     */
-    text?: string | null;
-    /**
-     * Сейчас на сайте: «Резидент»
-     */
-    resident?: string | null;
-    /**
-     * Сейчас на сайте: «Производители и бренды»
-     */
-    partnersShort?: string | null;
-    /**
-     * Сейчас на сайте: «Работаете на себя или в компании?»
-     */
-    empQuestion?: string | null;
-    /**
-     * Сейчас на сайте: «Работаю на себя»
-     */
-    empSelf?: string | null;
-    /**
-     * Сейчас на сайте: «Работаю в компании»
-     */
-    empCompany?: string | null;
-    /**
-     * Сейчас на сайте: «В какой компании»
-     */
-    whichCompany?: string | null;
-    /**
-     * Сейчас на сайте: «Название студии или бренда (если есть)»
-     */
-    studioName?: string | null;
-    /**
-     * Сейчас на сайте: «Необязательно»
-     */
-    optional?: string | null;
-    /**
-     * Сейчас на сайте: «Профессия»
-     */
-    profession?: string | null;
-    /**
-     * Сейчас на сайте: «Архитектор, дизайнер интерьера…»
-     */
-    professionPh?: string | null;
-    /**
-     * Сейчас на сайте: «Направление деятельности»
-     */
-    field?: string | null;
-    /**
-     * Сейчас на сайте: «Сайт»
-     */
-    site?: string | null;
-    /**
-     * Сейчас на сайте: «Отправить заявку партнёра»
-     */
-    sendPartner?: string | null;
-    /**
-     * Сейчас на сайте: «Ответ придёт на указанную почту после рассмотрения.»
-     */
-    sentText?: string | null;
+    label?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    title?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    text?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    resident?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    partnersShort?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    empQuestion?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    empSelf?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    empCompany?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    whichCompany?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    studioName?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    optional?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    profession?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    professionPh?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    field?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    site?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    sendPartner?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    sentText?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
   };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
 /**
- * Страница future-arch.md/forum. Дата, таймер и спикеры — в разделе «Настройки → Форум». Пустое поле = остаётся текст, который стоит на сайте сейчас.
+ * Дата, спикеры и все тексты страницы форума.
  *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "page-forum".
+ * via the `definition` "forum".
  */
-export interface PageForum {
-  id: number;
-  hero?: {
-    /**
-     * Сейчас на сайте: «9 декабря 2026 · Кишинёв, Range Rover Moldova»
-     */
-    datePlace?: string | null;
-    /**
-     * Сейчас на сайте: «Участие по отбору»
-     */
-    selection?: string | null;
-    /**
-     * Сейчас на сайте: «Закрытая встреча тех, кто определяет будущее недвижимости Молдовы»
-     */
-    lead?: string | null;
-    /**
-     * Сейчас на сайте: «Более 250 девелоперов, инвесторов, архитекторов, производителей и представителей города об…»
-     */
-    text?: string | null;
-    /**
-     * Сейчас на сайте: «Подать заявку»
-     */
-    cta?: string | null;
-    /**
-     * Сейчас на сайте: «Подать заявку на участие»
-     */
-    ctaMenu?: string | null;
-    /**
-     * Сейчас на сайте: «Предложение для партнёров»
-     */
-    partnerOffer?: string | null;
-    /**
-     * Сейчас на сайте: «дней»
-     */
-    days?: string | null;
-    /**
-     * Сейчас на сайте: «часов»
-     */
-    hours?: string | null;
-    /**
-     * Сейчас на сайте: «минут»
-     */
-    minutes?: string | null;
-    /**
-     * Сейчас на сайте: «секунд»
-     */
-    seconds?: string | null;
-    /**
-     * Сейчас на сайте: «Иллюстрация: навес и площадь»
-     */
-    alt?: string | null;
-  };
-  chain?: {
-    /**
-     * Сейчас на сайте: «Цепочка стоимости»
-     */
-    label?: string | null;
-    /**
-     * Сейчас на сайте: «В одном зале — все, кто влияет на результат проекта»
-     */
-    title?: string | null;
-    /**
-     * Сейчас на сайте: «От выбора земли и финансирования до продаж и управления готовым объектом. Форум помогает у…»
-     */
-    text?: string | null;
-    /**
-     * Пустой список — на сайте стоят тексты по умолчанию. Строка N заменяет N-й пункт, пустое поле в строке оставляет исходный текст. Сейчас на сайте (RU):
-     * 1. Земля и развитие города
-     * 2. Инвестиции и финансирование
-     * 3. Концепция и архитектура
-     * 4. Строительство и технологии
-     * 5. Маркетинг и продажи
-     * 6. Управление и эксплуатация
-     */
-    stages?:
-      | {
-          title?: string | null;
-          id?: string | null;
-        }[]
-      | null;
-  };
-  count?: {
-    /**
-     * Сейчас на сайте: «250»
-     */
-    number?: string | null;
-    /**
-     * Сейчас на сайте: «участников, которые формируют рынок недвижимости Молдовы»
-     */
-    text?: string | null;
-    /**
-     * Сейчас на сайте: «Фото форума»
-     */
-    alt?: string | null;
-  };
-  topics?: {
-    /**
-     * Сейчас на сайте: «Темы форума»
-     */
-    title?: string | null;
-    /**
-     * Пустой список — на сайте стоят тексты по умолчанию. Строка N заменяет N-й пункт, пустое поле в строке оставляет исходный текст. Сейчас на сайте (RU):
-     * 1. Ценность — Какие архитектурные решения повышают привлекательность и коммерческий результат проекта — За что покупатель готов платить, какие решения помогают выделить объект среди конкурентов и как заложить эту ценность на этапе концепции.
-     * 2. Опыт — Решения международных девелоперов, которые можно применять в Молдове — Реализованные проекты, технологии и стандарты жилого девелопмента. Что уже работает на других рынках и что можно адаптировать к местным условиям.
-     * 3. Город — Кишинёв 2035: где появятся новые точки роста — Территории будущей застройки, транспорт, инфраструктура и новые центры притяжения. Как развитие города может повлиять на спрос и стоимость земли.
-     * 4. Спрос — Какие форматы недвижимости формируют новый спрос — Wellness, промышленная и коммерческая недвижимость. Практический разговор о направлениях, которые открывают новые возможности для инвесторов и девелоперов.
-     */
-    items?:
-      | {
-          tag?: string | null;
-          title?: string | null;
-          text?: string | null;
-          id?: string | null;
-        }[]
-      | null;
-    /**
-     * Сейчас на сайте: «Спикеры»
-     */
-    speakers?: string | null;
-  };
-  program?: {
-    /**
-     * Сейчас на сайте: «Программа»
-     */
-    title1?: string | null;
-    /**
-     * Сейчас на сайте: «дня»
-     */
-    title2?: string | null;
-    /**
-     * Пустой список — на сайте стоят тексты по умолчанию. Строка N заменяет N-й пункт, пустое поле в строке оставляет исходный текст. Сейчас на сайте (RU):
-     * 1. Регистрация и welcome-кофе
-     * 2. Открытие
-     * 3. Первая сессия
-     * 4. Обед и нетворкинг
-     * 5. Вторая сессия
-     * 6. Премия и студенческий конкурс
-     * 7. Фуршет
-     * 8. Закрытый ужин
-     */
-    items?:
-      | {
-          title?: string | null;
-          id?: string | null;
-        }[]
-      | null;
-    /**
-     * Сейчас на сайте: «Человек у оранжевой стены»
-     */
-    alt?: string | null;
-  };
-  partners?: {
-    /**
-     * Сейчас на сайте: «Партнёрам»
-     */
-    label?: string | null;
-    /**
-     * Сейчас на сайте: «Возможности для партнёров»
-     */
-    title?: string | null;
-    /**
-     * Сейчас на сайте: «Для партнёров это возможность представить компанию ключевым игрокам рынка, выстроить новые…»
-     */
-    text?: string | null;
-    /**
-     * Сейчас на сайте: «Прямой контакт с профессиональным сообществом»
-     */
-    benefit1?: string | null;
-    /**
-     * Сейчас на сайте: «Присутствие на форуме, в ежегодном журнале сообщества и в медиаканалах»
-     */
-    benefit2?: string | null;
-    /**
-     * Сейчас на сайте: «До»
-     */
-    before?: string | null;
-    /**
-     * Сейчас на сайте: «Во время»
-     */
-    during?: string | null;
-    /**
-     * Сейчас на сайте: «После мероприятия»
-     */
-    after?: string | null;
-    /**
-     * Сейчас на сайте: «Получить предложение»
-     */
-    cta?: string | null;
-    /**
-     * Сейчас на сайте: «Фасад: бетонные ламели и небо»
-     */
-    alt?: string | null;
-  };
-  apply?: {
-    /**
-     * Сейчас на сайте: «Заявка на участие в форуме»
-     */
-    title?: string | null;
-    /**
-     * Сейчас на сайте: «9 декабря 2026»
-     */
-    date?: string | null;
-    /**
-     * Сейчас на сайте: «Кишинёв, Range Rover Moldova»
-     */
-    place?: string | null;
-    /**
-     * Сейчас на сайте: «Участник»
-     */
-    guest?: string | null;
-    /**
-     * Сейчас на сайте: «Компания и должность»
-     */
-    companyRole?: string | null;
-    /**
-     * Сейчас на сайте: «Ответ придёт на указанную почту. Партнёрам в ответном письме отправим презентацию.»
-     */
-    sentText?: string | null;
-  };
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * Страница future-arch.md/award. Номинации, дедлайн и флаг «приём открыт» — в разделе «Настройки → Премия». Пустое поле = остаётся текст, который стоит на сайте сейчас.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "page-award".
- */
-export interface PageAward {
-  id: number;
-  hero?: {
-    /**
-     * Сейчас на сайте: «Архитектура и дизайн»
-     */
-    eyebrow?: string | null;
-    /**
-     * Сейчас на сайте: «Приём заявок открыт»
-     */
-    open?: string | null;
-    /**
-     * Сейчас на сайте: «Представьте свой проект в одной из четырёх номинаций. Принимаем реализованные проекты и ко…»
-     */
-    lead?: string | null;
-    /**
-     * Сейчас на сайте: «Заявки до»
-     */
-    deadlineLabel?: string | null;
-    /**
-     * Сейчас на сайте: «Осталось {days} дн.»
-     */
-    daysLeft?: string | null;
-    /**
-     * Сейчас на сайте: «Победители»
-     */
-    winners?: string | null;
-    /**
-     * Сейчас на сайте: «Победителей объявят на сцене ARCH MAKERS Forum»
-     */
-    winnersText?: string | null;
-    /**
-     * Сейчас на сайте: «Выберите, где участвовать»
-     */
-    choose?: string | null;
-    /**
-     * Сейчас на сайте: «Премия»
-     */
-    award?: string | null;
-    /**
-     * Сейчас на сайте: «Для архитекторов и дизайнеров: 4 номинации»
-     */
-    awardNote?: string | null;
-    /**
-     * Сейчас на сайте: «Студенческий конкурс»
-     */
-    student?: string | null;
-    /**
-     * Сейчас на сайте: «Для студентов: проект общественного пространства»
-     */
-    studentNote?: string | null;
-    /**
-     * Сейчас на сайте: «Подать проект»
-     */
-    cta?: string | null;
-    /**
-     * Сейчас на сайте: «Иллюстрация: жёлтый портал на подиуме»
-     */
-    alt?: string | null;
-  };
-  nominations?: {
-    /**
-     * Сейчас на сайте: «01 / Номинации»
-     */
-    label?: string | null;
-    /**
-     * Сейчас на сайте: «Четыре номинации»
-     */
-    title?: string | null;
-    /**
-     * Сейчас на сайте: «Выберите номинацию — форма заявки откроется с ней.»
-     */
-    text?: string | null;
-  };
-  prize?: {
-    /**
-     * Сейчас на сайте: «02 / Награда»
-     */
-    label?: string | null;
-    /**
-     * Сейчас на сайте: «Что получает победитель»
-     */
-    title?: string | null;
-    /**
-     * Пустой список — на сайте стоят тексты по умолчанию. Строка N заменяет N-й пункт, пустое поле в строке оставляет исходный текст. Сейчас на сайте (RU):
-     * 1. Вручение награды на сцене ARCH MAKERS Forum 9 декабря — с представлением проекта и его авторов
-     * 2. Публикация проекта в ежегодном журнале ARCH MAKERS
-     * 3. Бесплатное членство в сообществе ARCH MAKERS на 2027 год
-     * 4. Подарки от партнёров сообщества и форума
-     */
-    items?:
-      | {
-          text?: string | null;
-          id?: string | null;
-        }[]
-      | null;
-  };
-  form?: {
-    /**
-     * Сейчас на сайте: «03 / Заявка»
-     */
-    label?: string | null;
-    /**
-     * Сейчас на сайте: «Заявка на премию»
-     */
-    title?: string | null;
-    /**
-     * Сейчас на сайте: «Номинация»
-     */
-    nomination?: string | null;
-    /**
-     * Сейчас на сайте: «Выберите номинацию»
-     */
-    chooseNom?: string | null;
-    /**
-     * Сейчас на сайте: «Название проекта»
-     */
-    project?: string | null;
-    /**
-     * Сейчас на сайте: «Авторы проекта»
-     */
-    authors?: string | null;
-    /**
-     * Сейчас на сайте: «Имя Фамилия»
-     */
-    authorsPh?: string | null;
-    /**
-     * Сейчас на сайте: «Компания»
-     */
-    company?: string | null;
-    /**
-     * Сейчас на сайте: «Бюро или студия»
-     */
-    companyPh?: string | null;
-    /**
-     * Сейчас на сайте: «Местоположение»
-     */
-    location?: string | null;
-    /**
-     * Сейчас на сайте: «Кишинёв»
-     */
-    locationPh?: string | null;
-    /**
-     * Сейчас на сайте: «Площадь»
-     */
-    area?: string | null;
-    /**
-     * Сейчас на сайте: «240 м²»
-     */
-    areaPh?: string | null;
-    /**
-     * Сейчас на сайте: «Год реализации»
-     */
-    year?: string | null;
-    /**
-     * Сейчас на сайте: «2025 или концепция»
-     */
-    yearPh?: string | null;
-    /**
-     * Сейчас на сайте: «Описание проекта»
-     */
-    desc?: string | null;
-    /**
-     * Сейчас на сайте: «Идея, задача, ключевые решения»
-     */
-    descPh?: string | null;
-    /**
-     * Сейчас на сайте: «Прикрепить файл»
-     */
-    attach?: string | null;
-    /**
-     * Сейчас на сайте: «PDF, JPG, PNG или ZIP, до 20 МБ каждый»
-     */
-    filesHint?: string | null;
-    /**
-     * Сейчас на сайте: «Отправить заявку →»
-     */
-    send?: string | null;
-    /**
-     * Сейчас на сайте: «Номинация: {nom}. Ответим после проверки материалов. Победителей объявят 9 декабря на сцен…»
-     */
-    sentText?: string | null;
-    /**
-     * Сейчас на сайте: «Подать ещё одну номинацию →»
-     */
-    again?: string | null;
-  };
-  student?: {
-    /**
-     * Сейчас на сайте: «Для студентов»
-     */
-    label?: string | null;
-    /**
-     * Сейчас на сайте: «Студенческий»
-     */
-    title1?: string | null;
-    /**
-     * Сейчас на сайте: «конкурс»
-     */
-    title2?: string | null;
-    /**
-     * Сейчас на сайте: «Как могут измениться общественные пространства нашего города?»
-     */
-    question?: string | null;
-    /**
-     * Сейчас на сайте: «Предложите решение для места, где люди встречаются и отдыхают: площади, парка, улицы или н…»
-     */
-    text?: string | null;
-    /**
-     * Сейчас на сайте: «Автор проекта»
-     */
-    author?: string | null;
-    /**
-     * Сейчас на сайте: «Учебное заведение»
-     */
-    school?: string | null;
-    /**
-     * Сейчас на сайте: «Факультет»
-     */
-    faculty?: string | null;
-    /**
-     * Сейчас на сайте: «Год начала учёбы»
-     */
-    studyYear?: string | null;
-    /**
-     * Сейчас на сайте: «Парк, улица, площадь»
-     */
-    locationPh?: string | null;
-    /**
-     * Сейчас на сайте: «1 200 м²»
-     */
-    areaPh?: string | null;
-    /**
-     * Сейчас на сайте: «Подать работу →»
-     */
-    send?: string | null;
-    /**
-     * Сейчас на сайте: «Работа отправлена. Мы свяжемся с вами по телефону. Награждение — 9 декабря на форуме.»
-     */
-    sentText?: string | null;
-    /**
-     * Сейчас на сайте: «Иллюстрация: общественное пространство»
-     */
-    alt?: string | null;
-  };
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * Дата форума и обратный отсчёт на всех страницах.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "forum-settings".
- */
-export interface ForumSetting {
+export interface Forum {
   id: number;
   /**
-   * От неё считается таймер обратного отсчёта и микроразметка события для Google.
+   * От неё считается таймер на странице.
    */
   forumDate?: string | null;
   countdownVisible?: boolean | null;
   /**
-   * В дизайне ARCH MAKERS не используется.
+   * Порядок в списке = порядок на сайте (перетаскивайте за ⠿). Фото Волошина, Разлоги, Мырзы и Ионицэ уже встроены — загружать не нужно. Новому спикеру без фото сайт покажет инициалы.
    */
-  speakerSlots?: number | null;
   speakers?:
     | {
+        name: {
+          ru: string;
+          ro?: string | null;
+          en?: string | null;
+        };
+        role?: {
+          ru?: string | null;
+          ro?: string | null;
+          en?: string | null;
+        };
         /**
-         * В версиях RO и EN можно поставить латиницу.
-         */
-        name: string;
-        /**
-         * Показывается под именем, только если поле «Кто он» пустое.
-         */
-        company?: string | null;
-        /**
-         * Строка под именем: должность и чем известен. Например: «Основатель Simpals, 999.md и Point.md».
-         */
-        role?: string | null;
-        /**
-         * Вертикальный кадр 4:5, от 800 px по короткой стороне. Для Волошина, Разлоги, Мырзы и Ионицэ портреты уже встроены в сайт — загружать не нужно. У остальных без фото в карточке стоят инициалы.
+         * Вертикальный кадр 4:5, от 800 px в ширину. Чёрно-белым сайт сделает сам.
          */
         photo?: (number | null) | Media;
         id?: string | null;
       }[]
     | null;
+  hero?: {
+    datePlace?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    selection?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    lead?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    text?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    cta?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    ctaMenu?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    partnerOffer?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    days?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    hours?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    minutes?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    seconds?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+  };
+  chain?: {
+    label?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    title?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    text?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    stages?:
+      | {
+          title?: {
+            ru?: string | null;
+            ro?: string | null;
+            en?: string | null;
+          };
+          id?: string | null;
+        }[]
+      | null;
+  };
+  count?: {
+    number?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    text?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+  };
+  topics?: {
+    title?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    items?:
+      | {
+          tag?: {
+            ru?: string | null;
+            ro?: string | null;
+            en?: string | null;
+          };
+          title?: {
+            ru?: string | null;
+            ro?: string | null;
+            en?: string | null;
+          };
+          text?: {
+            ru?: string | null;
+            ro?: string | null;
+            en?: string | null;
+          };
+          id?: string | null;
+        }[]
+      | null;
+    speakers?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+  };
+  program?: {
+    title1?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    title2?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    items?:
+      | {
+          title?: {
+            ru?: string | null;
+            ro?: string | null;
+            en?: string | null;
+          };
+          id?: string | null;
+        }[]
+      | null;
+  };
+  partners?: {
+    label?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    title?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    text?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    benefit1?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    benefit2?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    before?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    during?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    after?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    cta?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+  };
+  apply?: {
+    title?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    date?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    place?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    guest?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    companyRole?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    sentText?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
 /**
- * Дедлайн приёма заявок, номинации и жюри. Номинации сразу попадают и в список на странице, и в выпадающий список формы.
+ * Приём заявок, номинации и все тексты страницы премии.
  *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "award-settings".
+ * via the `definition` "award".
  */
-export interface AwardSetting {
+export interface Award {
   id: number;
   /**
-   * Как дата выглядит в тексте: «Заявки до 20 ноября».
-   */
-  deadlineLabel?: string | null;
-  /**
-   * От неё считается таймер.
+   * Дата в первом экране и счётчик «осталось N дней».
    */
   deadlineDate?: string | null;
-  countdownVisible?: boolean | null;
-  /**
-   * Снимите галочку, когда приём закрыт: форма заменится сообщением ниже.
-   */
   formOpen?: boolean | null;
-  formClosedText?: string | null;
-  nominations?:
-    | {
-        /**
-         * Двузначный: 01, 02…
-         */
-        no?: string | null;
-        title: string;
-        /**
-         * Надпись над названием в карточке номинации: «Архитектура» или «Интерьер».
-         */
-        hint?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  studentNominations?:
-    | {
-        /**
-         * Двузначный: 01, 02…
-         */
-        no?: string | null;
-        title: string;
-        /**
-         * Надпись над названием в карточке номинации: «Архитектура» или «Интерьер».
-         */
-        hint?: string | null;
-        id?: string | null;
-      }[]
-    | null;
+  formClosedText?: {
+    ru?: string | null;
+    ro?: string | null;
+    en?: string | null;
+  };
   /**
-   * В дизайне ARCH MAKERS блока жюри нет.
+   * Появляются и карточками на странице, и в выпадающем списке формы. Номер ставится сам.
    */
-  juryVisible?: boolean | null;
-  jury?:
+  nominationList?:
     | {
-        no?: string | null;
-        name: string;
-        role?: string | null;
+        kind?: {
+          ru?: string | null;
+          ro?: string | null;
+          en?: string | null;
+        };
+        title: {
+          ru: string;
+          ro?: string | null;
+          en?: string | null;
+        };
         id?: string | null;
       }[]
     | null;
+  hero?: {
+    eyebrow?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    open?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    lead?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    deadlineLabel?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    daysLeft?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    winners?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    winnersText?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    choose?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    award?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    awardNote?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    student?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    studentNote?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    cta?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+  };
+  nominations?: {
+    label?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    title?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    text?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+  };
+  prize?: {
+    label?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    title?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    items?:
+      | {
+          text?: {
+            ru?: string | null;
+            ro?: string | null;
+            en?: string | null;
+          };
+          id?: string | null;
+        }[]
+      | null;
+  };
+  form?: {
+    label?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    title?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    nomination?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    chooseNom?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    project?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    authors?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    authorsPh?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    company?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    companyPh?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    location?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    locationPh?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    area?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    areaPh?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    year?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    yearPh?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    desc?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    descPh?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    attach?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    filesHint?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    send?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    sentText?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    again?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+  };
+  student?: {
+    label?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    title1?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    title2?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    question?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    text?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    author?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    school?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    faculty?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    studyYear?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    locationPh?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    areaPh?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    send?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    sentText?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
 /**
- * Title и description для поиска и соцсетей. Пустые поля — остаются значения по умолчанию, зашитые в коде.
+ * То, что одинаково на всех страницах: пункты меню, контакты в подвале, подписи в формах.
  *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "seo".
+ * via the `definition` "common".
  */
-export interface Seo {
+export interface Common {
   id: number;
-  /**
-   * До 60 знаков. Пусто — берётся заголовок по умолчанию.
-   */
-  homeTitle?: string | null;
-  /**
-   * До 160 знаков. Одно предложение с пользой и конкретикой.
-   */
-  homeDescription?: string | null;
-  /**
-   * Что видно, когда ссылку кидают в чат. Пусто — общая og.png.
-   */
-  homeImage?: (number | null) | Media;
-  /**
-   * До 60 знаков. Пусто — берётся заголовок по умолчанию.
-   */
-  forumTitle?: string | null;
-  /**
-   * До 160 знаков. Одно предложение с пользой и конкретикой.
-   */
-  forumDescription?: string | null;
-  /**
-   * Что видно, когда ссылку кидают в чат. Пусто — общая og.png.
-   */
-  forumImage?: (number | null) | Media;
-  /**
-   * До 60 знаков. Пусто — берётся заголовок по умолчанию.
-   */
-  awardTitle?: string | null;
-  /**
-   * До 160 знаков. Одно предложение с пользой и конкретикой.
-   */
-  awardDescription?: string | null;
-  /**
-   * Что видно, когда ссылку кидают в чат. Пусто — общая og.png.
-   */
-  awardImage?: (number | null) | Media;
+  nav?: {
+    community?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    forum?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    award?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    contacts?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    menu?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    close?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+  };
+  contacts?: {
+    email1?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    email2?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    phone1?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    phone1Label?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    phone2?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    phone2Label?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    /**
+     * Полный адрес, https://… Пустое поле — иконки нет.
+     */
+    instagram?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    /**
+     * Пустое поле — иконки нет.
+     */
+    facebook?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    /**
+     * Пустое поле — иконки нет.
+     */
+    linkedin?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+  };
+  footer?: {
+    tagline?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    emailLabel?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    phoneLabel?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    founders?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    privacy?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    copyright?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+  };
+  forms?: {
+    sent?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    fullName?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    companyName?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    contactPerson?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    phone?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    email?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    partner?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    send?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    consent?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    consentLink?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    sending?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    error?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
 /**
- * Идентификаторы вставляются в код всех страниц. Скрипты не грузятся, пока поле пустое, — сайт не тормозит зря.
+ * Куда приходят заявки, SEO и счётчики.
  *
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "analytics".
+ * via the `definition` "settings".
  */
-export interface Analytics {
-  id: number;
-  /**
-   * Снимите галочку, чтобы временно отключить всю аналитику.
-   */
-  enabled?: boolean | null;
-  /**
-   * Контейнер GTM. Если он заполнен, GA4 удобнее подключать внутри GTM, а поле ниже оставить пустым.
-   */
-  gtmId?: string | null;
-  /**
-   * Прямое подключение gtag.js — если GTM не используется.
-   */
-  ga4Id?: string | null;
-  /**
-   * Только значение content из мета-тега, без самого тега. Нужно один раз, чтобы подтвердить права на сайт.
-   */
-  searchConsoleToken?: string | null;
-  /**
-   * Необязательно.
-   */
-  yandexId?: string | null;
-  /**
-   * Необязательно — для рекламы в Instagram и Facebook.
-   */
-  metaPixelId?: string | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * Каждая отправленная форма сохраняется в разделе «Заявки» и дублируется письмом. Даже если почта не отправится, заявка не потеряется.
- *
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "mail".
- */
-export interface Mail {
+export interface Setting {
   id: number;
   /**
    * Несколько адресов — через запятую.
    */
-  to: string;
+  mailTo?: string | null;
   /**
-   * По нему удобно ставить фильтр в почте.
+   * По нему удобно настроить фильтр в почте.
    */
   subjectPrefix?: string | null;
   autoreply?: boolean | null;
-  autoreplySubject?: string | null;
+  autoreplySubject?: {
+    ru?: string | null;
+    ro?: string | null;
+    en?: string | null;
+  };
   /**
    * Обычный текст. Абзацы — пустой строкой.
    */
-  autoreplyBody?: string | null;
+  autoreplyBody?: {
+    ru?: string | null;
+    ro?: string | null;
+    en?: string | null;
+  };
+  seo?: {
+    home?: {
+      /**
+       * До 60 знаков. Пусто — стоит заголовок по умолчанию.
+       */
+      title?: {
+        ru?: string | null;
+        ro?: string | null;
+        en?: string | null;
+      };
+      /**
+       * До 160 знаков. Пусто — описание по умолчанию.
+       */
+      description?: {
+        ru?: string | null;
+        ro?: string | null;
+        en?: string | null;
+      };
+      /**
+       * Пусто — стоит картинка по умолчанию.
+       */
+      image?: (number | null) | Media;
+    };
+    forum?: {
+      /**
+       * До 60 знаков. Пусто — стоит заголовок по умолчанию.
+       */
+      title?: {
+        ru?: string | null;
+        ro?: string | null;
+        en?: string | null;
+      };
+      /**
+       * До 160 знаков. Пусто — описание по умолчанию.
+       */
+      description?: {
+        ru?: string | null;
+        ro?: string | null;
+        en?: string | null;
+      };
+      /**
+       * Пусто — стоит картинка по умолчанию.
+       */
+      image?: (number | null) | Media;
+    };
+    award?: {
+      /**
+       * До 60 знаков. Пусто — стоит заголовок по умолчанию.
+       */
+      title?: {
+        ru?: string | null;
+        ro?: string | null;
+        en?: string | null;
+      };
+      /**
+       * До 160 знаков. Пусто — описание по умолчанию.
+       */
+      description?: {
+        ru?: string | null;
+        ro?: string | null;
+        en?: string | null;
+      };
+      /**
+       * Пусто — стоит картинка по умолчанию.
+       */
+      image?: (number | null) | Media;
+    };
+  };
+  analyticsEnabled?: boolean | null;
+  gtmId?: string | null;
+  ga4Id?: string | null;
+  yandexId?: string | null;
+  metaPixelId?: string | null;
+  /**
+   * Только значение content из мета-тега.
+   */
+  searchConsoleToken?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "page-common_select".
+ * via the `definition` "home_select".
  */
-export interface PageCommonSelect<T extends boolean = true> {
-  nav?:
-    | T
-    | {
-        community?: T;
-        forum?: T;
-        award?: T;
-        contacts?: T;
-        menu?: T;
-        close?: T;
-      };
-  contacts?:
-    | T
-    | {
-        email1?: T;
-        email2?: T;
-        phone1?: T;
-        phone1Label?: T;
-        phone2?: T;
-        phone2Label?: T;
-        instagram?: T;
-        facebook?: T;
-        linkedin?: T;
-      };
-  footer?:
-    | T
-    | {
-        tagline?: T;
-        emailLabel?: T;
-        phoneLabel?: T;
-        founders?: T;
-        privacy?: T;
-        copyright?: T;
-      };
-  forms?:
-    | T
-    | {
-        sent?: T;
-        fullName?: T;
-        companyName?: T;
-        contactPerson?: T;
-        phone?: T;
-        email?: T;
-        partner?: T;
-        send?: T;
-        consent?: T;
-        consentLink?: T;
-        sending?: T;
-        error?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "page-home_select".
- */
-export interface PageHomeSelect<T extends boolean = true> {
+export interface HomeSelect<T extends boolean = true> {
   hero?:
     | T
     | {
-        eyebrow?: T;
-        place?: T;
-        lead?: T;
-        beResident?: T;
-        bePartner?: T;
-        word1?: T;
-        word2?: T;
-        word3?: T;
-        cta?: T;
-        ctaMenu?: T;
-        alt?: T;
+        eyebrow?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        place?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        lead?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        beResident?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        bePartner?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        word1?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        word2?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        word3?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        cta?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        ctaMenu?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
       };
   mission?:
     | T
     | {
-        label?: T;
-        title?: T;
-        text?: T;
+        label?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        title?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        text?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
         values?:
           | T
           | {
-              title?: T;
-              text?: T;
+              title?:
+                | T
+                | {
+                    ru?: T;
+                    ro?: T;
+                    en?: T;
+                  };
+              text?:
+                | T
+                | {
+                    ru?: T;
+                    ro?: T;
+                    en?: T;
+                  };
               id?: T;
             };
       };
   who?:
     | T
     | {
-        label?: T;
-        title?: T;
-        note?: T;
-        residents?: T;
-        residentsTerm?: T;
-        residentsTitle?: T;
+        label?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        title?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        note?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        residents?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        residentsTerm?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        residentsTitle?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
         perks?:
           | T
           | {
-              text?: T;
+              text?:
+                | T
+                | {
+                    ru?: T;
+                    ro?: T;
+                    en?: T;
+                  };
               id?: T;
             };
-        residentsLink?: T;
-        residentsAlt?: T;
-        partners?: T;
-        partnersTerm?: T;
-        partnersTitle?: T;
-        partnersText?: T;
-        partnersLink?: T;
-        partnersAlt?: T;
+        residentsLink?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        partners?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        partnersTerm?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        partnersTitle?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        partnersText?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        partnersLink?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
       };
   formats?:
     | T
     | {
-        label?: T;
-        title?: T;
+        label?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        title?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
         items?:
           | T
           | {
-              title?: T;
-              text?: T;
+              title?:
+                | T
+                | {
+                    ru?: T;
+                    ro?: T;
+                    en?: T;
+                  };
+              text?:
+                | T
+                | {
+                    ru?: T;
+                    ro?: T;
+                    en?: T;
+                  };
               id?: T;
             };
       };
   join?:
     | T
     | {
-        label?: T;
-        title?: T;
-        text?: T;
-        resident?: T;
-        partnersShort?: T;
-        empQuestion?: T;
-        empSelf?: T;
-        empCompany?: T;
-        whichCompany?: T;
-        studioName?: T;
-        optional?: T;
-        profession?: T;
-        professionPh?: T;
-        field?: T;
-        site?: T;
-        sendPartner?: T;
-        sentText?: T;
+        label?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        title?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        text?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        resident?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        partnersShort?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        empQuestion?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        empSelf?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        empCompany?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        whichCompany?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        studioName?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        optional?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        profession?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        professionPh?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        field?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        site?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        sendPartner?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        sentText?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1781,95 +2080,353 @@ export interface PageHomeSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "page-forum_select".
+ * via the `definition` "forum_select".
  */
-export interface PageForumSelect<T extends boolean = true> {
+export interface ForumSelect<T extends boolean = true> {
+  forumDate?: T;
+  countdownVisible?: T;
+  speakers?:
+    | T
+    | {
+        name?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        role?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        photo?: T;
+        id?: T;
+      };
   hero?:
     | T
     | {
-        datePlace?: T;
-        selection?: T;
-        lead?: T;
-        text?: T;
-        cta?: T;
-        ctaMenu?: T;
-        partnerOffer?: T;
-        days?: T;
-        hours?: T;
-        minutes?: T;
-        seconds?: T;
-        alt?: T;
+        datePlace?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        selection?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        lead?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        text?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        cta?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        ctaMenu?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        partnerOffer?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        days?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        hours?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        minutes?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        seconds?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
       };
   chain?:
     | T
     | {
-        label?: T;
-        title?: T;
-        text?: T;
+        label?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        title?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        text?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
         stages?:
           | T
           | {
-              title?: T;
+              title?:
+                | T
+                | {
+                    ru?: T;
+                    ro?: T;
+                    en?: T;
+                  };
               id?: T;
             };
       };
   count?:
     | T
     | {
-        number?: T;
-        text?: T;
-        alt?: T;
+        number?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        text?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
       };
   topics?:
     | T
     | {
-        title?: T;
+        title?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
         items?:
           | T
           | {
-              tag?: T;
-              title?: T;
-              text?: T;
+              tag?:
+                | T
+                | {
+                    ru?: T;
+                    ro?: T;
+                    en?: T;
+                  };
+              title?:
+                | T
+                | {
+                    ru?: T;
+                    ro?: T;
+                    en?: T;
+                  };
+              text?:
+                | T
+                | {
+                    ru?: T;
+                    ro?: T;
+                    en?: T;
+                  };
               id?: T;
             };
-        speakers?: T;
+        speakers?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
       };
   program?:
     | T
     | {
-        title1?: T;
-        title2?: T;
+        title1?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        title2?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
         items?:
           | T
           | {
-              title?: T;
+              title?:
+                | T
+                | {
+                    ru?: T;
+                    ro?: T;
+                    en?: T;
+                  };
               id?: T;
             };
-        alt?: T;
       };
   partners?:
     | T
     | {
-        label?: T;
-        title?: T;
-        text?: T;
-        benefit1?: T;
-        benefit2?: T;
-        before?: T;
-        during?: T;
-        after?: T;
-        cta?: T;
-        alt?: T;
+        label?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        title?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        text?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        benefit1?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        benefit2?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        before?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        during?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        after?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        cta?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
       };
   apply?:
     | T
     | {
-        title?: T;
-        date?: T;
-        place?: T;
-        guest?: T;
-        companyRole?: T;
-        sentText?: T;
+        title?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        date?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        place?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        guest?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        companyRole?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        sentText?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1877,89 +2434,439 @@ export interface PageForumSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "page-award_select".
+ * via the `definition` "award_select".
  */
-export interface PageAwardSelect<T extends boolean = true> {
+export interface AwardSelect<T extends boolean = true> {
+  deadlineDate?: T;
+  formOpen?: T;
+  formClosedText?:
+    | T
+    | {
+        ru?: T;
+        ro?: T;
+        en?: T;
+      };
+  nominationList?:
+    | T
+    | {
+        kind?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        title?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        id?: T;
+      };
   hero?:
     | T
     | {
-        eyebrow?: T;
-        open?: T;
-        lead?: T;
-        deadlineLabel?: T;
-        daysLeft?: T;
-        winners?: T;
-        winnersText?: T;
-        choose?: T;
-        award?: T;
-        awardNote?: T;
-        student?: T;
-        studentNote?: T;
-        cta?: T;
-        alt?: T;
+        eyebrow?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        open?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        lead?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        deadlineLabel?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        daysLeft?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        winners?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        winnersText?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        choose?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        award?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        awardNote?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        student?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        studentNote?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        cta?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
       };
   nominations?:
     | T
     | {
-        label?: T;
-        title?: T;
-        text?: T;
+        label?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        title?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        text?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
       };
   prize?:
     | T
     | {
-        label?: T;
-        title?: T;
+        label?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        title?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
         items?:
           | T
           | {
-              text?: T;
+              text?:
+                | T
+                | {
+                    ru?: T;
+                    ro?: T;
+                    en?: T;
+                  };
               id?: T;
             };
       };
   form?:
     | T
     | {
-        label?: T;
-        title?: T;
-        nomination?: T;
-        chooseNom?: T;
-        project?: T;
-        authors?: T;
-        authorsPh?: T;
-        company?: T;
-        companyPh?: T;
-        location?: T;
-        locationPh?: T;
-        area?: T;
-        areaPh?: T;
-        year?: T;
-        yearPh?: T;
-        desc?: T;
-        descPh?: T;
-        attach?: T;
-        filesHint?: T;
-        send?: T;
-        sentText?: T;
-        again?: T;
+        label?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        title?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        nomination?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        chooseNom?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        project?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        authors?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        authorsPh?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        company?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        companyPh?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        location?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        locationPh?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        area?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        areaPh?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        year?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        yearPh?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        desc?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        descPh?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        attach?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        filesHint?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        send?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        sentText?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        again?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
       };
   student?:
     | T
     | {
-        label?: T;
-        title1?: T;
-        title2?: T;
-        question?: T;
-        text?: T;
-        author?: T;
-        school?: T;
-        faculty?: T;
-        studyYear?: T;
-        locationPh?: T;
-        areaPh?: T;
-        send?: T;
-        sentText?: T;
-        alt?: T;
+        label?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        title1?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        title2?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        question?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        text?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        author?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        school?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        faculty?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        studyYear?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        locationPh?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        areaPh?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        send?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        sentText?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1967,59 +2874,255 @@ export interface PageAwardSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "forum-settings_select".
+ * via the `definition` "common_select".
  */
-export interface ForumSettingsSelect<T extends boolean = true> {
-  forumDate?: T;
-  countdownVisible?: T;
-  speakerSlots?: T;
-  speakers?:
+export interface CommonSelect<T extends boolean = true> {
+  nav?:
     | T
     | {
-        name?: T;
-        company?: T;
-        role?: T;
-        photo?: T;
-        id?: T;
+        community?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        forum?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        award?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        contacts?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        menu?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        close?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
       };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "award-settings_select".
- */
-export interface AwardSettingsSelect<T extends boolean = true> {
-  deadlineLabel?: T;
-  deadlineDate?: T;
-  countdownVisible?: T;
-  formOpen?: T;
-  formClosedText?: T;
-  nominations?:
+  contacts?:
     | T
     | {
-        no?: T;
-        title?: T;
-        hint?: T;
-        id?: T;
+        email1?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        email2?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        phone1?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        phone1Label?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        phone2?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        phone2Label?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        instagram?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        facebook?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        linkedin?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
       };
-  studentNominations?:
+  footer?:
     | T
     | {
-        no?: T;
-        title?: T;
-        hint?: T;
-        id?: T;
+        tagline?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        emailLabel?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        phoneLabel?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        founders?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        privacy?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        copyright?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
       };
-  juryVisible?: T;
-  jury?:
+  forms?:
     | T
     | {
-        no?: T;
-        name?: T;
-        role?: T;
-        id?: T;
+        sent?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        fullName?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        companyName?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        contactPerson?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        phone?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        email?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        partner?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        send?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        consent?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        consentLink?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        sending?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        error?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
@@ -2027,50 +3130,106 @@ export interface AwardSettingsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "seo_select".
+ * via the `definition` "settings_select".
  */
-export interface SeoSelect<T extends boolean = true> {
-  homeTitle?: T;
-  homeDescription?: T;
-  homeImage?: T;
-  forumTitle?: T;
-  forumDescription?: T;
-  forumImage?: T;
-  awardTitle?: T;
-  awardDescription?: T;
-  awardImage?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "analytics_select".
- */
-export interface AnalyticsSelect<T extends boolean = true> {
-  enabled?: T;
-  gtmId?: T;
-  ga4Id?: T;
-  searchConsoleToken?: T;
-  yandexId?: T;
-  metaPixelId?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "mail_select".
- */
-export interface MailSelect<T extends boolean = true> {
-  to?: T;
+export interface SettingsSelect<T extends boolean = true> {
+  mailTo?: T;
   subjectPrefix?: T;
   autoreply?: T;
-  autoreplySubject?: T;
-  autoreplyBody?: T;
+  autoreplySubject?:
+    | T
+    | {
+        ru?: T;
+        ro?: T;
+        en?: T;
+      };
+  autoreplyBody?:
+    | T
+    | {
+        ru?: T;
+        ro?: T;
+        en?: T;
+      };
+  seo?:
+    | T
+    | {
+        home?:
+          | T
+          | {
+              title?:
+                | T
+                | {
+                    ru?: T;
+                    ro?: T;
+                    en?: T;
+                  };
+              description?:
+                | T
+                | {
+                    ru?: T;
+                    ro?: T;
+                    en?: T;
+                  };
+              image?: T;
+            };
+        forum?:
+          | T
+          | {
+              title?:
+                | T
+                | {
+                    ru?: T;
+                    ro?: T;
+                    en?: T;
+                  };
+              description?:
+                | T
+                | {
+                    ru?: T;
+                    ro?: T;
+                    en?: T;
+                  };
+              image?: T;
+            };
+        award?:
+          | T
+          | {
+              title?:
+                | T
+                | {
+                    ru?: T;
+                    ro?: T;
+                    en?: T;
+                  };
+              description?:
+                | T
+                | {
+                    ru?: T;
+                    ro?: T;
+                    en?: T;
+                  };
+              image?: T;
+            };
+      };
+  analyticsEnabled?: T;
+  gtmId?: T;
+  ga4Id?: T;
+  yandexId?: T;
+  metaPixelId?: T;
+  searchConsoleToken?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "welcome_widget".
+ */
+export interface WelcomeWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'full';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

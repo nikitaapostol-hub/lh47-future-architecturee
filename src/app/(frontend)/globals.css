@@ -550,6 +550,7 @@ html[data-pre='quick'] .am-pre-label { animation-delay: 0.36s; animation-duratio
 @keyframes am-pre-out {
   to { transform: translateY(-100%); visibility: hidden; }
 }
+html[data-pre='off'] .am-pre { display: none; }
 @media (prefers-reduced-motion: reduce) {
   .am-pre { display: none; }
 }

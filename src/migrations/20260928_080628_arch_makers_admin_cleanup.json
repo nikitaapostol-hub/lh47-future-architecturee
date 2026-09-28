@@ -1,0 +1,6053 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.community_applications": {
+      "name": "community_applications",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "track": {
+          "name": "track",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "company": {
+          "name": "company",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role": {
+          "name": "role",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "employment": {
+          "name": "employment",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "field": {
+          "name": "field",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "website": {
+          "name": "website",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "phone": {
+          "name": "phone",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "enum_community_applications_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'new'"
+        },
+        "note": {
+          "name": "note",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lang": {
+          "name": "lang",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source": {
+          "name": "source",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "utm": {
+          "name": "utm",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "submitted_at": {
+          "name": "submitted_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "community_applications_updated_at_idx": {
+          "name": "community_applications_updated_at_idx",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "community_applications_created_at_idx": {
+          "name": "community_applications_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.forum_applications": {
+      "name": "forum_applications",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "company": {
+          "name": "company",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kind": {
+          "name": "kind",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "phone": {
+          "name": "phone",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "enum_forum_applications_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'new'"
+        },
+        "note": {
+          "name": "note",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lang": {
+          "name": "lang",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source": {
+          "name": "source",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "utm": {
+          "name": "utm",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "submitted_at": {
+          "name": "submitted_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "forum_applications_updated_at_idx": {
+          "name": "forum_applications_updated_at_idx",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "forum_applications_created_at_idx": {
+          "name": "forum_applications_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.award_applications": {
+      "name": "award_applications",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "track": {
+          "name": "track",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nomination": {
+          "name": "nomination",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "project": {
+          "name": "project",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "org": {
+          "name": "org",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "faculty": {
+          "name": "faculty",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "study_start": {
+          "name": "study_start",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "location": {
+          "name": "location",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "area": {
+          "name": "area",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "year": {
+          "name": "year",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "phone": {
+          "name": "phone",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "desc": {
+          "name": "desc",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "files": {
+          "name": "files",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "enum_award_applications_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'new'"
+        },
+        "note": {
+          "name": "note",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lang": {
+          "name": "lang",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "source": {
+          "name": "source",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "utm": {
+          "name": "utm",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "submitted_at": {
+          "name": "submitted_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "award_applications_updated_at_idx": {
+          "name": "award_applications_updated_at_idx",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "award_applications_created_at_idx": {
+          "name": "award_applications_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.media": {
+      "name": "media",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "alt": {
+          "name": "alt",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "thumbnail_u_r_l": {
+          "name": "thumbnail_u_r_l",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "filename": {
+          "name": "filename",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "mime_type": {
+          "name": "mime_type",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "filesize": {
+          "name": "filesize",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "width": {
+          "name": "width",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "height": {
+          "name": "height",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "focal_x": {
+          "name": "focal_x",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "focal_y": {
+          "name": "focal_y",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "media_updated_at_idx": {
+          "name": "media_updated_at_idx",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "media_created_at_idx": {
+          "name": "media_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "media_filename_idx": {
+          "name": "media_filename_idx",
+          "columns": [
+            {
+              "expression": "filename",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.users_sessions": {
+      "name": "users_sessions",
+      "schema": "",
+      "columns": {
+        "_order": {
+          "name": "_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "users_sessions_order_idx": {
+          "name": "users_sessions_order_idx",
+          "columns": [
+            {
+              "expression": "_order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "users_sessions_parent_id_idx": {
+          "name": "users_sessions_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "users_sessions_parent_id_fk": {
+          "name": "users_sessions_parent_id_fk",
+          "tableFrom": "users_sessions",
+          "tableTo": "users",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "reset_password_token": {
+          "name": "reset_password_token",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reset_password_expiration": {
+          "name": "reset_password_expiration",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "salt": {
+          "name": "salt",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hash": {
+          "name": "hash",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "login_attempts": {
+          "name": "login_attempts",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
+        },
+        "lock_until": {
+          "name": "lock_until",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "users_updated_at_idx": {
+          "name": "users_updated_at_idx",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "users_created_at_idx": {
+          "name": "users_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "users_email_idx": {
+          "name": "users_email_idx",
+          "columns": [
+            {
+              "expression": "email",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.payload_kv": {
+      "name": "payload_kv",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "key": {
+          "name": "key",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "data": {
+          "name": "data",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "payload_kv_key_idx": {
+          "name": "payload_kv_key_idx",
+          "columns": [
+            {
+              "expression": "key",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.payload_locked_documents": {
+      "name": "payload_locked_documents",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "global_slug": {
+          "name": "global_slug",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "payload_locked_documents_global_slug_idx": {
+          "name": "payload_locked_documents_global_slug_idx",
+          "columns": [
+            {
+              "expression": "global_slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_locked_documents_updated_at_idx": {
+          "name": "payload_locked_documents_updated_at_idx",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_locked_documents_created_at_idx": {
+          "name": "payload_locked_documents_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.payload_locked_documents_rels": {
+      "name": "payload_locked_documents_rels",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "parent_id": {
+          "name": "parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "path": {
+          "name": "path",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "community_applications_id": {
+          "name": "community_applications_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forum_applications_id": {
+          "name": "forum_applications_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "award_applications_id": {
+          "name": "award_applications_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "media_id": {
+          "name": "media_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "users_id": {
+          "name": "users_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "payload_locked_documents_rels_order_idx": {
+          "name": "payload_locked_documents_rels_order_idx",
+          "columns": [
+            {
+              "expression": "order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_locked_documents_rels_parent_idx": {
+          "name": "payload_locked_documents_rels_parent_idx",
+          "columns": [
+            {
+              "expression": "parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_locked_documents_rels_path_idx": {
+          "name": "payload_locked_documents_rels_path_idx",
+          "columns": [
+            {
+              "expression": "path",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_locked_documents_rels_community_applications_id_idx": {
+          "name": "payload_locked_documents_rels_community_applications_id_idx",
+          "columns": [
+            {
+              "expression": "community_applications_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_locked_documents_rels_forum_applications_id_idx": {
+          "name": "payload_locked_documents_rels_forum_applications_id_idx",
+          "columns": [
+            {
+              "expression": "forum_applications_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_locked_documents_rels_award_applications_id_idx": {
+          "name": "payload_locked_documents_rels_award_applications_id_idx",
+          "columns": [
+            {
+              "expression": "award_applications_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_locked_documents_rels_media_id_idx": {
+          "name": "payload_locked_documents_rels_media_id_idx",
+          "columns": [
+            {
+              "expression": "media_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_locked_documents_rels_users_id_idx": {
+          "name": "payload_locked_documents_rels_users_id_idx",
+          "columns": [
+            {
+              "expression": "users_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "payload_locked_documents_rels_parent_fk": {
+          "name": "payload_locked_documents_rels_parent_fk",
+          "tableFrom": "payload_locked_documents_rels",
+          "tableTo": "payload_locked_documents",
+          "columnsFrom": [
+            "parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "payload_locked_documents_rels_community_applications_fk": {
+          "name": "payload_locked_documents_rels_community_applications_fk",
+          "tableFrom": "payload_locked_documents_rels",
+          "tableTo": "community_applications",
+          "columnsFrom": [
+            "community_applications_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "payload_locked_documents_rels_forum_applications_fk": {
+          "name": "payload_locked_documents_rels_forum_applications_fk",
+          "tableFrom": "payload_locked_documents_rels",
+          "tableTo": "forum_applications",
+          "columnsFrom": [
+            "forum_applications_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "payload_locked_documents_rels_award_applications_fk": {
+          "name": "payload_locked_documents_rels_award_applications_fk",
+          "tableFrom": "payload_locked_documents_rels",
+          "tableTo": "award_applications",
+          "columnsFrom": [
+            "award_applications_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "payload_locked_documents_rels_media_fk": {
+          "name": "payload_locked_documents_rels_media_fk",
+          "tableFrom": "payload_locked_documents_rels",
+          "tableTo": "media",
+          "columnsFrom": [
+            "media_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "payload_locked_documents_rels_users_fk": {
+          "name": "payload_locked_documents_rels_users_fk",
+          "tableFrom": "payload_locked_documents_rels",
+          "tableTo": "users",
+          "columnsFrom": [
+            "users_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.payload_preferences": {
+      "name": "payload_preferences",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "key": {
+          "name": "key",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "value": {
+          "name": "value",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "payload_preferences_key_idx": {
+          "name": "payload_preferences_key_idx",
+          "columns": [
+            {
+              "expression": "key",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_preferences_updated_at_idx": {
+          "name": "payload_preferences_updated_at_idx",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_preferences_created_at_idx": {
+          "name": "payload_preferences_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.payload_preferences_rels": {
+      "name": "payload_preferences_rels",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "parent_id": {
+          "name": "parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "path": {
+          "name": "path",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "users_id": {
+          "name": "users_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "payload_preferences_rels_order_idx": {
+          "name": "payload_preferences_rels_order_idx",
+          "columns": [
+            {
+              "expression": "order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_preferences_rels_parent_idx": {
+          "name": "payload_preferences_rels_parent_idx",
+          "columns": [
+            {
+              "expression": "parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_preferences_rels_path_idx": {
+          "name": "payload_preferences_rels_path_idx",
+          "columns": [
+            {
+              "expression": "path",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_preferences_rels_users_id_idx": {
+          "name": "payload_preferences_rels_users_id_idx",
+          "columns": [
+            {
+              "expression": "users_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "payload_preferences_rels_parent_fk": {
+          "name": "payload_preferences_rels_parent_fk",
+          "tableFrom": "payload_preferences_rels",
+          "tableTo": "payload_preferences",
+          "columnsFrom": [
+            "parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "payload_preferences_rels_users_fk": {
+          "name": "payload_preferences_rels_users_fk",
+          "tableFrom": "payload_preferences_rels",
+          "tableTo": "users",
+          "columnsFrom": [
+            "users_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.payload_migrations": {
+      "name": "payload_migrations",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "batch": {
+          "name": "batch",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "payload_migrations_updated_at_idx": {
+          "name": "payload_migrations_updated_at_idx",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_migrations_created_at_idx": {
+          "name": "payload_migrations_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.home_mission_values": {
+      "name": "home_mission_values",
+      "schema": "",
+      "columns": {
+        "_order": {
+          "name": "_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "title_ru": {
+          "name": "title_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title_ro": {
+          "name": "title_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title_en": {
+          "name": "title_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "text_ru": {
+          "name": "text_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "text_ro": {
+          "name": "text_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "text_en": {
+          "name": "text_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "home_mission_values_order_idx": {
+          "name": "home_mission_values_order_idx",
+          "columns": [
+            {
+              "expression": "_order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "home_mission_values_parent_id_idx": {
+          "name": "home_mission_values_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "home_mission_values_parent_id_fk": {
+          "name": "home_mission_values_parent_id_fk",
+          "tableFrom": "home_mission_values",
+          "tableTo": "home",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.home_who_perks": {
+      "name": "home_who_perks",
+      "schema": "",
+      "columns": {
+        "_order": {
+          "name": "_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "text_ru": {
+          "name": "text_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "text_ro": {
+          "name": "text_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "text_en": {
+          "name": "text_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "home_who_perks_order_idx": {
+          "name": "home_who_perks_order_idx",
+          "columns": [
+            {
+              "expression": "_order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "home_who_perks_parent_id_idx": {
+          "name": "home_who_perks_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "home_who_perks_parent_id_fk": {
+          "name": "home_who_perks_parent_id_fk",
+          "tableFrom": "home_who_perks",
+          "tableTo": "home",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.home_formats_items": {
+      "name": "home_formats_items",
+      "schema": "",
+      "columns": {
+        "_order": {
+          "name": "_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "title_ru": {
+          "name": "title_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title_ro": {
+          "name": "title_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title_en": {
+          "name": "title_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "text_ru": {
+          "name": "text_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "text_ro": {
+          "name": "text_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "text_en": {
+          "name": "text_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "home_formats_items_order_idx": {
+          "name": "home_formats_items_order_idx",
+          "columns": [
+            {
+              "expression": "_order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "home_formats_items_parent_id_idx": {
+          "name": "home_formats_items_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "home_formats_items_parent_id_fk": {
+          "name": "home_formats_items_parent_id_fk",
+          "tableFrom": "home_formats_items",
+          "tableTo": "home",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.home": {
+      "name": "home",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "hero_eyebrow_ru": {
+          "name": "hero_eyebrow_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_eyebrow_ro": {
+          "name": "hero_eyebrow_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_eyebrow_en": {
+          "name": "hero_eyebrow_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_place_ru": {
+          "name": "hero_place_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_place_ro": {
+          "name": "hero_place_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_place_en": {
+          "name": "hero_place_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_lead_ru": {
+          "name": "hero_lead_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_lead_ro": {
+          "name": "hero_lead_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_lead_en": {
+          "name": "hero_lead_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_be_resident_ru": {
+          "name": "hero_be_resident_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_be_resident_ro": {
+          "name": "hero_be_resident_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_be_resident_en": {
+          "name": "hero_be_resident_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_be_partner_ru": {
+          "name": "hero_be_partner_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_be_partner_ro": {
+          "name": "hero_be_partner_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_be_partner_en": {
+          "name": "hero_be_partner_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_word1_ru": {
+          "name": "hero_word1_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_word1_ro": {
+          "name": "hero_word1_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_word1_en": {
+          "name": "hero_word1_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_word2_ru": {
+          "name": "hero_word2_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_word2_ro": {
+          "name": "hero_word2_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_word2_en": {
+          "name": "hero_word2_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_word3_ru": {
+          "name": "hero_word3_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_word3_ro": {
+          "name": "hero_word3_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_word3_en": {
+          "name": "hero_word3_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_cta_ru": {
+          "name": "hero_cta_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_cta_ro": {
+          "name": "hero_cta_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_cta_en": {
+          "name": "hero_cta_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_cta_menu_ru": {
+          "name": "hero_cta_menu_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_cta_menu_ro": {
+          "name": "hero_cta_menu_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_cta_menu_en": {
+          "name": "hero_cta_menu_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "mission_label_ru": {
+          "name": "mission_label_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "mission_label_ro": {
+          "name": "mission_label_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "mission_label_en": {
+          "name": "mission_label_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "mission_title_ru": {
+          "name": "mission_title_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "mission_title_ro": {
+          "name": "mission_title_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "mission_title_en": {
+          "name": "mission_title_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "mission_text_ru": {
+          "name": "mission_text_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "mission_text_ro": {
+          "name": "mission_text_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "mission_text_en": {
+          "name": "mission_text_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_label_ru": {
+          "name": "who_label_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_label_ro": {
+          "name": "who_label_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_label_en": {
+          "name": "who_label_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_title_ru": {
+          "name": "who_title_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_title_ro": {
+          "name": "who_title_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_title_en": {
+          "name": "who_title_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_note_ru": {
+          "name": "who_note_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_note_ro": {
+          "name": "who_note_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_note_en": {
+          "name": "who_note_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_residents_ru": {
+          "name": "who_residents_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_residents_ro": {
+          "name": "who_residents_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_residents_en": {
+          "name": "who_residents_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_residents_term_ru": {
+          "name": "who_residents_term_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_residents_term_ro": {
+          "name": "who_residents_term_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_residents_term_en": {
+          "name": "who_residents_term_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_residents_title_ru": {
+          "name": "who_residents_title_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_residents_title_ro": {
+          "name": "who_residents_title_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_residents_title_en": {
+          "name": "who_residents_title_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_residents_link_ru": {
+          "name": "who_residents_link_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_residents_link_ro": {
+          "name": "who_residents_link_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_residents_link_en": {
+          "name": "who_residents_link_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_partners_ru": {
+          "name": "who_partners_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_partners_ro": {
+          "name": "who_partners_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_partners_en": {
+          "name": "who_partners_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_partners_term_ru": {
+          "name": "who_partners_term_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_partners_term_ro": {
+          "name": "who_partners_term_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_partners_term_en": {
+          "name": "who_partners_term_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_partners_title_ru": {
+          "name": "who_partners_title_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_partners_title_ro": {
+          "name": "who_partners_title_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_partners_title_en": {
+          "name": "who_partners_title_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_partners_text_ru": {
+          "name": "who_partners_text_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_partners_text_ro": {
+          "name": "who_partners_text_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_partners_text_en": {
+          "name": "who_partners_text_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_partners_link_ru": {
+          "name": "who_partners_link_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_partners_link_ro": {
+          "name": "who_partners_link_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "who_partners_link_en": {
+          "name": "who_partners_link_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "formats_label_ru": {
+          "name": "formats_label_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "formats_label_ro": {
+          "name": "formats_label_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "formats_label_en": {
+          "name": "formats_label_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "formats_title_ru": {
+          "name": "formats_title_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "formats_title_ro": {
+          "name": "formats_title_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "formats_title_en": {
+          "name": "formats_title_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_label_ru": {
+          "name": "join_label_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_label_ro": {
+          "name": "join_label_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_label_en": {
+          "name": "join_label_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_title_ru": {
+          "name": "join_title_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_title_ro": {
+          "name": "join_title_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_title_en": {
+          "name": "join_title_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_text_ru": {
+          "name": "join_text_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_text_ro": {
+          "name": "join_text_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_text_en": {
+          "name": "join_text_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_resident_ru": {
+          "name": "join_resident_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_resident_ro": {
+          "name": "join_resident_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_resident_en": {
+          "name": "join_resident_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_partners_short_ru": {
+          "name": "join_partners_short_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_partners_short_ro": {
+          "name": "join_partners_short_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_partners_short_en": {
+          "name": "join_partners_short_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_emp_question_ru": {
+          "name": "join_emp_question_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_emp_question_ro": {
+          "name": "join_emp_question_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_emp_question_en": {
+          "name": "join_emp_question_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_emp_self_ru": {
+          "name": "join_emp_self_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_emp_self_ro": {
+          "name": "join_emp_self_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_emp_self_en": {
+          "name": "join_emp_self_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_emp_company_ru": {
+          "name": "join_emp_company_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_emp_company_ro": {
+          "name": "join_emp_company_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_emp_company_en": {
+          "name": "join_emp_company_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_which_company_ru": {
+          "name": "join_which_company_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_which_company_ro": {
+          "name": "join_which_company_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_which_company_en": {
+          "name": "join_which_company_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_studio_name_ru": {
+          "name": "join_studio_name_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_studio_name_ro": {
+          "name": "join_studio_name_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_studio_name_en": {
+          "name": "join_studio_name_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_optional_ru": {
+          "name": "join_optional_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_optional_ro": {
+          "name": "join_optional_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_optional_en": {
+          "name": "join_optional_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_profession_ru": {
+          "name": "join_profession_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_profession_ro": {
+          "name": "join_profession_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_profession_en": {
+          "name": "join_profession_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_profession_ph_ru": {
+          "name": "join_profession_ph_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_profession_ph_ro": {
+          "name": "join_profession_ph_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_profession_ph_en": {
+          "name": "join_profession_ph_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_field_ru": {
+          "name": "join_field_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_field_ro": {
+          "name": "join_field_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_field_en": {
+          "name": "join_field_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_site_ru": {
+          "name": "join_site_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_site_ro": {
+          "name": "join_site_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_site_en": {
+          "name": "join_site_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_send_partner_ru": {
+          "name": "join_send_partner_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_send_partner_ro": {
+          "name": "join_send_partner_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_send_partner_en": {
+          "name": "join_send_partner_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_sent_text_ru": {
+          "name": "join_sent_text_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_sent_text_ro": {
+          "name": "join_sent_text_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "join_sent_text_en": {
+          "name": "join_sent_text_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.forum_speakers": {
+      "name": "forum_speakers",
+      "schema": "",
+      "columns": {
+        "_order": {
+          "name": "_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name_ru": {
+          "name": "name_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name_ro": {
+          "name": "name_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "name_en": {
+          "name": "name_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role_ru": {
+          "name": "role_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role_ro": {
+          "name": "role_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "role_en": {
+          "name": "role_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "photo_id": {
+          "name": "photo_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "forum_speakers_order_idx": {
+          "name": "forum_speakers_order_idx",
+          "columns": [
+            {
+              "expression": "_order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "forum_speakers_parent_id_idx": {
+          "name": "forum_speakers_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "forum_speakers_photo_idx": {
+          "name": "forum_speakers_photo_idx",
+          "columns": [
+            {
+              "expression": "photo_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "forum_speakers_photo_id_media_id_fk": {
+          "name": "forum_speakers_photo_id_media_id_fk",
+          "tableFrom": "forum_speakers",
+          "tableTo": "media",
+          "columnsFrom": [
+            "photo_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "forum_speakers_parent_id_fk": {
+          "name": "forum_speakers_parent_id_fk",
+          "tableFrom": "forum_speakers",
+          "tableTo": "forum",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.forum_chain_stages": {
+      "name": "forum_chain_stages",
+      "schema": "",
+      "columns": {
+        "_order": {
+          "name": "_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "title_ru": {
+          "name": "title_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title_ro": {
+          "name": "title_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title_en": {
+          "name": "title_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "forum_chain_stages_order_idx": {
+          "name": "forum_chain_stages_order_idx",
+          "columns": [
+            {
+              "expression": "_order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "forum_chain_stages_parent_id_idx": {
+          "name": "forum_chain_stages_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "forum_chain_stages_parent_id_fk": {
+          "name": "forum_chain_stages_parent_id_fk",
+          "tableFrom": "forum_chain_stages",
+          "tableTo": "forum",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.forum_topics_items": {
+      "name": "forum_topics_items",
+      "schema": "",
+      "columns": {
+        "_order": {
+          "name": "_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "tag_ru": {
+          "name": "tag_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tag_ro": {
+          "name": "tag_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tag_en": {
+          "name": "tag_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title_ru": {
+          "name": "title_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title_ro": {
+          "name": "title_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title_en": {
+          "name": "title_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "text_ru": {
+          "name": "text_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "text_ro": {
+          "name": "text_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "text_en": {
+          "name": "text_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "forum_topics_items_order_idx": {
+          "name": "forum_topics_items_order_idx",
+          "columns": [
+            {
+              "expression": "_order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "forum_topics_items_parent_id_idx": {
+          "name": "forum_topics_items_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "forum_topics_items_parent_id_fk": {
+          "name": "forum_topics_items_parent_id_fk",
+          "tableFrom": "forum_topics_items",
+          "tableTo": "forum",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.forum_program_items": {
+      "name": "forum_program_items",
+      "schema": "",
+      "columns": {
+        "_order": {
+          "name": "_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "title_ru": {
+          "name": "title_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title_ro": {
+          "name": "title_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title_en": {
+          "name": "title_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "forum_program_items_order_idx": {
+          "name": "forum_program_items_order_idx",
+          "columns": [
+            {
+              "expression": "_order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "forum_program_items_parent_id_idx": {
+          "name": "forum_program_items_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "forum_program_items_parent_id_fk": {
+          "name": "forum_program_items_parent_id_fk",
+          "tableFrom": "forum_program_items",
+          "tableTo": "forum",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.forum": {
+      "name": "forum",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "forum_date": {
+          "name": "forum_date",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'2026-12-09T10:00:00+02:00'"
+        },
+        "countdown_visible": {
+          "name": "countdown_visible",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
+        "hero_date_place_ru": {
+          "name": "hero_date_place_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_date_place_ro": {
+          "name": "hero_date_place_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_date_place_en": {
+          "name": "hero_date_place_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_selection_ru": {
+          "name": "hero_selection_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_selection_ro": {
+          "name": "hero_selection_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_selection_en": {
+          "name": "hero_selection_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_lead_ru": {
+          "name": "hero_lead_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_lead_ro": {
+          "name": "hero_lead_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_lead_en": {
+          "name": "hero_lead_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_text_ru": {
+          "name": "hero_text_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_text_ro": {
+          "name": "hero_text_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_text_en": {
+          "name": "hero_text_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_cta_ru": {
+          "name": "hero_cta_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_cta_ro": {
+          "name": "hero_cta_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_cta_en": {
+          "name": "hero_cta_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_cta_menu_ru": {
+          "name": "hero_cta_menu_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_cta_menu_ro": {
+          "name": "hero_cta_menu_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_cta_menu_en": {
+          "name": "hero_cta_menu_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_partner_offer_ru": {
+          "name": "hero_partner_offer_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_partner_offer_ro": {
+          "name": "hero_partner_offer_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_partner_offer_en": {
+          "name": "hero_partner_offer_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_days_ru": {
+          "name": "hero_days_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_days_ro": {
+          "name": "hero_days_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_days_en": {
+          "name": "hero_days_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_hours_ru": {
+          "name": "hero_hours_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_hours_ro": {
+          "name": "hero_hours_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_hours_en": {
+          "name": "hero_hours_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_minutes_ru": {
+          "name": "hero_minutes_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_minutes_ro": {
+          "name": "hero_minutes_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_minutes_en": {
+          "name": "hero_minutes_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_seconds_ru": {
+          "name": "hero_seconds_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_seconds_ro": {
+          "name": "hero_seconds_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_seconds_en": {
+          "name": "hero_seconds_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "chain_label_ru": {
+          "name": "chain_label_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "chain_label_ro": {
+          "name": "chain_label_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "chain_label_en": {
+          "name": "chain_label_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "chain_title_ru": {
+          "name": "chain_title_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "chain_title_ro": {
+          "name": "chain_title_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "chain_title_en": {
+          "name": "chain_title_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "chain_text_ru": {
+          "name": "chain_text_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "chain_text_ro": {
+          "name": "chain_text_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "chain_text_en": {
+          "name": "chain_text_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "count_number_ru": {
+          "name": "count_number_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "count_number_ro": {
+          "name": "count_number_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "count_number_en": {
+          "name": "count_number_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "count_text_ru": {
+          "name": "count_text_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "count_text_ro": {
+          "name": "count_text_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "count_text_en": {
+          "name": "count_text_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "topics_title_ru": {
+          "name": "topics_title_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "topics_title_ro": {
+          "name": "topics_title_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "topics_title_en": {
+          "name": "topics_title_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "topics_speakers_ru": {
+          "name": "topics_speakers_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "topics_speakers_ro": {
+          "name": "topics_speakers_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "topics_speakers_en": {
+          "name": "topics_speakers_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "program_title1_ru": {
+          "name": "program_title1_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "program_title1_ro": {
+          "name": "program_title1_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "program_title1_en": {
+          "name": "program_title1_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "program_title2_ru": {
+          "name": "program_title2_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "program_title2_ro": {
+          "name": "program_title2_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "program_title2_en": {
+          "name": "program_title2_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_label_ru": {
+          "name": "partners_label_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_label_ro": {
+          "name": "partners_label_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_label_en": {
+          "name": "partners_label_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_title_ru": {
+          "name": "partners_title_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_title_ro": {
+          "name": "partners_title_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_title_en": {
+          "name": "partners_title_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_text_ru": {
+          "name": "partners_text_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_text_ro": {
+          "name": "partners_text_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_text_en": {
+          "name": "partners_text_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_benefit1_ru": {
+          "name": "partners_benefit1_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_benefit1_ro": {
+          "name": "partners_benefit1_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_benefit1_en": {
+          "name": "partners_benefit1_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_benefit2_ru": {
+          "name": "partners_benefit2_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_benefit2_ro": {
+          "name": "partners_benefit2_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_benefit2_en": {
+          "name": "partners_benefit2_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_before_ru": {
+          "name": "partners_before_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_before_ro": {
+          "name": "partners_before_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_before_en": {
+          "name": "partners_before_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_during_ru": {
+          "name": "partners_during_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_during_ro": {
+          "name": "partners_during_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_during_en": {
+          "name": "partners_during_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_after_ru": {
+          "name": "partners_after_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_after_ro": {
+          "name": "partners_after_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_after_en": {
+          "name": "partners_after_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_cta_ru": {
+          "name": "partners_cta_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_cta_ro": {
+          "name": "partners_cta_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "partners_cta_en": {
+          "name": "partners_cta_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "apply_title_ru": {
+          "name": "apply_title_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "apply_title_ro": {
+          "name": "apply_title_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "apply_title_en": {
+          "name": "apply_title_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "apply_date_ru": {
+          "name": "apply_date_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "apply_date_ro": {
+          "name": "apply_date_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "apply_date_en": {
+          "name": "apply_date_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "apply_place_ru": {
+          "name": "apply_place_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "apply_place_ro": {
+          "name": "apply_place_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "apply_place_en": {
+          "name": "apply_place_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "apply_guest_ru": {
+          "name": "apply_guest_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "apply_guest_ro": {
+          "name": "apply_guest_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "apply_guest_en": {
+          "name": "apply_guest_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "apply_company_role_ru": {
+          "name": "apply_company_role_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "apply_company_role_ro": {
+          "name": "apply_company_role_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "apply_company_role_en": {
+          "name": "apply_company_role_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "apply_sent_text_ru": {
+          "name": "apply_sent_text_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "apply_sent_text_ro": {
+          "name": "apply_sent_text_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "apply_sent_text_en": {
+          "name": "apply_sent_text_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.award_nomination_list": {
+      "name": "award_nomination_list",
+      "schema": "",
+      "columns": {
+        "_order": {
+          "name": "_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "kind_ru": {
+          "name": "kind_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kind_ro": {
+          "name": "kind_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kind_en": {
+          "name": "kind_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title_ru": {
+          "name": "title_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title_ro": {
+          "name": "title_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title_en": {
+          "name": "title_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "award_nomination_list_order_idx": {
+          "name": "award_nomination_list_order_idx",
+          "columns": [
+            {
+              "expression": "_order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "award_nomination_list_parent_id_idx": {
+          "name": "award_nomination_list_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "award_nomination_list_parent_id_fk": {
+          "name": "award_nomination_list_parent_id_fk",
+          "tableFrom": "award_nomination_list",
+          "tableTo": "award",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.award_prize_items": {
+      "name": "award_prize_items",
+      "schema": "",
+      "columns": {
+        "_order": {
+          "name": "_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "text_ru": {
+          "name": "text_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "text_ro": {
+          "name": "text_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "text_en": {
+          "name": "text_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "award_prize_items_order_idx": {
+          "name": "award_prize_items_order_idx",
+          "columns": [
+            {
+              "expression": "_order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "award_prize_items_parent_id_idx": {
+          "name": "award_prize_items_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "award_prize_items_parent_id_fk": {
+          "name": "award_prize_items_parent_id_fk",
+          "tableFrom": "award_prize_items",
+          "tableTo": "award",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.award": {
+      "name": "award",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "deadline_date": {
+          "name": "deadline_date",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'2026-11-20T23:59:00+02:00'"
+        },
+        "form_open": {
+          "name": "form_open",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
+        "form_closed_text_ru": {
+          "name": "form_closed_text_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_closed_text_ro": {
+          "name": "form_closed_text_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_closed_text_en": {
+          "name": "form_closed_text_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_eyebrow_ru": {
+          "name": "hero_eyebrow_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_eyebrow_ro": {
+          "name": "hero_eyebrow_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_eyebrow_en": {
+          "name": "hero_eyebrow_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_open_ru": {
+          "name": "hero_open_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_open_ro": {
+          "name": "hero_open_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_open_en": {
+          "name": "hero_open_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_lead_ru": {
+          "name": "hero_lead_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_lead_ro": {
+          "name": "hero_lead_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_lead_en": {
+          "name": "hero_lead_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_deadline_label_ru": {
+          "name": "hero_deadline_label_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_deadline_label_ro": {
+          "name": "hero_deadline_label_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_deadline_label_en": {
+          "name": "hero_deadline_label_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_days_left_ru": {
+          "name": "hero_days_left_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_days_left_ro": {
+          "name": "hero_days_left_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_days_left_en": {
+          "name": "hero_days_left_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_winners_ru": {
+          "name": "hero_winners_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_winners_ro": {
+          "name": "hero_winners_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_winners_en": {
+          "name": "hero_winners_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_winners_text_ru": {
+          "name": "hero_winners_text_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_winners_text_ro": {
+          "name": "hero_winners_text_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_winners_text_en": {
+          "name": "hero_winners_text_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_choose_ru": {
+          "name": "hero_choose_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_choose_ro": {
+          "name": "hero_choose_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_choose_en": {
+          "name": "hero_choose_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_award_ru": {
+          "name": "hero_award_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_award_ro": {
+          "name": "hero_award_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_award_en": {
+          "name": "hero_award_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_award_note_ru": {
+          "name": "hero_award_note_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_award_note_ro": {
+          "name": "hero_award_note_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_award_note_en": {
+          "name": "hero_award_note_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_student_ru": {
+          "name": "hero_student_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_student_ro": {
+          "name": "hero_student_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_student_en": {
+          "name": "hero_student_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_student_note_ru": {
+          "name": "hero_student_note_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_student_note_ro": {
+          "name": "hero_student_note_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_student_note_en": {
+          "name": "hero_student_note_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_cta_ru": {
+          "name": "hero_cta_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_cta_ro": {
+          "name": "hero_cta_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hero_cta_en": {
+          "name": "hero_cta_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nominations_label_ru": {
+          "name": "nominations_label_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nominations_label_ro": {
+          "name": "nominations_label_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nominations_label_en": {
+          "name": "nominations_label_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nominations_title_ru": {
+          "name": "nominations_title_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nominations_title_ro": {
+          "name": "nominations_title_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nominations_title_en": {
+          "name": "nominations_title_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nominations_text_ru": {
+          "name": "nominations_text_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nominations_text_ro": {
+          "name": "nominations_text_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nominations_text_en": {
+          "name": "nominations_text_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "prize_label_ru": {
+          "name": "prize_label_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "prize_label_ro": {
+          "name": "prize_label_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "prize_label_en": {
+          "name": "prize_label_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "prize_title_ru": {
+          "name": "prize_title_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "prize_title_ro": {
+          "name": "prize_title_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "prize_title_en": {
+          "name": "prize_title_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_label_ru": {
+          "name": "form_label_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_label_ro": {
+          "name": "form_label_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_label_en": {
+          "name": "form_label_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_title_ru": {
+          "name": "form_title_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_title_ro": {
+          "name": "form_title_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_title_en": {
+          "name": "form_title_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_nomination_ru": {
+          "name": "form_nomination_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_nomination_ro": {
+          "name": "form_nomination_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_nomination_en": {
+          "name": "form_nomination_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_choose_nom_ru": {
+          "name": "form_choose_nom_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_choose_nom_ro": {
+          "name": "form_choose_nom_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_choose_nom_en": {
+          "name": "form_choose_nom_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_project_ru": {
+          "name": "form_project_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_project_ro": {
+          "name": "form_project_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_project_en": {
+          "name": "form_project_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_authors_ru": {
+          "name": "form_authors_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_authors_ro": {
+          "name": "form_authors_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_authors_en": {
+          "name": "form_authors_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_authors_ph_ru": {
+          "name": "form_authors_ph_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_authors_ph_ro": {
+          "name": "form_authors_ph_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_authors_ph_en": {
+          "name": "form_authors_ph_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_company_ru": {
+          "name": "form_company_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_company_ro": {
+          "name": "form_company_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_company_en": {
+          "name": "form_company_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_company_ph_ru": {
+          "name": "form_company_ph_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_company_ph_ro": {
+          "name": "form_company_ph_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_company_ph_en": {
+          "name": "form_company_ph_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_location_ru": {
+          "name": "form_location_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_location_ro": {
+          "name": "form_location_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_location_en": {
+          "name": "form_location_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_location_ph_ru": {
+          "name": "form_location_ph_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_location_ph_ro": {
+          "name": "form_location_ph_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_location_ph_en": {
+          "name": "form_location_ph_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_area_ru": {
+          "name": "form_area_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_area_ro": {
+          "name": "form_area_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_area_en": {
+          "name": "form_area_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_area_ph_ru": {
+          "name": "form_area_ph_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_area_ph_ro": {
+          "name": "form_area_ph_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_area_ph_en": {
+          "name": "form_area_ph_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_year_ru": {
+          "name": "form_year_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_year_ro": {
+          "name": "form_year_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_year_en": {
+          "name": "form_year_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_year_ph_ru": {
+          "name": "form_year_ph_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_year_ph_ro": {
+          "name": "form_year_ph_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_year_ph_en": {
+          "name": "form_year_ph_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_desc_ru": {
+          "name": "form_desc_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_desc_ro": {
+          "name": "form_desc_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_desc_en": {
+          "name": "form_desc_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_desc_ph_ru": {
+          "name": "form_desc_ph_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_desc_ph_ro": {
+          "name": "form_desc_ph_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_desc_ph_en": {
+          "name": "form_desc_ph_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_attach_ru": {
+          "name": "form_attach_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_attach_ro": {
+          "name": "form_attach_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_attach_en": {
+          "name": "form_attach_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_files_hint_ru": {
+          "name": "form_files_hint_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_files_hint_ro": {
+          "name": "form_files_hint_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_files_hint_en": {
+          "name": "form_files_hint_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_send_ru": {
+          "name": "form_send_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_send_ro": {
+          "name": "form_send_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_send_en": {
+          "name": "form_send_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_sent_text_ru": {
+          "name": "form_sent_text_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_sent_text_ro": {
+          "name": "form_sent_text_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_sent_text_en": {
+          "name": "form_sent_text_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_again_ru": {
+          "name": "form_again_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_again_ro": {
+          "name": "form_again_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_again_en": {
+          "name": "form_again_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_label_ru": {
+          "name": "student_label_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_label_ro": {
+          "name": "student_label_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_label_en": {
+          "name": "student_label_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_title1_ru": {
+          "name": "student_title1_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_title1_ro": {
+          "name": "student_title1_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_title1_en": {
+          "name": "student_title1_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_title2_ru": {
+          "name": "student_title2_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_title2_ro": {
+          "name": "student_title2_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_title2_en": {
+          "name": "student_title2_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_question_ru": {
+          "name": "student_question_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_question_ro": {
+          "name": "student_question_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_question_en": {
+          "name": "student_question_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_text_ru": {
+          "name": "student_text_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_text_ro": {
+          "name": "student_text_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_text_en": {
+          "name": "student_text_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_author_ru": {
+          "name": "student_author_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_author_ro": {
+          "name": "student_author_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_author_en": {
+          "name": "student_author_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_school_ru": {
+          "name": "student_school_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_school_ro": {
+          "name": "student_school_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_school_en": {
+          "name": "student_school_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_faculty_ru": {
+          "name": "student_faculty_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_faculty_ro": {
+          "name": "student_faculty_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_faculty_en": {
+          "name": "student_faculty_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_study_year_ru": {
+          "name": "student_study_year_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_study_year_ro": {
+          "name": "student_study_year_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_study_year_en": {
+          "name": "student_study_year_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_location_ph_ru": {
+          "name": "student_location_ph_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_location_ph_ro": {
+          "name": "student_location_ph_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_location_ph_en": {
+          "name": "student_location_ph_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_area_ph_ru": {
+          "name": "student_area_ph_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_area_ph_ro": {
+          "name": "student_area_ph_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_area_ph_en": {
+          "name": "student_area_ph_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_send_ru": {
+          "name": "student_send_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_send_ro": {
+          "name": "student_send_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_send_en": {
+          "name": "student_send_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_sent_text_ru": {
+          "name": "student_sent_text_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_sent_text_ro": {
+          "name": "student_sent_text_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "student_sent_text_en": {
+          "name": "student_sent_text_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.common": {
+      "name": "common",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "nav_community_ru": {
+          "name": "nav_community_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nav_community_ro": {
+          "name": "nav_community_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nav_community_en": {
+          "name": "nav_community_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nav_forum_ru": {
+          "name": "nav_forum_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nav_forum_ro": {
+          "name": "nav_forum_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nav_forum_en": {
+          "name": "nav_forum_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nav_award_ru": {
+          "name": "nav_award_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nav_award_ro": {
+          "name": "nav_award_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nav_award_en": {
+          "name": "nav_award_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nav_contacts_ru": {
+          "name": "nav_contacts_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nav_contacts_ro": {
+          "name": "nav_contacts_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nav_contacts_en": {
+          "name": "nav_contacts_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nav_menu_ru": {
+          "name": "nav_menu_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nav_menu_ro": {
+          "name": "nav_menu_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nav_menu_en": {
+          "name": "nav_menu_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nav_close_ru": {
+          "name": "nav_close_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nav_close_ro": {
+          "name": "nav_close_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nav_close_en": {
+          "name": "nav_close_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_email1_ru": {
+          "name": "contacts_email1_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_email1_ro": {
+          "name": "contacts_email1_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_email1_en": {
+          "name": "contacts_email1_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_email2_ru": {
+          "name": "contacts_email2_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_email2_ro": {
+          "name": "contacts_email2_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_email2_en": {
+          "name": "contacts_email2_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_phone1_ru": {
+          "name": "contacts_phone1_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_phone1_ro": {
+          "name": "contacts_phone1_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_phone1_en": {
+          "name": "contacts_phone1_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_phone1_label_ru": {
+          "name": "contacts_phone1_label_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_phone1_label_ro": {
+          "name": "contacts_phone1_label_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_phone1_label_en": {
+          "name": "contacts_phone1_label_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_phone2_ru": {
+          "name": "contacts_phone2_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_phone2_ro": {
+          "name": "contacts_phone2_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_phone2_en": {
+          "name": "contacts_phone2_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_phone2_label_ru": {
+          "name": "contacts_phone2_label_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_phone2_label_ro": {
+          "name": "contacts_phone2_label_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_phone2_label_en": {
+          "name": "contacts_phone2_label_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_instagram_ru": {
+          "name": "contacts_instagram_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_instagram_ro": {
+          "name": "contacts_instagram_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_instagram_en": {
+          "name": "contacts_instagram_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_facebook_ru": {
+          "name": "contacts_facebook_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_facebook_ro": {
+          "name": "contacts_facebook_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_facebook_en": {
+          "name": "contacts_facebook_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_linkedin_ru": {
+          "name": "contacts_linkedin_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_linkedin_ro": {
+          "name": "contacts_linkedin_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "contacts_linkedin_en": {
+          "name": "contacts_linkedin_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "footer_tagline_ru": {
+          "name": "footer_tagline_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "footer_tagline_ro": {
+          "name": "footer_tagline_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "footer_tagline_en": {
+          "name": "footer_tagline_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "footer_email_label_ru": {
+          "name": "footer_email_label_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "footer_email_label_ro": {
+          "name": "footer_email_label_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "footer_email_label_en": {
+          "name": "footer_email_label_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "footer_phone_label_ru": {
+          "name": "footer_phone_label_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "footer_phone_label_ro": {
+          "name": "footer_phone_label_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "footer_phone_label_en": {
+          "name": "footer_phone_label_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "footer_founders_ru": {
+          "name": "footer_founders_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "footer_founders_ro": {
+          "name": "footer_founders_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "footer_founders_en": {
+          "name": "footer_founders_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "footer_privacy_ru": {
+          "name": "footer_privacy_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "footer_privacy_ro": {
+          "name": "footer_privacy_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "footer_privacy_en": {
+          "name": "footer_privacy_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "footer_copyright_ru": {
+          "name": "footer_copyright_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "footer_copyright_ro": {
+          "name": "footer_copyright_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "footer_copyright_en": {
+          "name": "footer_copyright_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_sent_ru": {
+          "name": "forms_sent_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_sent_ro": {
+          "name": "forms_sent_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_sent_en": {
+          "name": "forms_sent_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_full_name_ru": {
+          "name": "forms_full_name_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_full_name_ro": {
+          "name": "forms_full_name_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_full_name_en": {
+          "name": "forms_full_name_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_company_name_ru": {
+          "name": "forms_company_name_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_company_name_ro": {
+          "name": "forms_company_name_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_company_name_en": {
+          "name": "forms_company_name_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_contact_person_ru": {
+          "name": "forms_contact_person_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_contact_person_ro": {
+          "name": "forms_contact_person_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_contact_person_en": {
+          "name": "forms_contact_person_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_phone_ru": {
+          "name": "forms_phone_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_phone_ro": {
+          "name": "forms_phone_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_phone_en": {
+          "name": "forms_phone_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_email_ru": {
+          "name": "forms_email_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_email_ro": {
+          "name": "forms_email_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_email_en": {
+          "name": "forms_email_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_partner_ru": {
+          "name": "forms_partner_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_partner_ro": {
+          "name": "forms_partner_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_partner_en": {
+          "name": "forms_partner_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_send_ru": {
+          "name": "forms_send_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_send_ro": {
+          "name": "forms_send_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_send_en": {
+          "name": "forms_send_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_consent_ru": {
+          "name": "forms_consent_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_consent_ro": {
+          "name": "forms_consent_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_consent_en": {
+          "name": "forms_consent_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_consent_link_ru": {
+          "name": "forms_consent_link_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_consent_link_ro": {
+          "name": "forms_consent_link_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_consent_link_en": {
+          "name": "forms_consent_link_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_sending_ru": {
+          "name": "forms_sending_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_sending_ro": {
+          "name": "forms_sending_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_sending_en": {
+          "name": "forms_sending_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_error_ru": {
+          "name": "forms_error_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_error_ro": {
+          "name": "forms_error_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "forms_error_en": {
+          "name": "forms_error_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.settings": {
+      "name": "settings",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "mail_to": {
+          "name": "mail_to",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'marketing-team@lh47arch.com'"
+        },
+        "subject_prefix": {
+          "name": "subject_prefix",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'[future-arch.md]'"
+        },
+        "autoreply": {
+          "name": "autoreply",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
+        "autoreply_subject_ru": {
+          "name": "autoreply_subject_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "autoreply_subject_ro": {
+          "name": "autoreply_subject_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "autoreply_subject_en": {
+          "name": "autoreply_subject_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "autoreply_body_ru": {
+          "name": "autoreply_body_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "autoreply_body_ro": {
+          "name": "autoreply_body_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "autoreply_body_en": {
+          "name": "autoreply_body_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_home_title_ru": {
+          "name": "seo_home_title_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_home_title_ro": {
+          "name": "seo_home_title_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_home_title_en": {
+          "name": "seo_home_title_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_home_description_ru": {
+          "name": "seo_home_description_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_home_description_ro": {
+          "name": "seo_home_description_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_home_description_en": {
+          "name": "seo_home_description_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_home_image_id": {
+          "name": "seo_home_image_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_forum_title_ru": {
+          "name": "seo_forum_title_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_forum_title_ro": {
+          "name": "seo_forum_title_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_forum_title_en": {
+          "name": "seo_forum_title_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_forum_description_ru": {
+          "name": "seo_forum_description_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_forum_description_ro": {
+          "name": "seo_forum_description_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_forum_description_en": {
+          "name": "seo_forum_description_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_forum_image_id": {
+          "name": "seo_forum_image_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_award_title_ru": {
+          "name": "seo_award_title_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_award_title_ro": {
+          "name": "seo_award_title_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_award_title_en": {
+          "name": "seo_award_title_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_award_description_ru": {
+          "name": "seo_award_description_ru",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_award_description_ro": {
+          "name": "seo_award_description_ro",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_award_description_en": {
+          "name": "seo_award_description_en",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "seo_award_image_id": {
+          "name": "seo_award_image_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "analytics_enabled": {
+          "name": "analytics_enabled",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
+        "gtm_id": {
+          "name": "gtm_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ga4_id": {
+          "name": "ga4_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "yandex_id": {
+          "name": "yandex_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "meta_pixel_id": {
+          "name": "meta_pixel_id",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "search_console_token": {
+          "name": "search_console_token",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "settings_seo_home_seo_home_image_idx": {
+          "name": "settings_seo_home_seo_home_image_idx",
+          "columns": [
+            {
+              "expression": "seo_home_image_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "settings_seo_forum_seo_forum_image_idx": {
+          "name": "settings_seo_forum_seo_forum_image_idx",
+          "columns": [
+            {
+              "expression": "seo_forum_image_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "settings_seo_award_seo_award_image_idx": {
+          "name": "settings_seo_award_seo_award_image_idx",
+          "columns": [
+            {
+              "expression": "seo_award_image_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "settings_seo_home_image_id_media_id_fk": {
+          "name": "settings_seo_home_image_id_media_id_fk",
+          "tableFrom": "settings",
+          "tableTo": "media",
+          "columnsFrom": [
+            "seo_home_image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "settings_seo_forum_image_id_media_id_fk": {
+          "name": "settings_seo_forum_image_id_media_id_fk",
+          "tableFrom": "settings",
+          "tableTo": "media",
+          "columnsFrom": [
+            "seo_forum_image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        },
+        "settings_seo_award_image_id_media_id_fk": {
+          "name": "settings_seo_award_image_id_media_id_fk",
+          "tableFrom": "settings",
+          "tableTo": "media",
+          "columnsFrom": [
+            "seo_award_image_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.enum_community_applications_status": {
+      "name": "enum_community_applications_status",
+      "schema": "public",
+      "values": [
+        "new",
+        "progress",
+        "accepted",
+        "declined"
+      ]
+    },
+    "public.enum_forum_applications_status": {
+      "name": "enum_forum_applications_status",
+      "schema": "public",
+      "values": [
+        "new",
+        "progress",
+        "accepted",
+        "declined"
+      ]
+    },
+    "public.enum_award_applications_status": {
+      "name": "enum_award_applications_status",
+      "schema": "public",
+      "values": [
+        "new",
+        "progress",
+        "accepted",
+        "declined"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "id": "06dcdf0f-5075-4aa0-9ce9-83f1fb33af64",
+  "prevId": "00000000-0000-0000-0000-000000000000"
+}

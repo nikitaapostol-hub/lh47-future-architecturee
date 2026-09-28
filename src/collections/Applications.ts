@@ -79,10 +79,10 @@ function notify(title: string, rows: (doc: any) => MailRow[]) {
     const payload = req.payload
     let cfg: any = {}
     try {
-      cfg = await payload.findGlobal({ slug: 'mail' })
+      cfg = await payload.findGlobal({ slug: 'settings' })
     } catch {}
 
-    const to = (cfg?.to || process.env.APPLICATIONS_EMAIL || 'marketing-team@lh47arch.com').trim()
+    const to = (cfg?.mailTo || process.env.APPLICATIONS_EMAIL || 'marketing-team@lh47arch.com').trim()
     const prefix = cfg?.subjectPrefix || '[future-arch.md]'
     const who = doc?.name ? ' — ' + doc.name : ''
 
@@ -101,13 +101,10 @@ function notify(title: string, rows: (doc: any) => MailRow[]) {
 
     if (cfg?.autoreply !== false && doc?.email) {
       const locale = doc?.lang === 'ro' || doc?.lang === 'en' ? doc.lang : 'ru'
-      let a: any = cfg
-      try {
-        a = await payload.findGlobal({ slug: 'mail', locale })
-      } catch {}
-      const subject = a?.autoreplySubject || 'Заявка получена — ARCH MAKERS'
+      const tr = (v: any) => (v && typeof v === 'object' ? String(v[locale] || v.ru || '').trim() : '')
+      const subject = tr(cfg?.autoreplySubject) || 'Заявка получена — ARCH MAKERS'
       const body =
-        a?.autoreplyBody ||
+        tr(cfg?.autoreplyBody) ||
         'Здравствуйте!\n\nМы получили вашу заявку и вернёмся с ответом на этот адрес.\n\nARCH MAKERS\nfuture-arch.md'
       await sendSafe(payload, { to: doc.email, subject, html: autoreplyHtml(body) })
     }
@@ -118,10 +115,13 @@ function notify(title: string, rows: (doc: any) => MailRow[]) {
 export const ForumApplications: CollectionConfig = {
   slug: 'forum-applications',
   labels: { singular: 'Заявка на форум', plural: 'Заявки — Форум' },
+  defaultSort: '-submittedAt',
   admin: {
+    hideAPIURL: true,
     useAsTitle: 'name',
     group: 'Заявки',
-    defaultColumns: ['name', 'company', 'kind', 'email', 'status', 'submittedAt'],
+    listSearchableFields: ['name', 'email', 'company', 'phone'],
+    defaultColumns: ['name', 'kind', 'company', 'phone', 'email', 'status', 'submittedAt'],
     description: 'Форма на странице форума.',
   },
   access: inboxAccess,
@@ -140,7 +140,7 @@ export const ForumApplications: CollectionConfig = {
   fields: [
     { name: 'name', type: 'text', label: 'Имя', required: true },
     { name: 'company', type: 'text', label: 'Компания и должность', required: true },
-    { name: 'role', type: 'text', label: 'Позиция' },
+    { name: 'role', type: 'text', label: 'Позиция', admin: { condition: (d: any) => Boolean(d?.role) } },
     { name: 'kind', type: 'text', label: 'Участник или партнёр' },
     { name: 'email', type: 'email', label: 'Почта', required: true },
     { name: 'phone', type: 'text', label: 'Телефон' },
@@ -153,10 +153,13 @@ export const ForumApplications: CollectionConfig = {
 export const CommunityApplications: CollectionConfig = {
   slug: 'community-applications',
   labels: { singular: 'Заявка в сообщество', plural: 'Заявки — Сообщество' },
+  defaultSort: '-submittedAt',
   admin: {
+    hideAPIURL: true,
     useAsTitle: 'name',
     group: 'Заявки',
-    defaultColumns: ['name', 'track', 'company', 'role', 'email', 'status', 'submittedAt'],
+    listSearchableFields: ['name', 'email', 'company', 'phone'],
+    defaultColumns: ['name', 'track', 'role', 'company', 'phone', 'status', 'submittedAt'],
     description: 'Форма на главной странице: резиденты и партнёры.',
   },
   access: inboxAccess,
@@ -194,10 +197,13 @@ export const CommunityApplications: CollectionConfig = {
 export const AwardApplications: CollectionConfig = {
   slug: 'award-applications',
   labels: { singular: 'Заявка на премию', plural: 'Заявки — Премия' },
+  defaultSort: '-submittedAt',
   admin: {
+    hideAPIURL: true,
     useAsTitle: 'name',
     group: 'Заявки',
-    defaultColumns: ['name', 'project', 'track', 'nomination', 'status', 'submittedAt'],
+    listSearchableFields: ['name', 'email', 'org', 'project', 'phone'],
+    defaultColumns: ['name', 'track', 'nomination', 'project', 'phone', 'status', 'submittedAt'],
     description: 'Форма на странице премии — премия и студенческий конкурс.',
   },
   access: inboxAccess,
@@ -242,7 +248,7 @@ export const AwardApplications: CollectionConfig = {
       label: 'Файлы проекта',
       admin: { description: 'Имя файла и ссылка, по одному в строке. Файлы лежат в закрытом хранилище: ссылка открывается, только когда вы вошли в админку.' },
     },
-    { name: 'url', type: 'text', label: 'Ссылка на материалы' },
+    { name: 'url', type: 'text', label: 'Ссылка на материалы', admin: { condition: (d: any) => Boolean(d?.url) } },
     STATUS,
     NOTE,
     ...META,

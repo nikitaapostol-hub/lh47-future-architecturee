@@ -3,7 +3,7 @@ import { list, text } from './fields'
 
 /** Страница премии. Номинации, дедлайн и «приём открыт» — в «Настройки → Премия». */
 export const AWARD: PageContent = {
-  slug: 'page-award',
+  slug: 'award',
   label: 'Премия — тексты',
   desc: 'Страница future-arch.md/award. Номинации, дедлайн и флаг «приём открыт» — в разделе «Настройки → Премия». Пустое поле = остаётся текст, который стоит на сайте сейчас.',
   sections: [
@@ -24,7 +24,6 @@ export const AWARD: PageContent = {
         text('student', 'Карточка «Студенческий конкурс» — заголовок', 'aStudent'),
         text('studentNote', 'Карточка «Студенческий конкурс» — текст', 'aStudentNote'),
         text('cta', 'Кнопка в шапке', 'aCta'),
-        text('alt', 'Описание иллюстрации (alt)', 'aHeroAlt'),
       ],
     },
     {
@@ -96,7 +95,6 @@ export const AWARD: PageContent = {
         text('areaPh', 'Подсказка в поле площади', 'aStudentAreaPh'),
         text('send', 'Кнопка отправки', 'aStudentSend'),
         text('sentText', 'Текст после отправки', 'aStudentSent', true),
-        text('alt', 'Описание иллюстрации (alt)', 'aStudentAlt'),
       ],
     },
   ],

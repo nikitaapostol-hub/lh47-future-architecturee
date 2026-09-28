@@ -1,1 +1,62 @@
-/* project-level admin tweaks */
+/* Админка ARCH MAKERS — поменьше визуального шума. */
+
+/* Заголовок поля на трёх языках («Заголовок», «Текст»…) — как обычная подпись,
+   а не крупный заголовок раздела. */
+.group-field__title {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+  margin: 0 0 4px;
+}
+.group-field__header {
+  margin-bottom: 6px;
+}
+.group-field__description,
+.group-field .field-description {
+  margin-top: 0;
+}
+
+/* Подписи RU / RO / EN — маленькие и серые. */
+.group-field .row .field-label {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  opacity: 0.6;
+}
+
+/* Вкладки с разделами страницы — не такие крупные. */
+.tabs-field__tab-button {
+  font-size: 15px;
+}
+
+/* Акцент бренда. */
+:root {
+  --am-accent: #1a52a0;
+}
+
+/* Поля на трёх языках идут плотнее: без двойных отступов и линий между ними. */
+.render-fields > .group-field,
+.tabs-field__content-wrap .group-field {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  border-top: 0;
+}
+.render-fields > .group-field + .group-field {
+  border-top: 1px solid var(--theme-elevation-50);
+}
+.array-field .group-field {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* Когда рядом открыт живой просмотр и форма узкая — RU / RO / EN
+   встают друг под другом, а не сжимаются до обрезков. */
+.group-field .row__fields {
+  flex-wrap: wrap;
+}
+.group-field .row__fields > .field-type {
+  flex: 1 1 240px !important;
+  min-width: 240px;
+  width: auto !important;
+}

@@ -3,7 +3,7 @@ import { list, text } from './fields'
 
 /** Страница форума. Дата, таймер и спикеры — в «Настройки → Форум». */
 export const FORUM: PageContent = {
-  slug: 'page-forum',
+  slug: 'forum',
   label: 'Форум — тексты',
   desc: 'Страница future-arch.md/forum. Дата, таймер и спикеры — в разделе «Настройки → Форум». Пустое поле = остаётся текст, который стоит на сайте сейчас.',
   sections: [
@@ -22,7 +22,6 @@ export const FORUM: PageContent = {
         text('hours', 'Таймер — часов', 'fHours'),
         text('minutes', 'Таймер — минут', 'fMinutes'),
         text('seconds', 'Таймер — секунд', 'fSeconds'),
-        text('alt', 'Описание иллюстрации (alt)', 'fHeroAlt'),
       ],
     },
     {
@@ -48,7 +47,6 @@ export const FORUM: PageContent = {
       fields: [
         text('number', 'Число', 'fCount'),
         text('text', 'Подпись', 'fCountText'),
-        text('alt', 'Описание фото (alt)', 'fPhotoAlt'),
       ],
     },
     {
@@ -91,7 +89,6 @@ export const FORUM: PageContent = {
           { title: 'fProg7' },
           { title: 'fProg8' },
         ]),
-        text('alt', 'Описание фото (alt)', 'fProgramAlt'),
       ],
     },
     {
@@ -107,7 +104,6 @@ export const FORUM: PageContent = {
         text('during', 'Метка «Во время»', 'fDuring'),
         text('after', 'Метка «После»', 'fAfter'),
         text('cta', 'Кнопка', 'fGetOffer'),
-        text('alt', 'Описание иллюстрации (alt)', 'fFacadeAlt'),
       ],
     },
     {

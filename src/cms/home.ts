@@ -3,7 +3,7 @@ import { list, text } from './fields'
 
 /** Главная — сообщество. Порядок секций = порядок на странице. */
 export const HOME: PageContent = {
-  slug: 'page-home',
+  slug: 'home',
   label: 'Главная — тексты',
   desc: 'Страница future-arch.md. Пустое поле = остаётся текст, который стоит на сайте сейчас.',
   sections: [
@@ -21,7 +21,6 @@ export const HOME: PageContent = {
         text('word3', 'Слово внизу 3', 'hWord3'),
         text('cta', 'Кнопка в шапке', 'hCta'),
         text('ctaMenu', 'Кнопка в мобильном меню', 'hCtaMenu'),
-        text('alt', 'Описание иллюстрации (alt)', 'hHeroAlt'),
       ],
     },
     {
@@ -57,13 +56,11 @@ export const HOME: PageContent = {
           { text: 'hPerk5' },
         ]),
         text('residentsLink', 'Резиденты — ссылка', 'hBeResidentArrow'),
-        text('residentsAlt', 'Резиденты — описание картинки (alt)', 'hResidentsAlt'),
         text('partners', 'Партнёры — метка', 'hPartners'),
         text('partnersTerm', 'Партнёры — условие', 'hPartnersTerm'),
         text('partnersTitle', 'Партнёры — заголовок', 'hPartnersTitle'),
         text('partnersText', 'Партнёры — текст', 'hPartnersText', true),
         text('partnersLink', 'Партнёры — ссылка', 'hBePartnerArrow'),
-        text('partnersAlt', 'Партнёры — описание картинки (alt)', 'hPartnersAlt'),
       ],
     },
     {
