@@ -190,7 +190,7 @@ function notify(slug: string, section: Section, kind: (doc: any) => string, rows
       const body =
         tr(cfg?.autoreplyBody) ||
         'Здравствуйте!\n\nМы получили вашу заявку и вернёмся с ответом на этот адрес.\n\nFuture Architecture\nfuture-arch.md'
-      // ответ на автоответ попадёт в общий ящик, а не в noreply
+      // ответ на автоответ попадёт в общий ящик
       await sendSafe(payload, {
         to: doc.email,
         subject,

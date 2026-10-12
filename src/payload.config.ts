@@ -20,11 +20,13 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 /** Почта сайта. Основной способ — Resend (ключ RESEND_API_KEY в Vercel),
-    письма уходят с noreply@future-arch.md. Запасной — SMTP из окружения.
+    письма уходят с info@future-arch.md — у этого адреса есть Google-аккаунт
+    со знаком на фото, поэтому в Gmail у писем видна аватарка.
+    Сменить адрес — переменная MAIL_SENDER в Vercel. Запасной способ — SMTP.
     Нет ни того ни другого — Payload только логирует письма, заявка при этом
     всё равно сохраняется в базе. */
 const FROM_NAME = process.env.MAIL_FROM_NAME || 'Future Architecture'
-const FROM = process.env.MAIL_FROM || 'noreply@future-arch.md'
+const FROM = process.env.MAIL_SENDER || 'info@future-arch.md'
 
 function email() {
   if (process.env.RESEND_API_KEY) {
