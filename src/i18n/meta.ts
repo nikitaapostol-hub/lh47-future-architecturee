@@ -110,3 +110,14 @@ export function privacyMeta(lang: Lang): Metadata {
     },
   }
 }
+
+const THANKS: Record<Lang, string> = {
+  ru: 'Заявка отправлена · Future Architecture',
+  ro: 'Cererea a fost trimisă · Future Architecture',
+  en: 'Application sent · Future Architecture',
+}
+
+/** Страница «Спасибо»: в поиск не попадает. */
+export function thanksMeta(lang: Lang): Metadata {
+  return { title: THANKS[lang], robots: { index: false, follow: false } }
+}

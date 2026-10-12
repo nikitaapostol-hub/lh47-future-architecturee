@@ -3,6 +3,7 @@
 import CommunityPage from '@/components/CommunityPage'
 import ForumPage from '@/components/ForumPage'
 import AwardPage from '@/components/AwardPage'
+import ThanksPage from '@/components/ThanksPage'
 import { getGlobal } from '@/lib/settings'
 import { texts } from '@/lib/content'
 import { inLang } from '@/cms/build'
@@ -62,4 +63,15 @@ export async function Award({ lang }: { lang: Lang }) {
       />
     </>
   )
+}
+
+/** «Спасибо» после отправки формы: общие тексты + строки «заявка отправлена»
+    со всех трёх страниц (как они заданы в админке). */
+export async function Thanks({ lang }: { lang: Lang }) {
+  const [h, f, a] = await Promise.all([texts('home', lang), texts('forum', lang), texts('award', lang)])
+  const t = { ...h, ...f, ...a }
+  const keep = ['hSentText', 'hCta', 'hCtaMenu', 'fSentText', 'fCta', 'fCtaMenu', 'aSentText', 'aStudentSent', 'aAgain', 'aCta']
+  const out: Record<string, string> = {}
+  for (const k in t) if (k[0] === 'c' || keep.includes(k)) out[k] = (t as any)[k]
+  return <ThanksPage t={out as any} lang={lang} />
 }

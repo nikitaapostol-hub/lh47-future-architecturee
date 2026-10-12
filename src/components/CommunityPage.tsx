@@ -6,7 +6,7 @@ import { useState } from 'react'
 import type { FormEvent } from 'react'
 import type { Dict } from '@/i18n/dict'
 import type { Lang } from '@/i18n/links'
-import { post } from '@/lib/submit'
+import { post, thanks } from '@/lib/submit'
 import { Arrow, Consent, EMAIL_RE, Footer, FormError, Header, INPUT, LABEL, W, no2 } from './am/ui'
 import type { S } from './am/ui'
 import Preloader from './Preloader'
@@ -102,6 +102,7 @@ export default function CommunityPage({ t, lang }: Props) {
     try {
       await post('community-applications', body, lang)
       setSent(true)
+      thanks(isResident ? 'community_resident' : 'community_partner', lang)
     } catch {
       setError(t.cError)
     } finally {

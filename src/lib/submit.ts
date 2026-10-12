@@ -1,6 +1,20 @@
 /* Отправка форм. Кроме полей формы уходит контекст: язык, страница и utm —
-   по ним видно, откуда пришла заявка. Событие дублируется в dataLayer,
-   чтобы цель настраивалась в GTM без правок кода. */
+   по ним видно, откуда пришла заявка. После успешной отправки — переход
+   на страницу «Спасибо» (/thanks), там уходит событие form_success в dataLayer
+   (GTM → GA4 generate_lead). */
+import { path } from '@/i18n/links'
+import type { Lang } from '@/i18n/links'
+
+/** Какая форма отправлена — значение параметра form_name в GA4. */
+export type FormName =
+  | 'community_resident'
+  | 'community_partner'
+  | 'forum_guest'
+  | 'forum_partner'
+  | 'award_nomination'
+  | 'award_student'
+
+export const LEAD_KEY = 'fa-lead'
 
 function utm() {
   if (typeof window === 'undefined') return ''
@@ -20,7 +34,8 @@ export function track(event: string, params: Record<string, unknown> = {}) {
   try {
     w.dataLayer = w.dataLayer || []
     w.dataLayer.push({ event, ...params })
-    if (typeof w.gtag === 'function') w.gtag('event', event, params)
+    // без GTM (GA4 подключён напрямую) — событие сразу в GA4
+    if (!w.google_tag_manager && typeof w.gtag === 'function' && event === 'form_success') w.gtag('event', 'generate_lead', params)
   } catch {}
 }
 
@@ -37,8 +52,15 @@ export async function post(collection: string, body: Record<string, unknown>, la
     body: JSON.stringify(payload),
   })
   if (!res.ok) throw new Error('submit failed: ' + res.status)
-  track('form_submit', { form: collection, language: lang })
   return res.json()
+}
+
+/** Заявка принята — на страницу «Спасибо». */
+export function thanks(form: FormName, lang: Lang, nomination = '') {
+  try {
+    sessionStorage.setItem(LEAD_KEY, JSON.stringify({ form, nomination, page: window.location.pathname }))
+  } catch {}
+  window.location.assign(path(lang, '/thanks') + '?form=' + form)
 }
 
 /** Загрузка файлов заявки в приватное хранилище Vercel Blob прямо из браузера.

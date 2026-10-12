@@ -55,7 +55,9 @@ export function AnalyticsScripts({ cfg }: { cfg: AnalyticsConfig }) {
         </>
       ) : null}
 
-      {ga4Id ? (
+      {/* GA4 напрямую — только если нет GTM: при GTM код GA4 стоит в нём
+          (тег «Google tag»), иначе просмотры считались бы дважды. */}
+      {ga4Id && !gtmId ? (
         <>
           <Script
             src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}

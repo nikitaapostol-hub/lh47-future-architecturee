@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
 import type { Dict } from '@/i18n/dict'
 import type { Lang } from '@/i18n/links'
-import { post } from '@/lib/submit'
+import { post, thanks } from '@/lib/submit'
 import { Consent, EMAIL_RE, Footer, FormError, Header, INPUT, LABEL, W, no2 } from './am/ui'
 import type { S } from './am/ui'
 import Preloader from './Preloader'
@@ -123,6 +123,7 @@ export default function ForumPage({ t, lang, forumDate, countdownVisible = true,
     try {
       await post('forum-applications', { kind: partner ? 'Партнёр' : 'Участник', name: v.name, company: v.company, phone: v.phone, email }, lang)
       setSent(true)
+      thanks(partner ? 'forum_partner' : 'forum_guest', lang)
     } catch {
       setError(t.cError)
     } finally {

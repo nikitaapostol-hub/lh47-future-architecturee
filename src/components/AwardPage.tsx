@@ -6,7 +6,7 @@ import { useState } from 'react'
 import type { ChangeEvent, FormEvent } from 'react'
 import type { Dict } from '@/i18n/dict'
 import type { Lang } from '@/i18n/links'
-import { post, uploadFiles } from '@/lib/submit'
+import { post, thanks, uploadFiles } from '@/lib/submit'
 import { Arrow, Consent, Footer, FormError, Header, W, fill, no2 } from './am/ui'
 import type { S } from './am/ui'
 import Preloader from './Preloader'
@@ -131,6 +131,7 @@ export default function AwardPage({ t, lang, deadlineDate, forumDate, nomination
       await post('award-applications', { track: 'Премия', nomination: nom, ...a, files }, lang)
       setSentNom(nom)
       setSentA(true)
+      thanks('award_nomination', lang, nom)
     } catch {
       setErrA(t.cError)
     } finally {
@@ -157,6 +158,7 @@ export default function AwardPage({ t, lang, deadlineDate, forumDate, nomination
     try {
       await post('award-applications', { track: 'Студенческий конкурс', ...s, files }, lang)
       setSentS(true)
+      thanks('award_student', lang)
     } catch {
       setErrS(t.cError)
     } finally {
