@@ -187,6 +187,7 @@ button:focus-visible,
 .am-g2,
 .am-g3,
 .am-g4,
+.am-g5,
 .am-f2 {
   grid-template-columns: minmax(0, 1fr);
 }
@@ -230,8 +231,13 @@ button:focus-visible,
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .am-g3,
-  .am-g4 {
+  .am-g4,
+  .am-g5 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* пятая карточка на планшете — на всю ширину, без «дырки» справа */
+  .am-g5 > :last-child:nth-child(odd) {
+    grid-column: 1 / -1;
   }
   .am-g4p {
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -277,6 +283,12 @@ button:focus-visible,
   }
   .am-g4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .am-g5 {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .am-g5 > :last-child:nth-child(odd) {
+    grid-column: auto;
   }
   .am-g6 {
     grid-template-columns: repeat(6, minmax(0, 1fr));

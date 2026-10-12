@@ -10,6 +10,7 @@ import * as migration_20260928_080628_arch_makers_admin_cleanup from './20260928
 import * as migration_20260928_080700_arch_makers_admin_data from './20260928_080700_arch_makers_admin_data';
 import * as migration_20261012_090000_future_architecture_brand from './20261012_090000_future_architecture_brand';
 import * as migration_20261012_120000_applications_mail from './20261012_120000_applications_mail';
+import * as migration_20261012_140000_public_spaces_nomination from './20261012_140000_public_spaces_nomination';
 
 export const migrations = [
   {
@@ -71,5 +72,10 @@ export const migrations = [
     up: migration_20261012_120000_applications_mail.up,
     down: migration_20261012_120000_applications_mail.down,
     name: '20261012_120000_applications_mail',
+  },
+  {
+    up: migration_20261012_140000_public_spaces_nomination.up,
+    down: migration_20261012_140000_public_spaces_nomination.down,
+    name: '20261012_140000_public_spaces_nomination',
   },
 ];

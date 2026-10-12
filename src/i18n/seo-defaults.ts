@@ -46,17 +46,17 @@ export const SEO_COPY: Record<SeoPage, Record<Lang, { title: string; description
     ru: {
       title: 'Future Architecture Award 2026 — премия и студенческий конкурс',
       description:
-        'Премия для архитекторов и дизайнеров в четырёх номинациях и студенческий конкурс. Заявки до 20 ноября, победителей объявят 9 декабря на сцене Future Architecture Forum.',
+        'Премия для архитекторов и дизайнеров в пяти номинациях и студенческий конкурс. Заявки до 20 ноября, победителей объявят 9 декабря на сцене Future Architecture Forum.',
     },
     ro: {
       title: 'Future Architecture Award 2026 — premiu și concurs studențesc',
       description:
-        'Premiu pentru arhitecți și designeri în patru nominalizări și un concurs studențesc. Cereri până pe 20 noiembrie, câștigătorii vor fi anunțați pe 9 decembrie pe scena Future Architecture Forum.',
+        'Premiu pentru arhitecți și designeri în cinci nominalizări și un concurs studențesc. Cereri până pe 20 noiembrie, câștigătorii vor fi anunțați pe 9 decembrie pe scena Future Architecture Forum.',
     },
     en: {
       title: 'Future Architecture Award 2026 — award and student competition',
       description:
-        'An award for architects and designers in four categories, plus a student competition. Applications until 20 November, winners announced on 9 December on stage at Future Architecture Forum.',
+        'An award for architects and designers in five categories, plus a student competition. Applications until 20 November, winners announced on 9 December on stage at Future Architecture Forum.',
     },
   },
 }

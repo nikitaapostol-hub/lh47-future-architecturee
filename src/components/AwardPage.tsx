@@ -39,18 +39,21 @@ const DEFAULT_NOMS: Record<Lang, [string, string][]> = {
     ['Архитектура', 'Архитектура жилого комплекса'],
     ['Интерьер', 'Интерьер жилого пространства'],
     ['Интерьер', 'Интерьер коммерческого пространства'],
+    ['Архитектура', 'Общественные пространства'],
   ],
   ro: [
     ['Arhitectură', 'Arhitectura casei private'],
     ['Arhitectură', 'Arhitectura complexului rezidențial'],
     ['Interior', 'Interiorul spațiului rezidențial'],
     ['Interior', 'Interiorul spațiului comercial'],
+    ['Arhitectură', 'Spații publice'],
   ],
   en: [
     ['Architecture', 'Private house architecture'],
     ['Architecture', 'Residential complex architecture'],
     ['Interior', 'Residential interior'],
     ['Interior', 'Commercial interior'],
+    ['Architecture', 'Public spaces'],
   ],
 }
 
@@ -249,7 +252,7 @@ export default function AwardPage({ t, lang, deadlineDate, forumDate, nomination
               </div>
               <p style={{ maxWidth: '42ch', fontSize: '16px', lineHeight: 1.6, color: '#55554F' }}>{t.aNomText}</p>
             </div>
-            <div className="am-g4" style={{ display: 'grid', marginTop: '32px', borderTop: '1px solid #000', borderLeft: '1px solid #E6E6E3' }}>
+            <div className={noms.length === 5 ? 'am-g5' : 'am-g4'} style={{ display: 'grid', marginTop: '32px', borderTop: '1px solid #000', borderLeft: '1px solid #E6E6E3' }}>
               {noms.map((n) => (
                 <a key={n.no} href="#apply" onClick={() => setNom(n.title)} className="hv-bgyellow" style={{ display: 'flex', flexDirection: 'column', minHeight: '200px', padding: '22px', borderRight: '1px solid #E6E6E3', borderBottom: '1px solid #E6E6E3', color: '#000', transition: 'background 240ms' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
