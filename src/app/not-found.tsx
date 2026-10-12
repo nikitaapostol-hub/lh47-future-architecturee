@@ -5,7 +5,7 @@ import './(frontend)/globals.css'
 import NotFoundPage from '@/components/NotFoundPage'
 
 export const metadata: Metadata = {
-  title: 'Страница не найдена · ARCH MAKERS',
+  title: 'Страница не найдена · Future Architecture',
   description: 'Такой страницы на сайте нет.',
   robots: { index: false, follow: true },
 }

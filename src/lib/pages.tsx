@@ -29,8 +29,8 @@ export async function Forum({ lang }: { lang: Lang }) {
   }))
   return (
     <>
-      <OrgLd lang={lang} />
-      <ForumLd lang={lang} startDate={g.forumDate as string} />
+      <OrgLd lang={lang} page="/forum" />
+      <ForumLd lang={lang} startDate={g.forumDate as string} speakers={speakers} />
       <ForumPage t={t} lang={lang} forumDate={g.forumDate as string} countdownVisible={g.countdownVisible !== false} speakers={speakers} />
     </>
   )
@@ -44,8 +44,13 @@ export async function Award({ lang }: { lang: Lang }) {
     .filter((n: any) => n.title)
   return (
     <>
-      <OrgLd lang={lang} />
-      <AwardLd lang={lang} deadline={g.deadlineDate as string} />
+      <OrgLd lang={lang} page="/award" />
+      <AwardLd
+        lang={lang}
+        deadline={g.deadlineDate as string}
+        ceremony={f.forumDate as string}
+        nominations={nominations.map((n: any) => n.title)}
+      />
       <AwardPage
         t={t}
         lang={lang}

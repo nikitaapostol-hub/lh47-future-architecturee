@@ -144,9 +144,9 @@ export default function ForumPage({ t, lang, forumDate, countdownVisible = true,
             </div>
             <div style={{ marginTop: 'auto' }}>
               <h1 style={{ fontFamily: W, fontWeight: 800, fontSize: 'clamp(36px,4.6vw,72px)', lineHeight: 0.94, letterSpacing: '-.03em', textTransform: 'uppercase' }}>
-                Arch
+                Future
                 <br />
-                Makers
+                Architecture
                 <br />
                 Forum <span style={{ color: '#000' }}>2026</span>
               </h1>

@@ -37,8 +37,8 @@ export default function NotFoundPage() {
     <div lang={lang} className="sel-yellow" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#fff', color: '#000', overflowX: 'clip' }}>
       <header style={{ borderBottom: '1px solid #E6E6E3' }}>
         <div style={{ maxWidth: '1440px', height: '72px', margin: '0 auto', padding: '0 clamp(20px,4vw,64px)', display: 'flex', alignItems: 'center', gap: '24px' }}>
-          <a href={path(lang, '/')} aria-label="ARCH MAKERS" style={{ display: 'flex', alignItems: 'center' }}>
-            <img src="/img/logo-v2.svg" alt="ARCH MAKERS" width={137} height={40} style={{ display: 'block', height: '40px', width: 'auto' }} />
+          <a href={path(lang, '/')} aria-label="Future Architecture" style={{ display: 'flex', alignItems: 'center' }}>
+            <img src="/img/logo.svg" alt="Future Architecture" width={160} height={40} style={{ display: 'block', height: '40px', width: 'auto' }} />
           </a>
           <div style={{ display: 'flex', gap: '10px', marginLeft: 'auto', fontSize: '13px', color: '#8A8A86' }}>
             {(['ro', 'ru', 'en'] as Lang[]).map((k) => (
@@ -76,7 +76,7 @@ export default function NotFoundPage() {
       </main>
       <footer style={{ background: '#000', color: '#9A9A96' }}>
         <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '20px clamp(20px,4vw,64px)', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '16px', fontSize: '13px' }}>
-          <span>© 2026 ARCH MAKERS</span>
+          <span>© 2026 Future Architecture</span>
           <a href="mailto:marketing@lh47arch.com" style={{ color: '#fff' }}>marketing@lh47arch.com</a>
         </div>
       </footer>

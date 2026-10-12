@@ -46,7 +46,7 @@ export async function Welcome({ req }: { req: PayloadRequest }) {
   return (
     <div style={{ marginBottom: 48 }}>
       <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', justifyContent: 'space-between', gap: 16 }}>
-        <h1 style={{ margin: 0 }}>ARCH MAKERS</h1>
+        <h1 style={{ margin: 0 }}>Future Architecture</h1>
         <a href="/" target="_blank" rel="noopener" style={{ fontWeight: 600 }}>
           Открыть сайт ↗
         </a>

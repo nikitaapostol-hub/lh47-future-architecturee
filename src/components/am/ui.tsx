@@ -1,6 +1,6 @@
 'use client'
 
-/* Общие части новых страниц ARCH MAKERS: шапка, подвал, поля форм.
+/* Общие части новых страниц Future Architecture: шапка, подвал, поля форм.
    Разметка и инлайновые стили перенесены из макетов design/*.dc.html дословно;
    то, что в макете считалось в JS по ширине окна, — классы am-* в globals.css
    (брейкпоинты макета: ≥1100px — десктоп, 720–1099 — планшет, <720 — телефон). */
@@ -112,8 +112,8 @@ export function Header({
     <>
     <header style={{ ['--am-acc' as string]: a.color, position: 'sticky', top: 0, zIndex: 60, background: 'rgba(255,255,255,.94)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderBottom: '1px solid #E6E6E3' }}>
       <div style={{ maxWidth: '1440px', height: '72px', margin: '0 auto', padding: '0 clamp(20px,4vw,64px)', display: 'flex', alignItems: 'center', gap: '32px' }}>
-        <a href={path(lang, '/')} aria-label="ARCH MAKERS" style={{ display: 'flex', alignItems: 'center', flex: '0 0 auto' }}>
-          <img src="/img/logo-v2.svg" alt="ARCH MAKERS" width={137} height={40} style={{ display: 'block', height: '40px', width: 'auto' }} />
+        <a href={path(lang, '/')} aria-label="Future Architecture" style={{ display: 'flex', alignItems: 'center', flex: '0 0 auto' }}>
+          <img src="/img/logo.svg" alt="Future Architecture" width={160} height={40} style={{ display: 'block', height: '40px', width: 'auto' }} />
         </a>
         <nav className="am-d" style={{ display: 'flex', alignItems: 'center', gap: '32px', marginLeft: 'auto', fontSize: '14px', fontWeight: 500, whiteSpace: 'nowrap' }}>
           {items.map((it) =>
@@ -214,7 +214,7 @@ export function Footer({ t, lang }: { t: Dict; lang: Lang }) {
       <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 clamp(20px,4vw,64px)' }}>
         <div className="am-g4" style={{ display: 'grid', gap: '32px' }}>
           <div>
-            <img src="/img/logo-v2-white.svg" alt="ARCH MAKERS" width={192} height={56} loading="lazy" style={{ display: 'block', height: '56px', width: 'auto' }} />
+            <img src="/img/logo-white.svg" alt="Future Architecture" width={224} height={56} loading="lazy" style={{ display: 'block', height: '56px', width: 'auto' }} />
             <div style={{ marginTop: '20px', ...CAP }}>{t.cTagline}</div>
           </div>
           <div>

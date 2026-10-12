@@ -1,8 +1,8 @@
-/* Логотип и значок ARCH MAKERS в админке. */
+/* Логотип и значок Future Architecture в админке. */
 export function Logo() {
-  return <img src="/img/logo-v2.svg" alt="ARCH MAKERS" style={{ height: 56, width: 'auto', display: 'block' }} />
+  return <img src="/img/logo.svg" alt="Future Architecture" style={{ height: 56, width: 'auto', display: 'block' }} />
 }
 
 export function Icon() {
-  return <img src="/icon.svg" alt="ARCH MAKERS" style={{ height: 28, width: 28, display: 'block' }} />
+  return <img src="/icon.svg" alt="Future Architecture" style={{ height: 28, width: 28, display: 'block' }} />
 }

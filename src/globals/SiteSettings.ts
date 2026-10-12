@@ -107,7 +107,8 @@ export const SiteSettings: GlobalConfig = {
     hideAPIURL: true,
     description: 'Куда приходят заявки, SEO и счётчики.',
   },
-  access: { read: () => true },
+  // адреса почты и коды — только для вошедших в админку; сайт читает их на сервере
+  access: { read: ({ req }) => Boolean(req.user) },
   hooks: { afterChange: [revalidateSite] },
   fields: [{ type: 'tabs', tabs: [mail, seo, analytics] }],
 }

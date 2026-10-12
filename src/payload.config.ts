@@ -26,7 +26,7 @@ function email() {
   const port = Number(process.env.SMTP_PORT || 465)
   return nodemailerAdapter({
     defaultFromAddress: process.env.SMTP_FROM || process.env.SMTP_USER || 'no-reply@lh47arch.com',
-    defaultFromName: process.env.SMTP_FROM_NAME || 'ARCH MAKERS',
+    defaultFromName: process.env.SMTP_FROM_NAME || 'Future Architecture',
     transport: nodemailer.createTransport({
       host,
       port,
@@ -42,7 +42,7 @@ export default buildConfig({
     user: Users.slug,
     importMap: { baseDir: path.resolve(dirname) },
     meta: {
-      titleSuffix: ' · ARCH MAKERS',
+      titleSuffix: ' · Future Architecture',
       icons: [{ rel: 'icon', type: 'image/svg+xml', url: '/icon.svg' }],
     },
     components: {
@@ -54,7 +54,7 @@ export default buildConfig({
     // Первый экран админки — один блок: новые заявки и ссылки на страницы.
     dashboard: {
       widgets: [
-        { slug: 'welcome', label: 'ARCH MAKERS', Component: '/components/admin/Welcome#Welcome', minWidth: 'full', maxWidth: 'full' },
+        { slug: 'welcome', label: 'Future Architecture', Component: '/components/admin/Welcome#Welcome', minWidth: 'full', maxWidth: 'full' },
       ],
       defaultLayout: [{ widgetSlug: 'welcome', width: 'full' }],
     },

@@ -125,10 +125,10 @@ export default function CommunityPage({ t, lang }: Props) {
               <span style={{ color: '#1A52A0' }}>{t.hPlace}</span>
             </div>
             <div style={{ marginTop: 'auto' }}>
-              <h1 style={{ fontFamily: W, fontWeight: 800, fontSize: 'clamp(40px,5.6vw,92px)', lineHeight: 0.9, letterSpacing: '-.035em', textTransform: 'uppercase' }}>
-                Arch
+              <h1 style={{ fontFamily: W, fontWeight: 800, fontSize: 'clamp(38px,5vw,80px)', lineHeight: 0.92, letterSpacing: '-.035em', textTransform: 'uppercase' }}>
+                Future
                 <br />
-                Makers
+                Architecture
               </h1>
               <p style={{ marginTop: '18px', maxWidth: '36ch', fontSize: 'clamp(16px,1.3vw,19px)', lineHeight: 1.45, color: '#2A2A28' }}>{t.hLead}</p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginTop: '28px' }}>

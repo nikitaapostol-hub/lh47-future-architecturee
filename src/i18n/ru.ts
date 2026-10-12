@@ -1,4 +1,4 @@
-/* Тексты сайта ARCH MAKERS — русская версия (она же значения по умолчанию для админки).
+/* Тексты сайта Future Architecture — русская версия (она же значения по умолчанию для админки).
    Ключи сгруппированы по страницам: c* — общее, h* — сообщество, f* — форум, a* — премия.
    ro.ts и en.ts повторяют тот же набор ключей. */
 export const ru = {
@@ -23,7 +23,7 @@ export const ru = {
   cInstagram: '',
   cFacebook: '',
   cLinkedin: '',
-  cCopyright: '© 2026 ARCH MAKERS',
+  cCopyright: '© 2026 Future Architecture',
   cSent: 'Заявка отправлена',
   cFullName: 'Имя и фамилия',
   cCompanyName: 'Название компании',
@@ -84,7 +84,7 @@ export const ru = {
   hBePartnerArrow: 'Стать партнёром →',
   hFormatsLabel: '03 / Инструменты',
   hFormatsTitle: 'Форматы взаимодействия',
-  hFormat1: 'ARCH MAKERS Forum',
+  hFormat1: 'Future Architecture Forum',
   hFormat1Text: 'Главное ежегодное событие сообщества',
   hFormat2: 'ArchiMinds',
   hFormat2Text: 'Ежемесячные образовательные встречи с экспертами',
@@ -203,7 +203,7 @@ export const ru = {
   aDeadlineLabel: 'Заявки до',
   aDaysLeft: 'Осталось {days} дн.',
   aWinners: 'Победители',
-  aWinnersText: 'Победителей объявят на сцене ARCH MAKERS Forum',
+  aWinnersText: 'Победителей объявят на сцене Future Architecture Forum',
   aChoose: 'Выберите, где участвовать',
   aAward: 'Премия',
   aAwardNote: 'Для архитекторов и дизайнеров: 4 номинации',
@@ -215,9 +215,9 @@ export const ru = {
   aNomText: 'Выберите номинацию — форма заявки откроется с ней.',
   aPrizeLabel: '02 / Награда',
   aPrizeTitle: 'Что получает победитель',
-  aPrize1: 'Вручение награды на сцене ARCH MAKERS Forum 9 декабря — с представлением проекта и его авторов',
-  aPrize2: 'Публикация проекта в ежегодном журнале ARCH MAKERS',
-  aPrize3: 'Бесплатное членство в сообществе ARCH MAKERS на 2027 год',
+  aPrize1: 'Вручение награды на сцене Future Architecture Forum 9 декабря — с представлением проекта и его авторов',
+  aPrize2: 'Публикация проекта в ежегодном журнале Future Architecture',
+  aPrize3: 'Бесплатное членство в сообществе Future Architecture на 2027 год',
   aPrize4: 'Подарки от партнёров сообщества и форума',
   aFormLabel: '03 / Заявка',
   aFormTitle: 'Заявка на премию',
@@ -242,7 +242,7 @@ export const ru = {
   aUploadError: 'Файлы не загрузились. Попробуйте ещё раз или пришлите ссылку на материалы в описании.',
   aUploading: 'Загружаем файлы…',
   aSend: 'Отправить заявку →',
-  aSentText: 'Номинация: {nom}. Ответим после проверки материалов. Победителей объявят 9 декабря на сцене ARCH MAKERS Forum.',
+  aSentText: 'Номинация: {nom}. Ответим после проверки материалов. Победителей объявят 9 декабря на сцене Future Architecture Forum.',
   aAgain: 'Подать ещё одну номинацию →',
   aStudentsLabel: 'Для студентов',
   aStudent1: 'Студенческий',

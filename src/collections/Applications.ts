@@ -102,10 +102,10 @@ function notify(title: string, rows: (doc: any) => MailRow[]) {
     if (cfg?.autoreply !== false && doc?.email) {
       const locale = doc?.lang === 'ro' || doc?.lang === 'en' ? doc.lang : 'ru'
       const tr = (v: any) => (v && typeof v === 'object' ? String(v[locale] || v.ru || '').trim() : '')
-      const subject = tr(cfg?.autoreplySubject) || 'Заявка получена — ARCH MAKERS'
+      const subject = tr(cfg?.autoreplySubject) || 'Заявка получена — Future Architecture'
       const body =
         tr(cfg?.autoreplyBody) ||
-        'Здравствуйте!\n\nМы получили вашу заявку и вернёмся с ответом на этот адрес.\n\nARCH MAKERS\nfuture-arch.md'
+        'Здравствуйте!\n\nМы получили вашу заявку и вернёмся с ответом на этот адрес.\n\nFuture Architecture\nfuture-arch.md'
       await sendSafe(payload, { to: doc.email, subject, html: autoreplyHtml(body) })
     }
     return doc

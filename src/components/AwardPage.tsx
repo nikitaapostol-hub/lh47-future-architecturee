@@ -187,9 +187,9 @@ export default function AwardPage({ t, lang, deadlineDate, forumDate, nomination
             </div>
             <div style={{ marginTop: 'auto' }}>
               <h1 style={{ fontFamily: W, fontWeight: 800, fontSize: 'clamp(36px,4.6vw,72px)', lineHeight: 0.94, letterSpacing: '-.03em', textTransform: 'uppercase' }}>
-                Arch
+                Future
                 <br />
-                Makers
+                Architecture
                 <br />
                 Award 2026
               </h1>

@@ -1,10 +1,10 @@
-# ARCH MAKERS — сайт (future-arch.md)
+# Future Architecture — сайт (future-arch.md)
 
 Next.js 16 + Payload CMS 3 на Postgres (Neon). Бывший Future Architecture.
-Дизайн ARCH MAKERS 2026 перенесён из макетов Claude Design (`*.dc.html`) в React-компоненты;
+Дизайн Future Architecture 2026 перенесён из макетов Claude Design (`*.dc.html`) в React-компоненты;
 весь текст редактируется из админки на трёх языках.
 
-## Редизайн ARCH MAKERS (сентябрь 2026) — что где
+## Редизайн Future Architecture (сентябрь 2026) — что где
 
 - Страницы: `src/components/CommunityPage.tsx`, `ForumPage.tsx`, `AwardPage.tsx`, `PrivacyPage.tsx`,
   `NotFoundPage.tsx`; общие шапка, подвал и поля форм — `src/components/am/ui.tsx`.
@@ -120,3 +120,11 @@ npm run migrate:create
   reveal по скроллу, счётчики, бегущие строки, таймеры, параллакс.
 - **Состояние страниц** (меню, валидация форм, выбор трека премии) переписано
   на React-хуки один в один с исходной логикой.
+
+## Название, логотип и SEO
+
+- Название — **Future Architecture**. Логотип: `public/img/logo.svg` (цветной), `public/img/logo-white.svg` (для тёмного подвала); значки — `public/icon.svg`, `favicon.ico`, `icon-*.png`, `apple-touch-icon.png`.
+- Заголовки и описания страниц по умолчанию — `src/i18n/seo-defaults.ts`; правятся в админке: «Настройки сайта → SEO».
+- Картинки превью ссылок (1200×630, на каждом языке) — `public/og/{home,forum,award}-{ru,ro,en}.jpg`. Своя картинка из админки важнее.
+- Разметка schema.org (организация, сайт, страница, события форума и премии) — `src/lib/JsonLd.tsx`.
+- `/llms.txt` — справка о сайте для AI-ассистентов; `/robots.txt` открывает сайт поисковым и AI-краулерам; `/sitemap.xml` — все страницы на трёх языках.

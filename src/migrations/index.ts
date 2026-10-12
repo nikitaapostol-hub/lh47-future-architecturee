@@ -8,6 +8,7 @@ import * as migration_20260927_200500_arch_makers_content from './20260927_20050
 import * as migration_20260928_080623_arch_makers_admin from './20260928_080623_arch_makers_admin';
 import * as migration_20260928_080628_arch_makers_admin_cleanup from './20260928_080628_arch_makers_admin_cleanup';
 import * as migration_20260928_080700_arch_makers_admin_data from './20260928_080700_arch_makers_admin_data';
+import * as migration_20261012_090000_future_architecture_brand from './20261012_090000_future_architecture_brand';
 
 export const migrations = [
   {
@@ -59,5 +60,10 @@ export const migrations = [
     up: migration_20260928_080700_arch_makers_admin_data.up,
     down: migration_20260928_080700_arch_makers_admin_data.down,
     name: '20260928_080700_arch_makers_admin_data',
+  },
+  {
+    up: migration_20261012_090000_future_architecture_brand.up,
+    down: migration_20261012_090000_future_architecture_brand.down,
+    name: '20261012_090000_future_architecture_brand',
   },
 ];
