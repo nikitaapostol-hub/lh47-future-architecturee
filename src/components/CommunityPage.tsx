@@ -6,8 +6,8 @@ import { useState } from 'react'
 import type { FormEvent } from 'react'
 import type { Dict } from '@/i18n/dict'
 import type { Lang } from '@/i18n/links'
-import { post, thanks } from '@/lib/submit'
-import { Arrow, Consent, EMAIL_RE, Footer, FormError, Header, INPUT, LABEL, W, no2 } from './am/ui'
+import { checkForm, hpValue, post, thanks } from '@/lib/submit'
+import { Arrow, Consent, EMAIL_RE, Footer, FormError, Header, Honeypot, INPUT, LABEL, W, no2 } from './am/ui'
 import type { S } from './am/ui'
 import Preloader from './Preloader'
 
@@ -73,6 +73,8 @@ export default function CommunityPage({ t, lang }: Props) {
   const submit = async (e: FormEvent) => {
     e.preventDefault()
     if (busy) return
+    const form = e.currentTarget as HTMLFormElement
+    if (!checkForm(form, lang)) return
     const email = (v.email || '').trim()
     if (!EMAIL_RE.test(email)) {
       document.getElementById('am-join-email')?.focus()
@@ -100,7 +102,7 @@ export default function CommunityPage({ t, lang }: Props) {
           email,
         }
     try {
-      await post('community-applications', body, lang)
+      await post('community-applications', { ...body, hp: hpValue(form) }, lang)
       setSent(true)
       thanks(isResident ? 'community_resident' : 'community_partner', lang)
     } catch {
@@ -272,7 +274,8 @@ export default function CommunityPage({ t, lang }: Props) {
                   <p style={{ marginTop: '14px', fontSize: '16px', lineHeight: 1.6, color: '#55554F' }}>{t.hSentText}</p>
                 </div>
               ) : (
-                <form onSubmit={submit}>
+                <form onSubmit={submit} style={{ position: 'relative' }}>
+                  <Honeypot />
                   <div role="radiogroup" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', border: '1px solid #000', maxWidth: '420px' }}>
                     <button type="button" role="radio" aria-checked={isResident} onClick={pickResident} style={{ height: '48px', border: 0, cursor: 'pointer', fontFamily: W, fontWeight: 700, fontSize: '13px', background: isResident ? '#000' : '#fff', color: isResident ? '#fff' : '#000' }}>
                       {t.hResident}

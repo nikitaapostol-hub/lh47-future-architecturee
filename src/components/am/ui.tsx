@@ -281,6 +281,21 @@ export function Consent({ t, lang, dark = false }: { t: Dict; lang: Lang; dark?:
 }
 
 /** Сообщение об ошибке отправки. */
+/** Невидимое поле-ловушка: человек его не видит, бот заполняет — и заявка не уходит. */
+export function Honeypot() {
+  return (
+    <input
+      type="text"
+      name="hp"
+      tabIndex={-1}
+      autoComplete="off"
+      aria-hidden="true"
+      defaultValue=""
+      style={{ position: 'absolute', left: '-10000px', top: 'auto', width: '1px', height: '1px', overflow: 'hidden', opacity: 0 }}
+    />
+  )
+}
+
 export function FormError({ children, dark = false }: { children?: ReactNode; dark?: boolean }) {
   if (!children) return null
   return (

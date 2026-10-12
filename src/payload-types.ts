@@ -155,7 +155,7 @@ export interface CommunityApplication {
   field?: string | null;
   website?: string | null;
   email: string;
-  phone?: string | null;
+  phone: string;
   status?: ('new' | 'progress' | 'accepted' | 'declined') | null;
   /**
    * Видна только в админке.
@@ -181,7 +181,7 @@ export interface ForumApplication {
   role?: string | null;
   kind?: string | null;
   email: string;
-  phone?: string | null;
+  phone: string;
   status?: ('new' | 'progress' | 'accepted' | 'declined') | null;
   /**
    * Видна только в админке.
@@ -213,7 +213,7 @@ export interface AwardApplication {
   area?: string | null;
   year?: string | null;
   email?: string | null;
-  phone?: string | null;
+  phone: string;
   desc?: string | null;
   /**
    * Имя файла и ссылка, по одному в строке. Файлы лежат в закрытом хранилище: ссылка открывается, только когда вы вошли в админку.
@@ -1590,11 +1590,11 @@ export interface Common {
 export interface Setting {
   id: number;
   /**
-   * Несколько адресов — через запятую.
+   * Несколько адресов — через запятую. info@future-arch.md пересылается командам LH47 и InStyle.
    */
   mailTo?: string | null;
   /**
-   * По нему удобно настроить фильтр в почте.
+   * Тема выглядит так: Future Architecture "Заявка — Форум (участник)" — Имя. По ней удобно настроить фильтр в почте.
    */
   subjectPrefix?: string | null;
   autoreply?: boolean | null;

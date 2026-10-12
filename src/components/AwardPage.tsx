@@ -6,8 +6,8 @@ import { useState } from 'react'
 import type { ChangeEvent, FormEvent } from 'react'
 import type { Dict } from '@/i18n/dict'
 import type { Lang } from '@/i18n/links'
-import { post, thanks, uploadFiles } from '@/lib/submit'
-import { Arrow, Consent, Footer, FormError, Header, W, fill, no2 } from './am/ui'
+import { checkForm, hpValue, post, thanks, uploadFiles } from '@/lib/submit'
+import { Arrow, Consent, Footer, FormError, Header, Honeypot, W, fill, no2 } from './am/ui'
 import type { S } from './am/ui'
 import Preloader from './Preloader'
 
@@ -114,6 +114,8 @@ export default function AwardPage({ t, lang, deadlineDate, forumDate, nomination
   const submitA = async (e: FormEvent) => {
     e.preventDefault()
     if (busyA) return
+    const form = e.currentTarget as HTMLFormElement
+    if (!checkForm(form, lang)) return
     setErrA('')
     let files = ''
     try {
@@ -128,7 +130,7 @@ export default function AwardPage({ t, lang, deadlineDate, forumDate, nomination
     }
     setBusyA(t.cSending)
     try {
-      await post('award-applications', { track: 'Премия', nomination: nom, ...a, files }, lang)
+      await post('award-applications', { track: 'Премия', nomination: nom, ...a, files, hp: hpValue(form) }, lang)
       setSentNom(nom)
       setSentA(true)
       thanks('award_nomination', lang, nom)
@@ -142,6 +144,8 @@ export default function AwardPage({ t, lang, deadlineDate, forumDate, nomination
   const submitS = async (e: FormEvent) => {
     e.preventDefault()
     if (busyS) return
+    const form = e.currentTarget as HTMLFormElement
+    if (!checkForm(form, lang)) return
     setErrS('')
     let files = ''
     try {
@@ -156,7 +160,7 @@ export default function AwardPage({ t, lang, deadlineDate, forumDate, nomination
     }
     setBusyS(t.cSending)
     try {
-      await post('award-applications', { track: 'Студенческий конкурс', ...s, files }, lang)
+      await post('award-applications', { track: 'Студенческий конкурс', ...s, files, hp: hpValue(form) }, lang)
       setSentS(true)
       thanks('award_student', lang)
     } catch {
@@ -293,7 +297,8 @@ export default function AwardPage({ t, lang, deadlineDate, forumDate, nomination
                   </button>
                 </div>
               ) : (
-                <form onSubmit={submitA} className="am-f2" style={{ display: 'grid', gap: '16px 28px', marginTop: '24px' }}>
+                <form onSubmit={submitA} className="am-f2" style={{ position: 'relative', display: 'grid', gap: '16px 28px', marginTop: '24px' }}>
+                  <Honeypot />
                   <label style={{ gridColumn: '1/-1', display: 'block' }}>
                     <span style={LBL}>{t.aNomination}</span>
                     <select name="nomination" required value={nom} onChange={(e) => setNom(e.target.value)} className="fc-black" style={{ ...FIELD, cursor: 'pointer' }}>
@@ -359,7 +364,8 @@ export default function AwardPage({ t, lang, deadlineDate, forumDate, nomination
                   {t.aStudentSent}
                 </p>
               ) : (
-                <form onSubmit={submitS} className="am-f2" style={{ display: 'grid', gap: '14px 28px', marginTop: '24px' }}>
+                <form onSubmit={submitS} className="am-f2" style={{ position: 'relative', display: 'grid', gap: '14px 28px', marginTop: '24px' }}>
+                  <Honeypot />
                   {studentFields.map((f) => (
                     <label key={f.k} style={{ display: 'block' }}>
                       <span style={{ ...LBL, color: '#C8D6EC' }}>{f.label}</span>

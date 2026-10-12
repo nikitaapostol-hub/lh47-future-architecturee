@@ -34,7 +34,7 @@ export const en: Dict = {
   cConsent: "By sending the application you agree to the",
   cConsentLink: "data processing policy",
   cSending: "Sending…",
-  cError: "Could not send. Please try again or write to marketing@lh47arch.com.",
+  cError: "Could not send. Please try again or write to info@future-arch.md.",
   hCta: "Join",
   hCtaMenu: "Join the community",
   hEyebrow: "Professional community",

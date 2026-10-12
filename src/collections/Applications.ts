@@ -1,5 +1,6 @@
-import type { CollectionConfig, Field } from 'payload'
-import { autoreplyHtml, notifyHtml, sendSafe } from '@/lib/mail'
+import type { CollectionBeforeOperationHook, CollectionConfig, Field } from 'payload'
+import { APIError } from 'payload'
+import { autoreplyHtml, notifyHtml, notifyText, sendSafe } from '@/lib/mail'
 import type { MailRow } from '@/lib/mail'
 
 /* Входящие заявки. Сайт пишет, админка читает.
@@ -24,6 +25,7 @@ const STATUS: Field = {
     { label: '× Отклонена', value: 'declined' },
   ],
   admin: { position: 'sidebar' },
+  access: { create: ({ req }: any) => Boolean(req.user), update: ({ req }: any) => Boolean(req.user) },
 }
 
 const NOTE: Field = {
@@ -31,6 +33,63 @@ const NOTE: Field = {
   type: 'textarea',
   label: 'Заметка команды',
   admin: { position: 'sidebar', description: 'Видна только в админке.' },
+  access: { create: ({ req }: any) => Boolean(req.user), update: ({ req }: any) => Boolean(req.user) },
+}
+
+/* ——— Проверка того, что пришло с формы ———
+   Форма проверяет поля в браузере, но запрос можно отправить и в обход неё,
+   поэтому то же самое проверяется здесь. */
+
+/** Пробелы по краям убираем, слишком длинное обрезаем — до записи в базу. */
+const clean = (max: number) => ({ value }: any) =>
+  typeof value === 'string' ? value.trim().replace(/\s{3,}/g, '  ').slice(0, max) : value
+
+const PHONE_RE = /^\+?[\d\s().-]{7,20}$/
+const phoneOk = (v: string) => PHONE_RE.test(v) && v.replace(/\D/g, '').length >= 8 && v.replace(/\D/g, '').length <= 15
+
+/** Текстовое поле заявки: обрезка пробелов и длины. */
+const txt = (name: string, label: string, opts: { required?: boolean; max?: number; area?: boolean; admin?: any } = {}): Field =>
+  ({
+    name,
+    type: opts.area ? 'textarea' : 'text',
+    label,
+    ...(opts.required ? { required: true } : {}),
+    maxLength: opts.max || 300,
+    hooks: { beforeValidate: [clean(opts.max || 300)] },
+    ...(opts.admin ? { admin: opts.admin } : {}),
+  }) as Field
+
+const PHONE = (required: boolean): Field =>
+  ({
+    name: 'phone',
+    type: 'text',
+    label: 'Телефон',
+    ...(required ? { required: true } : {}),
+    hooks: { beforeValidate: [clean(40)] },
+    // строго — только для новых заявок с сайта; правка старой заявки в админке не блокируется
+    validate: (v: any, o: any) => {
+      if (o?.operation === 'update' || o?.req?.user) return true
+      if (!v) return required ? 'Укажите телефон' : true
+      return phoneOk(String(v)) || 'Проверьте номер телефона'
+    },
+  }) as Field
+
+const EMAIL = (required: boolean): Field =>
+  ({
+    name: 'email',
+    type: 'email',
+    label: 'Почта',
+    ...(required ? { required: true } : {}),
+    hooks: { beforeValidate: [({ value }: any) => (typeof value === 'string' ? value.trim().toLowerCase() || undefined : value)] },
+  }) as Field
+
+/** Ловушка для ботов: невидимое поле hp заполняют только роботы. */
+const honeypot: CollectionBeforeOperationHook = ({ args, operation, req }) => {
+  if (operation === 'create' && !req.user) {
+    const hp = (args?.data as any)?.hp
+    if (typeof hp === 'string' && hp.trim()) throw new APIError('Bad request', 400)
+  }
+  return args
 }
 
 const META: Field[] = [
@@ -72,31 +131,37 @@ const META: Field[] = [
   },
 ]
 
-/** Общий обработчик: письмо команде + автоответ. */
-function notify(title: string, rows: (doc: any) => MailRow[]) {
+/** Общий обработчик: письмо команде + автоответ.
+    `kind(doc)` — что это за заявка: «Форум (участник)», «Премия: …» — идёт в тему письма. */
+function notify(slug: string, kind: (doc: any) => string, rows: (doc: any) => MailRow[]) {
   return async ({ doc, operation, req }: any) => {
     if (operation !== 'create') return doc
     const payload = req.payload
     let cfg: any = {}
     try {
-      cfg = await payload.findGlobal({ slug: 'settings' })
+      cfg = await payload.findGlobal({ slug: 'settings', overrideAccess: true })
     } catch {}
 
-    const to = (cfg?.mailTo || process.env.APPLICATIONS_EMAIL || 'marketing-team@lh47arch.com').trim()
-    const prefix = cfg?.subjectPrefix || '[future-arch.md]'
+    const to = String(cfg?.mailTo || process.env.APPLICATIONS_EMAIL || 'info@future-arch.md').trim()
+    const prefix = String(cfg?.subjectPrefix || 'Future Architecture').trim()
     const who = doc?.name ? ' — ' + doc.name : ''
+    const site = (process.env.NEXT_PUBLIC_SITE_URL || 'https://future-arch.md').replace(/\/$/, '')
+    const adminUrl = `${site}/admin/collections/${slug}/${doc.id}`
 
-    const meta: MailRow[] = [
-      { label: 'Язык', value: doc?.lang },
-      { label: 'Страница', value: doc?.source },
+    const all: MailRow[] = [
+      { label: 'Заявка', value: kind(doc) },
+      ...rows(doc),
+      { label: 'Язык сайта', value: doc?.lang ? String(doc.lang).toUpperCase() : '' },
+      { label: 'Страница', value: doc?.source ? site + doc.source : '' },
       { label: 'UTM', value: doc?.utm },
     ]
 
     await sendSafe(payload, {
       to,
-      subject: `${prefix} ${title}${who}`,
-      html: notifyHtml(title, [...rows(doc), ...meta], 'Заявка сохранена в админке: future-arch.md/admin'),
-      replyTo: doc?.email,
+      subject: `${prefix} "Заявка — ${kind(doc)}"${who}`,
+      html: notifyHtml(all, adminUrl),
+      text: notifyText(all, adminUrl),
+      replyTo: doc?.email || undefined,
     })
 
     if (cfg?.autoreply !== false && doc?.email) {
@@ -106,11 +171,14 @@ function notify(title: string, rows: (doc: any) => MailRow[]) {
       const body =
         tr(cfg?.autoreplyBody) ||
         'Здравствуйте!\n\nМы получили вашу заявку и вернёмся с ответом на этот адрес.\n\nFuture Architecture\nfuture-arch.md'
-      await sendSafe(payload, { to: doc.email, subject, html: autoreplyHtml(body) })
+      // ответ на автоответ попадёт в общий ящик, а не в noreply
+      await sendSafe(payload, { to: doc.email, subject, html: autoreplyHtml(body), text: body, replyTo: to.split(',')[0].trim() })
     }
     return doc
   }
 }
+
+const low = (v: any) => String(v || '').trim().toLowerCase()
 
 export const ForumApplications: CollectionConfig = {
   slug: 'forum-applications',
@@ -126,24 +194,28 @@ export const ForumApplications: CollectionConfig = {
   },
   access: inboxAccess,
   hooks: {
+    beforeOperation: [honeypot],
     afterChange: [
-      notify('Заявка на форум', (d) => [
-        { label: 'Имя', value: d.name },
-        { label: 'Компания', value: d.company },
-        { label: 'Позиция', value: d.role },
-        { label: 'Тип обращения', value: d.kind },
-        { label: 'Почта', value: d.email },
-        { label: 'Телефон', value: d.phone },
-      ]),
+      notify(
+        'forum-applications',
+        (d) => 'Форум' + (/партн/.test(low(d.kind)) ? ' (партнёр)' : ' (участник)'),
+        (d) => [
+          { label: 'Имя', value: d.name },
+          { label: 'Телефон', value: d.phone },
+          { label: 'Email', value: d.email },
+          { label: /партн/.test(low(d.kind)) ? 'Компания' : 'Компания и должность', value: d.company },
+          { label: 'Позиция', value: d.role },
+        ],
+      ),
     ],
   },
   fields: [
-    { name: 'name', type: 'text', label: 'Имя', required: true },
-    { name: 'company', type: 'text', label: 'Компания и должность', required: true },
-    { name: 'role', type: 'text', label: 'Позиция', admin: { condition: (d: any) => Boolean(d?.role) } },
-    { name: 'kind', type: 'text', label: 'Участник или партнёр' },
-    { name: 'email', type: 'email', label: 'Почта', required: true },
-    { name: 'phone', type: 'text', label: 'Телефон' },
+    txt('name', 'Имя', { required: true, max: 120 }),
+    txt('company', 'Компания и должность', { required: true, max: 200 }),
+    txt('role', 'Позиция', { max: 200, admin: { condition: (d: any) => Boolean(d?.role) } }),
+    txt('kind', 'Участник или партнёр', { max: 40 }),
+    EMAIL(true),
+    PHONE(true),
     STATUS,
     NOTE,
     ...META,
@@ -164,30 +236,34 @@ export const CommunityApplications: CollectionConfig = {
   },
   access: inboxAccess,
   hooks: {
+    beforeOperation: [honeypot],
     afterChange: [
-      notify('Заявка в сообщество', (d) => [
-        { label: 'Формат', value: d.track },
-        { label: 'Имя', value: d.name },
-        { label: 'Профессия', value: d.role },
-        { label: 'Место работы', value: d.employment },
-        { label: 'Компания', value: d.company },
-        { label: 'Направление', value: d.field },
-        { label: 'Сайт', value: d.website },
-        { label: 'Почта', value: d.email },
-        { label: 'Телефон', value: d.phone },
-      ]),
+      notify(
+        'community-applications',
+        (d) => 'Сообщество' + (/партн/.test(low(d.track)) ? ' (партнёр)' : ' (резидент)'),
+        (d) => [
+          { label: 'Имя', value: d.name },
+          { label: 'Телефон', value: d.phone },
+          { label: 'Email', value: d.email },
+          { label: 'Профессия', value: d.role },
+          { label: 'Место работы', value: d.employment },
+          { label: 'Компания', value: d.company },
+          { label: 'Направление', value: d.field },
+          { label: 'Сайт', value: d.website },
+        ],
+      ),
     ],
   },
   fields: [
-    { name: 'track', type: 'text', label: 'Формат участия', admin: { description: 'Резидент или партнёр.' } },
-    { name: 'name', type: 'text', label: 'Имя / контактное лицо', required: true },
-    { name: 'company', type: 'text', label: 'Компания' },
-    { name: 'role', type: 'text', label: 'Профессия' },
-    { name: 'employment', type: 'text', label: 'Работает на себя или в компании' },
-    { name: 'field', type: 'text', label: 'Направление деятельности' },
-    { name: 'website', type: 'text', label: 'Сайт' },
-    { name: 'email', type: 'email', label: 'Почта', required: true },
-    { name: 'phone', type: 'text', label: 'Телефон' },
+    txt('track', 'Формат участия', { max: 40, admin: { description: 'Резидент или партнёр.' } }),
+    txt('name', 'Имя / контактное лицо', { required: true, max: 120 }),
+    txt('company', 'Компания', { max: 200 }),
+    txt('role', 'Профессия', { max: 200 }),
+    txt('employment', 'Работает на себя или в компании', { max: 60 }),
+    txt('field', 'Направление деятельности', { max: 200 }),
+    txt('website', 'Сайт', { max: 300 }),
+    EMAIL(true),
+    PHONE(true),
     STATUS,
     NOTE,
     ...META,
@@ -208,40 +284,43 @@ export const AwardApplications: CollectionConfig = {
   },
   access: inboxAccess,
   hooks: {
+    beforeOperation: [honeypot],
     afterChange: [
-      notify('Заявка на премию', (d) => [
-        { label: 'Куда подаёт', value: d.track },
-        { label: 'Номинация', value: d.nomination },
+      notify(
+        'award-applications',
+        (d) => (/студ/.test(low(d.track)) ? 'Студенческий конкурс' : 'Премия' + (d.nomination ? ': ' + d.nomination : '')),
+        (d) => [
+        { label: /студ/.test(low(d.track)) ? 'Автор' : 'Авторы', value: d.name },
+        { label: 'Телефон', value: d.phone },
+        { label: 'Email', value: d.email },
         { label: 'Проект', value: d.project },
-        { label: 'Авторы', value: d.name },
         { label: 'Компания / вуз', value: d.org },
         { label: 'Факультет', value: d.faculty },
         { label: 'Год начала учёбы', value: d.studyStart },
         { label: 'Местоположение', value: d.location },
         { label: 'Площадь', value: d.area },
         { label: 'Год реализации', value: d.year },
-        { label: 'Телефон', value: d.phone },
-        { label: 'Почта', value: d.email },
         { label: 'Описание', value: d.desc },
         { label: 'Файлы', value: d.files },
         { label: 'Ссылка на материалы', value: d.url },
-      ]),
+      ],
+      ),
     ],
   },
   fields: [
-    { name: 'track', type: 'text', label: 'Куда подаёт' },
-    { name: 'nomination', type: 'text', label: 'Номинация' },
-    { name: 'project', type: 'text', label: 'Название проекта' },
-    { name: 'name', type: 'text', label: 'Авторы / автор', required: true },
-    { name: 'org', type: 'text', label: 'Компания / учебное заведение', required: true },
-    { name: 'faculty', type: 'text', label: 'Факультет' },
-    { name: 'studyStart', type: 'text', label: 'Год начала учёбы' },
-    { name: 'location', type: 'text', label: 'Местоположение' },
-    { name: 'area', type: 'text', label: 'Площадь' },
-    { name: 'year', type: 'text', label: 'Год реализации' },
-    { name: 'email', type: 'email', label: 'Почта' },
-    { name: 'phone', type: 'text', label: 'Телефон' },
-    { name: 'desc', type: 'textarea', label: 'Описание проекта' },
+    txt('track', 'Куда подаёт', { max: 60 }),
+    txt('nomination', 'Номинация', { max: 200 }),
+    txt('project', 'Название проекта', { max: 200 }),
+    txt('name', 'Авторы / автор', { required: true, max: 300 }),
+    txt('org', 'Компания / учебное заведение', { required: true, max: 200 }),
+    txt('faculty', 'Факультет', { max: 200 }),
+    txt('studyStart', 'Год начала учёбы', { max: 20 }),
+    txt('location', 'Местоположение', { max: 200 }),
+    txt('area', 'Площадь', { max: 60 }),
+    txt('year', 'Год реализации', { max: 20 }),
+    EMAIL(false),
+    PHONE(true),
+    txt('desc', 'Описание проекта', { area: true, max: 5000 }),
     {
       name: 'files',
       type: 'textarea',

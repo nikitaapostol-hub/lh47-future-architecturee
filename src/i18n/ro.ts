@@ -34,7 +34,7 @@ export const ro: Dict = {
   cConsent: "Trimițând cererea, sunteți de acord cu",
   cConsentLink: "politica de prelucrare a datelor",
   cSending: "Se trimite…",
-  cError: "Nu s-a putut trimite. Încercați din nou sau scrieți la marketing@lh47arch.com.",
+  cError: "Nu s-a putut trimite. Încercați din nou sau scrieți la info@future-arch.md.",
   hCta: "Aderă",
   hCtaMenu: "Aderă la comunitate",
   hEyebrow: "Comunitate profesională",

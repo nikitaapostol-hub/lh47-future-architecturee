@@ -4,6 +4,7 @@ import { buildConfig } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
+import { resendAdapter } from '@payloadcms/email-resend'
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { ru } from '@payloadcms/translations/languages/ru'
 import nodemailer from 'nodemailer'
@@ -18,15 +19,23 @@ import { SiteSettings } from './globals/SiteSettings'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
-/** SMTP берём из окружения. Нет настроек — Payload просто логирует письма,
-    заявка при этом всё равно сохраняется в базе. */
+/** Почта сайта. Основной способ — Resend (ключ RESEND_API_KEY в Vercel),
+    письма уходят с noreply@future-arch.md. Запасной — SMTP из окружения.
+    Нет ни того ни другого — Payload только логирует письма, заявка при этом
+    всё равно сохраняется в базе. */
+const FROM_NAME = process.env.MAIL_FROM_NAME || 'Future Architecture'
+const FROM = process.env.MAIL_FROM || 'noreply@future-arch.md'
+
 function email() {
+  if (process.env.RESEND_API_KEY) {
+    return resendAdapter({ apiKey: process.env.RESEND_API_KEY, defaultFromAddress: FROM, defaultFromName: FROM_NAME })
+  }
   const host = process.env.SMTP_HOST
   if (!host) return undefined
   const port = Number(process.env.SMTP_PORT || 465)
   return nodemailerAdapter({
-    defaultFromAddress: process.env.SMTP_FROM || process.env.SMTP_USER || 'no-reply@lh47arch.com',
-    defaultFromName: process.env.SMTP_FROM_NAME || 'Future Architecture',
+    defaultFromAddress: process.env.SMTP_FROM || process.env.SMTP_USER || FROM,
+    defaultFromName: FROM_NAME,
     transport: nodemailer.createTransport({
       host,
       port,

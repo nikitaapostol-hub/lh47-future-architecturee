@@ -16,6 +16,44 @@ export type FormName =
 
 export const LEAD_KEY = 'fa-lead'
 
+/* ——— Проверка формы перед отправкой ———
+   Браузер сам проверяет required и формат почты; дополнительно ловим поля
+   из одних пробелов и номер телефона без цифр. Те же правила — на сервере. */
+
+const MSG: Record<Lang, { empty: string; phone: string; email: string }> = {
+  ru: { empty: 'Заполните это поле', phone: 'Проверьте номер телефона: нужно от 8 цифр', email: 'Проверьте адрес почты' },
+  ro: { empty: 'Completați acest câmp', phone: 'Verificați numărul de telefon: minimum 8 cifre', email: 'Verificați adresa de e-mail' },
+  en: { empty: 'Please fill in this field', phone: 'Check the phone number: at least 8 digits', email: 'Check the email address' },
+}
+
+const EMAIL_OK = /^[^@\s]+@[^@\s]+\.[^@\s]{2,}$/
+export function phoneOk(v: string) {
+  const digits = v.replace(/\D/g, '').length
+  return /^\+?[\d\s().-]{7,20}$/.test(v.trim()) && digits >= 8 && digits <= 15
+}
+
+/** true — можно отправлять; иначе браузер покажет подсказку у первого неверного поля. */
+export function checkForm(form: HTMLFormElement, lang: Lang): boolean {
+  const m = MSG[lang] || MSG.ru
+  if (!form.dataset.watch) {
+    form.dataset.watch = '1'
+    form.addEventListener('input', (e) => (e.target as HTMLInputElement).setCustomValidity?.(''))
+  }
+  for (const el of Array.from(form.elements) as HTMLInputElement[]) {
+    if (!el.name || el.name === 'hp' || !('setCustomValidity' in el) || el.type === 'file') continue
+    const v = String(el.value || '')
+    let msg = ''
+    if (el.required && !v.trim()) msg = m.empty
+    else if (el.type === 'tel' && v.trim() && !phoneOk(v)) msg = m.phone
+    else if (el.type === 'email' && v.trim() && !EMAIL_OK.test(v.trim())) msg = m.email
+    el.setCustomValidity(msg)
+  }
+  return form.reportValidity()
+}
+
+/** Значение невидимого поля-ловушки для ботов. */
+export const hpValue = (form: HTMLFormElement) => String((form.elements.namedItem('hp') as HTMLInputElement | null)?.value || '')
+
 function utm() {
   if (typeof window === 'undefined') return ''
   const q = new URLSearchParams(window.location.search)
