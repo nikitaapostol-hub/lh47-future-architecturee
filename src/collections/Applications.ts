@@ -1,7 +1,7 @@
 import type { CollectionBeforeOperationHook, CollectionConfig, Field } from 'payload'
 import { APIError } from 'payload'
 import { autoreplyHtml, notifyHtml, notifyText, sendSafe } from '@/lib/mail'
-import type { MailRow } from '@/lib/mail'
+import type { MailRow, NotifyMail, Section } from '@/lib/mail'
 
 /* Входящие заявки. Сайт пишет, админка читает.
    На создание записи уходит письмо команде и автоответ заявителю. */
@@ -132,8 +132,10 @@ const META: Field[] = [
 ]
 
 /** Общий обработчик: письмо команде + автоответ.
-    `kind(doc)` — что это за заявка: «Форум (участник)», «Премия: …» — идёт в тему письма. */
-function notify(slug: string, kind: (doc: any) => string, rows: (doc: any) => MailRow[]) {
+    `section` — раздел сайта (цвет письма), `kind(doc)` — что это за заявка:
+    «Форум (участник)», «Премия: …» — идёт в заголовок и тему письма.
+    Имя, телефон и email выводятся в шапке письма, `rows` — остальные поля. */
+function notify(slug: string, section: Section, kind: (doc: any) => string, rows: (doc: any) => MailRow[]) {
   return async ({ doc, operation, req }: any) => {
     if (operation !== 'create') return doc
     const payload = req.payload
@@ -146,21 +148,38 @@ function notify(slug: string, kind: (doc: any) => string, rows: (doc: any) => Ma
     const prefix = String(cfg?.subjectPrefix || 'Future Architecture').trim()
     const who = doc?.name ? ' — ' + doc.name : ''
     const site = (process.env.NEXT_PUBLIC_SITE_URL || 'https://future-arch.md').replace(/\/$/, '')
-    const adminUrl = `${site}/admin/collections/${slug}/${doc.id}`
+    let when = ''
+    try {
+      when = new Intl.DateTimeFormat('ru-RU', {
+        timeZone: 'Europe/Chisinau',
+        day: 'numeric',
+        month: 'long',
+        hour: '2-digit',
+        minute: '2-digit',
+      }).format(new Date(doc?.submittedAt || doc?.createdAt || Date.now()))
+    } catch {}
 
-    const all: MailRow[] = [
-      { label: 'Заявка', value: kind(doc) },
-      ...rows(doc),
-      { label: 'Язык сайта', value: doc?.lang ? String(doc.lang).toUpperCase() : '' },
-      { label: 'Страница', value: doc?.source ? site + doc.source : '' },
-      { label: 'UTM', value: doc?.utm },
-    ]
+    const mail: NotifyMail = {
+      section,
+      kind: kind(doc),
+      name: doc?.name || '',
+      phone: doc?.phone || '',
+      email: doc?.email || '',
+      rows: rows(doc),
+      meta: [
+        { label: 'Язык', value: doc?.lang ? String(doc.lang).toUpperCase() : '' },
+        { label: 'Страница', value: doc?.source ? site + doc.source : '' },
+        { label: 'UTM', value: doc?.utm },
+      ],
+      adminUrl: `${site}/admin/collections/${slug}/${doc.id}`,
+      when,
+    }
 
     await sendSafe(payload, {
       to,
-      subject: `${prefix} "Заявка — ${kind(doc)}"${who}`,
-      html: notifyHtml(all, adminUrl),
-      text: notifyText(all, adminUrl),
+      subject: `${prefix} "Заявка — ${mail.kind}"${who}`,
+      html: notifyHtml(mail),
+      text: notifyText(mail),
       replyTo: doc?.email || undefined,
     })
 
@@ -172,7 +191,13 @@ function notify(slug: string, kind: (doc: any) => string, rows: (doc: any) => Ma
         tr(cfg?.autoreplyBody) ||
         'Здравствуйте!\n\nМы получили вашу заявку и вернёмся с ответом на этот адрес.\n\nFuture Architecture\nfuture-arch.md'
       // ответ на автоответ попадёт в общий ящик, а не в noreply
-      await sendSafe(payload, { to: doc.email, subject, html: autoreplyHtml(body), text: body, replyTo: to.split(',')[0].trim() })
+      await sendSafe(payload, {
+        to: doc.email,
+        subject,
+        html: autoreplyHtml({ lang: locale, section, text: body }),
+        text: body,
+        replyTo: to.split(',')[0].trim(),
+      })
     }
     return doc
   }
@@ -198,11 +223,9 @@ export const ForumApplications: CollectionConfig = {
     afterChange: [
       notify(
         'forum-applications',
+        'forum',
         (d) => 'Форум' + (/партн/.test(low(d.kind)) ? ' (партнёр)' : ' (участник)'),
         (d) => [
-          { label: 'Имя', value: d.name },
-          { label: 'Телефон', value: d.phone },
-          { label: 'Email', value: d.email },
           { label: /партн/.test(low(d.kind)) ? 'Компания' : 'Компания и должность', value: d.company },
           { label: 'Позиция', value: d.role },
         ],
@@ -240,11 +263,9 @@ export const CommunityApplications: CollectionConfig = {
     afterChange: [
       notify(
         'community-applications',
+        'home',
         (d) => 'Сообщество' + (/партн/.test(low(d.track)) ? ' (партнёр)' : ' (резидент)'),
         (d) => [
-          { label: 'Имя', value: d.name },
-          { label: 'Телефон', value: d.phone },
-          { label: 'Email', value: d.email },
           { label: 'Профессия', value: d.role },
           { label: 'Место работы', value: d.employment },
           { label: 'Компания', value: d.company },
@@ -288,11 +309,9 @@ export const AwardApplications: CollectionConfig = {
     afterChange: [
       notify(
         'award-applications',
+        'award',
         (d) => (/студ/.test(low(d.track)) ? 'Студенческий конкурс' : 'Премия' + (d.nomination ? ': ' + d.nomination : '')),
         (d) => [
-        { label: /студ/.test(low(d.track)) ? 'Автор' : 'Авторы', value: d.name },
-        { label: 'Телефон', value: d.phone },
-        { label: 'Email', value: d.email },
         { label: 'Проект', value: d.project },
         { label: 'Компания / вуз', value: d.org },
         { label: 'Факультет', value: d.faculty },
