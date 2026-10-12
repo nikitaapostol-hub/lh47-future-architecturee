@@ -1,6 +1,6 @@
 /* Письма по заявкам: уведомление команде и автоответ заявителю.
-   Вёрстка в стиле сайта: белый лист, четыре цвета знака сверху, крупный
-   заголовок, данные заявки таблицей, кнопки «Позвонить / Написать».
+   Минималистичная вёрстка: белый лист, логотип, метка с цветом раздела,
+   заголовок, данные заявки таблицей, ссылка в админку.
    Почтовики понимают только таблицы и инлайновые стили, шрифт — Arial;
    логотип — PNG с сайта (SVG Gmail не показывает).
    Отправка никогда не должна ронять форму — все ошибки гасятся и логируются. */
@@ -12,12 +12,10 @@ type Lang = 'ru' | 'ro' | 'en'
 
 const SITE = (process.env.NEXT_PUBLIC_SITE_URL || 'https://future-arch.md').replace(/\/$/, '')
 const LOGO = 'https://future-arch.md/email/logo.png'
-const MARK = 'https://future-arch.md/email/mark.png'
 
 const INK = '#16181D'
 const MUTED = '#6E7278'
 const LINE = '#E6E6E3'
-const PAPER = '#F3F3F1'
 const FONT = 'Arial,Helvetica,sans-serif'
 
 /** Цвет раздела — как на сайте: сообщество синее, форум оранжевый, премия жёлтая. */
@@ -49,42 +47,37 @@ function cell(v: string) {
   return esc(s).replace(/\n/g, '<br>')
 }
 
-/** Общий «лист»: полоса из четырёх цветов, логотип, содержимое, подвал. */
+/** Общий «лист»: белое поле, логотип, содержимое, тонкая строка подвала. */
 function frame(opts: { lang: Lang; preheader: string; body: string; footer: string }) {
-  const stripe = ['#E5D900', '#1A52A0', '#E8461E', '#3C3F44']
-    .map((c) => `<td width="25%" height="6" style="height:6px;line-height:6px;font-size:0;background:${c}">&nbsp;</td>`)
-    .join('')
   return `<!doctype html>
 <html lang="${opts.lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light only"><meta name="supported-color-schemes" content="light only">
 <title>Future Architecture</title></head>
-<body style="margin:0;padding:0;background:${PAPER};-webkit-text-size-adjust:100%">
-<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:${PAPER}">${esc(opts.preheader)}&#8199;&#65279;&#847;&#8199;&#65279;&#847;</div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${PAPER}">
-<tr><td align="center" style="padding:28px 12px">
-  <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:600px;background:#FFFFFF;border:1px solid ${LINE}">
-    <tr><td style="padding:0"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>${stripe}</tr></table></td></tr>
-    <tr><td style="padding:26px 32px 22px;border-bottom:1px solid ${LINE}">
-      <a href="${SITE}" style="text-decoration:none"><img src="${LOGO}" width="176" height="44" alt="Future Architecture" style="display:block;border:0;width:176px;height:44px"></a>
+<body style="margin:0;padding:0;background:#FFFFFF;-webkit-text-size-adjust:100%">
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#FFFFFF">${esc(opts.preheader)}&#8199;&#65279;&#847;&#8199;&#65279;&#847;</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#FFFFFF">
+<tr><td align="center" style="padding:40px 24px">
+  <table role="presentation" width="520" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:520px">
+    <tr><td style="padding:0 0 40px">
+      <a href="${SITE}" style="text-decoration:none"><img src="${LOGO}" width="136" height="34" alt="Future Architecture" style="display:block;border:0;width:136px;height:34px"></a>
     </td></tr>
     ${opts.body}
-    <tr><td style="padding:22px 32px;background:#16181D">
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-        <td valign="middle" width="40"><img src="${MARK}" width="28" height="28" alt="" style="display:block;border:0;width:28px;height:28px;border-radius:4px"></td>
-        <td valign="middle" style="font:13px/1.5 ${FONT};color:#C9C9C5">${opts.footer}</td>
-      </tr></table>
-    </td></tr>
+    <tr><td style="padding:40px 0 0;font:12px/1.6 ${FONT};color:${MUTED}">${opts.footer}</td></tr>
   </table>
 </td></tr></table>
 </body></html>`
 }
 
-/** Кнопка, которая одинаково выглядит в Gmail, Outlook и Apple Mail. */
-function button(href: string, label: string, dark = true) {
-  const bg = dark ? '#000000' : '#FFFFFF'
-  const fg = dark ? '#FFFFFF' : '#000000'
-  return `<a href="${esc(href)}" style="display:inline-block;margin:0 6px 8px 0;padding:12px 18px;background:${bg};color:${fg};border:1px solid #000;font:bold 14px/1 ${FONT};text-decoration:none;white-space:nowrap">${esc(label)}</a>`
+/** Короткая метка над заголовком: цветной квадрат раздела и подпись. */
+function label(section: Section, text: string) {
+  return `<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+    <td width="8" height="8" style="width:8px;height:8px;line-height:8px;font-size:0;background:${ACCENT[section].bg}">&nbsp;</td>
+    <td style="padding-left:10px;font:12px/1 ${FONT};letter-spacing:.06em;text-transform:uppercase;color:${MUTED}">${esc(text)}</td>
+  </tr></table>`
 }
+
+const link = (href: string, text: string, color = INK) =>
+  `<a href="${esc(href)}" style="color:${color};text-decoration:none;border-bottom:1px solid ${LINE}">${esc(text)}</a>`
 
 export type NotifyMail = {
   section: Section
@@ -101,46 +94,39 @@ export type NotifyMail = {
 
 /** Письмо команде о новой заявке. */
 export function notifyHtml(m: NotifyMail) {
-  const a = ACCENT[m.section]
-  const contacts = [
-    m.phone ? button(telHref(m.phone), 'Позвонить') : '',
-    m.email ? button(`mailto:${m.email}`, 'Написать') : '',
-    button(m.adminUrl, 'Открыть в админке', false),
-  ].join('')
+  const contacts = [m.phone ? link(telHref(m.phone), m.phone) : '', m.email ? link(`mailto:${m.email}`, m.email) : '']
+    .filter(Boolean)
+    .join(' &nbsp;&nbsp; ')
 
   const table = filled(m.rows)
     .map(
       (r) => `<tr>
-        <td valign="top" style="padding:11px 16px 11px 0;border-top:1px solid ${LINE};width:36%;font:bold 11px/1.5 ${FONT};letter-spacing:.08em;text-transform:uppercase;color:${MUTED}">${esc(r.label)}</td>
-        <td valign="top" style="padding:11px 0;border-top:1px solid ${LINE};font:15px/1.5 ${FONT};color:${INK}">${cell(String(r.value))}</td>
+        <td valign="top" style="padding:10px 16px 10px 0;border-top:1px solid ${LINE};width:38%;font:14px/1.5 ${FONT};color:${MUTED}">${esc(r.label)}</td>
+        <td valign="top" style="padding:10px 0;border-top:1px solid ${LINE};font:14px/1.5 ${FONT};color:${INK}">${cell(String(r.value))}</td>
       </tr>`,
     )
     .join('')
 
-  const meta = filled(m.meta)
-    .map((r) => `${esc(r.label)}: ${cell(String(r.value))}`)
-    .join(' &nbsp;·&nbsp; ')
+  const meta = [m.when ? esc(m.when) : '', ...filled(m.meta).map((r) => `${esc(r.label)}: ${cell(String(r.value))}`)]
+    .filter(Boolean)
+    .join(' · ')
 
   const body = `
-    <tr><td style="padding:28px 32px 6px">
-      <span style="display:inline-block;padding:6px 10px;background:${a.bg};color:${a.ink};font:bold 11px/1 ${FONT};letter-spacing:.12em;text-transform:uppercase">Новая заявка</span>
-      <div style="margin-top:14px;font:bold 26px/1.15 ${FONT};color:${INK};letter-spacing:-.01em">${esc(m.kind)}</div>
-      ${m.name ? `<div style="margin-top:8px;font:18px/1.4 ${FONT};color:${INK}">${esc(m.name)}</div>` : ''}
-      ${m.phone || m.email ? `<div style="margin-top:4px;font:15px/1.5 ${FONT};color:${MUTED}">${[m.phone ? `<a href="${telHref(m.phone)}" style="color:${MUTED};text-decoration:none">${esc(m.phone)}</a>` : '', m.email ? `<a href="mailto:${esc(m.email)}" style="color:${MUTED};text-decoration:none">${esc(m.email)}</a>` : ''].filter(Boolean).join(' &nbsp;·&nbsp; ')}</div>` : ''}
+    <tr><td>
+      ${label(m.section, 'Новая заявка')}
+      <div style="margin-top:14px;font:bold 24px/1.2 ${FONT};color:${INK};letter-spacing:-.01em">${esc(m.kind)}</div>
+      ${m.name ? `<div style="margin-top:20px;font:17px/1.4 ${FONT};color:${INK}">${esc(m.name)}</div>` : ''}
+      ${contacts ? `<div style="margin-top:6px;font:15px/1.6 ${FONT};color:${INK}">${contacts}</div>` : ''}
     </td></tr>
-    <tr><td style="padding:18px 32px 10px">
-      ${contacts}
-    </td></tr>
-    <tr><td style="padding:8px 32px 26px">
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${table}</table>
-      ${meta || m.when ? `<div style="margin-top:16px;font:12px/1.6 ${FONT};color:${MUTED}">${[m.when ? esc(m.when) : '', meta].filter(Boolean).join(' &nbsp;·&nbsp; ')}</div>` : ''}
-    </td></tr>`
+    ${table ? `<tr><td style="padding-top:28px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${table}</table></td></tr>` : ''}
+    <tr><td style="padding-top:28px;font:bold 14px/1 ${FONT}">${link(m.adminUrl, 'Открыть в админке →')}</td></tr>
+    ${meta ? `<tr><td style="padding-top:28px;font:12px/1.6 ${FONT};color:${MUTED}">${meta}</td></tr>` : ''}`
 
   return frame({
     lang: 'ru',
     preheader: [m.name, m.phone, m.email].filter(Boolean).join(' · '),
     body,
-    footer: `Заявка с сайта <a href="${SITE}" style="color:#FFFFFF;text-decoration:none">future-arch.md</a>. Ответ на это письмо уйдёт заявителю.`,
+    footer: 'Ответ на это письмо уйдёт заявителю.',
   })
 }
 
@@ -159,10 +145,10 @@ export function notifyText(m: NotifyMail) {
   return lines.filter((l, i, a) => !(l === '' && a[i - 1] === '')).join('\n').trim()
 }
 
-const AUTO: Record<Lang, { kicker: string; site: string; footer: string }> = {
-  ru: { kicker: 'Заявка получена', site: 'Перейти на сайт', footer: 'сообщество архитекторов и дизайнеров Молдовы' },
-  ro: { kicker: 'Cerere primită', site: 'Accesați site-ul', footer: 'comunitatea arhitecților și designerilor din Moldova' },
-  en: { kicker: 'Application received', site: 'Visit the website', footer: 'community of architects and designers in Moldova' },
+const AUTO: Record<Lang, { kicker: string; footer: string }> = {
+  ru: { kicker: 'Заявка получена', footer: 'сообщество архитекторов и дизайнеров Молдовы' },
+  ro: { kicker: 'Cerere primită', footer: 'comunitatea arhitecților și designerilor din Moldova' },
+  en: { kicker: 'Application received', footer: 'community of architects and designers in Moldova' },
 }
 
 /** Автоответ заявителю. Текст — из админки («Настройки сайта → Почта»):
@@ -171,7 +157,6 @@ const AUTO: Record<Lang, { kicker: string; site: string; footer: string }> = {
 export function autoreplyHtml(opts: { lang?: string; text: string; section?: Section }) {
   const lang: Lang = opts.lang === 'ro' || opts.lang === 'en' ? opts.lang : 'ru'
   const t = AUTO[lang]
-  const a = ACCENT[opts.section || 'home']
   const href = SITE + (lang === 'ru' ? '/' : '/' + lang)
   let parts = opts.text
     .split(/\n\s*\n/)
@@ -181,22 +166,19 @@ export function autoreplyHtml(opts: { lang?: string; text: string; section?: Sec
   if (parts.length > 1 && parts[0].length <= 40 && !parts[0].includes('\n')) title = parts.shift() as string
   if (parts.length > 1 && /future-arch\.md\s*$/i.test(parts[parts.length - 1])) parts = parts.slice(0, -1)
   const paragraphs = parts
-    .map((p) => `<p style="margin:0 0 14px;font:17px/1.6 ${FONT};color:${INK}">${esc(p).replace(/\n/g, '<br>')}</p>`)
+    .map((p) => `<p style="margin:0 0 12px;font:16px/1.6 ${FONT};color:${INK}">${esc(p).replace(/\n/g, '<br>')}</p>`)
     .join('')
   const body = `
-    <tr><td style="padding:30px 32px 8px">
-      <span style="display:inline-block;padding:6px 10px;background:${a.bg};color:${a.ink};font:bold 11px/1 ${FONT};letter-spacing:.12em;text-transform:uppercase">${esc(t.kicker)}</span>
-      ${title ? `<div style="margin-top:14px;font:bold 26px/1.15 ${FONT};color:${INK};letter-spacing:-.01em">${esc(title)}</div>` : ''}
+    <tr><td>
+      ${label(opts.section || 'home', t.kicker)}
+      ${title ? `<div style="margin-top:14px;font:bold 24px/1.2 ${FONT};color:${INK};letter-spacing:-.01em">${esc(title)}</div>` : ''}
     </td></tr>
-    <tr><td style="padding:16px 32px 10px">${paragraphs}</td></tr>
-    <tr><td style="padding:0 32px 30px">
-      ${button(href, t.site)}
-    </td></tr>`
+    <tr><td style="padding-top:18px">${paragraphs}</td></tr>`
   return frame({
     lang,
     preheader: opts.text.split(/\n/).map((s) => s.trim()).filter(Boolean).slice(0, 2).join(' '),
     body,
-    footer: `Future Architecture — ${esc(t.footer)}<br><a href="mailto:info@future-arch.md" style="color:#FFFFFF;text-decoration:none">info@future-arch.md</a> &nbsp;·&nbsp; <a href="${href}" style="color:#FFFFFF;text-decoration:none">future-arch.md</a>`,
+    footer: `Future Architecture — ${esc(t.footer)}<br>${link(href, 'future-arch.md', MUTED)} &nbsp;·&nbsp; ${link('mailto:info@future-arch.md', 'info@future-arch.md', MUTED)}`,
   })
 }
 
