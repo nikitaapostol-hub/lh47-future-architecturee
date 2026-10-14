@@ -34,7 +34,7 @@ ${BRAND.about.ru}
 
 Website: ${SITE} — in Russian (default), Romanian (/ro) and English (/en).
 Location: Chișinău, Republic of Moldova.
-Contact: info@future-arch.md, +373 68 059 311.
+Contact: info@future-arch.md, +373 68 059 311. Instagram: https://www.instagram.com/futurearch.md/
 Founded by the architecture bureau LH47 ARCH (https://lh47arch.com) and InStyle Home.
 
 ## Key facts

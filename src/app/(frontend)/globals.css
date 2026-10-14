@@ -567,3 +567,36 @@ html[data-pre='off'] .am-pre { display: none; }
 @media (prefers-reduced-motion: reduce) {
   .am-pre { display: none; }
 }
+
+/* Баннер cookie: на компьютере — карточка внизу слева, на телефоне — во всю ширину */
+.fa-cookie {
+  left: 24px;
+  bottom: 24px;
+  width: min(440px, calc(100vw - 48px));
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+  animation: fa-cookie-in 420ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes fa-cookie-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+@media (max-width: 640px) {
+  .fa-cookie {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    width: auto;
+    max-height: calc(100vh - 96px);
+  }
+  .fa-cookie-btns > button:not(:last-child) {
+    flex: 1 1 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fa-cookie { animation: none; }
+}
+
+/* логотипы основателей в подвале — ссылки на их сайты */
+.am-founder { opacity: 0.85; transition: opacity 200ms; }
+.am-founder:hover, .am-founder:focus-visible { opacity: 1; }

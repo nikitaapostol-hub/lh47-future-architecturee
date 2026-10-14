@@ -45,6 +45,7 @@ export function OrgLd({ lang, page = '/' }: { lang: Lang; page?: '/' | '/forum' 
         image: SITE + ogImage('/', lang),
         email: 'info@future-arch.md',
         telephone: '+37368059311',
+        sameAs: ['https://www.instagram.com/futurearch.md/'],
         foundingDate: '2026',
         address: { '@type': 'PostalAddress', addressLocality: 'Chișinău', addressCountry: 'MD' },
         areaServed: { '@type': 'Country', name: 'Moldova' },

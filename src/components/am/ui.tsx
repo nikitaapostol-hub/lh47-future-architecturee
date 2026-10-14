@@ -5,6 +5,7 @@
    то, что в макете считалось в JS по ширине окна, — классы am-* в globals.css
    (брейкпоинты макета: ≥1100px — десктоп, 720–1099 — планшет, <720 — телефон). */
 
+import { CookieSettingsLink } from '../CookieConsent'
 import { useEffect, useState } from 'react'
 import type { CSSProperties, ReactNode } from 'react'
 import type { Dict } from '@/i18n/dict'
@@ -238,8 +239,12 @@ export function Footer({ t, lang }: { t: Dict; lang: Lang }) {
           <div>
             <div style={CAP}>{t.cFounders}</div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '24px', marginTop: '16px' }}>
-              <img src="/img/d65b278e9b.png" alt="LH47 arch." width={26} height={26} loading="lazy" style={{ height: '26px', width: 'auto', filter: 'brightness(0) invert(1)' }} />
-              <img src="/img/d7f7cfad4d.png" alt="InStyle Home" width={73} height={18} loading="lazy" style={{ height: '18px', width: 'auto', filter: 'brightness(0) invert(1)' }} />
+              <a href="https://lh47arch.com/" target="_blank" rel="noopener" aria-label="LH47 ARCH" className="am-founder" style={{ display: 'flex' }}>
+                <img src="/img/d65b278e9b.png" alt="LH47 arch." width={26} height={26} loading="lazy" style={{ height: '26px', width: 'auto', filter: 'brightness(0) invert(1)' }} />
+              </a>
+              <a href="https://instylehome.md/" target="_blank" rel="noopener" aria-label="InStyle Home" className="am-founder" style={{ display: 'flex' }}>
+                <img src="/img/d7f7cfad4d.png" alt="InStyle Home" width={73} height={18} loading="lazy" style={{ height: '18px', width: 'auto', filter: 'brightness(0) invert(1)' }} />
+              </a>
             </div>
             {social.length > 0 && (
               <div style={{ display: 'flex', gap: '8px', marginTop: '20px' }}>
@@ -254,7 +259,10 @@ export function Footer({ t, lang }: { t: Dict; lang: Lang }) {
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '16px', marginTop: '40px', paddingTop: '20px', borderTop: '1px solid #2B2B2B', fontSize: '13px', color: '#9A9A96' }}>
           <span>{t.cCopyright}</span>
-          <a href={path(lang, '/privacy')}>{t.cPrivacy}</a>
+          <span style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 24px' }}>
+            <CookieSettingsLink lang={lang} className="am-foot-link" />
+            <a href={path(lang, '/privacy')}>{t.cPrivacy}</a>
+          </span>
         </div>
       </div>
     </footer>

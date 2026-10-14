@@ -3,6 +3,8 @@ import { AnalyticsScripts, VerificationMeta, resolveAnalytics } from '@/componen
 import { getGlobal } from '@/lib/settings'
 import type { Lang } from '@/i18n/links'
 import LivePreview from '@/components/LivePreview'
+import CookieConsent from '@/components/CookieConsent'
+import { CONSENT_DEFAULT } from '@/lib/consent'
 
 /** Заставка: первый заход за сессию — полная, дальше — короткая.
     Отметку ставим до первой отрисовки, чтобы не было мигания. */
@@ -26,9 +28,13 @@ export default async function Shell({
     yandexId: g.yandexId,
     metaPixelId: g.metaPixelId,
   })
+  // Баннер и запреты по умолчанию нужны, только если на сайте есть счётчики
+  const tracking = Boolean(cfg.enabled && (cfg.gtmId || cfg.ga4Id || cfg.yandexId || cfg.metaPixelId))
   return (
     <html lang={lang} suppressHydrationWarning>
       <head>
+        {/* Consent Mode v2: до любых счётчиков, поэтому первым в <head> */}
+        {tracking ? <script dangerouslySetInnerHTML={{ __html: CONSENT_DEFAULT }} /> : null}
         <link rel="preload" href="/fonts/onest-cyrillic.woff2" as="font" type="font/woff2" crossOrigin="" />
         <link rel="preload" href="/fonts/onest-latin.woff2" as="font" type="font/woff2" crossOrigin="" />
         <script dangerouslySetInnerHTML={{ __html: PRE }} />
@@ -38,6 +44,7 @@ export default async function Shell({
         {children}
         <LivePreview />
         <AnalyticsScripts cfg={cfg} />
+        {tracking ? <CookieConsent lang={lang} yandexId={cfg.yandexId} metaPixelId={cfg.metaPixelId} /> : null}
       </body>
     </html>
   )

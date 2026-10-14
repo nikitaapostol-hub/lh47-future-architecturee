@@ -20,7 +20,7 @@ export const ru = {
   cPhone1Label: '',
   cPhone2: '',
   cPhone2Label: '',
-  cInstagram: '',
+  cInstagram: 'https://www.instagram.com/futurearch.md/',
   cFacebook: '',
   cLinkedin: '',
   cCopyright: '© 2026 Future Architecture',
