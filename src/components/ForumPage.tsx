@@ -31,7 +31,7 @@ const PILL: S = { display: 'inline-flex', alignItems: 'center', height: '32px', 
 const CHAIN_SQ = ['#E5D900', '#E8461E', '#1A52A0', '#000', '#E5D900', '#E8461E']
 /** Уголок на картинке темы: цвета бренда, чёрный заменён оранжевым (вариант «Графит»). */
 const TOPIC_ACC = ['#E8461E', '#1A52A0', '#E5D900', '#E8461E']
-const PHOTOS = ['/img/fo-photo-panel.jpg', '/img/fo-photo-group.jpg', '/img/0c1ebc8a38.jpg', '/img/ec5233a8df.jpg']
+const PHOTOS = ['/img/fo-photo-panel.jpg', '/img/fo-photo-group.jpg', '/img/0c1ebc8a38.jpg', '/img/fo-photo-event.jpg']
 
 const pad = (n: number) => String(n).padStart(2, '0')
 
@@ -217,7 +217,7 @@ export default function ForumPage({ t, lang, forumDate, countdownVisible = true,
           <div className="am-g4p" style={{ display: 'grid', gap: '2px' }}>
             {PHOTOS.map((src, i) => (
               <div key={src} style={{ position: 'relative', aspectRatio: '4/3', background: '#1A1A1A', overflow: 'hidden' }}>
-                <div className="am-zoom am-gray" style={{ position: 'absolute', inset: 0, filter: 'grayscale(1)' }}>
+                <div className="am-zoom" style={{ position: 'absolute', inset: 0 }}>
                   <img src={src} alt={t.fPhotoAlt} loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                 </div>
                 {i === 3 && (
@@ -263,7 +263,7 @@ export default function ForumPage({ t, lang, forumDate, countdownVisible = true,
                     <div key={i} className="am-card" style={{ position: 'relative' }}>
                       <div className="am-zoom" style={{ position: 'relative', aspectRatio: '4/5', background: '#E4E4E2', overflow: 'hidden' }}>
                         {s.img ? (
-                          <div className="am-gray" style={{ position: 'absolute', inset: 0, filter: 'grayscale(1)' }}>
+                          <div style={{ position: 'absolute', inset: 0 }}>
                             {s.crop ? (
                               <img src={s.img} alt={s.name} loading="lazy" style={{ position: 'absolute', left: s.crop[0], top: s.crop[1], width: s.crop[2], maxWidth: 'none', height: 'auto', display: 'block' }} />
                             ) : (

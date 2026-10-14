@@ -577,11 +577,6 @@ export interface Home {
     };
   };
   mission?: {
-    label?: {
-      ru?: string | null;
-      ro?: string | null;
-      en?: string | null;
-    };
     title?: {
       ru?: string | null;
       ro?: string | null;
@@ -609,11 +604,6 @@ export interface Home {
       | null;
   };
   who?: {
-    label?: {
-      ru?: string | null;
-      ro?: string | null;
-      en?: string | null;
-    };
     title?: {
       ru?: string | null;
       ro?: string | null;
@@ -625,11 +615,6 @@ export interface Home {
       en?: string | null;
     };
     residents?: {
-      ru?: string | null;
-      ro?: string | null;
-      en?: string | null;
-    };
-    residentsTerm?: {
       ru?: string | null;
       ro?: string | null;
       en?: string | null;
@@ -659,11 +644,6 @@ export interface Home {
       ro?: string | null;
       en?: string | null;
     };
-    partnersTerm?: {
-      ru?: string | null;
-      ro?: string | null;
-      en?: string | null;
-    };
     partnersTitle?: {
       ru?: string | null;
       ro?: string | null;
@@ -681,11 +661,6 @@ export interface Home {
     };
   };
   formats?: {
-    label?: {
-      ru?: string | null;
-      ro?: string | null;
-      en?: string | null;
-    };
     title?: {
       ru?: string | null;
       ro?: string | null;
@@ -708,11 +683,6 @@ export interface Home {
       | null;
   };
   join?: {
-    label?: {
-      ru?: string | null;
-      ro?: string | null;
-      en?: string | null;
-    };
     title?: {
       ru?: string | null;
       ro?: string | null;
@@ -826,7 +796,7 @@ export interface Forum {
           en?: string | null;
         };
         /**
-         * Вертикальный кадр 4:5, от 800 px в ширину. Чёрно-белым сайт сделает сам.
+         * Вертикальный кадр 4:5, от 800 px в ширину. На сайте фото показывается в цвете.
          */
         photo?: (number | null) | Media;
         id?: string | null;
@@ -1773,13 +1743,6 @@ export interface HomeSelect<T extends boolean = true> {
   mission?:
     | T
     | {
-        label?:
-          | T
-          | {
-              ru?: T;
-              ro?: T;
-              en?: T;
-            };
         title?:
           | T
           | {
@@ -1817,13 +1780,6 @@ export interface HomeSelect<T extends boolean = true> {
   who?:
     | T
     | {
-        label?:
-          | T
-          | {
-              ru?: T;
-              ro?: T;
-              en?: T;
-            };
         title?:
           | T
           | {
@@ -1839,13 +1795,6 @@ export interface HomeSelect<T extends boolean = true> {
               en?: T;
             };
         residents?:
-          | T
-          | {
-              ru?: T;
-              ro?: T;
-              en?: T;
-            };
-        residentsTerm?:
           | T
           | {
               ru?: T;
@@ -1885,13 +1834,6 @@ export interface HomeSelect<T extends boolean = true> {
               ro?: T;
               en?: T;
             };
-        partnersTerm?:
-          | T
-          | {
-              ru?: T;
-              ro?: T;
-              en?: T;
-            };
         partnersTitle?:
           | T
           | {
@@ -1917,13 +1859,6 @@ export interface HomeSelect<T extends boolean = true> {
   formats?:
     | T
     | {
-        label?:
-          | T
-          | {
-              ru?: T;
-              ro?: T;
-              en?: T;
-            };
         title?:
           | T
           | {
@@ -1954,13 +1889,6 @@ export interface HomeSelect<T extends boolean = true> {
   join?:
     | T
     | {
-        label?:
-          | T
-          | {
-              ru?: T;
-              ro?: T;
-              en?: T;
-            };
         title?:
           | T
           | {

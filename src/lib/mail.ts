@@ -59,7 +59,7 @@ function frame(opts: { lang: Lang; preheader: string; body: string; footer: stri
 <tr><td align="center" style="padding:40px 24px">
   <table role="presentation" width="520" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:520px">
     <tr><td style="padding:0 0 40px">
-      <a href="${SITE}" style="text-decoration:none"><img src="${LOGO}" width="136" height="34" alt="Future Architecture" style="display:block;border:0;width:136px;height:34px"></a>
+      <a href="${SITE}" style="text-decoration:none"><img src="${LOGO}" width="139" height="34" alt="Future Architecture" style="display:block;border:0;width:139px;height:34px"></a>
     </td></tr>
     ${opts.body}
     <tr><td style="padding:40px 0 0;font:12px/1.6 ${FONT};color:${MUTED}">${opts.footer}</td></tr>

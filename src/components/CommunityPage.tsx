@@ -161,8 +161,7 @@ export default function CommunityPage({ t, lang }: Props) {
           <span aria-hidden="true" style={{ position: 'absolute', left: 0, bottom: 0, width: 'min(5vw,64px)', height: 'min(16vw,220px)', background: '#E5D900', pointerEvents: 'none' }} />
           <div className="am-split" style={{ position: 'relative', ...WRAP, display: 'grid', gap: '40px clamp(40px,6vw,112px)', alignItems: 'start' }}>
             <div>
-              <div style={{ ...CAP, color: '#9A9A96' }}>{t.hMissionLabel}</div>
-              <h2 style={{ marginTop: '28px', maxWidth: '20ch', fontFamily: W, fontWeight: 700, fontSize: 'clamp(26px,2.8vw,42px)', lineHeight: 1.1, letterSpacing: '-.025em' }}>{t.hMissionTitle}</h2>
+              <h2 style={{ maxWidth: '20ch', fontFamily: W, fontWeight: 700, fontSize: 'clamp(26px,2.8vw,42px)', lineHeight: 1.1, letterSpacing: '-.025em' }}>{t.hMissionTitle}</h2>
               <p style={{ marginTop: '20px', maxWidth: '48ch', fontSize: '17px', lineHeight: 1.6, color: '#C9C9C5' }}>{t.hMissionText}</p>
             </div>
             <div className="am-f2" style={{ display: 'grid', gap: '0 32px', borderTop: '1px solid #333' }}>
@@ -180,10 +179,7 @@ export default function CommunityPage({ t, lang }: Props) {
         <section style={{ padding: 'clamp(48px,5vw,88px) 0' }}>
           <div style={WRAP}>
             <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: '24px 64px' }}>
-              <div>
-                <div style={CAP}>{t.hWhoLabel}</div>
-                <h2 style={H2}>{t.hWhoTitle}</h2>
-              </div>
+              <h2 style={{ ...H2, marginTop: 0 }}>{t.hWhoTitle}</h2>
               <p style={{ maxWidth: '44ch', fontSize: '17px', lineHeight: 1.6, color: '#55554F' }}>{t.hWhoNote}</p>
             </div>
             <div className="am-g2" style={{ display: 'grid', gap: '24px', marginTop: '32px' }}>
@@ -192,10 +188,7 @@ export default function CommunityPage({ t, lang }: Props) {
                   <img src="/img/il-residents.jpg" alt={t.hResidentsAlt} loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: 'clamp(24px,3vw,44px)' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', fontSize: '12px', fontWeight: 600, letterSpacing: '.12em', textTransform: 'uppercase' }}>
-                    <span>{t.hResidents}</span>
-                    <span style={{ color: '#55554F' }}>{t.hResidentsTerm}</span>
-                  </div>
+                  <div style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '.12em', textTransform: 'uppercase' }}>{t.hResidents}</div>
                   <h3 style={{ marginTop: '24px', fontFamily: W, fontWeight: 700, fontSize: 'clamp(24px,2.2vw,34px)', lineHeight: 1.1, letterSpacing: '-.02em' }}>{t.hResidentsTitle}</h3>
                   <div style={{ marginTop: '28px', borderTop: '1px solid #000' }}>
                     {perks.map((p, i) => (
@@ -215,10 +208,7 @@ export default function CommunityPage({ t, lang }: Props) {
                   <img src="/img/il-partners.jpg" alt={t.hPartnersAlt} loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: 'clamp(24px,3vw,44px)' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', fontSize: '12px', fontWeight: 600, letterSpacing: '.12em', textTransform: 'uppercase' }}>
-                    <span>{t.hPartners}</span>
-                    <span style={{ color: '#C8D6EC' }}>{t.hPartnersTerm}</span>
-                  </div>
+                  <div style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '.12em', textTransform: 'uppercase' }}>{t.hPartners}</div>
                   <h3 style={{ marginTop: '24px', fontFamily: W, fontWeight: 700, fontSize: 'clamp(24px,2.2vw,34px)', lineHeight: 1.1, letterSpacing: '-.02em' }}>{t.hPartnersTitle}</h3>
                   <p style={{ marginTop: '20px', maxWidth: '44ch', fontSize: '17px', lineHeight: 1.6, color: '#E3EAF5' }}>{t.hPartnersText}</p>
                   <a href="#join" onClick={pickPartner} className="am-link" style={{ alignSelf: 'flex-start', marginTop: 'auto', paddingTop: '32px', fontFamily: W, fontWeight: 700, fontSize: '14px', color: '#fff' }}>
@@ -233,8 +223,7 @@ export default function CommunityPage({ t, lang }: Props) {
         <section style={{ padding: '0 0 clamp(48px,5vw,88px)' }}>
           <div style={WRAP}>
             <div style={{ paddingTop: 'clamp(48px,5vw,72px)', borderTop: '1px solid #E6E6E3' }}>
-              <div style={CAP}>{t.hFormatsLabel}</div>
-              <h2 style={H2}>{t.hFormatsTitle}</h2>
+              <h2 style={{ ...H2, marginTop: 0 }}>{t.hFormatsTitle}</h2>
             </div>
             <div className="am-g3" style={{ display: 'grid', marginTop: '32px', borderTop: '1px solid #000', borderLeft: '1px solid #E6E6E3' }}>
               {formats.map(([title, text], i) => (
@@ -251,8 +240,7 @@ export default function CommunityPage({ t, lang }: Props) {
         <section id="join" style={{ background: '#F3F3F1', padding: 'clamp(48px,5vw,88px) 0' }}>
           <div className="am-split" style={{ ...WRAP, display: 'grid', gap: 'clamp(40px,6vw,112px)', alignItems: 'start' }}>
             <div>
-              <div style={CAP}>{t.hJoinLabel}</div>
-              <h2 style={H2}>{t.hJoinTitle}</h2>
+              <h2 style={{ ...H2, marginTop: 0 }}>{t.hJoinTitle}</h2>
               <p style={{ marginTop: '24px', maxWidth: '42ch', fontSize: '17px', lineHeight: 1.6, color: '#3A3A37' }}>{t.hJoinText}</p>
               <div style={{ marginTop: '40px', borderTop: '1px solid #000' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', gap: '16px', padding: '16px 0', borderBottom: '1px solid #DADAD6', fontSize: '15px' }}>

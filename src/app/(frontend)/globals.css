@@ -397,14 +397,6 @@ button:hover .am-arr {
 .am-zoom:hover img {
   transform: scale(1.045);
 }
-/* чёрно-белые фото оживают в цвете */
-.am-gray {
-  transition: filter 500ms ease;
-}
-.am-card:hover .am-gray,
-.am-gray:hover {
-  filter: grayscale(0) !important;
-}
 
 /* уголок номинации сдвигается по диагонали */
 .am-corner {

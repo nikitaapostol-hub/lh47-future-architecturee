@@ -77,7 +77,7 @@ export default function NotFoundPage() {
       <footer style={{ background: '#000', color: '#9A9A96' }}>
         <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '20px clamp(20px,4vw,64px)', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '16px', fontSize: '13px' }}>
           <span>© 2026 Future Architecture</span>
-          <a href="mailto:marketing@lh47arch.com" style={{ color: '#fff' }}>marketing@lh47arch.com</a>
+          <a href="mailto:info@future-arch.md" style={{ color: '#fff' }}>info@future-arch.md</a>
         </div>
       </footer>
     </div>

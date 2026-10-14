@@ -64,7 +64,7 @@ export const SEO_COPY: Record<SeoPage, Record<Lang, { title: string; description
 /** Картинка превью ссылки (1200×630): логотип и короткая подпись на языке страницы. */
 export function ogImage(page: SeoPage | '/privacy', lang: Lang) {
   const k = page === '/forum' ? 'forum' : page === '/award' ? 'award' : 'home'
-  return `/og/${k}-${lang}.jpg`
+  return `/og/${k}-${lang}.jpg?v=2`
 }
 
 /** Короткое имя и описание проекта — для разметки schema.org и llms.txt. */

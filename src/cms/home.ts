@@ -27,7 +27,6 @@ export const HOME: PageContent = {
       name: 'mission',
       label: '01 · Миссия',
       fields: [
-        text('label', 'Надзаголовок', 'hMissionLabel'),
         text('title', 'Заголовок', 'hMissionTitle'),
         text('text', 'Текст', 'hMissionText', true),
         list('values', 'Ценности', 'Ценность', [{ name: 'title', label: 'Название' }, { name: 'text', label: 'Описание', area: true }], [
@@ -42,11 +41,9 @@ export const HOME: PageContent = {
       name: 'who',
       label: '02 · Кто внутри',
       fields: [
-        text('label', 'Надзаголовок', 'hWhoLabel'),
         text('title', 'Заголовок', 'hWhoTitle'),
         text('note', 'Подпись справа', 'hWhoNote'),
         text('residents', 'Резиденты — метка', 'hResidents'),
-        text('residentsTerm', 'Резиденты — условие', 'hResidentsTerm'),
         text('residentsTitle', 'Резиденты — заголовок', 'hResidentsTitle'),
         list('perks', 'Резиденты — что получают', 'Пункт', [{ name: 'text', label: 'Текст' }], [
           { text: 'hPerk1' },
@@ -57,7 +54,6 @@ export const HOME: PageContent = {
         ]),
         text('residentsLink', 'Резиденты — ссылка', 'hBeResidentArrow'),
         text('partners', 'Партнёры — метка', 'hPartners'),
-        text('partnersTerm', 'Партнёры — условие', 'hPartnersTerm'),
         text('partnersTitle', 'Партнёры — заголовок', 'hPartnersTitle'),
         text('partnersText', 'Партнёры — текст', 'hPartnersText', true),
         text('partnersLink', 'Партнёры — ссылка', 'hBePartnerArrow'),
@@ -67,7 +63,6 @@ export const HOME: PageContent = {
       name: 'formats',
       label: '03 · Форматы',
       fields: [
-        text('label', 'Надзаголовок', 'hFormatsLabel'),
         text('title', 'Заголовок', 'hFormatsTitle'),
         list('items', 'Форматы', 'Формат', [{ name: 'title', label: 'Название' }, { name: 'text', label: 'Описание' }], [
           { title: 'hFormat1', text: 'hFormat1Text' },
@@ -86,7 +81,6 @@ export const HOME: PageContent = {
       name: 'join',
       label: '04 · Вступление и форма',
       fields: [
-        text('label', 'Надзаголовок', 'hJoinLabel'),
         text('title', 'Заголовок', 'hJoinTitle'),
         text('text', 'Текст', 'hJoinText', true),
         text('resident', 'Переключатель «Резидент»', 'hResident'),

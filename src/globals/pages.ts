@@ -81,7 +81,7 @@ const forumSettings: Tab[] = [
             type: 'upload',
             relationTo: 'media',
             label: 'Портрет',
-            admin: { description: 'Вертикальный кадр 4:5, от 800 px в ширину. Чёрно-белым сайт сделает сам.' },
+            admin: { description: 'Вертикальный кадр 4:5, от 800 px в ширину. На сайте фото показывается в цвете.' },
           },
         ] as Field[],
       },
