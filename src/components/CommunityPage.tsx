@@ -157,8 +157,8 @@ export default function CommunityPage({ t, lang }: Props) {
         </section>
 
         <section style={{ position: 'relative', overflow: 'hidden', background: '#000', color: '#fff', padding: 'clamp(48px,5vw,88px) 0' }}>
-          <span aria-hidden="true" style={{ position: 'absolute', left: 0, bottom: 0, width: 'min(20vw,280px)', height: 'min(5vw,64px)', background: '#E5D900', pointerEvents: 'none' }} />
-          <span aria-hidden="true" style={{ position: 'absolute', left: 0, bottom: 0, width: 'min(5vw,64px)', height: 'min(16vw,220px)', background: '#E5D900', pointerEvents: 'none' }} />
+          <span aria-hidden="true" style={{ position: 'absolute', left: 0, bottom: 0, width: 'min(20vw,280px)', height: 'min(4vw,56px)', background: '#E5D900', pointerEvents: 'none' }} />
+          <span aria-hidden="true" style={{ position: 'absolute', left: 0, bottom: 0, width: 'min(4vw,56px)', height: 'min(16vw,220px)', background: '#E5D900', pointerEvents: 'none' }} />
           <div className="am-split" style={{ position: 'relative', ...WRAP, display: 'grid', gap: '40px clamp(40px,6vw,112px)', alignItems: 'start' }}>
             <div>
               <h2 style={{ maxWidth: '20ch', fontFamily: W, fontWeight: 700, fontSize: 'clamp(26px,2.8vw,42px)', lineHeight: 1.1, letterSpacing: '-.025em' }}>{t.hMissionTitle}</h2>
