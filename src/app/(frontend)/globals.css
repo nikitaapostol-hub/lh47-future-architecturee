@@ -398,6 +398,15 @@ button:hover .am-arr {
   transform: scale(1.045);
 }
 
+/* чёрно-белые портреты спикеров оживают в цвете */
+.am-gray {
+  transition: filter 500ms ease;
+}
+.am-card:hover .am-gray,
+.am-gray:hover {
+  filter: grayscale(0) !important;
+}
+
 /* уголок номинации сдвигается по диагонали */
 .am-corner {
   transition: transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1);

@@ -263,7 +263,7 @@ export default function ForumPage({ t, lang, forumDate, countdownVisible = true,
                     <div key={i} className="am-card" style={{ position: 'relative' }}>
                       <div className="am-zoom" style={{ position: 'relative', aspectRatio: '4/5', background: '#E4E4E2', overflow: 'hidden' }}>
                         {s.img ? (
-                          <div style={{ position: 'absolute', inset: 0 }}>
+                          <div className="am-gray" style={{ position: 'absolute', inset: 0, filter: 'grayscale(1)' }}>
                             {s.crop ? (
                               <img src={s.img} alt={s.name} loading="lazy" style={{ position: 'absolute', left: s.crop[0], top: s.crop[1], width: s.crop[2], maxWidth: 'none', height: 'auto', display: 'block' }} />
                             ) : (
