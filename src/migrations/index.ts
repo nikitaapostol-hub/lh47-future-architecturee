@@ -13,6 +13,8 @@ import * as migration_20261012_120000_applications_mail from './20261012_120000_
 import * as migration_20261012_140000_public_spaces_nomination from './20261012_140000_public_spaces_nomination';
 import * as migration_20261014_120000_contacts_logo_texts from './20261014_120000_contacts_logo_texts';
 import * as migration_20261014_120100_drop_home_labels from './20261014_120100_drop_home_labels';
+import * as migration_20261014_160000_who_benefits from './20261014_160000_who_benefits';
+import * as migration_20261014_160100_who_benefits_data from './20261014_160100_who_benefits_data';
 import * as migration_20261014_150000_instagram from './20261014_150000_instagram';
 
 export const migrations = [
@@ -95,5 +97,15 @@ export const migrations = [
     up: migration_20261014_150000_instagram.up,
     down: migration_20261014_150000_instagram.down,
     name: '20261014_150000_instagram',
+  },
+  {
+    up: migration_20261014_160000_who_benefits.up,
+    down: migration_20261014_160000_who_benefits.down,
+    name: '20261014_160000_who_benefits',
+  },
+  {
+    up: migration_20261014_160100_who_benefits_data.up,
+    down: migration_20261014_160100_who_benefits_data.down,
+    name: '20261014_160100_who_benefits_data',
   },
 ];

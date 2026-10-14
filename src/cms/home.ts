@@ -29,12 +29,6 @@ export const HOME: PageContent = {
       fields: [
         text('title', 'Заголовок', 'hMissionTitle'),
         text('text', 'Текст', 'hMissionText', true),
-        list('values', 'Ценности', 'Ценность', [{ name: 'title', label: 'Название' }, { name: 'text', label: 'Описание', area: true }], [
-          { title: 'hValue1', text: 'hValue1Text' },
-          { title: 'hValue2', text: 'hValue2Text' },
-          { title: 'hValue3', text: 'hValue3Text' },
-          { title: 'hValue4', text: 'hValue4Text' },
-        ]),
       ],
     },
     {
@@ -43,19 +37,24 @@ export const HOME: PageContent = {
       fields: [
         text('title', 'Заголовок', 'hWhoTitle'),
         text('note', 'Подпись справа', 'hWhoNote'),
+        text('benefitsLabel', 'Подзаголовок списка в карточках', 'hBenefitsLabel'),
         text('residents', 'Резиденты — метка', 'hResidents'),
         text('residentsTitle', 'Резиденты — заголовок', 'hResidentsTitle'),
-        list('perks', 'Резиденты — что получают', 'Пункт', [{ name: 'text', label: 'Текст' }], [
-          { text: 'hPerk1' },
-          { text: 'hPerk2' },
-          { text: 'hPerk3' },
-          { text: 'hPerk4' },
-          { text: 'hPerk5' },
+        text('residentsText', 'Резиденты — короткий текст', 'hResidentsText', true),
+        list('residentsBenefits', 'Резиденты — что даёт сообщество', 'Пункт', [{ name: 'title', label: 'Название' }, { name: 'text', label: 'Описание', area: true }], [
+          { title: 'hRBen1', text: 'hRBen1Text' },
+          { title: 'hRBen2', text: 'hRBen2Text' },
+          { title: 'hRBen3', text: 'hRBen3Text' },
         ]),
         text('residentsLink', 'Резиденты — ссылка', 'hBeResidentArrow'),
         text('partners', 'Партнёры — метка', 'hPartners'),
         text('partnersTitle', 'Партнёры — заголовок', 'hPartnersTitle'),
-        text('partnersText', 'Партнёры — текст', 'hPartnersText', true),
+        text('partnersText', 'Партнёры — короткий текст', 'hPartnersText', true),
+        list('partnersBenefits', 'Партнёры — что даёт сообщество', 'Пункт', [{ name: 'title', label: 'Название' }, { name: 'text', label: 'Описание', area: true }], [
+          { title: 'hPBen1', text: 'hPBen1Text' },
+          { title: 'hPBen2', text: 'hPBen2Text' },
+          { title: 'hPBen3', text: 'hPBen3Text' },
+        ]),
         text('partnersLink', 'Партнёры — ссылка', 'hBePartnerArrow'),
       ],
     },

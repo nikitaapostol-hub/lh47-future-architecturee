@@ -570,7 +570,7 @@ html[data-pre='off'] .am-pre { display: none; }
 
 /* Баннер cookie: на компьютере — карточка внизу слева, на телефоне — во всю ширину */
 .fa-cookie {
-  left: 24px;
+  right: 24px;
   bottom: 24px;
   width: min(440px, calc(100vw - 48px));
   max-height: calc(100vh - 48px);
@@ -600,3 +600,13 @@ html[data-pre='off'] .am-pre { display: none; }
 /* логотипы основателей в подвале — ссылки на их сайты */
 .am-founder { opacity: 0.85; transition: opacity 200ms; }
 .am-founder:hover, .am-founder:focus-visible { opacity: 1; }
+
+/* «Кто входит в сообщество»: строки карточек резидентов и партнёров на одной высоте */
+@supports (grid-template-rows: subgrid) {
+  .am-who > .am-card {
+    display: grid !important;
+    grid-row: span 5;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+  }
+}

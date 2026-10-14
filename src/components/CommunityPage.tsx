@@ -33,13 +33,16 @@ export default function CommunityPage({ t, lang }: Props) {
   const pickPartner = () => setTrack('partner')
   const isResident = track === 'resident'
 
-  const values = [
-    [t.hValue1, t.hValue1Text],
-    [t.hValue2, t.hValue2Text],
-    [t.hValue3, t.hValue3Text],
-    [t.hValue4, t.hValue4Text],
+  const residentBenefits = [
+    [t.hRBen1, t.hRBen1Text],
+    [t.hRBen2, t.hRBen2Text],
+    [t.hRBen3, t.hRBen3Text],
   ]
-  const perks = [t.hPerk1, t.hPerk2, t.hPerk3, t.hPerk4, t.hPerk5]
+  const partnerBenefits = [
+    [t.hPBen1, t.hPBen1Text],
+    [t.hPBen2, t.hPBen2Text],
+    [t.hPBen3, t.hPBen3Text],
+  ]
   const formats = [
     [t.hFormat1, t.hFormat1Text],
     [t.hFormat2, t.hFormat2Text],
@@ -156,23 +159,13 @@ export default function CommunityPage({ t, lang }: Props) {
           </div>
         </section>
 
-        <section style={{ position: 'relative', overflow: 'hidden', background: '#000', color: '#fff', padding: 'clamp(48px,5vw,88px) 0' }}>
+        <section style={{ position: 'relative', overflow: 'hidden', background: '#000', color: '#fff', padding: 'clamp(56px,6vw,104px) 0 calc(min(11vw,150px) + clamp(32px,4vw,56px))' }}>
+          {/* жёлтый уголок — в пустом поле под текстом, ни с чем не пересекается */}
           <span aria-hidden="true" style={{ position: 'absolute', left: 0, bottom: 0, width: 'min(20vw,280px)', height: 'min(4vw,56px)', background: '#E5D900', pointerEvents: 'none' }} />
-          <span aria-hidden="true" style={{ position: 'absolute', left: 0, bottom: 0, width: 'min(4vw,56px)', height: 'min(16vw,220px)', background: '#E5D900', pointerEvents: 'none' }} />
-          <div className="am-split" style={{ position: 'relative', ...WRAP, display: 'grid', gap: '40px clamp(40px,6vw,112px)', alignItems: 'start' }}>
-            <div>
-              <h2 style={{ maxWidth: '20ch', fontFamily: W, fontWeight: 700, fontSize: 'clamp(26px,2.8vw,42px)', lineHeight: 1.1, letterSpacing: '-.025em' }}>{t.hMissionTitle}</h2>
-              <p style={{ marginTop: '20px', maxWidth: '48ch', fontSize: '17px', lineHeight: 1.6, color: '#C9C9C5' }}>{t.hMissionText}</p>
-            </div>
-            <div className="am-f2" style={{ display: 'grid', gap: '0 32px', borderTop: '1px solid #333' }}>
-              {values.map(([title, text], i) => (
-                <div key={i} style={{ padding: '20px 0 4px', borderBottom: '1px solid #333' }}>
-                  <div style={{ fontSize: '13px', fontWeight: 600, color: '#E5D900' }}>{no2(i)}</div>
-                  <h3 style={{ marginTop: '12px', fontFamily: W, fontWeight: 700, fontSize: '20px', lineHeight: 1.15 }}>{title}</h3>
-                  <p style={{ marginTop: '8px', marginBottom: '16px', maxWidth: '30ch', fontSize: '16px', lineHeight: 1.55, color: '#B5B5B1' }}>{text}</p>
-                </div>
-              ))}
-            </div>
+          <span aria-hidden="true" style={{ position: 'absolute', left: 0, bottom: 0, width: 'min(4vw,56px)', height: 'min(11vw,150px)', background: '#E5D900', pointerEvents: 'none' }} />
+          <div className="am-split" style={{ position: 'relative', ...WRAP, display: 'grid', gap: '24px clamp(40px,6vw,112px)', alignItems: 'start' }}>
+            <h2 style={{ maxWidth: '14ch', fontFamily: W, fontWeight: 800, fontSize: 'clamp(32px,4vw,60px)', lineHeight: 1.02, letterSpacing: '-.03em' }}>{t.hMissionTitle}</h2>
+            <p style={{ maxWidth: '40ch', paddingTop: 'clamp(0px,0.6vw,10px)', fontSize: 'clamp(18px,1.55vw,22px)', lineHeight: 1.55, color: '#C9C9C5' }}>{t.hMissionText}</p>
           </div>
         </section>
 
@@ -182,40 +175,31 @@ export default function CommunityPage({ t, lang }: Props) {
               <h2 style={{ ...H2, marginTop: 0 }}>{t.hWhoTitle}</h2>
               <p style={{ maxWidth: '44ch', fontSize: '17px', lineHeight: 1.6, color: '#55554F' }}>{t.hWhoNote}</p>
             </div>
-            <div className="am-g2" style={{ display: 'grid', gap: '24px', marginTop: '32px' }}>
-              <article className="am-card" style={{ display: 'flex', flexDirection: 'column', background: '#F3F3F1' }}>
-                <div className="am-zoom" style={{ position: 'relative', aspectRatio: '2/1', overflow: 'hidden', background: '#D9D9D6' }}>
-                  <img src="/img/il-residents.jpg" alt={t.hResidentsAlt} loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: 'clamp(24px,3vw,44px)' }}>
-                  <div style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '.12em', textTransform: 'uppercase' }}>{t.hResidents}</div>
-                  <h3 style={{ marginTop: '24px', fontFamily: W, fontWeight: 700, fontSize: 'clamp(24px,2.2vw,34px)', lineHeight: 1.1, letterSpacing: '-.02em' }}>{t.hResidentsTitle}</h3>
-                  <div style={{ marginTop: '28px', borderTop: '1px solid #000' }}>
-                    {perks.map((p, i) => (
-                      <div key={i} style={{ display: 'grid', gridTemplateColumns: '40px minmax(0,1fr)', gap: '8px', padding: '14px 0', borderBottom: '1px solid #DADAD6', fontSize: '16px', lineHeight: 1.45 }}>
-                        <span style={{ fontWeight: 600, color: '#1A52A0' }}>{no2(i)}</span>
-                        <span>{p}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <a href="#join" onClick={pickResident} className="am-link" style={{ alignSelf: 'flex-start', marginTop: 'auto', paddingTop: '32px', fontFamily: W, fontWeight: 700, fontSize: '14px' }}>
-                    <Arrow s={t.hBeResidentArrow} line />
-                  </a>
-                </div>
-              </article>
-              <article className="am-card" style={{ display: 'flex', flexDirection: 'column', background: '#1A52A0', color: '#fff' }}>
-                <div className="am-zoom" style={{ position: 'relative', aspectRatio: '2/1', overflow: 'hidden', background: '#123C78' }}>
-                  <img src="/img/il-partners.jpg" alt={t.hPartnersAlt} loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: 'clamp(24px,3vw,44px)' }}>
-                  <div style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '.12em', textTransform: 'uppercase' }}>{t.hPartners}</div>
-                  <h3 style={{ marginTop: '24px', fontFamily: W, fontWeight: 700, fontSize: 'clamp(24px,2.2vw,34px)', lineHeight: 1.1, letterSpacing: '-.02em' }}>{t.hPartnersTitle}</h3>
-                  <p style={{ marginTop: '20px', maxWidth: '44ch', fontSize: '17px', lineHeight: 1.6, color: '#E3EAF5' }}>{t.hPartnersText}</p>
-                  <a href="#join" onClick={pickPartner} className="am-link" style={{ alignSelf: 'flex-start', marginTop: 'auto', paddingTop: '32px', fontFamily: W, fontWeight: 700, fontSize: '14px', color: '#fff' }}>
-                    <Arrow s={t.hBePartnerArrow} line />
-                  </a>
-                </div>
-              </article>
+            <div className="am-g2 am-who" style={{ display: 'grid', gap: '24px', marginTop: '32px' }}>
+              <WhoCard
+                dark={false}
+                img="/img/il-residents.jpg"
+                alt={t.hResidentsAlt}
+                label={t.hResidents}
+                title={t.hResidentsTitle}
+                text={t.hResidentsText}
+                benefitsLabel={t.hBenefitsLabel}
+                benefits={residentBenefits}
+                link={t.hBeResidentArrow}
+                onLink={pickResident}
+              />
+              <WhoCard
+                dark
+                img="/img/il-partners.jpg"
+                alt={t.hPartnersAlt}
+                label={t.hPartners}
+                title={t.hPartnersTitle}
+                text={t.hPartnersText}
+                benefitsLabel={t.hBenefitsLabel}
+                benefits={partnerBenefits}
+                link={t.hBePartnerArrow}
+                onLink={pickPartner}
+              />
             </div>
           </div>
         </section>
@@ -326,5 +310,57 @@ export default function CommunityPage({ t, lang }: Props) {
 
       <Footer t={t} lang={lang} />
     </div>
+  )
+}
+
+/** Карточка «Резиденты» / «Партнёры»: кто это, коротко и что даёт сообщество.
+    Строки двух карточек выровнены между собой (subgrid в .am-who). */
+function WhoCard(p: {
+  dark: boolean
+  img: string
+  alt: string
+  label: string
+  title: string
+  text: string
+  benefitsLabel: string
+  benefits: string[][]
+  link: string
+  onLink: () => void
+}) {
+  const PAD = 'clamp(24px,3vw,44px)'
+  const ink = p.dark ? '#fff' : '#000'
+  const soft = p.dark ? '#DCE5F3' : '#3A3A37'
+  const line = p.dark ? 'rgba(255,255,255,.28)' : '#DADAD6'
+  const accent = p.dark ? '#E5D900' : '#1A52A0'
+  return (
+    <article className="am-card" style={{ display: 'flex', flexDirection: 'column', background: p.dark ? '#1A52A0' : '#F3F3F1', color: ink }}>
+      <div className="am-zoom" style={{ position: 'relative', aspectRatio: '2/1', overflow: 'hidden', background: p.dark ? '#123C78' : '#D9D9D6' }}>
+        <img src={p.img} alt={p.alt} loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+      </div>
+      <div style={{ padding: `${PAD} ${PAD} 0` }}>
+        <div style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '.12em', textTransform: 'uppercase' }}>{p.label}</div>
+        <h3 style={{ marginTop: '20px', maxWidth: '22ch', fontFamily: W, fontWeight: 700, fontSize: 'clamp(24px,2.2vw,34px)', lineHeight: 1.1, letterSpacing: '-.02em' }}>{p.title}</h3>
+      </div>
+      <p style={{ padding: `16px ${PAD} 0`, maxWidth: 'calc(46ch + 88px)', fontSize: '17px', lineHeight: 1.55, color: soft }}>{p.text}</p>
+      <div style={{ padding: `32px ${PAD} 0` }}>
+        <div style={{ paddingBottom: '12px', borderBottom: '1px solid ' + ink, fontSize: '12px', fontWeight: 600, letterSpacing: '.12em', textTransform: 'uppercase', color: p.dark ? '#fff' : '#55554F' }}>{p.benefitsLabel}</div>
+        <ol style={{ margin: 0, padding: 0, listStyle: 'none' }}>
+          {p.benefits.map(([title, text], i) => (
+            <li key={i} style={{ display: 'grid', gridTemplateColumns: '40px minmax(0,1fr)', gap: '8px', padding: '18px 0', borderBottom: '1px solid ' + line }}>
+              <span style={{ fontWeight: 600, fontSize: '15px', lineHeight: 1.5, color: accent }}>{no2(i)}</span>
+              <span>
+                <span style={{ display: 'block', fontFamily: W, fontWeight: 700, fontSize: '18px', lineHeight: 1.3 }}>{title}</span>
+                <span style={{ display: 'block', marginTop: '6px', fontSize: '15px', lineHeight: 1.55, color: soft }}>{text}</span>
+              </span>
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'flex-end', padding: `32px ${PAD} ${PAD}` }}>
+        <a href="#join" onClick={p.onLink} className="am-link" style={{ fontFamily: W, fontWeight: 700, fontSize: '14px', color: ink }}>
+          <Arrow s={p.link} line />
+        </a>
+      </div>
+    </article>
   )
 }

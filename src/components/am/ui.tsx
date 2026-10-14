@@ -197,18 +197,26 @@ export function Header({
 }
 
 const CAP: S = { fontSize: '12px', fontWeight: 600, letterSpacing: '.12em', textTransform: 'uppercase', color: '#9A9A96' }
-const SOCIAL: S = { display: 'flex', alignItems: 'center', justifyContent: 'center', width: '44px', height: '44px', border: '1px solid #444', color: '#fff', transition: 'background 200ms,border-color 200ms,color 200ms' }
+const SOCIAL: S = { display: 'inline-flex', alignItems: 'center', gap: '10px', height: '40px', padding: '0 16px 0 12px', border: '1px solid #3A3A3A', color: '#fff', fontSize: '14px', fontWeight: 500, transition: 'background 200ms,border-color 200ms,color 200ms' }
+
+/** «@futurearch.md» из ссылки на профиль — подпись рядом с иконкой. */
+const handle = (url: string, fallback: string) => {
+  const m = url.match(/^https?:\/\/(?:www\.)?[^/]+\/(?:in\/|company\/)?([^/?#]+)/)
+  return m ? '@' + m[1] : fallback
+}
 
 const tel = (s: string) => 'tel:' + s.replace(/[^\d+]/g, '')
 
 export function Footer({ t, lang }: { t: Dict; lang: Lang }) {
   const social = [
     { href: t.cInstagram, label: 'Instagram', body: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none" /></svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" stroke="none" /></svg>
     ), style: {} as S },
-    { href: t.cFacebook, label: 'Facebook', body: 'f', style: { fontFamily: 'Onest,sans-serif', fontWeight: 800, fontSize: '20px' } as S },
-    { href: t.cLinkedin, label: 'LinkedIn', body: 'in', style: { fontFamily: 'Onest,sans-serif', fontWeight: 800, fontSize: '16px' } as S },
-  ].filter((s) => s.href && s.href.trim())
+    { href: t.cFacebook, label: 'Facebook', body: 'f', style: { fontFamily: 'Onest,sans-serif', fontWeight: 800, fontSize: '18px' } as S },
+    { href: t.cLinkedin, label: 'LinkedIn', body: 'in', style: { fontFamily: 'Onest,sans-serif', fontWeight: 800, fontSize: '15px' } as S },
+  ]
+    .filter((s) => s.href && s.href.trim())
+    .map((s) => ({ ...s, handle: handle(s.href.trim(), s.label) }))
 
   return (
     <footer id="contacts" className="am-foot" style={{ background: '#000', color: '#fff', padding: 'clamp(48px,5vw,80px) 0 28px' }}>
@@ -217,6 +225,16 @@ export function Footer({ t, lang }: { t: Dict; lang: Lang }) {
           <div>
             <img src="/img/logo-white.svg" alt="Future Architecture" width={224} height={56} loading="lazy" style={{ display: 'block', height: '56px', width: 'auto' }} />
             <div style={{ marginTop: '20px', ...CAP }}>{t.cTagline}</div>
+            {social.length > 0 && (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '24px' }}>
+                {social.map((s) => (
+                  <a key={s.label} className="hv-social" href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label + ' ' + s.handle} style={SOCIAL}>
+                    <span aria-hidden="true" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '20px', ...s.style }}>{s.body}</span>
+                    <span>{s.handle}</span>
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
           <div>
             <div style={CAP}>{t.cEmailLabel}</div>
@@ -246,15 +264,6 @@ export function Footer({ t, lang }: { t: Dict; lang: Lang }) {
                 <img src="/img/d7f7cfad4d.png" alt="InStyle Home" width={73} height={18} loading="lazy" style={{ height: '18px', width: 'auto', filter: 'brightness(0) invert(1)' }} />
               </a>
             </div>
-            {social.length > 0 && (
-              <div style={{ display: 'flex', gap: '8px', marginTop: '20px' }}>
-                {social.map((s) => (
-                  <a key={s.label} className="hv-social" href={s.href} target="_blank" rel="noopener noreferrer" aria-label={s.label} style={{ ...SOCIAL, ...s.style }}>
-                    {s.body}
-                  </a>
-                ))}
-              </div>
-            )}
           </div>
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: '16px', marginTop: '40px', paddingTop: '20px', borderTop: '1px solid #2B2B2B', fontSize: '13px', color: '#9A9A96' }}>

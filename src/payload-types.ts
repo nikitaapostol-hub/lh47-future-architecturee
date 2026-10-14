@@ -587,21 +587,6 @@ export interface Home {
       ro?: string | null;
       en?: string | null;
     };
-    values?:
-      | {
-          title?: {
-            ru?: string | null;
-            ro?: string | null;
-            en?: string | null;
-          };
-          text?: {
-            ru?: string | null;
-            ro?: string | null;
-            en?: string | null;
-          };
-          id?: string | null;
-        }[]
-      | null;
   };
   who?: {
     title?: {
@@ -610,6 +595,11 @@ export interface Home {
       en?: string | null;
     };
     note?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    benefitsLabel?: {
       ru?: string | null;
       ro?: string | null;
       en?: string | null;
@@ -624,8 +614,18 @@ export interface Home {
       ro?: string | null;
       en?: string | null;
     };
-    perks?:
+    residentsText?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    residentsBenefits?:
       | {
+          title?: {
+            ru?: string | null;
+            ro?: string | null;
+            en?: string | null;
+          };
           text?: {
             ru?: string | null;
             ro?: string | null;
@@ -654,6 +654,21 @@ export interface Home {
       ro?: string | null;
       en?: string | null;
     };
+    partnersBenefits?:
+      | {
+          title?: {
+            ru?: string | null;
+            ro?: string | null;
+            en?: string | null;
+          };
+          text?: {
+            ru?: string | null;
+            ro?: string | null;
+            en?: string | null;
+          };
+          id?: string | null;
+        }[]
+      | null;
     partnersLink?: {
       ru?: string | null;
       ro?: string | null;
@@ -1757,25 +1772,6 @@ export interface HomeSelect<T extends boolean = true> {
               ro?: T;
               en?: T;
             };
-        values?:
-          | T
-          | {
-              title?:
-                | T
-                | {
-                    ru?: T;
-                    ro?: T;
-                    en?: T;
-                  };
-              text?:
-                | T
-                | {
-                    ru?: T;
-                    ro?: T;
-                    en?: T;
-                  };
-              id?: T;
-            };
       };
   who?:
     | T
@@ -1788,6 +1784,13 @@ export interface HomeSelect<T extends boolean = true> {
               en?: T;
             };
         note?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        benefitsLabel?:
           | T
           | {
               ru?: T;
@@ -1808,9 +1811,23 @@ export interface HomeSelect<T extends boolean = true> {
               ro?: T;
               en?: T;
             };
-        perks?:
+        residentsText?:
           | T
           | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        residentsBenefits?:
+          | T
+          | {
+              title?:
+                | T
+                | {
+                    ru?: T;
+                    ro?: T;
+                    en?: T;
+                  };
               text?:
                 | T
                 | {
@@ -1847,6 +1864,25 @@ export interface HomeSelect<T extends boolean = true> {
               ru?: T;
               ro?: T;
               en?: T;
+            };
+        partnersBenefits?:
+          | T
+          | {
+              title?:
+                | T
+                | {
+                    ru?: T;
+                    ro?: T;
+                    en?: T;
+                  };
+              text?:
+                | T
+                | {
+                    ru?: T;
+                    ro?: T;
+                    en?: T;
+                  };
+              id?: T;
             };
         partnersLink?:
           | T
