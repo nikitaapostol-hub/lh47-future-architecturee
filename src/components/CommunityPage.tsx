@@ -159,23 +159,20 @@ export default function CommunityPage({ t, lang }: Props) {
           </div>
         </section>
 
-        {/* Старт в 2027 и предпродажа — сразу под первым экраном */}
-        <section aria-labelledby="am-presale" style={{ position: 'relative', overflow: 'hidden', background: '#E5D900', color: '#000' }}>
-          <span aria-hidden="true" className="am-presale-year" style={{ position: 'absolute', right: 'clamp(-12px,-1vw,0px)', bottom: '-0.2em', fontFamily: W, fontWeight: 900, fontSize: 'clamp(120px,19vw,300px)', lineHeight: 0.8, letterSpacing: '-.06em', color: 'rgba(0,0,0,.07)', pointerEvents: 'none', userSelect: 'none' }}>
-            2027
-          </span>
-          <div className="am-split" style={{ position: 'relative', ...WRAP, display: 'grid', gap: '20px clamp(40px,6vw,112px)', alignItems: 'end', padding: 'clamp(36px,4vw,64px) clamp(20px,4vw,64px)' }}>
+        {/* Старт в 2027 и предпродажа — сразу под первым экраном, спокойно, в цветах сайта */}
+        <section aria-labelledby="am-presale" style={{ background: '#F3F3F1', color: '#000', borderBottom: '1px solid #E6E6E3' }}>
+          <div className="am-split" style={{ ...WRAP, display: 'grid', gap: '20px clamp(40px,6vw,112px)', alignItems: 'end', paddingTop: 'clamp(36px,4vw,64px)', paddingBottom: 'clamp(36px,4vw,64px)' }}>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '12px', fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase' }}>
-                <span aria-hidden="true" style={{ width: '10px', height: '10px', background: '#000' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', ...CAP }}>
+                <span aria-hidden="true" style={{ width: '10px', height: '10px', background: '#E5D900' }} />
                 {t.hPresaleLabel}
               </div>
-              <h2 id="am-presale" style={{ marginTop: '16px', maxWidth: '16ch', fontFamily: W, fontWeight: 800, fontSize: 'clamp(28px,3.4vw,52px)', lineHeight: 1.02, letterSpacing: '-.03em' }}>{t.hPresaleTitle}</h2>
+              <h2 id="am-presale" style={{ marginTop: '16px', maxWidth: '16ch', fontFamily: W, fontWeight: 700, fontSize: 'clamp(26px,2.8vw,42px)', lineHeight: 1.08, letterSpacing: '-.025em' }}>{t.hPresaleTitle}</h2>
             </div>
             <div>
-              <p style={{ maxWidth: '44ch', fontSize: 'clamp(17px,1.35vw,20px)', lineHeight: 1.5 }}>{t.hPresaleText}</p>
-              <a href="#join" onClick={pickResident} className="hv-blue" style={{ ...BTN, marginTop: '24px' }}>
-                <Arrow s={t.hPresaleCta + ' →'} />
+              <p style={{ maxWidth: '46ch', fontSize: '17px', lineHeight: 1.6, color: '#3A3A37' }}>{t.hPresaleText}</p>
+              <a href="#join" onClick={pickResident} className="am-link" style={{ display: 'inline-block', marginTop: '20px', fontFamily: W, fontWeight: 700, fontSize: '14px' }}>
+                <Arrow s={t.hPresaleCta + ' →'} line />
               </a>
             </div>
           </div>
