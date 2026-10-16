@@ -161,17 +161,17 @@ export default function CommunityPage({ t, lang }: Props) {
 
         {/* Старт в 2027 и предпродажа — сразу под первым экраном, спокойно, в цветах сайта */}
         <section aria-labelledby="am-presale" style={{ background: '#F3F3F1', color: '#000', borderBottom: '1px solid #E6E6E3' }}>
-          <div className="am-split" style={{ ...WRAP, display: 'grid', gap: '20px clamp(40px,6vw,112px)', alignItems: 'end', paddingTop: 'clamp(36px,4vw,64px)', paddingBottom: 'clamp(36px,4vw,64px)' }}>
+          <div className="am-split" style={{ ...WRAP, display: 'grid', gap: '20px clamp(40px,6vw,112px)', alignItems: 'end', paddingTop: 'clamp(28px,3.2vw,52px)', paddingBottom: 'clamp(28px,3.2vw,52px)' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', ...CAP }}>
                 <span aria-hidden="true" style={{ width: '10px', height: '10px', background: '#E5D900' }} />
                 {t.hPresaleLabel}
               </div>
-              <h2 id="am-presale" style={{ marginTop: '16px', maxWidth: '16ch', fontFamily: W, fontWeight: 700, fontSize: 'clamp(26px,2.8vw,42px)', lineHeight: 1.08, letterSpacing: '-.025em' }}>{t.hPresaleTitle}</h2>
+              <h2 id="am-presale" style={{ marginTop: '14px', maxWidth: '18ch', fontFamily: W, fontWeight: 800, fontSize: 'clamp(24px,2.4vw,36px)', lineHeight: 1.04, letterSpacing: '-.03em' }}>{t.hPresaleTitle}</h2>
             </div>
             <div>
-              <p style={{ maxWidth: '46ch', fontSize: '17px', lineHeight: 1.6, color: '#3A3A37' }}>{t.hPresaleText}</p>
-              <a href="#join" onClick={pickResident} className="am-link" style={{ display: 'inline-block', marginTop: '20px', fontFamily: W, fontWeight: 700, fontSize: '14px' }}>
+              <p style={{ maxWidth: '46ch', fontSize: '16px', lineHeight: 1.6, color: '#3A3A37' }}>{t.hPresaleText}</p>
+              <a href="#join" onClick={pickResident} className="am-link" style={{ display: 'inline-block', marginTop: '16px', fontFamily: W, fontWeight: 700, fontSize: '14px' }}>
                 <Arrow s={t.hPresaleCta + ' →'} line />
               </a>
             </div>
