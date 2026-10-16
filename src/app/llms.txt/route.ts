@@ -40,7 +40,7 @@ Founded by the architecture bureau LH47 ARCH (https://lh47arch.com) and InStyle 
 ## Key facts
 
 - Future Architecture is a professional community of architects, interior designers, developers and building-industry companies in Moldova. Membership is by application (residents and partners).
-- Future Architecture Forum 2026 is an architecture and real-estate forum in Chișinău on ${forumDate}, venue Range Rover Moldova, 250+ attendees, attendance by selection.${speakers.length ? `\n- Forum speakers: ${speakers.join('; ')}.` : ''}
+- Future Architecture Forum 2026 is an architecture and real-estate forum in Chișinău on ${forumDate}, venue Range Rover Moldova, 300+ attendees, attendance by selection.${speakers.length ? `\n- Forum speakers: ${speakers.join('; ')}.` : ''}
 - Future Architecture Award 2026 is an architecture and design award in Moldova with a student competition.${noms.length ? ` Categories: ${noms.join('; ')}.` : ''}${deadline ? ` Applications until ${deadline}.` : ''} Winners are announced on stage at the forum.
 
 ## Pages

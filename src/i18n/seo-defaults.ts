@@ -29,17 +29,17 @@ export const SEO_COPY: Record<SeoPage, Record<Lang, { title: string; description
     ru: {
       title: 'Future Architecture Forum 2026 — архитектурный форум в Молдове',
       description:
-        'Закрытая встреча тех, кто определяет будущее недвижимости Молдовы. Более 250 девелоперов, инвесторов, архитекторов и производителей. 9 декабря 2026, Range Rover Moldova. Участие по отбору.',
+        'Закрытая встреча тех, кто определяет будущее недвижимости Молдовы. Более 300 девелоперов, инвесторов, архитекторов и производителей. 9 декабря 2026, Range Rover Moldova. Участие по отбору.',
     },
     ro: {
       title: 'Future Architecture Forum 2026 — forum de arhitectură în Moldova',
       description:
-        'O întâlnire închisă a celor care definesc viitorul imobiliarelor din Moldova. Peste 250 de dezvoltatori, investitori, arhitecți și producători. 9 decembrie 2026, Range Rover Moldova. Participare pe bază de selecție.',
+        'O întâlnire închisă a celor care definesc viitorul imobiliarelor din Moldova. Peste 300 de dezvoltatori, investitori, arhitecți și producători. 9 decembrie 2026, Range Rover Moldova. Participare pe bază de selecție.',
     },
     en: {
       title: 'Future Architecture Forum 2026 — architecture forum in Moldova',
       description:
-        'A closed meeting of the people shaping the future of real estate in Moldova. More than 250 developers, investors, architects and manufacturers. 9 December 2026, Range Rover Moldova. Attendance by selection.',
+        'A closed meeting of the people shaping the future of real estate in Moldova. More than 300 developers, investors, architects and manufacturers. 9 December 2026, Range Rover Moldova. Attendance by selection.',
     },
   },
   '/award': {
@@ -64,7 +64,7 @@ export const SEO_COPY: Record<SeoPage, Record<Lang, { title: string; description
 /** Картинка превью ссылки (1200×630): логотип и короткая подпись на языке страницы. */
 export function ogImage(page: SeoPage | '/privacy', lang: Lang) {
   const k = page === '/forum' ? 'forum' : page === '/award' ? 'award' : 'home'
-  return `/og/${k}-${lang}.jpg?v=2`
+  return `/og/${k}-${lang}.jpg?v=3`
 }
 
 /** Короткое имя и описание проекта — для разметки schema.org и llms.txt. */

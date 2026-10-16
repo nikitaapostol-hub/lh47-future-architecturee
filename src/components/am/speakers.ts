@@ -34,19 +34,19 @@ const DEFAULTS: Record<Lang, { name: string; role: string }[]> = {
     { name: 'Дмитрий Волошин', role: 'Основатель Simpals, 999.md, Point.md и Woloshin Banya' },
     { name: 'Дмитрий Разлога', role: 'Основатель сети магазинов JYSK Bonus Local' },
     { name: 'Сергей Мырза', role: 'Основатель архитектурного бюро LH47 ARCH' },
-    { name: 'Вячеслав Ионицэ', role: 'Экономический эксперт' },
+    { name: 'Вячеслав Ионицэ', role: 'Доктор экономических наук' },
   ],
   ro: [
     { name: 'Dmitri Voloșin', role: 'Fondatorul Simpals, 999.md, Point.md și Woloshin Banya' },
     { name: 'Dmitri Razloga', role: 'Fondatorul rețelei de magazine JYSK Bonus Local' },
     { name: 'Serghei Mîrza', role: 'Fondatorul biroului de arhitectură LH47 ARCH' },
-    { name: 'Veaceslav Ioniță', role: 'Expert economic' },
+    { name: 'Veaceslav Ioniță', role: 'Doctor în științe economice' },
   ],
   en: [
     { name: 'Dmitry Voloshin', role: 'Founder of Simpals, 999.md, Point.md and Woloshin Banya' },
     { name: 'Dmitry Razloga', role: 'Founder of the JYSK Bonus Local store chain' },
     { name: 'Sergei Myrza', role: 'Founder of LH47 ARCH architecture bureau' },
-    { name: 'Veaceslav Ioniță', role: 'Economic expert' },
+    { name: 'Veaceslav Ioniță', role: 'Doctor of Economic Sciences' },
   ],
 }
 

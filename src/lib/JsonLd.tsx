@@ -110,7 +110,7 @@ export function ForumLd({
     eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
     url,
     inLanguage: IN_LANG[lang],
-    maximumAttendeeCapacity: 250,
+    maximumAttendeeCapacity: 300,
     image: [SITE + ogImage('/forum', lang)],
     location: VENUE,
     organizer: ORGANIZER,

@@ -159,6 +159,28 @@ export default function CommunityPage({ t, lang }: Props) {
           </div>
         </section>
 
+        {/* Старт в 2027 и предпродажа — сразу под первым экраном */}
+        <section aria-labelledby="am-presale" style={{ position: 'relative', overflow: 'hidden', background: '#E5D900', color: '#000' }}>
+          <span aria-hidden="true" className="am-presale-year" style={{ position: 'absolute', right: 'clamp(-12px,-1vw,0px)', bottom: '-0.2em', fontFamily: W, fontWeight: 900, fontSize: 'clamp(120px,19vw,300px)', lineHeight: 0.8, letterSpacing: '-.06em', color: 'rgba(0,0,0,.07)', pointerEvents: 'none', userSelect: 'none' }}>
+            2027
+          </span>
+          <div className="am-split" style={{ position: 'relative', ...WRAP, display: 'grid', gap: '20px clamp(40px,6vw,112px)', alignItems: 'end', padding: 'clamp(36px,4vw,64px) clamp(20px,4vw,64px)' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '12px', fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase' }}>
+                <span aria-hidden="true" style={{ width: '10px', height: '10px', background: '#000' }} />
+                {t.hPresaleLabel}
+              </div>
+              <h2 id="am-presale" style={{ marginTop: '16px', maxWidth: '16ch', fontFamily: W, fontWeight: 800, fontSize: 'clamp(28px,3.4vw,52px)', lineHeight: 1.02, letterSpacing: '-.03em' }}>{t.hPresaleTitle}</h2>
+            </div>
+            <div>
+              <p style={{ maxWidth: '44ch', fontSize: 'clamp(17px,1.35vw,20px)', lineHeight: 1.5 }}>{t.hPresaleText}</p>
+              <a href="#join" onClick={pickResident} className="hv-blue" style={{ ...BTN, marginTop: '24px' }}>
+                <Arrow s={t.hPresaleCta + ' →'} />
+              </a>
+            </div>
+          </div>
+        </section>
+
         <section style={{ position: 'relative', overflow: 'hidden', background: '#000', color: '#fff', padding: 'clamp(56px,6vw,104px) 0 calc(min(11vw,150px) + clamp(32px,4vw,56px))' }}>
           {/* жёлтый уголок — в пустом поле под текстом, ни с чем не пересекается */}
           <span aria-hidden="true" style={{ position: 'absolute', left: 0, bottom: 0, width: 'min(20vw,280px)', height: 'min(4vw,56px)', background: '#E5D900', pointerEvents: 'none' }} />

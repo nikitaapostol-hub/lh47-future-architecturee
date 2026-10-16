@@ -43,7 +43,7 @@ export const FORUM: PageContent = {
     },
     {
       name: 'count',
-      label: '02 · 250+',
+      label: '02 · Число участников',
       fields: [
         text('number', 'Число', 'fCount'),
         text('text', 'Подпись', 'fCountText'),
@@ -87,7 +87,6 @@ export const FORUM: PageContent = {
           { title: 'fProg5' },
           { title: 'fProg6' },
           { title: 'fProg7' },
-          { title: 'fProg8' },
         ]),
       ],
     },
@@ -100,9 +99,6 @@ export const FORUM: PageContent = {
         text('text', 'Текст', 'fPartnersText', true),
         text('benefit1', 'Преимущество 1', 'fBenefit1'),
         text('benefit2', 'Преимущество 2', 'fBenefit2'),
-        text('before', 'Метка «До»', 'fBefore'),
-        text('during', 'Метка «Во время»', 'fDuring'),
-        text('after', 'Метка «После»', 'fAfter'),
         text('cta', 'Кнопка', 'fGetOffer'),
       ],
     },

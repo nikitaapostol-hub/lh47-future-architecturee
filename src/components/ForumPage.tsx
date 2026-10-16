@@ -26,7 +26,6 @@ const CAP: S = { fontSize: '12px', fontWeight: 600, letterSpacing: '.12em', text
 const H2: S = { fontFamily: W, fontWeight: 700, fontSize: 'clamp(28px,3vw,44px)', lineHeight: 1.05, letterSpacing: '-.025em' }
 const WRAP: S = { maxWidth: '1440px', margin: '0 auto', padding: '0 clamp(20px,4vw,64px)' }
 const BTN: S = { display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '14px', minHeight: '52px', padding: '0 26px', background: '#000', color: '#fff', fontFamily: W, fontWeight: 700, fontSize: '14px', textAlign: 'center', transition: 'background 200ms,color 200ms' }
-const PILL: S = { display: 'inline-flex', alignItems: 'center', height: '32px', padding: '0 12px', border: '1px solid rgba(255,255,255,.5)', fontSize: '12px', fontWeight: 600, letterSpacing: '.1em', textTransform: 'uppercase' }
 
 const CHAIN_SQ = ['#E5D900', '#E8461E', '#1A52A0', '#000', '#E5D900', '#E8461E']
 /** Уголок на картинке темы: цвета бренда, чёрный заменён оранжевым (вариант «Графит»). */
@@ -92,7 +91,7 @@ export default function ForumPage({ t, lang, forumDate, countdownVisible = true,
     [t.fTopic3Tag, t.fTopic3, t.fTopic3Text],
     [t.fTopic4Tag, t.fTopic4, t.fTopic4Text],
   ]
-  const program = [t.fProg1, t.fProg2, t.fProg3, t.fProg4, t.fProg5, t.fProg6, t.fProg7, t.fProg8]
+  const program = [t.fProg1, t.fProg2, t.fProg3, t.fProg4, t.fProg5, t.fProg6, t.fProg7]
   const cards = speakerCards(speakers, lang)
 
   const fields = partner
@@ -336,14 +335,7 @@ export default function ForumPage({ t, lang, forumDate, countdownVisible = true,
             </div>
             <div style={{ marginTop: '24px', paddingTop: '18px', borderTop: '1px solid #fff', display: 'grid', gridTemplateColumns: '44px minmax(0,1fr)', gap: '8px' }}>
               <span style={{ fontWeight: 600, color: '#E5D900' }}>02</span>
-              <div>
-                <div style={{ fontSize: '17px', lineHeight: 1.45 }}>{t.fBenefit2}</div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '14px' }}>
-                  <span style={PILL}>{t.fBefore}</span>
-                  <span style={PILL}>{t.fDuring}</span>
-                  <span style={PILL}>{t.fAfter}</span>
-                </div>
-              </div>
+              <span style={{ fontSize: '17px', lineHeight: 1.45 }}>{t.fBenefit2}</span>
             </div>
             <a href="#apply" onClick={pickPartner} className="hv-yellow" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '14px', minHeight: '56px', marginTop: '40px', padding: '0 28px', background: '#fff', color: '#000', fontFamily: W, fontWeight: 700, fontSize: '14px', textAlign: 'center', transition: 'background 200ms' }}>
               {t.fGetOffer}

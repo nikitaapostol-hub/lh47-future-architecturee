@@ -576,6 +576,28 @@ export interface Home {
       en?: string | null;
     };
   };
+  presale?: {
+    label?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    title?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    text?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+    cta?: {
+      ru?: string | null;
+      ro?: string | null;
+      en?: string | null;
+    };
+  };
   mission?: {
     title?: {
       ru?: string | null;
@@ -989,21 +1011,6 @@ export interface Forum {
       en?: string | null;
     };
     benefit2?: {
-      ru?: string | null;
-      ro?: string | null;
-      en?: string | null;
-    };
-    before?: {
-      ru?: string | null;
-      ro?: string | null;
-      en?: string | null;
-    };
-    during?: {
-      ru?: string | null;
-      ro?: string | null;
-      en?: string | null;
-    };
-    after?: {
       ru?: string | null;
       ro?: string | null;
       en?: string | null;
@@ -1755,6 +1762,38 @@ export interface HomeSelect<T extends boolean = true> {
               en?: T;
             };
       };
+  presale?:
+    | T
+    | {
+        label?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        title?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        text?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+        cta?:
+          | T
+          | {
+              ru?: T;
+              ro?: T;
+              en?: T;
+            };
+      };
   mission?:
     | T
     | {
@@ -2311,27 +2350,6 @@ export interface ForumSelect<T extends boolean = true> {
               en?: T;
             };
         benefit2?:
-          | T
-          | {
-              ru?: T;
-              ro?: T;
-              en?: T;
-            };
-        before?:
-          | T
-          | {
-              ru?: T;
-              ro?: T;
-              en?: T;
-            };
-        during?:
-          | T
-          | {
-              ru?: T;
-              ro?: T;
-              en?: T;
-            };
-        after?:
           | T
           | {
               ru?: T;

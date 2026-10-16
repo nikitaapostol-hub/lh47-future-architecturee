@@ -24,6 +24,16 @@ export const HOME: PageContent = {
       ],
     },
     {
+      name: 'presale',
+      label: '00 · Старт и предпродажа',
+      fields: [
+        text('label', 'Строка над заголовком', 'hPresaleLabel'),
+        text('title', 'Заголовок', 'hPresaleTitle'),
+        text('text', 'Текст', 'hPresaleText', true),
+        text('cta', 'Кнопка', 'hPresaleCta'),
+      ],
+    },
+    {
       name: 'mission',
       label: '01 · Миссия',
       fields: [
