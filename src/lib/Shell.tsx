@@ -1,5 +1,5 @@
 import '../app/(frontend)/globals.css'
-import { AnalyticsScripts, VerificationMeta, resolveAnalytics } from '@/components/Analytics'
+import { AnalyticsScripts, MetaDomainVerification, VerificationMeta, resolveAnalytics } from '@/components/Analytics'
 import { getGlobal } from '@/lib/settings'
 import type { Lang } from '@/i18n/links'
 import LivePreview from '@/components/LivePreview'
@@ -39,6 +39,7 @@ export default async function Shell({
         <link rel="preload" href="/fonts/onest-latin.woff2" as="font" type="font/woff2" crossOrigin="" />
         <script dangerouslySetInnerHTML={{ __html: PRE }} />
         <VerificationMeta token={cfg.searchConsoleToken} />
+        <MetaDomainVerification />
       </head>
       <body>
         {children}

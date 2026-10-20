@@ -2,7 +2,15 @@ import Script from 'next/script'
 
 /* Счётчики. Идентификаторы приходят из админки («Аналитика и счётчики»),
    а если поле пустое — из переменных окружения. Пусто и там — ничего
-   не грузится: на скорость страницы аналитика тогда не влияет. */
+   не грузится: на скорость страницы аналитика тогда не влияет.
+
+   Meta Pixel и подтверждение домена в Meta заданы ещё и здесь, в коде:
+   это публичные значения (они и так видны в коде страницы), а поле
+   в админке, если его заполнить, главнее. Пиксель «Future Architecture —
+   future-arch.md» в портфолио «Future Architecture Community × InSTYLE Home». */
+
+const META_PIXEL_ID = '1819950995810337'
+const META_DOMAIN_VERIFICATION = 'k28wfn1nez5fcqocv656z1vdkesd90'
 
 export type AnalyticsConfig = {
   enabled?: boolean
@@ -22,7 +30,7 @@ export function resolveAnalytics(cfg: Partial<AnalyticsConfig> = {}): AnalyticsC
     ga4Id: pick(cfg.ga4Id, process.env.NEXT_PUBLIC_GA4_ID),
     searchConsoleToken: pick(cfg.searchConsoleToken, process.env.GOOGLE_SITE_VERIFICATION),
     yandexId: pick(cfg.yandexId, process.env.NEXT_PUBLIC_YANDEX_ID),
-    metaPixelId: pick(cfg.metaPixelId, process.env.NEXT_PUBLIC_META_PIXEL_ID),
+    metaPixelId: pick(cfg.metaPixelId, process.env.NEXT_PUBLIC_META_PIXEL_ID || META_PIXEL_ID),
   }
 }
 
@@ -30,6 +38,11 @@ export function resolveAnalytics(cfg: Partial<AnalyticsConfig> = {}): AnalyticsC
 export function VerificationMeta({ token }: { token?: string }) {
   if (!token) return null
   return <meta name="google-site-verification" content={token} />
+}
+
+/** Мета-тег подтверждения домена future-arch.md в Meta Business. Идёт в <head>. */
+export function MetaDomainVerification() {
+  return <meta name="facebook-domain-verification" content={META_DOMAIN_VERIFICATION} />
 }
 
 /** Сами счётчики. Ставятся в конце <body>. */
