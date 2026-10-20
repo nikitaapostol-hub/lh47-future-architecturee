@@ -82,6 +82,8 @@ function loadOnce(id: string, code: string) {
   document.body.appendChild(s)
 }
 
+/* Meta Pixel: autoConfig выключен — пиксель не собирает сам клики по кнопкам
+   и данные страниц; уходят только PageView и Lead (lib/meta.ts). */
 function applyThirdParty(c: Consent, yandexId?: string, metaPixelId?: string) {
   if (c.analytics && yandexId)
     loadOnce(
@@ -92,7 +94,7 @@ function applyThirdParty(c: Consent, yandexId?: string, metaPixelId?: string) {
   if (c.marketing && metaPixelId)
     loadOnce(
       'meta-pixel',
-      `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${String(metaPixelId).replace(/\D/g, '')}');fbq('track','PageView');`,
+      `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('set','autoConfig',false,'${String(metaPixelId).replace(/\D/g, '')}');fbq('init','${String(metaPixelId).replace(/\D/g, '')}');fbq('track','PageView');`,
     )
   // события (Lead со страницы «Спасибо»), пришедшие раньше пикселя
   if (c.marketing && metaPixelId) flushMeta()
