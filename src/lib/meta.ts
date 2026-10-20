@@ -40,3 +40,36 @@ export function flushMeta() {
   w.__faFbq = []
   q.forEach((item) => send(w, item))
 }
+
+/* ——— Клик из рекламы (fbclid) ———
+   Человек приходит с рекламы по ссылке с ?fbclid=…, но соглашается на cookie
+   не сразу — часто уже на другой странице, где fbclid в адресе нет. Тогда
+   пиксель не узнал бы, что визит пришёл с рекламы, и заявка не засчиталась бы
+   объявлению. Поэтому fbclid запоминаем в sessionStorage вкладки (в Meta он
+   не уходит), а когда пиксель загружается после согласия, ставим cookie _fbc
+   в формате Meta. Без согласия на рекламу cookie не ставится. */
+
+const CLICK_KEY = 'fa-fbclid'
+
+/** Запомнить fbclid из адреса текущей страницы. Вызывается на каждой странице. */
+export function rememberAdClick() {
+  if (typeof window === 'undefined') return
+  try {
+    const id = new URLSearchParams(window.location.search).get('fbclid')
+    if (id) sessionStorage.setItem(CLICK_KEY, JSON.stringify({ id, ts: Date.now() }))
+  } catch {}
+}
+
+/** Перед загрузкой пикселя: поставить _fbc из сохранённого клика, если его ещё нет. */
+export function applyAdClick() {
+  if (typeof window === 'undefined') return
+  try {
+    if (/(?:^|;\s*)_fbc=/.test(document.cookie)) return
+    const raw = sessionStorage.getItem(CLICK_KEY)
+    if (!raw) return
+    const { id, ts } = JSON.parse(raw) as { id: string; ts: number }
+    if (!id) return
+    const secure = location.protocol === 'https:' ? '; Secure' : ''
+    document.cookie = `_fbc=${encodeURIComponent(`fb.1.${ts}.${id}`)}; Max-Age=${60 * 60 * 24 * 90}; Path=/; SameSite=Lax${secure}`
+  } catch {}
+}

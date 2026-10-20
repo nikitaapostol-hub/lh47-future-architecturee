@@ -13,7 +13,7 @@ import type { Lang } from '@/i18n/links'
 import { path } from '@/i18n/links'
 import { CONSENT_EVENT, readConsent, saveConsent } from '@/lib/consent'
 import type { Consent } from '@/lib/consent'
-import { flushMeta } from '@/lib/meta'
+import { applyAdClick, flushMeta, rememberAdClick } from '@/lib/meta'
 
 type S = CSSProperties
 const W = "'Actay Wide',Onest,sans-serif"
@@ -88,6 +88,7 @@ function applyThirdParty(c: Consent, yandexId?: string, metaPixelId?: string) {
       'ym',
       `(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,'script','https://mc.yandex.ru/metrika/tag.js','ym');ym(${Number(yandexId)},'init',{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true});`,
     )
+  if (c.marketing && metaPixelId) applyAdClick()
   if (c.marketing && metaPixelId)
     loadOnce(
       'meta-pixel',
@@ -127,6 +128,7 @@ export default function CookieConsent({ lang, yandexId, metaPixelId }: Props) {
   useEffect(() => {
     // внутри админки (живой предпросмотр) баннер не нужен
     if (window.self !== window.top) return
+    rememberAdClick()
     const c = readConsent()
     if (c) {
       setAnalytics(c.analytics)

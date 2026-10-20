@@ -57,12 +57,13 @@ export function saveConsent(c: Consent) {
     ad_personalization: ads,
   })
   w.dataLayer.push({ event: 'fa_consent_update', consent_analytics: c.analytics, consent_marketing: c.marketing })
-  // Отказ после согласия: убираем уже поставленные cookie аналитики на этом домене
-  if (!c.analytics) {
+  // Отказ после согласия: убираем уже поставленные cookie аналитики и рекламы на этом домене
+  const drop = [!c.analytics && /^(_ga|_gid|_gat|_ym)/, !c.marketing && /^(_fbp|_fbc)$/].filter(Boolean) as RegExp[]
+  if (drop.length) {
     const host = location.hostname.replace(/^www\./, '')
     for (const part of document.cookie.split(';')) {
       const name = part.split('=')[0].trim()
-      if (/^(_ga|_gid|_gat|_ym)/.test(name)) {
+      if (drop.some((re) => re.test(name))) {
         for (const d of ['', `; Domain=${host}`, `; Domain=.${host}`])
           document.cookie = `${name}=; Max-Age=0; Path=/${d}`
       }
