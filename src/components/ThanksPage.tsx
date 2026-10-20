@@ -4,7 +4,8 @@
    Форма кладёт в sessionStorage, что отправили (fa-lead), и переходит сюда.
    Здесь один раз уходит событие form_success в dataLayer — по нему GTM
    отправляет в GA4 generate_lead. Обновление страницы или прямой заход
-   событие не повторяют: запись из sessionStorage сразу удаляется. */
+   событие не повторяют: запись из sessionStorage сразу удаляется.
+   Параллельно уходит Lead в Meta Pixel (lib/meta.ts). */
 import { useEffect, useState } from 'react'
 import type { Dict } from '@/i18n/dict'
 import type { Lang } from '@/i18n/links'
@@ -13,6 +14,7 @@ import { Arrow, Footer, Header, W, fill } from './am/ui'
 import type { Page } from './am/ui'
 import { LEAD_KEY, track } from '@/lib/submit'
 import type { FormName } from '@/lib/submit'
+import { metaTrack } from '@/lib/meta'
 
 type Lead = { form: FormName; nomination?: string; page?: string }
 
@@ -41,6 +43,12 @@ export default function ThanksPage({ t, lang }: { t: Dict; lang: Lang }) {
             form_page: l.page || '',
             form_language: lang,
             nomination: l.nomination || '',
+          })
+          // Meta Pixel: заявка → Lead (уйдёт, только если есть согласие на рекламу)
+          metaTrack('Lead', {
+            content_name: l.form,
+            content_category: PAGE_OF[l.form],
+            form_language: lang,
           })
         }
       }

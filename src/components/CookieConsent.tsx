@@ -13,6 +13,7 @@ import type { Lang } from '@/i18n/links'
 import { path } from '@/i18n/links'
 import { CONSENT_EVENT, readConsent, saveConsent } from '@/lib/consent'
 import type { Consent } from '@/lib/consent'
+import { flushMeta } from '@/lib/meta'
 
 type S = CSSProperties
 const W = "'Actay Wide',Onest,sans-serif"
@@ -92,6 +93,8 @@ function applyThirdParty(c: Consent, yandexId?: string, metaPixelId?: string) {
       'meta-pixel',
       `!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${String(metaPixelId).replace(/\D/g, '')}');fbq('track','PageView');`,
     )
+  // события (Lead со страницы «Спасибо»), пришедшие раньше пикселя
+  if (c.marketing && metaPixelId) flushMeta()
 }
 
 const BTN: S = { display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minHeight: '44px', padding: '0 18px', fontFamily: W, fontWeight: 700, fontSize: '13px', cursor: 'pointer', transition: 'background 200ms,color 200ms', whiteSpace: 'nowrap' }
