@@ -17,8 +17,13 @@ const MAX_AGE = 60 * 60 * 24 * 365
 
 export type Consent = { analytics: boolean; marketing: boolean }
 
-/** Значение cookie: «a1.m0» — аналитика да, реклама нет. */
-export const encode = (c: Consent) => `a${c.analytics ? 1 : 0}.m${c.marketing ? 1 : 0}`
+/** Значение cookie: «a1.m0.v2» — аналитика да, реклама нет.
+    v2 — выбор сделан, когда в баннере уже была категория «Реклама» (Meta Pixel).
+    Выбор без v2 сделан раньше: тогда «Принять все» записывало m0, потому что
+    рекламы на сайте ещё не было. Таких спрашиваем ещё раз, а до ответа
+    действует их старый выбор по аналитике (его читает CONSENT_DEFAULT). */
+const VERSION = 'v2'
+export const encode = (c: Consent) => `a${c.analytics ? 1 : 0}.m${c.marketing ? 1 : 0}.${VERSION}`
 
 export function readConsent(): Consent | null {
   if (typeof document === 'undefined') return null
@@ -26,6 +31,7 @@ export function readConsent(): Consent | null {
   if (!m) return null
   const v = decodeURIComponent(m[1])
   if (!/a[01]\.m[01]/.test(v)) return null
+  if (!v.endsWith('.' + VERSION)) return null // старый выбор — показать баннер ещё раз
   return { analytics: v.includes('a1'), marketing: v.includes('m1') }
 }
 
