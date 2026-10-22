@@ -187,8 +187,10 @@ export async function sendSafe(
   args: { to: string; subject: string; html: string; text?: string; replyTo?: string },
 ) {
   try {
+    // «a@x, b@y» → два получателя: Resend принимает список, а не строку с запятыми
+    const to = args.to.split(/[,;]/).map((s) => s.trim()).filter(Boolean)
     await payload.sendEmail({
-      to: args.to,
+      to: to.length > 1 ? to : to[0],
       subject: args.subject,
       html: args.html,
       ...(args.text ? { text: args.text } : {}),

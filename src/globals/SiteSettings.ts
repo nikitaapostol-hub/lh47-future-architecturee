@@ -31,8 +31,8 @@ const mail: Tab = {
           name: 'mailTo',
           type: 'text',
           label: 'Куда приходят заявки',
-          defaultValue: 'info@future-arch.md',
-          admin: { width: '50%', description: 'Несколько адресов — через запятую. info@future-arch.md пересылается командам LH47 и InStyle.' },
+          defaultValue: 'nikita.apostol@lh47arch.com, vlada.medvedcova@lh47arch.com',
+          admin: { width: '50%', description: 'Несколько адресов — через запятую. Письма уходят на них напрямую, без пересылки через info@.' },
         },
         {
           name: 'subjectPrefix',

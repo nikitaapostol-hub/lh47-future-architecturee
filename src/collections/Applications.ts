@@ -196,7 +196,7 @@ function notify(slug: string, section: Section, kind: (doc: any) => string, rows
         subject,
         html: autoreplyHtml({ lang: locale, section, text: body }),
         text: body,
-        replyTo: to.split(',')[0].trim(),
+        replyTo: 'info@future-arch.md',
       })
     }
     return doc

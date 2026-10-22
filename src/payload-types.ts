@@ -1582,7 +1582,7 @@ export interface Common {
 export interface Setting {
   id: number;
   /**
-   * Несколько адресов — через запятую. info@future-arch.md пересылается командам LH47 и InStyle.
+   * Несколько адресов — через запятую. Письма уходят на них напрямую, без пересылки через info@.
    */
   mailTo?: string | null;
   /**
