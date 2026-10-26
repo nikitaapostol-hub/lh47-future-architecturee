@@ -212,7 +212,7 @@ export const ru = {
   aSpecTag: 'Спецноминация',
   aSpec1: 'Умный дом',
   aSpec1Partner: 'При поддержке QGROUP | Technologies',
-  aSpec2: 'Устойчивое жильё',
+  aSpec2: 'Экологичное жильё',
   aSpec2Partner: 'При поддержке QGROUP | Energy',
   aPrizeLabel: '02 / Награда',
   aPrizeTitle: 'Что получает победитель',
