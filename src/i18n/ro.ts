@@ -192,7 +192,6 @@ export const ro: Dict = {
   aNomText: "Alegeți o nominalizare — aceasta va apărea imediat în formularul de înscriere.",
   aSpecLabel: "Suplimentar",
   aSpecTitle: "Nominalizări speciale",
-  aSpecText: "Două nominalizări separate ale premiului, în parteneriat cu partenerii noștri. Înscrierea se face prin același formular.",
   aSpecTag: "Nominalizare specială",
   aSpec1: "Smart Home – Locuință inteligentă",
   aSpec1Partner: "În parteneriat cu QGROUP | Technologies",

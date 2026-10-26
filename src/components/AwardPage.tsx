@@ -283,7 +283,6 @@ export default function AwardPage({ t, lang, deadlineDate, forumDate, nomination
                       {t.aSpecTitle}
                     </h3>
                   </div>
-                  <p style={{ maxWidth: '42ch', fontSize: '16px', lineHeight: 1.6, color: '#55554F' }}>{t.aSpecText}</p>
                 </div>
                 <div className="am-g2" style={{ display: 'grid', marginTop: '24px', borderTop: '1px solid #000', borderLeft: '1px solid #E6E6E3' }}>
                   {specials.map((n) => (

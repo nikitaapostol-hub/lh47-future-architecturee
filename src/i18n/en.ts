@@ -192,7 +192,6 @@ export const en: Dict = {
   aNomText: "Pick a category — the application form will open with it selected.",
   aSpecLabel: "Additional",
   aSpecTitle: "Special nominations",
-  aSpecText: "Two separate award categories run with our partners. Apply through the same form.",
   aSpecTag: "Special nomination",
   aSpec1: "Smart Home",
   aSpec1Partner: "In partnership with QGROUP | Technologies",
