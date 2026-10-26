@@ -50,7 +50,7 @@ export async function Award({ lang }: { lang: Lang }) {
         lang={lang}
         deadline={g.deadlineDate as string}
         ceremony={f.forumDate as string}
-        nominations={nominations.map((n: any) => n.title)}
+        nominations={[...nominations.map((n: any) => n.title), t.aSpec1, t.aSpec2].filter(Boolean)}
       />
       <AwardPage
         t={t}

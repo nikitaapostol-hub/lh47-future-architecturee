@@ -71,6 +71,11 @@ type Files = { list: File[]; error: string }
 export default function AwardPage({ t, lang, deadlineDate, forumDate, nominations, formOpen = true, formClosedText }: Props) {
   const fromAdmin = (nominations || []).filter((n) => n?.title && n.title.trim())
   const noms = (fromAdmin.length ? fromAdmin.map((n) => [n.hint || '', n.title as string]) : DEFAULT_NOMS[lang]).map(([kind, title], i) => ({ no: no2(i), kind, title }))
+  /* Специальные номинации с партнёром — отдельный блок и отдельная группа в списке формы. */
+  const specials = [
+    { title: t.aSpec1, partner: t.aSpec1Partner },
+    { title: t.aSpec2, partner: t.aSpec2Partner },
+  ].filter((n) => n.title)
 
   const [nom, setNom] = useState('')
   const [a, setA] = useState<Record<string, string>>({})
@@ -267,6 +272,36 @@ export default function AwardPage({ t, lang, deadlineDate, forumDate, nomination
                 </a>
               ))}
             </div>
+
+            {specials.length > 0 && (
+              <div style={{ marginTop: 'clamp(40px,4vw,64px)' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-end', gap: '12px 64px' }}>
+                  <div>
+                    <div style={CAP}>{t.aSpecLabel}</div>
+                    <h3 style={{ marginTop: '10px', display: 'flex', alignItems: 'center', gap: '12px', fontFamily: W, fontWeight: 700, fontSize: 'clamp(22px,2.2vw,30px)', lineHeight: 1.1, letterSpacing: '-.02em' }}>
+                      <span aria-hidden="true" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '34px', height: '34px', background: '#E5D900', fontSize: '26px', lineHeight: 1, paddingTop: '6px' }}>*</span>
+                      {t.aSpecTitle}
+                    </h3>
+                  </div>
+                  <p style={{ maxWidth: '42ch', fontSize: '16px', lineHeight: 1.6, color: '#55554F' }}>{t.aSpecText}</p>
+                </div>
+                <div className="am-g2" style={{ display: 'grid', marginTop: '24px', borderTop: '1px solid #000', borderLeft: '1px solid #E6E6E3' }}>
+                  {specials.map((n) => (
+                    <a key={n.title} href="#apply" onClick={() => setNom(n.title)} className="hv-bgyellow" style={{ display: 'flex', flexDirection: 'column', minHeight: '170px', padding: '22px', borderRight: '1px solid #E6E6E3', borderBottom: '1px solid #E6E6E3', background: '#F3F3F1', color: '#000', transition: 'background 240ms' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', height: '26px', padding: '0 10px', background: '#000', color: '#fff', fontSize: '12px', fontWeight: 600, letterSpacing: '.1em', textTransform: 'uppercase' }}>{t.aSpecTag}</span>
+                        <span aria-hidden="true" className="am-corner" style={{ position: 'relative', display: 'block', width: '24px', height: '24px' }}>
+                          <i style={{ position: 'absolute', right: 0, top: 0, width: '100%', height: '28%', background: '#000' }} />
+                          <i style={{ position: 'absolute', right: 0, top: 0, width: '28%', height: '100%', background: '#000' }} />
+                        </span>
+                      </div>
+                      <h4 style={{ marginTop: 'auto', paddingTop: '24px', fontFamily: W, fontWeight: 700, fontSize: '22px', lineHeight: 1.2 }}>{n.title}</h4>
+                      <div style={{ marginTop: '8px', ...CAP }}>{n.partner}</div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </section>
 
@@ -311,6 +346,15 @@ export default function AwardPage({ t, lang, deadlineDate, forumDate, nomination
                           {n.title}
                         </option>
                       ))}
+                      {specials.length > 0 && (
+                        <optgroup label={t.aSpecTitle}>
+                          {specials.map((n) => (
+                            <option key={n.title} value={n.title}>
+                              {n.title}
+                            </option>
+                          ))}
+                        </optgroup>
+                      )}
                     </select>
                   </label>
                   {awardFields.map((f) => (
