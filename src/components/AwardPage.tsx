@@ -73,8 +73,8 @@ export default function AwardPage({ t, lang, deadlineDate, forumDate, nomination
   const noms = (fromAdmin.length ? fromAdmin.map((n) => [n.hint || '', n.title as string]) : DEFAULT_NOMS[lang]).map(([kind, title], i) => ({ no: no2(i), kind, title }))
   /* Специальные номинации с партнёром — отдельный блок и отдельная группа в списке формы. */
   const specials = [
-    { title: t.aSpec1, note: '', partner: t.aSpec1Partner },
-    { title: t.aSpec2, note: t.aSpec2Note, partner: t.aSpec2Partner },
+    { title: t.aSpec1, partner: t.aSpec1Partner },
+    { title: t.aSpec2, partner: t.aSpec2Partner },
   ].filter((n) => n.title)
 
   const [nom, setNom] = useState('')
@@ -294,7 +294,6 @@ export default function AwardPage({ t, lang, deadlineDate, forumDate, nomination
                         </span>
                       </div>
                       <h4 style={{ margin: 0, paddingTop: '24px', fontFamily: W, fontWeight: 700, fontSize: '22px', lineHeight: 1.2 }}>{n.title}</h4>
-                      {n.note && <p style={{ margin: '6px 0 0', fontSize: '15px', lineHeight: 1.45, color: '#2A2A28' }}>{n.note}</p>}
                       <div style={{ marginTop: 'auto', paddingTop: '20px', ...CAP }}>{n.partner}</div>
                     </a>
                   ))}
