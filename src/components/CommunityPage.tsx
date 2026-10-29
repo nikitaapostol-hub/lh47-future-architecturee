@@ -340,37 +340,37 @@ function Founders({ t }: { t: Dict }) {
   const people = [
     {
       no: '01',
-      tag: t.fd1Tag,
-      first: t.fd1First,
-      name: t.fd1Name,
-      role: t.fd1Role,
+      tag: t.hFd1Tag,
+      first: t.hFd1First,
+      name: t.hFd1Name,
+      role: t.hFd1Role,
       img: '/img/fd-myrza.jpg',
       stats: [
-        [t.fd1N1, t.fd1C1],
-        [t.fd1N2, t.fd1C2],
-        [t.fd1N3, t.fd1C3],
-        [t.fd1N4, t.fd1C4],
+        [t.hFd1N1, t.hFd1C1],
+        [t.hFd1N2, t.hFd1C2],
+        [t.hFd1N3, t.hFd1C3],
+        [t.hFd1N4, t.hFd1C4],
       ],
-      quote: t.fd1Quote,
+      quote: t.hFd1Quote,
       href: 'https://lh47arch.com/',
-      link: t.fd1Link,
+      link: t.hFd1Link,
       reverse: false,
     },
     {
       no: '02',
-      tag: t.fd2Tag,
-      first: t.fd2First,
-      name: t.fd2Name,
-      role: t.fd2Role,
+      tag: t.hFd2Tag,
+      first: t.hFd2First,
+      name: t.hFd2Name,
+      role: t.hFd2Role,
       img: '/img/fd-okulskaya.jpg',
       stats: [
-        [t.fd2N1, t.fd2C1],
-        [t.fd2N2, t.fd2C2],
-        [t.fd2N3, t.fd2C3],
+        [t.hFd2N1, t.hFd2C1],
+        [t.hFd2N2, t.hFd2C2],
+        [t.hFd2N3, t.hFd2C3],
       ],
-      quote: t.fd2Quote,
+      quote: t.hFd2Quote,
       href: 'https://instylehome.md/',
-      link: t.fd2Link,
+      link: t.hFd2Link,
       reverse: true,
     },
   ]
@@ -381,13 +381,13 @@ function Founders({ t }: { t: Dict }) {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', ...CAP }}>
               <span aria-hidden="true" style={{ width: '10px', height: '10px', background: '#1A52A0' }} />
-              {t.fdEyebrow}
+              {t.hFdEyebrow}
             </div>
-            <h2 id="am-founders" style={{ marginTop: '16px', fontFamily: W, fontWeight: 800, fontSize: 'clamp(38px,5.6vw,88px)', lineHeight: 0.95, letterSpacing: '-.04em' }}>{t.fdTitle}</h2>
+            <h2 id="am-founders" style={{ marginTop: '16px', fontFamily: W, fontWeight: 800, fontSize: 'clamp(38px,5.6vw,88px)', lineHeight: 0.95, letterSpacing: '-.04em' }}>{t.hFdTitle}</h2>
           </div>
           <div style={{ maxWidth: '520px' }}>
-            <p style={{ fontFamily: W, fontWeight: 700, fontSize: 'clamp(20px,1.9vw,28px)', lineHeight: 1.2, letterSpacing: '-.02em' }}>{t.fdLead}</p>
-            <p style={{ marginTop: '10px', fontSize: '17px', lineHeight: 1.55, color: '#55554F' }}>{t.fdSub}</p>
+            <p style={{ fontFamily: W, fontWeight: 700, fontSize: 'clamp(20px,1.9vw,28px)', lineHeight: 1.2, letterSpacing: '-.02em' }}>{t.hFdLead}</p>
+            <p style={{ marginTop: '10px', fontSize: '17px', lineHeight: 1.55, color: '#55554F' }}>{t.hFdSub}</p>
           </div>
         </div>
 
@@ -425,10 +425,10 @@ function Founders({ t }: { t: Dict }) {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', marginTop: 'clamp(64px,8vw,128px)', textAlign: 'center' }}>
-          <span style={CAP}>{t.fdMissionLabel}</span>
+          <span style={CAP}>{t.hFdMissionLabel}</span>
           <p style={{ display: 'flex', flexDirection: 'column', gap: '.1em', maxWidth: '1100px', fontFamily: W, fontWeight: 700, fontSize: 'clamp(22px,2.6vw,38px)', lineHeight: 1.2, letterSpacing: '-.03em', textWrap: 'balance' }}>
-            <span>{t.fdMission1}</span>
-            <span style={{ color: '#8A8A85' }}>{t.fdMission2}</span>
+            <span>{t.hFdMission1}</span>
+            <span style={{ color: '#8A8A85' }}>{t.hFdMission2}</span>
           </p>
         </div>
       </div>
