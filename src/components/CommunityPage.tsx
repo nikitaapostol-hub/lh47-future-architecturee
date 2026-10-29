@@ -240,6 +240,8 @@ export default function CommunityPage({ t, lang }: Props) {
           </div>
         </section>
 
+        <Founders t={t} />
+
         <section id="join" style={{ background: '#F3F3F1', padding: 'clamp(48px,5vw,88px) 0' }}>
           <div className="am-split" style={{ ...WRAP, display: 'grid', gap: 'clamp(40px,6vw,112px)', alignItems: 'start' }}>
             <div>
@@ -329,6 +331,108 @@ export default function CommunityPage({ t, lang }: Props) {
 
       <Footer t={t} lang={lang} />
     </div>
+  )
+}
+
+/** «Люди за идеей» — основатели сообщества (макет design_handoff_founders, в шрифтах и цветах сайта).
+    Вторая карточка зеркальная: текст сверху, фото снизу; на телефоне обе — фото сверху. */
+function Founders({ t }: { t: Dict }) {
+  const people = [
+    {
+      no: '01',
+      tag: t.fd1Tag,
+      first: t.fd1First,
+      name: t.fd1Name,
+      role: t.fd1Role,
+      img: '/img/fd-myrza.jpg',
+      stats: [
+        [t.fd1N1, t.fd1C1],
+        [t.fd1N2, t.fd1C2],
+        [t.fd1N3, t.fd1C3],
+        [t.fd1N4, t.fd1C4],
+      ],
+      quote: t.fd1Quote,
+      href: 'https://lh47arch.com/',
+      link: t.fd1Link,
+      reverse: false,
+    },
+    {
+      no: '02',
+      tag: t.fd2Tag,
+      first: t.fd2First,
+      name: t.fd2Name,
+      role: t.fd2Role,
+      img: '/img/fd-okulskaya.jpg',
+      stats: [
+        [t.fd2N1, t.fd2C1],
+        [t.fd2N2, t.fd2C2],
+        [t.fd2N3, t.fd2C3],
+      ],
+      quote: t.fd2Quote,
+      href: 'https://instylehome.md/',
+      link: t.fd2Link,
+      reverse: true,
+    },
+  ]
+  return (
+    <section id="founders" aria-labelledby="am-founders" style={{ padding: '0 0 clamp(56px,6vw,112px)' }}>
+      <div style={WRAP}>
+        <div className="am-split" style={{ display: 'grid', gap: '20px clamp(40px,6vw,112px)', alignItems: 'end', paddingTop: 'clamp(48px,5vw,72px)', paddingBottom: '28px', borderTop: '1px solid #E6E6E3', borderBottom: '1px solid #000' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', ...CAP }}>
+              <span aria-hidden="true" style={{ width: '10px', height: '10px', background: '#1A52A0' }} />
+              {t.fdEyebrow}
+            </div>
+            <h2 id="am-founders" style={{ marginTop: '16px', fontFamily: W, fontWeight: 800, fontSize: 'clamp(38px,5.6vw,88px)', lineHeight: 0.95, letterSpacing: '-.04em' }}>{t.fdTitle}</h2>
+          </div>
+          <div style={{ maxWidth: '520px' }}>
+            <p style={{ fontFamily: W, fontWeight: 700, fontSize: 'clamp(20px,1.9vw,28px)', lineHeight: 1.2, letterSpacing: '-.02em' }}>{t.fdLead}</p>
+            <p style={{ marginTop: '10px', fontSize: '17px', lineHeight: 1.55, color: '#55554F' }}>{t.fdSub}</p>
+          </div>
+        </div>
+
+        <div className="am-g2 am-founders" style={{ display: 'grid', gap: 'clamp(48px,5vw,80px) clamp(24px,4vw,64px)', alignItems: 'start', marginTop: 'clamp(40px,5vw,72px)' }}>
+          {people.map((p) => (
+            <article key={p.no} className={'am-founder' + (p.reverse ? ' am-founder-rev' : '')} style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+              <a href={p.href} target="_blank" rel="noopener" className="am-zoom" style={{ position: 'relative', display: 'block', aspectRatio: '4/5', overflow: 'hidden', background: '#E6E6E3' }}>
+                <img src={p.img} alt={p.name} loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 0%', display: 'block', filter: 'grayscale(1) contrast(1.04)' }} />
+                <span style={{ position: 'absolute', top: '20px', left: '20px', display: 'flex', gap: '12px', padding: '8px 12px', background: '#fff', color: '#000', whiteSpace: 'nowrap', ...CAP }}>
+                  <span style={{ color: '#1A52A0' }}>{p.no}</span>
+                  <span style={{ color: '#000' }}>{p.tag}</span>
+                </span>
+                <span aria-hidden="true" style={{ position: 'absolute', left: '20px', right: '20px', bottom: '16px', fontFamily: W, fontWeight: 800, fontSize: 'clamp(44px,5.6vw,92px)', lineHeight: 0.85, letterSpacing: '-.04em', color: '#fff', mixBlendMode: 'difference' }}>{p.first}</span>
+              </a>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                <div>
+                  <h3 style={{ fontFamily: W, fontWeight: 700, fontSize: 'clamp(26px,2.6vw,38px)', lineHeight: 1.05, letterSpacing: '-.03em' }}>{p.name}</h3>
+                  <p style={{ marginTop: '14px', maxWidth: '54ch', fontSize: '17px', lineHeight: 1.55, color: '#3A3A37' }}>{p.role}</p>
+                </div>
+                <ul style={{ margin: 0, padding: 0, listStyle: 'none', borderTop: '1px solid #000' }}>
+                  {p.stats.map(([n, c]) => (
+                    <li key={n + c} style={{ display: 'grid', gridTemplateColumns: 'clamp(92px,10vw,140px) minmax(0,1fr)', gap: '20px', alignItems: 'baseline', padding: '16px 0', borderBottom: '1px solid #E6E6E3' }}>
+                      <span style={{ fontFamily: W, fontWeight: 700, fontSize: 'clamp(28px,2.8vw,40px)', lineHeight: 1, letterSpacing: '-.03em' }}>{n}</span>
+                      <span style={{ fontSize: '15px', lineHeight: 1.4, color: '#3A3A37' }}>{c}</span>
+                    </li>
+                  ))}
+                </ul>
+                <blockquote style={{ margin: 0, maxWidth: '30ch', paddingLeft: '18px', borderLeft: '3px solid #E5D900', fontFamily: W, fontWeight: 700, fontSize: 'clamp(19px,1.7vw,23px)', lineHeight: 1.3, letterSpacing: '-.01em' }}>{p.quote}</blockquote>
+                <a href={p.href} target="_blank" rel="noopener" className="am-link" style={{ alignSelf: 'flex-start', fontFamily: W, fontWeight: 700, fontSize: '14px' }}>
+                  <Arrow s={p.link + ' ↗'} line />
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', marginTop: 'clamp(64px,8vw,128px)', textAlign: 'center' }}>
+          <span style={CAP}>{t.fdMissionLabel}</span>
+          <p style={{ display: 'flex', flexDirection: 'column', gap: '.1em', maxWidth: '1100px', fontFamily: W, fontWeight: 700, fontSize: 'clamp(22px,2.6vw,38px)', lineHeight: 1.2, letterSpacing: '-.03em', textWrap: 'balance' }}>
+            <span>{t.fdMission1}</span>
+            <span style={{ color: '#8A8A85' }}>{t.fdMission2}</span>
+          </p>
+        </div>
+      </div>
+    </section>
   )
 }
 

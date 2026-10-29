@@ -610,3 +610,10 @@ html[data-pre='off'] .am-pre { display: none; }
     row-gap: 0;
   }
 }
+
+/* «Люди за идеей»: вторая карточка зеркальная (текст сверху, фото снизу) — только в две колонки */
+@media (min-width: 720px) {
+  .am-founder-rev {
+    flex-direction: column-reverse !important;
+  }
+}
