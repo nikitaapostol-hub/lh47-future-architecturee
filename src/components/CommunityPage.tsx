@@ -391,9 +391,9 @@ function Founders({ t }: { t: Dict }) {
           </div>
         </div>
 
-        <div className="am-g2 am-founders" style={{ display: 'grid', gap: 'clamp(48px,5vw,80px) clamp(24px,4vw,64px)', alignItems: 'start', marginTop: 'clamp(40px,5vw,72px)' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(56px,6vw,104px)', marginTop: 'clamp(40px,5vw,72px)' }}>
           {people.map((p) => (
-            <article key={p.no} className={'am-founder' + (p.reverse ? ' am-founder-rev' : '')} style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+            <article key={p.no} className={'am-g2 am-fd' + (p.reverse ? ' am-fd-rev' : '')} style={{ display: 'grid', gap: '32px clamp(24px,4vw,64px)', alignItems: 'center' }}>
               <a href={p.href} target="_blank" rel="noopener" className="am-zoom" style={{ position: 'relative', display: 'block', aspectRatio: '4/5', overflow: 'hidden', background: '#E6E6E3' }}>
                 <img src={p.img} alt={p.name} loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 0%', display: 'block', filter: 'grayscale(1) contrast(1.04)' }} />
                 <span style={{ position: 'absolute', top: '20px', left: '20px', display: 'flex', gap: '12px', padding: '8px 12px', background: '#fff', color: '#000', whiteSpace: 'nowrap', ...CAP }}>
@@ -402,7 +402,7 @@ function Founders({ t }: { t: Dict }) {
                 </span>
                 <span aria-hidden="true" style={{ position: 'absolute', left: '20px', right: '20px', bottom: '16px', fontFamily: W, fontWeight: 800, fontSize: 'clamp(44px,5.6vw,92px)', lineHeight: 0.85, letterSpacing: '-.04em', color: '#fff', mixBlendMode: 'difference' }}>{p.first}</span>
               </a>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '600px' }}>
                 <div>
                   <h3 style={{ fontFamily: W, fontWeight: 700, fontSize: 'clamp(26px,2.6vw,38px)', lineHeight: 1.05, letterSpacing: '-.03em' }}>{p.name}</h3>
                   <p style={{ marginTop: '14px', maxWidth: '54ch', fontSize: '17px', lineHeight: 1.55, color: '#3A3A37' }}>{p.role}</p>
