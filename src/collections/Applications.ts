@@ -2,6 +2,7 @@ import type { CollectionBeforeOperationHook, CollectionConfig, Field } from 'pay
 import { APIError } from 'payload'
 import { autoreplyHtml, notifyHtml, notifyText, sendSafe } from '@/lib/mail'
 import type { MailRow, NotifyMail, Section } from '@/lib/mail'
+import { toSheet } from '@/lib/sheets'
 
 /* Входящие заявки. Сайт пишет, админка читает.
    На создание записи уходит письмо команде и автоответ заявителю. */
@@ -221,6 +222,7 @@ export const ForumApplications: CollectionConfig = {
   hooks: {
     beforeOperation: [honeypot],
     afterChange: [
+      toSheet('forum-applications'),
       notify(
         'forum-applications',
         'forum',
@@ -261,6 +263,7 @@ export const CommunityApplications: CollectionConfig = {
   hooks: {
     beforeOperation: [honeypot],
     afterChange: [
+      toSheet('community-applications'),
       notify(
         'community-applications',
         'home',
@@ -307,6 +310,7 @@ export const AwardApplications: CollectionConfig = {
   hooks: {
     beforeOperation: [honeypot],
     afterChange: [
+      toSheet('award-applications'),
       notify(
         'award-applications',
         'award',
