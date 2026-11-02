@@ -34,6 +34,12 @@ const cell = (v: unknown): string => {
   return /^[=+\-@]/.test(t) ? "'" + t : t
 }
 
+/** Телефон — всегда текстом: иначе таблица примет 060… за число и потеряет ноль. */
+const tel = (v: unknown): string => {
+  const t = v == null ? '' : String(v).trim()
+  return t ? "'" + t : ''
+}
+
 const low = (v: unknown) => String(v || '').trim().toLowerCase()
 
 /** Строка таблицы: Дата · Статус · Ответственный · Комментарий команды · поля заявки ·
@@ -49,16 +55,16 @@ export function rowOf(slug: AppSlug, d: any): (string | number)[] {
   if (slug === 'community-applications') {
     body = [
       /партн/.test(low(d.track)) ? 'Партнёр' : 'Резидент',
-      d.name, d.phone, d.email, d.role, d.employment, d.company, d.field, d.website,
-    ].map(cell)
+      d.name, tel(d.phone), d.email, d.role, d.employment, d.company, d.field, d.website,
+    ].map((v, i) => (i === 2 ? v : cell(v)))
   } else if (slug === 'forum-applications') {
-    body = [/партн/.test(low(d.kind)) ? 'Партнёр' : 'Участник', d.name, d.phone, d.email, d.company, d.role].map(cell)
+    body = [/партн/.test(low(d.kind)) ? 'Партнёр' : 'Участник', d.name, tel(d.phone), d.email, d.company, d.role].map((v, i) => (i === 2 ? v : cell(v)))
   } else {
     body = [
       /студ/.test(low(d.track)) ? 'Студенческий конкурс' : 'Премия',
-      d.nomination, d.project, d.name, d.org, d.phone, d.email, d.faculty, d.studyStart,
+      d.nomination, d.project, d.name, d.org, tel(d.phone), d.email, d.faculty, d.studyStart,
       d.location, d.area, d.year, d.desc, d.files, d.url,
-    ].map(cell)
+    ].map((v, i) => (i === 5 ? v : cell(v)))
   }
   const admin = `${site()}/admin/collections/${slug}/${d.id}`
   const tail = [
