@@ -34,68 +34,51 @@ const PHOTOS = ['/img/fo-photo-panel.jpg', '/img/fo-photo-group.jpg', '/img/0c1e
 
 const pad = (n: number) => String(n).padStart(2, '0')
 
-/* Партнёры форума — логотипы по ярусам (макет design_handoff_partners).
-   Высоты подобраны под одинаковый визуальный вес: вертикальный Rich Colors выше,
-   вытянутый Vinum ниже. Новый партнёр — строка в нужном ярусе; файл в /public/img/partners. */
-type Logo = { src: string; alt: string; h: string }
+/* Партнёры форума — макет design_handoff_partners: всё по центру, ярусы разделены
+   надписями с тонкими линиями, логотипы по убыванию размера. Высоты — из макета,
+   подобраны под одинаковый визуальный вес. Стили — .fa-partners* в globals.css.
+   Land Rover (генеральный) пока не подтверждён: когда подтвердят — второй логотип
+   в первый ярус, между ними .fa-partners__sep. */
 const P = '/img/partners/'
-const LOGOS: { key: 'general' | 'official' | 'partners'; color: string; cols: string; cell: string; items: Logo[] }[] = [
-  {
-    key: 'general',
-    color: '#E8461E',
-    cols: 'am-logos-1',
-    cell: 'clamp(150px,15vw,220px)',
-    items: [{ src: P + 'solomon-construct.png', alt: 'Solomon Construct', h: 'clamp(68px,8vw,116px)' }],
-  },
-  {
-    key: 'official',
-    color: '#1A52A0',
-    cols: 'am-logos-2',
-    cell: 'clamp(140px,13vw,196px)',
-    items: [
-      { src: P + 'qgroup-energy.png', alt: 'QGroup Energy', h: 'clamp(56px,6.6vw,100px)' },
-      { src: P + 'qgroup-since-2002.png', alt: 'QGroup', h: 'clamp(56px,6.6vw,100px)' },
-    ],
-  },
-  {
-    key: 'partners',
-    color: '#E5D900',
-    cols: 'am-logos-3',
-    cell: 'clamp(104px,9vw,136px)',
-    items: [
-      { src: P + 'rich-colors.png', alt: 'Rich Colors', h: 'clamp(48px,5vw,72px)' },
-      { src: P + 'homeitaly.png', alt: 'Home Italy Interiors', h: 'clamp(26px,2.7vw,38px)' },
-      { src: P + 'divetro.svg', alt: 'DiVetro', h: 'clamp(24px,2.6vw,36px)' },
-      { src: P + 'gdr.png', alt: 'GDR', h: 'clamp(22px,2.4vw,33px)' },
-      { src: P + 'perfectum-module.svg', alt: 'Perfectum Module', h: 'clamp(26px,2.7vw,38px)' },
-      { src: P + 'vinum-estate.png', alt: 'Vinum Estate', h: 'clamp(15px,1.6vw,23px)' },
-    ],
-  },
+const OFFICIAL = [
+  { src: P + 'qgroup-energy.png', alt: 'QGroup Energy' },
+  { src: P + 'qgroup-since-2002.png', alt: 'QGroup' },
+]
+const PARTNERS = [
+  { src: P + 'rich-colors.png', alt: 'Rich Colors', cls: 'rich' },
+  { src: P + 'homeitaly.png', alt: 'Home Italy Interiors', cls: 'homeitaly' },
+  { src: P + 'divetro.svg', alt: 'DiVetro', cls: 'divetro' },
+  { src: P + 'gdr.png', alt: 'GDR', cls: 'gdr' },
+  { src: P + 'perfectum-module.svg', alt: 'Perfectum Module', cls: 'perfectum' },
+  { src: P + 'vinum-estate.png', alt: 'Vinum Estate', cls: 'vinum' },
 ]
 
 function ForumPartners({ t }: { t: Dict }) {
-  const label = { general: t.fLogosGeneral, official: t.fLogosOfficial, partners: t.fLogosPartners }
   return (
-    <section aria-labelledby="am-logos" style={{ padding: '0 0 clamp(56px,6vw,104px)' }}>
-      <div style={WRAP}>
-        <div style={{ paddingTop: 'clamp(48px,5vw,72px)', borderTop: '1px solid #E6E6E3' }}>
-          <h2 id="am-logos" style={H2}>{t.fLogosTitle}</h2>
+    <section className="fa-partners" id="partners" aria-labelledby="fa-partners-title">
+      <div className="fa-partners__inner">
+        <h2 id="fa-partners-title" className="fa-partners__title" style={{ fontFamily: W }}>
+          {t.fLogosTitle}
+        </h2>
+
+        <span className="fa-partners__label fa-partners__label--first">{t.fLogosGeneral}</span>
+        <img className="fa-partners__general" src={P + 'solomon-construct.png'} alt="Solomon Construct" loading="lazy" />
+
+        <div className="fa-partners__divider">
+          <span className="fa-partners__label">{t.fLogosOfficial}</span>
         </div>
-        <div style={{ marginTop: '32px', borderTop: '1px solid #000' }}>
-          {LOGOS.map((tier) => (
-            <div key={tier.key} className="am-logos-tier" style={{ display: 'grid', borderBottom: '1px solid #E6E6E3' }}>
-              <div style={{ display: 'flex', alignItems: 'center', alignSelf: 'start', gap: '10px', padding: '24px 24px 20px 0', ...CAP }}>
-                <span aria-hidden="true" style={{ flex: 'none', width: '10px', height: '10px', background: tier.color }} />
-                {label[tier.key]}
-              </div>
-              <ul className={tier.cols} style={{ display: 'grid', margin: 0, padding: 0, listStyle: 'none' }}>
-                {tier.items.map((l) => (
-                  <li key={l.src} className="am-logo" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: tier.cell, padding: '20px 24px' }}>
-                    <img src={l.src} alt={l.alt} loading="lazy" style={{ display: 'block', height: l.h, width: 'auto', maxWidth: '100%', objectFit: 'contain' }} />
-                  </li>
-                ))}
-              </ul>
-            </div>
+        <div className="fa-partners__official">
+          {OFFICIAL.map((l) => (
+            <img key={l.src} src={l.src} alt={l.alt} loading="lazy" />
+          ))}
+        </div>
+
+        <div className="fa-partners__divider fa-partners__divider--narrow">
+          <span className="fa-partners__label">{t.fLogosPartners}</span>
+        </div>
+        <div className="fa-partners__grid">
+          {PARTNERS.map((l) => (
+            <img key={l.src} className={'fa-partners__' + l.cls} src={l.src} alt={l.alt} loading="lazy" />
           ))}
         </div>
       </div>
