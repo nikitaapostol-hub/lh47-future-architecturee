@@ -196,7 +196,7 @@ export const en: Dict = {
   fLogosTitle: "Forum partners",
   fLogosGeneral: "General partner",
   fLogosOfficial: "Official partner",
-  fLogosPartners: "Partners",
+  fLogosPartners: "Category partners",
   fPartnersLabel: "For partners",
   fPartnersTitle: "Partner opportunities",
   fPartnersText: "The forum is a chance to present your company to key market players, build new business relationships and become part of future projects.",

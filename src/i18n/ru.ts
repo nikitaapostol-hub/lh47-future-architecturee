@@ -209,7 +209,7 @@ export const ru = {
   fLogosTitle: "Партнёры форума",
   fLogosGeneral: "Генеральный партнёр",
   fLogosOfficial: "Официальный партнёр",
-  fLogosPartners: "Партнёры",
+  fLogosPartners: "Партнёры направления",
   fPartnersLabel: 'Партнёрам',
   fPartnersTitle: 'Возможности для партнёров',
   fPartnersText:

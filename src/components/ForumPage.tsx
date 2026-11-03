@@ -34,24 +34,43 @@ const PHOTOS = ['/img/fo-photo-panel.jpg', '/img/fo-photo-group.jpg', '/img/0c1e
 
 const pad = (n: number) => String(n).padStart(2, '0')
 
-/* Партнёры форума — макет design_handoff_partners: всё по центру, ярусы разделены
-   надписями с тонкими линиями, логотипы по убыванию размера. Высоты — из макета,
+/* Партнёры форума — макет design_handoff_partners, растянутый на ширину блока:
+   ярусы разделены надписями с линиями, каждый логотип — плитка-ссылка на сайт компании
+   (при наведении подсветка, подъём логотипа и стрелка ↗). Высоты логотипов — из макета,
    подобраны под одинаковый визуальный вес. Стили — .fa-partners* в globals.css.
-   Land Rover (генеральный) пока не подтверждён: когда подтвердят — второй логотип
-   в первый ярус, между ними .fa-partners__sep. */
+   Land Rover (генеральный) пока не подтверждён: когда подтвердят — вторая строка в GENERAL. */
+type Logo = { src: string; alt: string; href: string; cls: string }
 const P = '/img/partners/'
-const OFFICIAL = [
-  { src: P + 'qgroup-energy.png', alt: 'QGroup Energy' },
-  { src: P + 'qgroup-since-2002.png', alt: 'QGroup' },
+const GENERAL: Logo[] = [{ src: P + 'solomon-construct.png', alt: 'Solomon Construct', href: 'https://solomon.md/', cls: 'solomon' }]
+const OFFICIAL: Logo[] = [
+  { src: P + 'qgroup-energy.png', alt: 'QGroup Energy', href: 'https://energy.qgroup.md/', cls: 'qgroup' },
+  { src: P + 'qgroup-since-2002.png', alt: 'QGroup', href: 'https://qgroup.md/', cls: 'qgroup' },
 ]
-const PARTNERS = [
-  { src: P + 'rich-colors.png', alt: 'Rich Colors', cls: 'rich' },
-  { src: P + 'homeitaly.png', alt: 'Home Italy Interiors', cls: 'homeitaly' },
-  { src: P + 'divetro.svg', alt: 'DiVetro', cls: 'divetro' },
-  { src: P + 'gdr.png', alt: 'GDR', cls: 'gdr' },
-  { src: P + 'perfectum-module.svg', alt: 'Perfectum Module', cls: 'perfectum' },
-  { src: P + 'vinum-estate.png', alt: 'Vinum Estate', cls: 'vinum' },
+const PARTNERS: Logo[] = [
+  { src: P + 'rich-colors.png', alt: 'Rich Colors', href: 'https://www.richcolors.md/', cls: 'rich' },
+  { src: P + 'homeitaly.png', alt: 'Home Italy Interiors', href: 'https://www.homeitaly.md/', cls: 'homeitaly' },
+  { src: P + 'divetro.svg', alt: 'DiVetro', href: 'https://divetro.md/', cls: 'divetro' },
+  { src: P + 'gdr.png', alt: 'GDR', href: 'https://gdr.md/', cls: 'gdr' },
+  { src: P + 'perfectum-module.svg', alt: 'Perfectum Module', href: 'https://perfectum-module.md/', cls: 'perfectum' },
+  { src: P + 'vinum-estate.png', alt: 'Vinum Estate', href: 'https://vinum.md/', cls: 'vinum' },
 ]
+
+function LogoTiles({ items, grid }: { items: Logo[]; grid: string }) {
+  return (
+    <ul className={'fa-partners__row fa-partners__row--' + grid}>
+      {items.map((l) => (
+        <li key={l.href}>
+          <a className="fa-partners__tile" href={l.href} target="_blank" rel="noopener" aria-label={l.alt}>
+            <img className={'fa-partners__' + l.cls} src={l.src} alt={l.alt} loading="lazy" />
+            <span className="fa-partners__arrow" aria-hidden="true">
+              ↗
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  )
+}
 
 function ForumPartners({ t }: { t: Dict }) {
   return (
@@ -61,26 +80,20 @@ function ForumPartners({ t }: { t: Dict }) {
           {t.fLogosTitle}
         </h2>
 
-        <span className="fa-partners__label fa-partners__label--first">{t.fLogosGeneral}</span>
-        <img className="fa-partners__general" src={P + 'solomon-construct.png'} alt="Solomon Construct" loading="lazy" />
+        <div className="fa-partners__divider">
+          <span className="fa-partners__label">{t.fLogosGeneral}</span>
+        </div>
+        <LogoTiles items={GENERAL} grid="general" />
 
         <div className="fa-partners__divider">
           <span className="fa-partners__label">{t.fLogosOfficial}</span>
         </div>
-        <div className="fa-partners__official">
-          {OFFICIAL.map((l) => (
-            <img key={l.src} src={l.src} alt={l.alt} loading="lazy" />
-          ))}
-        </div>
+        <LogoTiles items={OFFICIAL} grid="official" />
 
-        <div className="fa-partners__divider fa-partners__divider--narrow">
+        <div className="fa-partners__divider">
           <span className="fa-partners__label">{t.fLogosPartners}</span>
         </div>
-        <div className="fa-partners__grid">
-          {PARTNERS.map((l) => (
-            <img key={l.src} className={'fa-partners__' + l.cls} src={l.src} alt={l.alt} loading="lazy" />
-          ))}
-        </div>
+        <LogoTiles items={PARTNERS} grid="partners" />
       </div>
     </section>
   )

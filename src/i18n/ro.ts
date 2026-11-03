@@ -196,7 +196,7 @@ export const ro: Dict = {
   fLogosTitle: "Partenerii forumului",
   fLogosGeneral: "Partener general",
   fLogosOfficial: "Partener oficial",
-  fLogosPartners: "Parteneri",
+  fLogosPartners: "Parteneri de categorie",
   fPartnersLabel: "Pentru parteneri",
   fPartnersTitle: "Oportunități pentru parteneri",
   fPartnersText: "Forumul este o ocazie de a vă prezenta compania principalilor jucători de pe piață, de a construi noi relații de afaceri și de a deveni parte a proiectelor viitoare.",
