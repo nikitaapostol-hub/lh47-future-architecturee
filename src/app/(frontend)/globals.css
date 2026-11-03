@@ -618,3 +618,70 @@ html[data-pre='off'] .am-pre { display: none; }
     order: 2;
   }
 }
+
+/* «Партнёры форума»: ярус = подпись + ряд логотипов. На телефоне подпись над логотипами (QGroup — в два столбца),
+   с 960px — слева колонкой. Ячейки разделены тонкими линиями, как сетки на сайте. */
+.am-logos-tier {
+  grid-template-columns: minmax(0, 1fr);
+}
+.am-logos-1 {
+  grid-template-columns: minmax(0, 1fr);
+}
+.am-logos-2,
+.am-logos-3 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.am-logos-2 > li:first-child {
+  border-right: 1px solid #e6e6e3;
+}
+.am-logos-1 > li,
+.am-logos-2 > li,
+.am-logos-3 > li {
+  border-top: 1px solid #e6e6e3;
+}
+.am-logos-3 > li:nth-child(odd) {
+  border-right: 1px solid #e6e6e3;
+}
+.am-logo img {
+  transition: transform 500ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.am-logo:hover img {
+  transform: scale(1.05);
+}
+@media (min-width: 720px) {
+  .am-logos-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .am-logos-3 > li:nth-child(odd) {
+    border-right: 0;
+  }
+  .am-logos-3 > li:not(:nth-child(3n)) {
+    border-right: 1px solid #e6e6e3;
+  }
+}
+@media (min-width: 960px) {
+  .am-logos-tier {
+    grid-template-columns: minmax(200px, 22%) minmax(0, 1fr);
+  }
+  .am-logos-1 > li,
+  .am-logos-2 > li,
+  .am-logos-3 > li {
+    border-left: 1px solid #e6e6e3;
+  }
+  .am-logos-1 > li,
+  .am-logos-2 > li {
+    border-top: 0;
+  }
+  .am-logos-3 > li:nth-child(-n + 3) {
+    border-top: 0;
+  }
+  .am-logos-2 > li:first-child,
+  .am-logos-3 > li:not(:nth-child(3n)) {
+    border-right: 0;
+  }
+}
+@media (hover: none) {
+  .am-logo:hover img {
+    transform: none;
+  }
+}

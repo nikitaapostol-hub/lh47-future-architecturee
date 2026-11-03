@@ -206,6 +206,10 @@ export const ru = {
   fProg6: 'Премия и студенческий конкурс',
   fProg7: 'Фуршет',
   fProgramAlt: 'Человек у оранжевой стены',
+  fLogosTitle: "Партнёры форума",
+  fLogosGeneral: "Генеральный партнёр",
+  fLogosOfficial: "Официальный партнёр",
+  fLogosPartners: "Партнёры",
   fPartnersLabel: 'Партнёрам',
   fPartnersTitle: 'Возможности для партнёров',
   fPartnersText:
