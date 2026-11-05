@@ -12,7 +12,7 @@ import { Consent, EMAIL_RE, Footer, FormError, Header, Honeypot, INPUT, LABEL, W
 import type { S } from './am/ui'
 import Preloader from './Preloader'
 import { speakerCards } from './am/speakers'
-import type { SpeakerIn } from './am/speakers'
+import type { SpeakerCard, SpeakerIn } from './am/speakers'
 
 type Props = {
   t: Dict
@@ -33,6 +33,34 @@ const TOPIC_ACC = ['#E8461E', '#1A52A0', '#E5D900', '#E8461E']
 const PHOTOS = ['/img/fo-photo-panel.jpg', '/img/fo-photo-group.jpg', '/img/0c1ebc8a38.jpg', '/img/fo-photo-event.jpg']
 
 const pad = (n: number) => String(n).padStart(2, '0')
+
+/** Портрет спикера. Если файл не загрузился (например, хранилище фото недоступно),
+    вместо пустой рамки — синяя карточка с инициалами, как у спикера без фото. */
+function SpeakerPhoto({ s }: { s: SpeakerCard }) {
+  const [failed, setFailed] = useState(false)
+  const show = s.img && !failed
+  // ошибка могла случиться ещё до загрузки скриптов — проверяем уже загруженную картинку
+  const check = (el: HTMLImageElement | null) => {
+    if (el && el.complete && el.naturalWidth === 0) setFailed(true)
+  }
+  return (
+    <div className="am-zoom" style={{ position: 'relative', aspectRatio: '4/5', background: '#E4E4E2', overflow: 'hidden' }}>
+      {show ? (
+        <div className="am-gray" style={{ position: 'absolute', inset: 0, filter: 'grayscale(1)' }}>
+          {s.crop ? (
+            <img ref={check} src={s.img!} alt={s.name} loading="lazy" onError={() => setFailed(true)} style={{ position: 'absolute', left: s.crop[0], top: s.crop[1], width: s.crop[2], maxWidth: 'none', height: 'auto', display: 'block' }} />
+          ) : (
+            <img ref={check} src={s.img!} alt={s.name} loading="lazy" onError={() => setFailed(true)} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 20%', display: 'block' }} />
+          )}
+        </div>
+      ) : (
+        <div aria-hidden="true" style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'flex-end', padding: 'clamp(16px,1.6vw,24px)', background: '#1A52A0', color: '#fff', fontFamily: W, fontWeight: 900, fontSize: 'clamp(56px,6vw,96px)', lineHeight: 0.85, letterSpacing: '-.04em' }}>
+          {s.initials}
+        </div>
+      )}
+    </div>
+  )
+}
 
 /* Партнёры форума — макет design_handoff_partners, растянутый на ширину блока:
    ярусы разделены надписями с линиями, каждый логотип — плитка-ссылка на сайт компании
@@ -328,21 +356,7 @@ export default function ForumPage({ t, lang, forumDate, countdownVisible = true,
                 <div className="am-g4p" style={{ display: 'grid', gap: '32px 24px', marginTop: '28px' }}>
                   {cards.map((s, i) => (
                     <div key={i} className="am-card" style={{ position: 'relative' }}>
-                      <div className="am-zoom" style={{ position: 'relative', aspectRatio: '4/5', background: '#E4E4E2', overflow: 'hidden' }}>
-                        {s.img ? (
-                          <div className="am-gray" style={{ position: 'absolute', inset: 0, filter: 'grayscale(1)' }}>
-                            {s.crop ? (
-                              <img src={s.img} alt={s.name} loading="lazy" style={{ position: 'absolute', left: s.crop[0], top: s.crop[1], width: s.crop[2], maxWidth: 'none', height: 'auto', display: 'block' }} />
-                            ) : (
-                              <img src={s.img} alt={s.name} loading="lazy" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 20%', display: 'block' }} />
-                            )}
-                          </div>
-                        ) : (
-                          <div aria-hidden="true" style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'flex-end', padding: 'clamp(16px,1.6vw,24px)', background: '#1A52A0', color: '#fff', fontFamily: W, fontWeight: 900, fontSize: 'clamp(56px,6vw,96px)', lineHeight: 0.85, letterSpacing: '-.04em' }}>
-                            {s.initials}
-                          </div>
-                        )}
-                      </div>
+                      <SpeakerPhoto s={s} />
                       <div style={{ marginTop: '16px', paddingRight: '16px', fontFamily: W, fontWeight: 700, fontSize: '18px', lineHeight: 1.2 }}>{s.name}</div>
                       {s.role && <p style={{ marginTop: '6px', paddingRight: '16px', fontSize: '14px', lineHeight: 1.45, color: '#55554F' }}>{s.role}</p>}
                     </div>
