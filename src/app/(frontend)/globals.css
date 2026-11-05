@@ -690,7 +690,7 @@ html[data-pre='off'] .am-pre { display: none; }
 }
 @media (min-width: 640px) {
   .fa-partners__row--partners > li {
-    flex-basis: 25%;
+    flex-basis: calc(100% / 3);
   }
 }
 @media (min-width: 640px) {
@@ -699,10 +699,10 @@ html[data-pre='off'] .am-pre { display: none; }
   }
 }
 /* на десктопе: генеральный — треть ширины по центру, официальный — две трети,
-   партнёры направления — все в один ряд на всю ширину */
+   партнёры направления — по 5 в ряд на всю ширину (9 логотипов: 5 + 4 по центру) */
 @media (min-width: 1100px) {
   .fa-partners__row--partners > li {
-    flex: 1 1 0;
+    flex-basis: 20%;
   }
   .fa-partners__row--general {
     width: calc(100% / 3);
@@ -794,6 +794,12 @@ html[data-pre='off'] .am-pre { display: none; }
 }
 .fa-partners__indelit {
   height: clamp(40px, 4.2vw, 58px);
+}
+.fa-partners__sonotiz {
+  height: clamp(52px, 5.2vw, 72px);
+}
+.fa-partners__djofra {
+  height: clamp(38px, 3.8vw, 52px);
 }
 .fa-partners__brun {
   height: clamp(20px, 2vw, 27px);
