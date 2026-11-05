@@ -1,6 +1,8 @@
 /* Спикеры форума. Список берётся из админки («Настройки → Форум»).
-   Портреты из макета лежат в public/img и подбираются по фамилии вместе с
-   кадрированием из макета; если в админке загружен свой портрет — берётся он.
+   Портреты лежат в public/img и подбираются по фамилии вместе с кадрированием —
+   они важнее портрета из админки: файлы админки хранятся в Vercel Blob, и если
+   хранилище недоступно, фото пропадает. Портрет из админки берётся для тех,
+   кого здесь нет.
    Пустой список в админке — показываем состав из макета. */
 import type { Lang } from '@/i18n/links'
 
@@ -27,6 +29,8 @@ const KNOWN: Known[] = [
   { match: /разлога|razloga/i, img: '/img/sp-razloga.jpg', crop: ['-36.6%', '-12.6%', '163.3%'] },
   { match: /мырза|mîrza|mirza|myrza|mârza/i, img: '/img/sp-myrza.jpg', crop: ['-36.1%', '0%', '165.5%'] },
   { match: /ионицэ|ионица|ioniță|ionita|ionitsa|ionitse/i, img: '/img/sp-ionita.jpg', crop: ['-13%', '4.6%', '120%'] },
+  // кадр уже 4:5 — показывается целиком
+  { match: /папанаг|papanag/i, img: '/img/sp-papanaga.jpg', crop: ['0%', '0%', '100%'] },
 ]
 
 const DEFAULTS: Record<Lang, { name: string; role: string }[]> = {
@@ -72,8 +76,8 @@ export function speakerCards(list: SpeakerIn[] | undefined, lang: Lang): Speaker
       return {
         name,
         role,
-        img: uploaded || known?.img || null,
-        crop: uploaded ? null : known?.crop || null,
+        img: known?.img || uploaded || null,
+        crop: known ? known.crop : null,
         initials: initials(name),
       }
     })
