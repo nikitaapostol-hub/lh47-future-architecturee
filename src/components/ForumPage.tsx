@@ -50,8 +50,9 @@ const PARTNERS: Logo[] = [
   { src: P + 'rich-colors.png', alt: 'Rich Colors', href: 'https://www.richcolors.md/', cls: 'rich' },
   { src: P + 'homeitaly.png', alt: 'Home Italy Interiors', href: 'https://www.homeitaly.md/', cls: 'homeitaly' },
   { src: P + 'divetro.svg', alt: 'DiVetro', href: 'https://divetro.md/', cls: 'divetro' },
-  { src: P + 'gdr.png', alt: 'GDR', href: 'https://gdr.md/', cls: 'gdr' },
+  { src: P + 'indelit.svg', alt: 'Indelit', href: 'https://indelit.md/', cls: 'indelit' },
   { src: P + 'perfectum-module.svg', alt: 'Perfectum Module', href: 'https://perfectum-module.md/', cls: 'perfectum' },
+  { src: P + 'brun.png', alt: 'Brun', href: 'https://brun.md/', cls: 'brun' },
   { src: P + 'vinum-estate.png', alt: 'Vinum Estate', href: 'https://vinum.md/', cls: 'vinum' },
 ]
 

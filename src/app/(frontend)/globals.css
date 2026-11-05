@@ -679,11 +679,18 @@ html[data-pre='off'] .am-pre { display: none; }
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 .fa-partners__row--partners {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* партнёров направления нечётное число — неполный ряд встаёт по центру */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.fa-partners__row--partners > li {
+  flex: 0 0 50%;
+  min-width: 0;
 }
 @media (min-width: 640px) {
-  .fa-partners__row--partners {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .fa-partners__row--partners > li {
+    flex-basis: 25%;
   }
 }
 @media (min-width: 640px) {
@@ -691,11 +698,11 @@ html[data-pre='off'] .am-pre { display: none; }
     width: 50%;
   }
 }
-/* на десктопе ряды выровнены по общей сетке из 6 колонок:
-   генеральный — 2 центральные колонки, официальный — 4, партнёры направления — все 6 */
+/* на десктопе: генеральный — треть ширины по центру, официальный — две трети,
+   партнёры направления — все в один ряд на всю ширину */
 @media (min-width: 1100px) {
-  .fa-partners__row--partners {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+  .fa-partners__row--partners > li {
+    flex: 1 1 0;
   }
   .fa-partners__row--general {
     width: calc(100% / 3);
@@ -785,8 +792,11 @@ html[data-pre='off'] .am-pre { display: none; }
 .fa-partners__divetro {
   height: clamp(24px, 2.6vw, 34px);
 }
-.fa-partners__gdr {
-  height: clamp(22px, 2.4vw, 31px);
+.fa-partners__indelit {
+  height: clamp(40px, 4.2vw, 58px);
+}
+.fa-partners__brun {
+  height: clamp(20px, 2vw, 27px);
 }
 .fa-partners__vinum {
   height: clamp(15px, 1.6vw, 21px);
