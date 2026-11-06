@@ -66,10 +66,14 @@ function SpeakerPhoto({ s }: { s: SpeakerCard }) {
    ярусы разделены надписями с линиями, каждый логотип — плитка-ссылка на сайт компании
    (при наведении подсветка, подъём логотипа и стрелка ↗). Высоты логотипов — из макета,
    подобраны под одинаковый визуальный вес. Стили — .fa-partners* в globals.css.
-   Land Rover (генеральный) пока не подтверждён: когда подтвердят — вторая строка в GENERAL. */
-type Logo = { src: string; alt: string; href: string; cls: string }
+   Генеральных партнёров два (Solomon, DAAC Hermes) — между ними вертикальная линия. */
+type Logo = { src: string; alt: string; href: string; cls: string; about?: boolean }
 const P = '/img/partners/'
-const GENERAL: Logo[] = [{ src: P + 'solomon-construct.png', alt: 'Solomon Construct', href: 'https://solomon.md/', cls: 'solomon' }]
+const GENERAL: Logo[] = [
+  // у Solomon вместо перехода на сайт — окно «Подробнее» с рендером и описанием
+  { src: P + 'solomon-construct.png', alt: 'Solomon Construct', href: 'https://solomon.md/', cls: 'solomon', about: true },
+  { src: P + 'daac-hermes.png', alt: 'DAAC Hermes', href: 'https://daac-hermes.md/', cls: 'daac' },
+]
 const OFFICIAL: Logo[] = [
   { src: P + 'qgroup-energy.png', alt: 'QGroup Energy', href: 'https://energy.qgroup.md/', cls: 'qgroup' },
   { src: P + 'qgroup-since-2002.png', alt: 'QGroup', href: 'https://qgroup.md/', cls: 'qgroup' },
@@ -86,24 +90,91 @@ const PARTNERS: Logo[] = [
   { src: P + 'vinum-estate.png', alt: 'Vinum Estate', href: 'https://vinum.md/', cls: 'vinum' },
 ]
 
-function LogoTiles({ items, grid }: { items: Logo[]; grid: string }) {
+function LogoTiles({ items, grid, more, onAbout }: { items: Logo[]; grid: string; more?: string; onAbout?: () => void }) {
   return (
-    <ul className={'fa-partners__row fa-partners__row--' + grid}>
-      {items.map((l) => (
-        <li key={l.href}>
-          <a className="fa-partners__tile" href={l.href} target="_blank" rel="noopener" aria-label={l.alt}>
-            <img className={'fa-partners__' + l.cls} src={l.src} alt={l.alt} loading="lazy" />
-            <span className="fa-partners__arrow" aria-hidden="true">
-              ↗
-            </span>
-          </a>
-        </li>
-      ))}
+    <ul className={'fa-partners__row fa-partners__row--' + grid + (items.length > 1 ? ' fa-partners__row--many' : '')}>
+      {items.map((l) =>
+        l.about && onAbout ? (
+          <li key={l.href}>
+            <button type="button" className="fa-partners__tile fa-partners__tile--more" onClick={onAbout} aria-haspopup="dialog" aria-label={l.alt + ' — ' + more}>
+              <img className={'fa-partners__' + l.cls} src={l.src} alt={l.alt} loading="lazy" />
+              <span className="fa-partners__more" aria-hidden="true">
+                {more} <span>+</span>
+              </span>
+            </button>
+          </li>
+        ) : (
+          <li key={l.href}>
+            <a className="fa-partners__tile" href={l.href} target="_blank" rel="noopener" aria-label={l.alt}>
+              <img className={'fa-partners__' + l.cls} src={l.src} alt={l.alt} loading="lazy" />
+              <span className="fa-partners__arrow" aria-hidden="true">
+                ↗
+              </span>
+            </a>
+          </li>
+        ),
+      )}
     </ul>
   )
 }
 
+/** Окно «О Solomon Construct»: рендер, описание, кнопка на сайт.
+    Нативный <dialog>: закрывается крестиком, Esc и кликом по затемнению. */
+function SolomonDialog({ t, open, onClose }: { t: Dict; open: boolean; onClose: () => void }) {
+  const ref = useRef<HTMLDialogElement>(null)
+  useEffect(() => {
+    const d = ref.current
+    if (!d) return
+    if (open && !d.open) {
+      d.showModal()
+      document.documentElement.style.overflow = 'hidden'
+    } else if (!open && d.open) d.close()
+  }, [open])
+  const closed = () => {
+    document.documentElement.style.overflow = ''
+    onClose()
+  }
+  return (
+    <dialog
+      ref={ref}
+      className="fa-pdlg"
+      aria-labelledby="fa-pdlg-title"
+      onClose={closed}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) ref.current?.close()
+      }}
+    >
+      <div className="fa-pdlg__box">
+        <button type="button" className="fa-pdlg__close" onClick={() => ref.current?.close()} aria-label={t.fPtClose}>
+          ×
+        </button>
+        <div className="fa-pdlg__img">
+          <img src={P + 'solomon-project.jpg'} alt="Solomon Construct" loading="lazy" />
+        </div>
+        <div className="fa-pdlg__body">
+          <div className="fa-pdlg__tag">
+            <span aria-hidden="true" />
+            {t.fLogosGeneral}
+          </div>
+          <h3 id="fa-pdlg-title" style={{ fontFamily: W }}>
+            {t.fSolAbout}
+          </h3>
+          {t.fSolText.split(/\n\s*\n/).map((para, i) => (
+            <p key={i}>{para}</p>
+          ))}
+        </div>
+        <div className="fa-pdlg__foot">
+          <a className="fa-pdlg__site hv-orange" href="https://solomon.md/" target="_blank" rel="noopener" style={{ fontFamily: W }}>
+            {t.fPtSite} <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </dialog>
+  )
+}
+
 function ForumPartners({ t }: { t: Dict }) {
+  const [about, setAbout] = useState(false)
   return (
     <section className="fa-partners" id="partners" aria-labelledby="fa-partners-title">
       <div className="fa-partners__inner">
@@ -114,7 +185,7 @@ function ForumPartners({ t }: { t: Dict }) {
         <div className="fa-partners__divider">
           <span className="fa-partners__label">{t.fLogosGeneral}</span>
         </div>
-        <LogoTiles items={GENERAL} grid="general" />
+        <LogoTiles items={GENERAL} grid="general" more={t.fPtMore} onAbout={() => setAbout(true)} />
 
         <div className="fa-partners__divider">
           <span className="fa-partners__label">{t.fLogosOfficial}</span>
@@ -126,6 +197,7 @@ function ForumPartners({ t }: { t: Dict }) {
         </div>
         <LogoTiles items={PARTNERS} grid="partners" />
       </div>
+      <SolomonDialog t={t} open={about} onClose={() => setAbout(false)} />
     </section>
   )
 }

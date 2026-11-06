@@ -776,6 +776,9 @@ html[data-pre='off'] .am-pre { display: none; }
   }
 }
 /* высоты логотипов — из макета, по визуальному весу */
+.fa-partners__daac {
+  height: clamp(26px, 3vw, 42px);
+}
 .fa-partners__solomon {
   height: clamp(72px, 9vw, 124px);
 }
@@ -806,4 +809,202 @@ html[data-pre='off'] .am-pre { display: none; }
 }
 .fa-partners__vinum {
   height: clamp(15px, 1.6vw, 21px);
+}
+
+/* Генеральных партнёров два: на телефоне друг под другом, с 640px — рядом,
+   между ними вертикальная линия; на десктопе ряд шириной как у официального */
+.fa-partners__row--general.fa-partners__row--many {
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 640px) {
+  .fa-partners__row--general.fa-partners__row--many {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+  .fa-partners__row--many > li + li {
+    position: relative;
+  }
+  .fa-partners__row--general.fa-partners__row--many > li + li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 22%;
+    bottom: 22%;
+    width: 1px;
+    background: #d8d8d5;
+  }
+}
+@media (min-width: 1100px) {
+  .fa-partners__row--general.fa-partners__row--many {
+    width: calc(100% * 2 / 3);
+  }
+}
+
+/* Плитка-кнопка «Подробнее» (Solomon) */
+button.fa-partners__tile {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+.fa-partners__more {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: #000;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  line-height: 1;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 250ms ease, transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1), background-color 200ms;
+}
+.fa-partners__more span {
+  color: #e8461e;
+  font-size: 14px;
+}
+.fa-partners__tile:hover .fa-partners__more,
+.fa-partners__tile:focus-visible .fa-partners__more {
+  opacity: 1;
+  transform: none;
+}
+@media (hover: none) {
+  .fa-partners__more {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Окно «О партнёре» */
+.fa-pdlg {
+  width: min(600px, calc(100vw - 32px));
+  max-width: none;
+  height: min(640px, calc(100dvh - 32px));
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: #fff;
+  color: #141414;
+  overflow: hidden;
+}
+.fa-pdlg[open] {
+  display: flex;
+  animation: fa-pdlg-in 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.fa-pdlg::backdrop {
+  background: rgba(10, 10, 10, 0.55);
+  animation: fa-pdlg-fade 250ms ease;
+}
+@keyframes fa-pdlg-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+}
+@keyframes fa-pdlg-fade {
+  from {
+    opacity: 0;
+  }
+}
+.fa-pdlg__box {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+.fa-pdlg__close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: #fff;
+  color: #000;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 200ms, color 200ms;
+}
+.fa-pdlg__close:hover {
+  background: #e8461e;
+  color: #fff;
+}
+.fa-pdlg__img {
+  position: relative;
+  flex: none;
+  aspect-ratio: 21 / 9;
+  background: #e6e6e3;
+  overflow: hidden;
+}
+.fa-pdlg__img img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.fa-pdlg__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: clamp(20px, 3.4vw, 32px) clamp(20px, 3.4vw, 32px) 8px;
+}
+.fa-pdlg__foot {
+  flex: none;
+  padding: 16px clamp(20px, 3.4vw, 32px) clamp(20px, 3.4vw, 28px);
+  border-top: 1px solid #e6e6e3;
+}
+.fa-pdlg__tag {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #55554f;
+}
+.fa-pdlg__tag span {
+  width: 10px;
+  height: 10px;
+  background: #e8461e;
+}
+.fa-pdlg__body h3 {
+  margin: 14px 0 0;
+  font-weight: 700;
+  font-size: clamp(22px, 2.6vw, 28px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.fa-pdlg__body p {
+  margin: 14px 0 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #3a3a37;
+}
+.fa-pdlg__site {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 22px;
+  background: #000;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  transition: background-color 200ms;
 }
