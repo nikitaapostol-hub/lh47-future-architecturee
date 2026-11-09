@@ -31,6 +31,7 @@ const KNOWN: Known[] = [
   { match: /ионицэ|ионица|ioniță|ionita|ionitsa|ionitse/i, img: '/img/sp-ionita.jpg', crop: ['-13%', '4.6%', '120%'] },
   // кадр уже 4:5 — показывается целиком
   { match: /папанаг|papanag/i, img: '/img/sp-papanaga.jpg', crop: ['0%', '0%', '100%'] },
+  { match: /гроян|groian/i, img: '/img/sp-groian.jpg', crop: ['0%', '0%', '100%'] },
 ]
 
 const DEFAULTS: Record<Lang, { name: string; role: string }[]> = {

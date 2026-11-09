@@ -19,6 +19,7 @@ import * as migration_20261014_160100_who_benefits_data from './20261014_160100_
 import * as migration_20261016_081414_presale_forum from './20261016_081414_presale_forum';
 import * as migration_20261016_081500_texts_1610 from './20261016_081500_texts_1610';
 import * as migration_20261022_150000_mail_recipients from './20261022_150000_mail_recipients';
+import * as migration_20261109_160000_speaker_groian from './20261109_160000_speaker_groian';
 
 export const migrations = [
   {
@@ -125,5 +126,10 @@ export const migrations = [
     up: migration_20261022_150000_mail_recipients.up,
     down: migration_20261022_150000_mail_recipients.down,
     name: '20261022_150000_mail_recipients',
+  },
+  {
+    up: migration_20261109_160000_speaker_groian.up,
+    down: migration_20261109_160000_speaker_groian.down,
+    name: '20261109_160000_speaker_groian',
   },
 ];
