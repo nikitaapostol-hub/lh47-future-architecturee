@@ -73,8 +73,7 @@ const GENERAL: Logo[] = [
   // у Solomon вместо перехода на сайт — окно «Подробнее» с рендером и описанием
   { src: P + 'solomon-construct.png', alt: 'Solomon Construct', href: 'https://solomon.md/', cls: 'solomon', about: true },
   { src: P + 'daac-hermes.png', alt: 'DAAC Hermes', href: 'https://daac-hermes.md/', cls: 'daac' },
-  // ссылки на сайт пока нет — плитка без перехода
-  { src: P + 'noble-dubai.png', alt: 'Noble Dubai', cls: 'noble' },
+  { src: P + 'noble-dubai.png', alt: 'Noble Dubai', href: 'https://nobledubaiproperties.com/', cls: 'noble' },
 ]
 const OFFICIAL: Logo[] = [
   { src: P + 'qgroup-energy.png', alt: 'QGroup Energy', href: 'https://energy.qgroup.md/', cls: 'qgroup' },
