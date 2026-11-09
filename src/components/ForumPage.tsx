@@ -88,6 +88,7 @@ const PARTNERS: Logo[] = [
   { src: P + 'perfectum-module.svg', alt: 'Perfectum Module', href: 'https://perfectum-module.md/', cls: 'perfectum' },
   { src: P + 'material-md.png', alt: 'Material MD', href: 'https://material.md/ru', cls: 'material' },
   { src: P + 'djofra.png', alt: 'Djofra-M', href: 'https://fgm.md/', cls: 'djofra' },
+  { src: P + 'eurolumina.png', alt: 'Eurolumina', href: 'https://www.eurolumina.md/', cls: 'eurolumina' },
   { src: P + 'dekada.png', alt: 'Dekada', href: 'https://dekada-partners.md/', cls: 'dekada' },
 ]
 /** Отдельная нижняя строка под всеми партнёрами — без подписи и линии. */

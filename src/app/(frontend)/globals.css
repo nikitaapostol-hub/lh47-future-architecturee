@@ -690,7 +690,7 @@ html[data-pre='off'] .am-pre { display: none; }
 }
 @media (min-width: 640px) {
   .fa-partners__row--partners > li {
-    flex-basis: calc(100% / 3);
+    flex-basis: 25%;
   }
 }
 @media (min-width: 640px) {
@@ -699,7 +699,7 @@ html[data-pre='off'] .am-pre { display: none; }
   }
 }
 /* на десктопе: генеральный — треть ширины по центру, официальный — две трети,
-   партнёры направления — по 5 в ряд на всю ширину (9 логотипов: 5 + 4 по центру) */
+   партнёры направления — по 5 в ряд на всю ширину (10 логотипов: 5 + 5) */
 @media (min-width: 1100px) {
   .fa-partners__row--partners > li {
     flex-basis: 20%;
@@ -781,6 +781,9 @@ html[data-pre='off'] .am-pre { display: none; }
 }
 .fa-partners__material {
   height: clamp(40px, 4vw, 54px);
+}
+.fa-partners__eurolumina {
+  height: clamp(28px, 2.9vw, 40px);
 }
 .fa-partners__dekada {
   height: clamp(22px, 2.2vw, 30px);
