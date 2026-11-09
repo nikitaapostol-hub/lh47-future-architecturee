@@ -66,13 +66,15 @@ function SpeakerPhoto({ s }: { s: SpeakerCard }) {
    ярусы разделены надписями с линиями, каждый логотип — плитка-ссылка на сайт компании
    (при наведении подсветка, подъём логотипа и стрелка ↗). Высоты логотипов — из макета,
    подобраны под одинаковый визуальный вес. Стили — .fa-partners* в globals.css.
-   Генеральных партнёров два (Solomon, DAAC Hermes) — между ними вертикальная линия. */
-type Logo = { src: string; alt: string; href: string; cls: string; about?: boolean }
+   Генеральных партнёров три (Solomon, DAAC Hermes, Noble Dubai) — между ними вертикальные линии. */
+type Logo = { src: string; alt: string; href?: string; cls: string; about?: boolean }
 const P = '/img/partners/'
 const GENERAL: Logo[] = [
   // у Solomon вместо перехода на сайт — окно «Подробнее» с рендером и описанием
   { src: P + 'solomon-construct.png', alt: 'Solomon Construct', href: 'https://solomon.md/', cls: 'solomon', about: true },
   { src: P + 'daac-hermes.png', alt: 'DAAC Hermes', href: 'https://daac-hermes.md/', cls: 'daac' },
+  // ссылки на сайт пока нет — плитка без перехода
+  { src: P + 'noble-dubai.png', alt: 'Noble Dubai', cls: 'noble' },
 ]
 const OFFICIAL: Logo[] = [
   { src: P + 'qgroup-energy.png', alt: 'QGroup Energy', href: 'https://energy.qgroup.md/', cls: 'qgroup' },
@@ -85,16 +87,27 @@ const PARTNERS: Logo[] = [
   { src: P + 'indelit.svg', alt: 'Indelit', href: 'https://indelit.md/', cls: 'indelit' },
   { src: P + 'sonotiz.png', alt: 'Sonotiz', href: 'https://sonotiz.md/ru/', cls: 'sonotiz' },
   { src: P + 'perfectum-module.svg', alt: 'Perfectum Module', href: 'https://perfectum-module.md/', cls: 'perfectum' },
-  { src: P + 'brun.png', alt: 'Brun', href: 'https://brun.md/', cls: 'brun' },
+  { src: P + 'material-md.png', alt: 'Material MD', href: 'https://material.md/ru', cls: 'material' },
   { src: P + 'djofra.png', alt: 'Djofra-M', href: 'https://fgm.md/', cls: 'djofra' },
+  { src: P + 'dekada.png', alt: 'Dekada', href: 'https://dekada-partners.md/', cls: 'dekada' },
+]
+/** Отдельная нижняя строка под всеми партнёрами — без подписи и линии. */
+const EXTRA: Logo[] = [
+  { src: P + 'brun.png', alt: 'Brun', href: 'https://brun.md/', cls: 'brun' },
   { src: P + 'vinum-estate.png', alt: 'Vinum Estate', href: 'https://vinum.md/', cls: 'vinum' },
 ]
 
 function LogoTiles({ items, grid, more, onAbout }: { items: Logo[]; grid: string; more?: string; onAbout?: () => void }) {
   return (
-    <ul className={'fa-partners__row fa-partners__row--' + grid + (items.length > 1 ? ' fa-partners__row--many' : '')}>
+    <ul className={'fa-partners__row fa-partners__row--' + grid + (items.length > 1 ? ' fa-partners__row--many' : '')} style={{ ['--n' as string]: items.length }}>
       {items.map((l) =>
-        l.about && onAbout ? (
+        !l.href ? (
+          <li key={l.src}>
+            <div className="fa-partners__tile fa-partners__tile--static">
+              <img className={'fa-partners__' + l.cls} src={l.src} alt={l.alt} loading="lazy" />
+            </div>
+          </li>
+        ) : l.about && onAbout ? (
           <li key={l.href}>
             <button type="button" className="fa-partners__tile fa-partners__tile--more" onClick={onAbout} aria-haspopup="dialog" aria-label={l.alt + ' — ' + more}>
               <img className={'fa-partners__' + l.cls} src={l.src} alt={l.alt} loading="lazy" />
@@ -183,7 +196,7 @@ function ForumPartners({ t }: { t: Dict }) {
         </h2>
 
         <div className="fa-partners__divider">
-          <span className="fa-partners__label">{t.fLogosGeneral}</span>
+          <span className="fa-partners__label">{GENERAL.length > 1 ? t.fLogosGenerals : t.fLogosGeneral}</span>
         </div>
         <LogoTiles items={GENERAL} grid="general" more={t.fPtMore} onAbout={() => setAbout(true)} />
 
@@ -196,6 +209,7 @@ function ForumPartners({ t }: { t: Dict }) {
           <span className="fa-partners__label">{t.fLogosPartners}</span>
         </div>
         <LogoTiles items={PARTNERS} grid="partners" />
+        <LogoTiles items={EXTRA} grid="partners" />
       </div>
       <SolomonDialog t={t} open={about} onClose={() => setAbout(false)} />
     </section>

@@ -199,6 +199,7 @@ export const ro: Dict = {
   fSolAbout: "Despre Solomon Construct",
   fSolText: "Sunt dezvoltatori care construiesc accesibil și dezvoltatori care construiesc premium. Solomon Construct construiește bine, în ambele cazuri. Din 2016, echipa noastră a dat în exploatare în Chișinău 6 complexe locative pentru oameni cu bugete foarte diferite, cu aceeași structură din beton armat și aceeași fațadă ventilată în fiecare dintre ele.\n\nAstăzi avem 5 șantiere în lucru, amplasate în sectoare diferite ale Chișinăului și adresate unor segmente diferite de preț. Ritmul îl ținem: un complex dat în exploatare în fiecare an, până în 2029. Echipe profesioniste, verificări ale construcției la fiecare etapă și un proces bine organizat ne permit să avansăm simultan pe toate șantierele, fără compromisuri la calitate și fără abateri de la calendarele aprobate și comunicate clientului.\n\nPrincipiul nostru de bază este simplu: construim ca să nu dezamăgim. De aceea orice șantier Solomon poate fi vizitat, oricând, în etapa în care se află. Clientul trebuie să vadă pentru ce plătește – de la fundația pe care urmează să fie ridicat apartamentul său, până la finisaje.",
   fLogosTitle: "Partenerii forumului",
+  fLogosGenerals: "Parteneri generali",
   fLogosGeneral: "Partener general",
   fLogosOfficial: "Partener oficial",
   fLogosPartners: "Parteneri de categorie",
