@@ -67,12 +67,21 @@ function SpeakerPhoto({ s }: { s: SpeakerCard }) {
    (при наведении подсветка, подъём логотипа и стрелка ↗). Высоты логотипов — из макета,
    подобраны под одинаковый визуальный вес. Стили — .fa-partners* в globals.css.
    Генеральных партнёров три (Solomon, DAAC Hermes, Noble Dubai) — между ними вертикальные линии. */
-type Logo = { src: string; alt: string; href?: string; cls: string; about?: boolean }
+type Logo = {
+  src: string
+  alt: string
+  href?: string
+  cls: string
+  about?: boolean
+  /** второй логотип в той же плитке (связка «дилер + марка») */
+  pair?: { src: string; alt: string }
+}
 const P = '/img/partners/'
 const GENERAL: Logo[] = [
   // у Solomon вместо перехода на сайт — окно «Подробнее» с рендером и описанием
   { src: P + 'solomon-construct.png', alt: 'Solomon Construct', href: 'https://solomon.md/', cls: 'solomon', about: true },
-  { src: P + 'daac-hermes.png', alt: 'DAAC Hermes', href: 'https://daac-hermes.md/', cls: 'daac' },
+  // DAAC Hermes и Range Rover — одна плитка, логотипы друг под другом одной ширины
+  { src: P + 'daac-hermes.png', alt: 'DAAC Hermes', href: 'https://daac-hermes.md/', cls: 'daac', pair: { src: P + 'range-rover.svg', alt: 'Range Rover' } },
   { src: P + 'noble-dubai.png', alt: 'Noble Dubai', href: 'https://nobledubaiproperties.com/', cls: 'noble' },
 ]
 const OFFICIAL: Logo[] = [
@@ -97,6 +106,16 @@ const EXTRA: Logo[] = [
   { src: P + 'vinum-estate.png', alt: 'Vinum Estate', href: 'https://vinum.md/', cls: 'vinum' },
 ]
 
+function LogoImg({ l }: { l: Logo }) {
+  if (!l.pair) return <img className={'fa-partners__' + l.cls} src={l.src} alt={l.alt} loading="lazy" />
+  return (
+    <span className="fa-partners__pair">
+      <img src={l.src} alt={l.alt} loading="lazy" />
+      <img src={l.pair.src} alt={l.pair.alt} loading="lazy" />
+    </span>
+  )
+}
+
 function LogoTiles({ items, grid, more, onAbout }: { items: Logo[]; grid: string; more?: string; onAbout?: () => void }) {
   return (
     <ul className={'fa-partners__row fa-partners__row--' + grid + (items.length > 1 ? ' fa-partners__row--many' : '')} style={{ ['--n' as string]: items.length }}>
@@ -118,8 +137,8 @@ function LogoTiles({ items, grid, more, onAbout }: { items: Logo[]; grid: string
           </li>
         ) : (
           <li key={l.href}>
-            <a className="fa-partners__tile" href={l.href} target="_blank" rel="noopener" aria-label={l.alt}>
-              <img className={'fa-partners__' + l.cls} src={l.src} alt={l.alt} loading="lazy" />
+            <a className="fa-partners__tile" href={l.href} target="_blank" rel="noopener" aria-label={l.pair ? l.alt + ' · ' + l.pair.alt : l.alt}>
+              <LogoImg l={l} />
               <span className="fa-partners__arrow" aria-hidden="true">
                 ↗
               </span>
