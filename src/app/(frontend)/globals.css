@@ -699,10 +699,10 @@ html[data-pre='off'] .am-pre { display: none; }
   }
 }
 /* на десктопе: генеральный — треть ширины по центру, официальный — две трети,
-   партнёры направления — по 5 в ряд на всю ширину (10 логотипов: 5 + 5) */
+   партнёры направления — по 6 в ряд на всю ширину (11 логотипов: 6 + 5 по центру) */
 @media (min-width: 1100px) {
   .fa-partners__row--partners > li {
-    flex-basis: 20%;
+    flex-basis: calc(100% / 6);
   }
   .fa-partners__row--general {
     width: calc(100% / 3);
@@ -784,6 +784,9 @@ html[data-pre='off'] .am-pre { display: none; }
 }
 .fa-partners__eurolumina {
   height: clamp(28px, 2.9vw, 40px);
+}
+.fa-partners__outdoor {
+  height: clamp(52px, 5.2vw, 72px);
 }
 .fa-partners__dekada {
   height: clamp(22px, 2.2vw, 30px);

@@ -98,6 +98,7 @@ const PARTNERS: Logo[] = [
   { src: P + 'material-md.png', alt: 'Material MD', href: 'https://material.md/ru', cls: 'material' },
   { src: P + 'djofra.png', alt: 'Djofra-M', href: 'https://fgm.md/', cls: 'djofra' },
   { src: P + 'eurolumina.png', alt: 'Eurolumina', href: 'https://www.eurolumina.md/', cls: 'eurolumina' },
+  { src: P + 'outdoor-solutions.png', alt: 'Outdoor Solutions', href: 'https://www.outdoorsolutions.md/', cls: 'outdoor' },
   { src: P + 'dekada.png', alt: 'Dekada', href: 'https://dekada-partners.md/', cls: 'dekada' },
 ]
 /** Отдельная нижняя строка под всеми партнёрами — без подписи и линии. */
