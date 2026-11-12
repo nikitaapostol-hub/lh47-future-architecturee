@@ -101,6 +101,11 @@ const PARTNERS: Logo[] = [
   { src: P + 'eurolumina.png', alt: 'Eurolumina', href: 'https://www.eurolumina.md/', cls: 'eurolumina' },
   { src: P + 'outdoor-solutions.png', alt: 'Outdoor Solutions', href: 'https://www.outdoorsolutions.md/', cls: 'outdoor' },
   { src: P + 'dekada.png', alt: 'Dekada', href: 'https://dekada-partners.md/', cls: 'dekada' },
+  { src: P + 'domino.png', alt: 'Domino mobila', href: 'https://domino.md/', cls: 'domino' },
+  { src: P + 'biraders.png', alt: 'Biraders', href: 'https://biraders.md/', cls: 'biraders' },
+  { src: P + 'azimut.png', alt: 'Azimut Microclimate Systems', href: 'https://azimut.md/', cls: 'azimut' },
+  { src: P + 'artizana.png', alt: 'Artizana Fashion Salon', href: 'https://artizanafashion.md/', cls: 'artizana' },
+  { src: P + 'kott.png', alt: 'Kott', href: 'https://kott.md/', cls: 'kott' },
 ]
 /** Отдельная нижняя строка под всеми партнёрами — без подписи и линии. */
 const EXTRA: Logo[] = [

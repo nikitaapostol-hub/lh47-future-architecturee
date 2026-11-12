@@ -690,7 +690,7 @@ html[data-pre='off'] .am-pre { display: none; }
 }
 @media (min-width: 640px) {
   .fa-partners__row--partners > li {
-    flex-basis: 25%;
+    flex-basis: calc(100% / 3);
   }
 }
 @media (min-width: 640px) {
@@ -699,7 +699,7 @@ html[data-pre='off'] .am-pre { display: none; }
   }
 }
 /* на десктопе: генеральный — треть ширины по центру, официальный — две трети,
-   партнёры направления — по 6 в ряд на всю ширину (12 логотипов: 6 + 6) */
+   партнёры направления — по 6 в ряд на всю ширину (17 логотипов: 6 + 6 + 5 по центру) */
 @media (min-width: 1100px) {
   .fa-partners__row--partners > li {
     flex-basis: calc(100% / 6);
@@ -790,6 +790,19 @@ html[data-pre='off'] .am-pre { display: none; }
 }
 .fa-partners__decoplit {
   height: clamp(30px, 3vw, 42px);
+}
+.fa-partners__domino,
+.fa-partners__biraders {
+  height: clamp(32px, 3.2vw, 44px);
+}
+.fa-partners__azimut {
+  height: clamp(26px, 2.6vw, 36px);
+}
+.fa-partners__artizana {
+  height: clamp(30px, 3vw, 42px);
+}
+.fa-partners__kott {
+  height: clamp(34px, 3.4vw, 48px);
 }
 .fa-partners__dekada {
   height: clamp(22px, 2.2vw, 30px);
