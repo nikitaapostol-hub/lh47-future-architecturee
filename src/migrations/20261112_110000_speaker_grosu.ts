@@ -2,7 +2,7 @@ import type { MigrateUpArgs, MigrateDownArgs } from '@payloadcms/db-postgres'
 
 /* Форум: новый спикер — Виктор Гросу (Hype Project), в конец списка.
    Если он уже есть в админке (по фамилии), ничего не меняется. Фото встроено
-   в сайт (public/img/sp-grosu.jpg) и подбирается по фамилии. */
+   в сайт (public/img/sp-grosu-2.jpg) и подбирается по фамилии. */
 
 const SPEAKER = {
   name: { ru: 'Виктор Гросу', ro: 'Victor Grosu', en: 'Victor Grosu' },
