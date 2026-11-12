@@ -20,6 +20,7 @@ import * as migration_20261016_081414_presale_forum from './20261016_081414_pres
 import * as migration_20261016_081500_texts_1610 from './20261016_081500_texts_1610';
 import * as migration_20261022_150000_mail_recipients from './20261022_150000_mail_recipients';
 import * as migration_20261109_160000_speaker_groian from './20261109_160000_speaker_groian';
+import * as migration_20261112_110000_speaker_grosu from './20261112_110000_speaker_grosu';
 
 export const migrations = [
   {
@@ -131,5 +132,10 @@ export const migrations = [
     up: migration_20261109_160000_speaker_groian.up,
     down: migration_20261109_160000_speaker_groian.down,
     name: '20261109_160000_speaker_groian',
+  },
+  {
+    up: migration_20261112_110000_speaker_grosu.up,
+    down: migration_20261112_110000_speaker_grosu.down,
+    name: '20261112_110000_speaker_grosu',
   },
 ];
