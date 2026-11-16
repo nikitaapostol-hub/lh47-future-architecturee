@@ -33,6 +33,7 @@ const KNOWN: Known[] = [
   { match: /папанаг|papanag/i, img: '/img/sp-papanaga.jpg', crop: ['0%', '0%', '100%'] },
   { match: /гроян|groian/i, img: '/img/sp-groian.jpg', crop: ['0%', '0%', '100%'] },
   { match: /гросу|гроссу|grosu/i, img: '/img/sp-grosu-2.jpg', crop: ['0%', '0%', '100%'] },
+  { match: /харди|hardy/i, img: '/img/sp-hardy.jpg', crop: ['0%', '0%', '100%'] },
 ]
 
 const DEFAULTS: Record<Lang, { name: string; role: string }[]> = {
