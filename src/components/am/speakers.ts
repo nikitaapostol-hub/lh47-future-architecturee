@@ -24,16 +24,19 @@ export type SpeakerCard = {
 
 type Known = { match: RegExp; img: string; crop: [string, string, string] }
 
+/* Все портреты (*-n.jpg) подготовлены одинаково: кадр 4:5 (760×950), лицо по центру,
+   одной ширины (~46% кадра), верх лица на 20% высоты. Новый портрет готовить так же. */
+const FULL: [string, string, string] = ['0%', '0%', '100%']
+
 const KNOWN: Known[] = [
-  { match: /волошин|voloshin|woloshin|voloșin/i, img: '/img/sp-voloshin.jpg', crop: ['-57.5%', '-3.7%', '167.9%'] },
-  { match: /разлога|razloga/i, img: '/img/sp-razloga.jpg', crop: ['-36.6%', '-12.6%', '163.3%'] },
-  { match: /мырза|mîrza|mirza|myrza|mârza/i, img: '/img/sp-myrza.jpg', crop: ['-36.1%', '0%', '165.5%'] },
-  { match: /ионицэ|ионица|ioniță|ionita|ionitsa|ionitse/i, img: '/img/sp-ionita.jpg', crop: ['-13%', '4.6%', '120%'] },
-  // кадр уже 4:5 — показывается целиком
-  { match: /папанаг|papanag/i, img: '/img/sp-papanaga.jpg', crop: ['0%', '0%', '100%'] },
-  { match: /гроян|groian/i, img: '/img/sp-groian.jpg', crop: ['0%', '0%', '100%'] },
-  { match: /гросу|гроссу|grosu/i, img: '/img/sp-grosu-2.jpg', crop: ['0%', '0%', '100%'] },
-  { match: /харди|hardy/i, img: '/img/sp-hardy.jpg', crop: ['0%', '0%', '100%'] },
+  { match: /волошин|voloshin|woloshin|voloșin/i, img: '/img/sp-voloshin-n.jpg', crop: FULL },
+  { match: /разлога|razloga/i, img: '/img/sp-razloga-n.jpg', crop: FULL },
+  { match: /мырза|mîrza|mirza|myrza|mârza/i, img: '/img/sp-myrza-n.jpg', crop: FULL },
+  { match: /ионицэ|ионица|ioniță|ionita|ionitsa|ionitse/i, img: '/img/sp-ionita-n.jpg', crop: FULL },
+  { match: /папанаг|papanag/i, img: '/img/sp-papanaga-n.jpg', crop: FULL },
+  { match: /гроян|groian/i, img: '/img/sp-groian-n.jpg', crop: FULL },
+  { match: /гросу|гроссу|grosu/i, img: '/img/sp-grosu-n.jpg', crop: FULL },
+  { match: /харди|hardy/i, img: '/img/sp-hardy-n.jpg', crop: FULL },
 ]
 
 const DEFAULTS: Record<Lang, { name: string; role: string }[]> = {
