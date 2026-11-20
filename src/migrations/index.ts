@@ -22,6 +22,7 @@ import * as migration_20261022_150000_mail_recipients from './20261022_150000_ma
 import * as migration_20261109_160000_speaker_groian from './20261109_160000_speaker_groian';
 import * as migration_20261112_110000_speaker_grosu from './20261112_110000_speaker_grosu';
 import * as migration_20261116_170000_speaker_hardy from './20261116_170000_speaker_hardy';
+import * as migration_20261120_100000_deadline_dec5 from './20261120_100000_deadline_dec5';
 
 export const migrations = [
   {
@@ -143,5 +144,10 @@ export const migrations = [
     up: migration_20261116_170000_speaker_hardy.up,
     down: migration_20261116_170000_speaker_hardy.down,
     name: '20261116_170000_speaker_hardy',
+  },
+  {
+    up: migration_20261120_100000_deadline_dec5.up,
+    down: migration_20261120_100000_deadline_dec5.down,
+    name: '20261120_100000_deadline_dec5',
   },
 ];

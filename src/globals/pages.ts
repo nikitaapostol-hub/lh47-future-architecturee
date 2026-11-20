@@ -109,7 +109,7 @@ const awardSettings: Tab[] = [
             name: 'deadlineDate',
             type: 'date',
             label: 'Заявки принимаются до',
-            defaultValue: '2026-11-20T23:59:00+02:00',
+            defaultValue: '2026-12-05T23:59:00+02:00',
             admin: {
               width: '50%',
               date: { pickerAppearance: 'dayAndTime', displayFormat: 'dd.MM.yyyy, HH:mm' },

@@ -57,7 +57,7 @@ const DEFAULT_NOMS: Record<Lang, [string, string][]> = {
   ],
 }
 
-/** Дата в формате 20.11.2026 по кишинёвскому времени — одинаково на сервере и в браузере. */
+/** Дата в формате 05.12.2026 по кишинёвскому времени — одинаково на сервере и в браузере. */
 function dmy(iso: string | undefined, fallback: string) {
   const d = new Date(iso || fallback)
   if (isNaN(d.getTime())) return ''
@@ -90,7 +90,7 @@ export default function AwardPage({ t, lang, deadlineDate, forumDate, nomination
   const [errA, setErrA] = useState('')
   const [errS, setErrS] = useState('')
 
-  const deadline = deadlineDate || '2026-11-20T23:59:00+02:00'
+  const deadline = deadlineDate || '2026-12-05T23:59:00+02:00'
   const daysLeft = Math.max(0, Math.ceil((new Date(deadline).getTime() - Date.now()) / 864e5))
 
   const pick = (set: (f: Files) => void) => (e: ChangeEvent<HTMLInputElement>) => {
@@ -213,7 +213,7 @@ export default function AwardPage({ t, lang, deadlineDate, forumDate, nomination
               <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1fr)', borderTop: '1px solid #000' }}>
                 <div style={{ padding: '14px 16px 0 0', borderRight: '1px solid #E6E6E3' }}>
                   <div style={{ fontSize: '12px', fontWeight: 600, letterSpacing: '.1em', textTransform: 'uppercase', color: '#55554F' }}>{t.aDeadlineLabel}</div>
-                  <div style={{ marginTop: '8px', fontFamily: W, fontWeight: 800, fontSize: 'clamp(26px,2.6vw,38px)', lineHeight: 1 }}>{dmy(deadlineDate, '2026-11-20T23:59:00+02:00')}</div>
+                  <div style={{ marginTop: '8px', fontFamily: W, fontWeight: 800, fontSize: 'clamp(26px,2.6vw,38px)', lineHeight: 1 }}>{dmy(deadlineDate, '2026-12-05T23:59:00+02:00')}</div>
                   {formOpen && (
                     <div suppressHydrationWarning style={{ marginTop: '6px', fontSize: '14px', color: '#55554F' }}>
                       {fill(t.aDaysLeft, { days: daysLeft })}

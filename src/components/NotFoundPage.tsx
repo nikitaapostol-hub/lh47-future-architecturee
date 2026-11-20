@@ -13,11 +13,11 @@ type Copy = { kicker: string; title: string; lead: string; nav: string; alt: str
 const COPY: Record<Lang, Copy> = 
 {
     ru: { kicker: 'Ошибка 404', title: 'Такой страницы нет', lead: 'Адрес набран с опечаткой или страницу перенесли. Ниже — разделы, которые точно работают.', nav: 'Разделы сайта', alt: 'Иллюстрация: оранжевый портал и лестница, которая обрывается в пустоту',
-      links: [['Сообщество', 'Архитекторы и дизайнеры Молдовы'], ['Форум 2026', '9 декабря · Кишинёв'], ['Премия и конкурсы', 'Заявки до 20 ноября']] },
+      links: [['Сообщество', 'Архитекторы и дизайнеры Молдовы'], ['Форум 2026', '9 декабря · Кишинёв'], ['Премия и конкурсы', 'Заявки до 5 декабря']] },
     ro: { kicker: 'Eroare 404', title: 'Această pagină nu există', lead: 'Adresa conține o greșeală sau pagina a fost mutată. Mai jos — secțiunile care funcționează sigur.', nav: 'Secțiunile site-ului', alt: 'Ilustrație: portal portocaliu și o scară care se termină în gol',
-      links: [['Comunitatea', 'Arhitecți și designeri din Moldova'], ['Forumul 2026', '9 decembrie · Chișinău'], ['Premiu și concursuri', 'Înscrieri până pe 20 noiembrie']] },
+      links: [['Comunitatea', 'Arhitecți și designeri din Moldova'], ['Forumul 2026', '9 decembrie · Chișinău'], ['Premiu și concursuri', 'Înscrieri până pe 5 decembrie']] },
     en: { kicker: 'Error 404', title: 'This page does not exist', lead: 'The address has a typo or the page has moved. Below are the sections that definitely work.', nav: 'Site sections', alt: 'Illustration: an orange portal and a staircase that ends in mid-air',
-      links: [['Community', 'Architects and designers of Moldova'], ['Forum 2026', '9 December · Chișinău'], ['Award & competitions', 'Applications until 20 November']] },
+      links: [['Community', 'Architects and designers of Moldova'], ['Forum 2026', '9 December · Chișinău'], ['Award & competitions', 'Applications until 5 December']] },
   }
 
 const HREFS = ['/', '/forum', '/award']
