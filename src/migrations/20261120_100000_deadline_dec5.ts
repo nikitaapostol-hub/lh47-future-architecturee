@@ -9,7 +9,7 @@ const SKIP = ['id', 'globalType', 'createdAt', 'updatedAt']
 const strip = (d: any) => Object.fromEntries(Object.entries(d || {}).filter(([k]) => !SKIP.includes(k)))
 
 const RULES: [RegExp, string][] = [
-  [/\b20 ноября\b/g, '5 декабря'],
+  [/(^|[^0-9])20 ноября/g, '$15 декабря'],
   [/\b20 noiembrie\b/g, '5 decembrie'],
   [/\b20(th)? November\b/g, '5 December'],
   [/\bNovember 20(th)?\b/g, 'December 5'],
