@@ -7,7 +7,7 @@
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { NextResponse } from 'next/server'
-import { SHEET_OF, pushRows, rowOf, sheetsConfigured } from '@/lib/sheets'
+import { SHEET_OF, nominationMap, pushRows, rowOf, sheetsConfigured } from '@/lib/sheets'
 import type { AppSlug } from '@/lib/sheets'
 
 export const maxDuration = 60
@@ -26,6 +26,7 @@ export async function GET(request: Request): Promise<Response> {
   if (!sheetsConfigured()) {
     lines.push('Таблица ещё не подключена: на Vercel нет SHEETS_WEBHOOK_URL и SHEETS_SECRET.')
   } else {
+    const noms = await nominationMap(payload)
     for (const slug of Object.keys(SHEET_OF) as AppSlug[]) {
       const sheet = SHEET_OF[slug]
       const { docs } = await payload.find({
@@ -36,7 +37,7 @@ export async function GET(request: Request): Promise<Response> {
         overrideAccess: true,
         pagination: false,
       })
-      const rows = docs.map((d: any) => rowOf(slug, d))
+      const rows = docs.map((d: any) => rowOf(slug, d, noms))
       let added = 0
       let skipped = 0
       let error = ''
