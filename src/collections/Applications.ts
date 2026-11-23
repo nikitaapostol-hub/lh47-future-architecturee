@@ -3,6 +3,7 @@ import { APIError } from 'payload'
 import { autoreplyHtml, notifyHtml, notifyText, sendSafe } from '@/lib/mail'
 import type { MailRow, NotifyMail, Section } from '@/lib/mail'
 import { toSheet } from '@/lib/sheets'
+import { toRuNomination } from '@/lib/nominations'
 
 /* Входящие заявки. Сайт пишет, админка читает.
    На создание записи уходит письмо команде и автоответ заявителю. */
@@ -305,6 +306,7 @@ export const AwardApplications: CollectionConfig = {
     listSearchableFields: ['name', 'email', 'org', 'project', 'phone'],
     defaultColumns: ['name', 'track', 'nomination', 'project', 'phone', 'status', 'submittedAt'],
     description: 'Форма на странице премии — премия и студенческий конкурс.',
+    components: { beforeList: ['/components/admin/AwardByNomination#AwardByNomination'] },
   },
   access: inboxAccess,
   hooks: {
@@ -332,7 +334,11 @@ export const AwardApplications: CollectionConfig = {
   },
   fields: [
     txt('track', 'Куда подаёт', { max: 60 }),
-    txt('nomination', 'Номинация', { max: 200 }),
+    {
+      ...txt('nomination', 'Номинация', { max: 200 }),
+      // с любой языковой версии сайта номинация сохраняется по-русски — для разбивки и фильтров
+      hooks: { beforeValidate: [clean(200), toRuNomination] },
+    } as Field,
     txt('project', 'Название проекта', { max: 200 }),
     txt('name', 'Авторы / автор', { required: true, max: 300 }),
     txt('org', 'Компания / учебное заведение', { required: true, max: 200 }),

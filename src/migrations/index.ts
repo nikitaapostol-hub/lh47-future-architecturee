@@ -24,6 +24,7 @@ import * as migration_20261112_110000_speaker_grosu from './20261112_110000_spea
 import * as migration_20261116_170000_speaker_hardy from './20261116_170000_speaker_hardy';
 import * as migration_20261120_100000_deadline_dec5 from './20261120_100000_deadline_dec5';
 import * as migration_20261120_120000_deadline_dec5_ru from './20261120_120000_deadline_dec5_ru';
+import * as migration_20261123_120000_award_nominations_ru from './20261123_120000_award_nominations_ru';
 
 export const migrations = [
   {
@@ -155,5 +156,10 @@ export const migrations = [
     up: migration_20261120_120000_deadline_dec5_ru.up,
     down: migration_20261120_120000_deadline_dec5_ru.down,
     name: '20261120_120000_deadline_dec5_ru',
+  },
+  {
+    up: migration_20261123_120000_award_nominations_ru.up,
+    down: migration_20261123_120000_award_nominations_ru.down,
+    name: '20261123_120000_award_nominations_ru',
   },
 ];

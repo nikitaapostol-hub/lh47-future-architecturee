@@ -1,3 +1,4 @@
+import { AwardByNomination as AwardByNomination_01e44913a62d4b81458f51c9fbe5b756 } from '../../../components/admin/AwardByNomination'
 import { ItemLabel as ItemLabel_a22f15833f5c099d83eec5874403c04c } from '../../../components/admin/RowLabel'
 import { SpeakerLabel as SpeakerLabel_a22f15833f5c099d83eec5874403c04c } from '../../../components/admin/RowLabel'
 import { NominationLabel as NominationLabel_a22f15833f5c099d83eec5874403c04c } from '../../../components/admin/RowLabel'
@@ -9,6 +10,7 @@ import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } f
 
 /** @type import('payload').ImportMap */
 export const importMap = {
+  "/components/admin/AwardByNomination#AwardByNomination": AwardByNomination_01e44913a62d4b81458f51c9fbe5b756,
   "/components/admin/RowLabel#ItemLabel": ItemLabel_a22f15833f5c099d83eec5874403c04c,
   "/components/admin/RowLabel#SpeakerLabel": SpeakerLabel_a22f15833f5c099d83eec5874403c04c,
   "/components/admin/RowLabel#NominationLabel": NominationLabel_a22f15833f5c099d83eec5874403c04c,
