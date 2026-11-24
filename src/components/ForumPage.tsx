@@ -106,6 +106,7 @@ const PARTNERS: Logo[] = [
   { src: P + 'azimut.png', alt: 'Azimut Microclimate Systems', href: 'https://azimut.md/', cls: 'azimut' },
   { src: P + 'artizana.png', alt: 'Artizana Fashion Salon', href: 'https://artizanafashion.md/', cls: 'artizana' },
   { src: P + 'kott.png', alt: 'Kott', href: 'https://kott.md/', cls: 'kott' },
+  { src: P + 'novaporta.svg', alt: 'NovaPorta', href: 'https://novaporta.md/', cls: 'novaporta' },
 ]
 /** Отдельная нижняя строка под всеми партнёрами — без подписи и линии. */
 const EXTRA: Logo[] = [

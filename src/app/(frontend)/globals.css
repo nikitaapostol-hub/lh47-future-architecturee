@@ -699,7 +699,7 @@ html[data-pre='off'] .am-pre { display: none; }
   }
 }
 /* на десктопе: генеральный — треть ширины по центру, официальный — две трети,
-   партнёры направления — по 6 в ряд на всю ширину (17 логотипов: 6 + 6 + 5 по центру) */
+   партнёры направления — по 6 в ряд на всю ширину (18 логотипов: 6 + 6 + 6) */
 @media (min-width: 1100px) {
   .fa-partners__row--partners > li {
     flex-basis: calc(100% / 6);
@@ -803,6 +803,10 @@ html[data-pre='off'] .am-pre { display: none; }
 }
 .fa-partners__kott {
   height: clamp(34px, 3.4vw, 48px);
+}
+/* NovaPorta: фирменный логотип жёлтый на чёрном — на белом даём одноцветный тёмный, без слогана */
+.fa-partners__novaporta {
+  height: clamp(42px, 4.6vw, 58px);
 }
 .fa-partners__dekada {
   height: clamp(22px, 2.2vw, 30px);
