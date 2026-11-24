@@ -806,7 +806,7 @@ html[data-pre='off'] .am-pre { display: none; }
 }
 /* NovaPorta: фирменный логотип жёлтый на чёрном — на белом даём одноцветный тёмный, без слогана */
 .fa-partners__novaporta {
-  height: clamp(42px, 4.6vw, 58px);
+  height: clamp(48px, 5vw, 66px);
 }
 .fa-partners__dekada {
   height: clamp(22px, 2.2vw, 30px);
