@@ -25,6 +25,7 @@ import * as migration_20261116_170000_speaker_hardy from './20261116_170000_spea
 import * as migration_20261120_100000_deadline_dec5 from './20261120_100000_deadline_dec5';
 import * as migration_20261120_120000_deadline_dec5_ru from './20261120_120000_deadline_dec5_ru';
 import * as migration_20261123_120000_award_nominations_ru from './20261123_120000_award_nominations_ru';
+import * as migration_20261125_170000_speaker_burunciuc from './20261125_170000_speaker_burunciuc';
 
 export const migrations = [
   {
@@ -161,5 +162,10 @@ export const migrations = [
     up: migration_20261123_120000_award_nominations_ru.up,
     down: migration_20261123_120000_award_nominations_ru.down,
     name: '20261123_120000_award_nominations_ru',
+  },
+  {
+    up: migration_20261125_170000_speaker_burunciuc.up,
+    down: migration_20261125_170000_speaker_burunciuc.down,
+    name: '20261125_170000_speaker_burunciuc',
   },
 ];

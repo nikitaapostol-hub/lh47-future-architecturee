@@ -37,6 +37,7 @@ const KNOWN: Known[] = [
   { match: /гроян|groian/i, img: '/img/sp-groian-n.jpg', crop: FULL },
   { match: /гросу|гроссу|grosu/i, img: '/img/sp-grosu-n.jpg', crop: FULL },
   { match: /харди|hardy/i, img: '/img/sp-hardy-n.jpg', crop: FULL },
+  { match: /бурунчук|burunciuc/i, img: '/img/sp-burunciuc-n.jpg', crop: FULL },
 ]
 
 const DEFAULTS: Record<Lang, { name: string; role: string }[]> = {
