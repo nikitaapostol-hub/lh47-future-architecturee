@@ -85,8 +85,8 @@ const GENERAL: Logo[] = [
   { src: P + 'noble-dubai.png', alt: 'Noble Dubai', href: 'https://nobledubaiproperties.com/', cls: 'noble' },
 ]
 const OFFICIAL: Logo[] = [
-  { src: P + 'qgroup-energy.png', alt: 'QGroup Energy', href: 'https://energy.qgroup.md/', cls: 'qgroup' },
-  { src: P + 'qgroup-since-2002.png', alt: 'QGroup', href: 'https://qgroup.md/', cls: 'qgroup' },
+  { src: P + 'qgroup-energy.png', alt: 'QGroup Energy', href: 'https://invest.qgroup.md/', cls: 'qgroup' },
+  { src: P + 'qgroup-since-2002.png', alt: 'QGroup', href: 'https://tech.qgroup.md/', cls: 'qgroup' },
 ]
 const PARTNERS: Logo[] = [
   { src: P + 'rich-colors.png', alt: 'Rich Colors', href: 'https://www.richcolors.md/', cls: 'rich' },
